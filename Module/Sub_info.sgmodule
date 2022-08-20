@@ -1,0 +1,16 @@
+#!name=Sub_info
+#!desc=机场流量
+#该模块为本地模块，请自己创建本地模块后复制粘贴修改参数
+
+[Script]
+#机场流量信息
+Sub_info = type=generic,timeout=10,script-path=https://raw.githubusercontent.com/mieqq/mieqq/master/sub_info_panel.js,script-update-interval=0,argument=url=机场链接encode后替换&reset_day=机场流量重置日期&title=机场名字&icon=doc.text.below.ecg&color=#FFC0CB
+Sub_info1 = type=generic,timeout=10,script-path=https://raw.githubusercontent.com/mieqq/mieqq/master/sub_info_panel.js,script-update-interval=0,argument=url=机场订阅encode后替换&reset_day=机场流量重置日期&title=机场名字&icon=bonjour&color=#007aff
+
+
+[Panel]
+
+#机场流量信息
+Sub_info = script-name=Sub_info,update-interval=60
+Sub_info = script-name=Sub_info1,update-interval=60
+

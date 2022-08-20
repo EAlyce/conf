@@ -1,0 +1,19 @@
+#!name=AD-anti
+#!desc=自用去广告 2022/08/16
+#手工收集，作者https://t.me/Aliyace
+[Rule]
+DOMAIN,679lkbf4.naisi-022.com,REJECT
+DOMAIN-SUFFIX,naisi-022.com,REJECT
+DOMAIN,d9cjtb89.naisi-040.com,REJECT
+DOMAIN-SUFFIX,insect.htled.net,REJECT
+DOMAIN,htled.net,REJECT
+DOMAIN,v1sk.cncnails.net,REJECT
+DOMAIN,tsyndicate.com,REJECT
+DOMAIN,cdn777.com,REJECT
+DOMAIN-SUFFIX,cncnails.net,REJECT
+DOMAIN-SUFFIX,doca182.com,REJECT
+DOMAIN,www.doca182.com,REJECT
+DOMAIN-SUFFIX,szbdyd.com,REJECT
+DOMAIN-SUFFIX,bytecdntp.com,REJECT
+DOMAIN,j9.games,REJECT
+DOMAIN,bit.ly,REJECT
