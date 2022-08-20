@@ -1,0 +1,8 @@
+#!name=Notability
+#!desc=Test
+
+
+[Script]
+Notability VIP = type=http-response,pattern=https:\/\/notability\.com\/subscriptions,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Crack/notability.js,script-update-interval=0
+[MITM]
+hostname = *notability.com
