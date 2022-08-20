@@ -1,0 +1,8 @@
+#!name=Mail
+#!desc=Alice
+
+[Rule]
+DOMAIN-KEYWORD,smtp,Mail
+DOMAIN-KEYWORD,pop,Mail
+DOMAIN-KEYWORD,mail,Mail
+DOMAIN-KEYWORD,imap,Mail
