@@ -2,7 +2,7 @@
 version     v0.0.1
 updatetime  2022-08-18
 tgchannel   https://t.me/ddgksf2021
-function    酷安去信息流和评论广告
+function    酷安去首页广告、信息流广告、评论广告
 author      kk pp
 
 
