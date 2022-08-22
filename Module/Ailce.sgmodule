@@ -1,0 +1,45 @@
+#!name=Redirect
+#!desc=更新时间2022-08-22
+
+[General]
+# www.baidu.com：网上国网、多看阅读、顺丰金融、广东农信、丰云行
+# yunbusiness.ccb.com：建行生活
+
+skip-proxy = %APPEND% www.baidu.com,yunbusiness.ccb.com
+[Rule]
+DOMAIN-KEYWORD,alipay,DIRECT
+IP-CIDR6,2408:876C:C0:110:715::3FE/128,DIRECT,no_resolve // Added for: [2408:876C:C0:110:715::3FE]:443
+IP-CIDR6,2408:875C:0:20:3::3F2/128,DIRECT,no_resolve // Added for: [2408:875C:0:20:3::3F2]:443
+IP-CIDR6,2408:875C:0:20:3::3F1/128,DIRECT,no_resolve // Added for: [2408:875C:0:20:3::3F1]:443
+IP-CIDR6,2400:B200:1000:10::B/128,DIRECT,no_resolve // Added for: [2400:B200:1000:10::B]:443
+IP-CIDR6,2400:B200:1005:B000::BF/128,DIRECT,no_resolve // Added for: [2400:B200:1005:B000::BF]:443
+IP-CIDR6,2400:B200:1000::F/128,DIRECT,no_resolve // Added for: [2400:B200:1000::F]:443
+IP-CIDR6,2400:B200:1005:C000::16B/128,DIRECT,no_resolve // Added for: [2400:B200:1005:C000::16B]:443
+IP-CIDR6,240E:950:1:0:3::3EA/128,DIRECT,no_resolve // Added for: [240E:950:1:0:3::3EA]:443
+IP-CIDR6,2400:B200:1010:20::3/128,DIRECT,no_resolve // Added for: [2400:B200:1010:20::3]:443
+IP-CIDR6,240E:950:1:0:3::3E9/128,DIRECT,no_resolve // Added for: [240E:950:1:0:3::3E9]:443
+DOMAIN-KEYWORD,smtp,Mail
+DOMAIN-KEYWORD,pop,Mail
+DOMAIN-KEYWORD,mail,Mail
+DOMAIN-KEYWORD,imap,Mail
+DOMAIN,679lkbf4.naisi-022.com,REJECT
+DOMAIN-SUFFIX,naisi-022.com,REJECT
+DOMAIN,d9cjtb89.naisi-040.com,REJECT
+DOMAIN-SUFFIX,insect.htled.net,REJECT
+DOMAIN,htled.net,REJECT
+DOMAIN,v1sk.cncnails.net,REJECT
+DOMAIN,tsyndicate.com,REJECT
+DOMAIN,cdn777.com,REJECT
+DOMAIN-SUFFIX,cncnails.net,REJECT
+DOMAIN-SUFFIX,doca182.com,REJECT
+DOMAIN,www.doca182.com,REJECT
+DOMAIN-SUFFIX,szbdyd.com,REJECT
+DOMAIN-SUFFIX,bytecdntp.com,REJECT
+DOMAIN,j9.games,REJECT
+DOMAIN,bit.ly,REJECT
+[URL Rewrite]
+# 阻止google.com 跳转到google.com.hk
+^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
+^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
+[MITM]
+hostname = %APPEND% www.google.cn, www.g.cn
