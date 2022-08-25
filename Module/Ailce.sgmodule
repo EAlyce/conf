@@ -7,7 +7,7 @@
 
 skip-proxy = %APPEND% www.baidu.com,yunbusiness.ccb.com
 [Rule]
-DOMAIN-KEYWORD,alipay,DIRECT
+DOMAIN-KEYWORD,alipay,DIRECT,no_resolve
 IP-CIDR6,2408:876C:C0:110:715::3FE/128,DIRECT,no_resolve // Added for: [2408:876C:C0:110:715::3FE]:443
 IP-CIDR6,2408:875C:0:20:3::3F2/128,DIRECT,no_resolve // Added for: [2408:875C:0:20:3::3F2]:443
 IP-CIDR6,2408:875C:0:20:3::3F1/128,DIRECT,no_resolve // Added for: [2408:875C:0:20:3::3F1]:443
@@ -17,11 +17,11 @@ IP-CIDR6,2400:B200:1000::F/128,DIRECT,no_resolve // Added for: [2400:B200:1000::
 IP-CIDR6,2400:B200:1005:C000::16B/128,DIRECT,no_resolve // Added for: [2400:B200:1005:C000::16B]:443
 IP-CIDR6,240E:950:1:0:3::3EA/128,DIRECT,no_resolve // Added for: [240E:950:1:0:3::3EA]:443
 IP-CIDR6,2400:B200:1010:20::3/128,DIRECT,no_resolve // Added for: [2400:B200:1010:20::3]:443
-IP-CIDR6,240E:950:1:0:3::3E9/128,DIRECT,no_resolve // Added for: [240E:950:1:0:3::3E9]:443
-DOMAIN-KEYWORD,smtp,Mail
-DOMAIN-KEYWORD,pop,Mail
-DOMAIN-KEYWORD,mail,Mail
-DOMAIN-KEYWORD,imap,Mail
+IP-CIDR6,240E:950:1:0:3::3E9/128,DIRECT,no_resolve // Added for: [240E:950:1:0:3::3E9]:443,no_resolve
+DOMAIN-KEYWORD,smtp,Mail,no_resolve
+DOMAIN-KEYWORD,pop,Mail,no_resolve
+DOMAIN-KEYWORD,mail,Mail,no_resolve
+DOMAIN-KEYWORD,imap,Mail,no_resolve
 DOMAIN,679lkbf4.naisi-022.com,REJECT
 DOMAIN-SUFFIX,naisi-022.com,REJECT
 DOMAIN,d9cjtb89.naisi-040.com,REJECT
