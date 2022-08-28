@@ -22,7 +22,6 @@ DOMAIN-SUFFIX,szbdyd.com,REJECT
 DOMAIN-SUFFIX,bytecdntp.com,REJECT
 DOMAIN,j9.games,REJECT
 DOMAIN,bit.ly,REJECT
-
 [URL Rewrite]
 # 阻止google.com 跳转到google.com.hk
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
