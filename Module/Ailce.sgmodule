@@ -3,10 +3,6 @@
 
 [Rule]
 
-DOMAIN-KEYWORD,smtp,Mail,no_resolve
-DOMAIN-KEYWORD,pop,Mail,no_resolve
-DOMAIN-KEYWORD,mail,Mail,no_resolve
-DOMAIN-KEYWORD,imap,Mail,no_resolve
 DOMAIN,679lkbf4.naisi-022.com,REJECT
 DOMAIN-SUFFIX,naisi-022.com,REJECT
 DOMAIN,d9cjtb89.naisi-040.com,REJECT
