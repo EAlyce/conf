@@ -1,6 +1,7 @@
 #Telegram分流
-#作者 https://t.me/Aliyace
-#最后更新于2022/08/16/16:58
+
+
+IP-CIDR,5.28.195.163/32,no-resolve 
 IP-CIDR,67.198.55.0/24,no-resolve
 IP-CIDR,109.239.140.0/24,no-resolve
 IP-CIDR,149.154.164.0/22,no-resolve
