@@ -35,7 +35,6 @@ IP-CIDR,182.43.124.6/32,REJECT,no-resolve // Added for: http://182.43.124.6/warn
 IP-CIDR,101.35.177.86/32,REJECT,no-resolve // Added for: http://101.35.177.86/img/pg.png
 DOMAIN,96110.pages.dev,REJECT // Added for: 96110.pages.dev:443
 DOMAIN-SUFFIX,mail.163.com,DIRECT // Added for: mail.163.com:443
-
 [URL Rewrite]
 # 阻止google.com 跳转到google.com.hk
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
