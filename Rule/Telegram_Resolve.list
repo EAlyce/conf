@@ -1,6 +1,6 @@
 #Telegram分流
 
-
+IP-CIDR,149.154.167.91/32,no-resolve
 IP-CIDR,5.28.195.163/32,no-resolve 
 IP-CIDR,67.198.55.0/24,no-resolve
 IP-CIDR,109.239.140.0/24,no-resolve
