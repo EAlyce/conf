@@ -30,6 +30,7 @@ DOMAIN-SUFFIX,pop,𝐌𝐚𝐢𝐥
 DOMAIN-SUFFIX,smtp,𝐌𝐚𝐢𝐥
 DOMAIN-SUFFIX,mail,𝐌𝐚𝐢𝐥
 DOMAIN-SUFFIX,smtp.gmail.com,𝐌𝐚𝐢𝐥
+IP-CIDR,0.0.0.0/32,REJECT
 IP-CIDR,39.102.194.95/32,REJECT,no-resolve // Added for: http://39.102.194.95/img/gzh.png
 IP-CIDR,182.43.124.6/32,REJECT,no-resolve // Added for: http://182.43.124.6/warning?_=1661839011647
 IP-CIDR,101.35.177.86/32,REJECT,no-resolve // Added for: http://101.35.177.86/img/pg.png
