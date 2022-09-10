@@ -1,6 +1,6 @@
 #!name=Redirect
 #!desc=更新时间2022-08-22
-
+#DOMAIN,tsyndicate.com,REJECT
 [Rule]
 
 DOMAIN,679lkbf4.naisi-022.com,REJECT
@@ -9,7 +9,7 @@ DOMAIN,d9cjtb89.naisi-040.com,REJECT
 DOMAIN-SUFFIX,insect.htled.net,REJECT
 DOMAIN,htled.net,REJECT
 DOMAIN,v1sk.cncnails.net,REJECT
-DOMAIN,tsyndicate.com,REJECT
+
 DOMAIN,cdn777.com,REJECT
 DOMAIN-SUFFIX,cncnails.net,REJECT
 DOMAIN-SUFFIX,doca182.com,REJECT
