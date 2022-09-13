@@ -1,7 +1,4 @@
 #Pikpak网盘分流，适用于Surge
-#作者 Alice    tg : @Usealice
-#更新日期2022-08-06 09:54
-
 DOMAIN-SUFFIX,mypikpak.com
 DOMAIN-SUFFIX,config.mypikpak.com
 DOMAIN-SUFFIX,user.mypikpak.com
