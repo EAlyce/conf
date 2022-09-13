@@ -1,0 +1,9 @@
+#!name=Redirect
+#!desc=2022-09-13
+
+[URL Rewrite]
+# 阻止google.com 跳转到google.com.hk
+^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
+^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
+[MITM]
+hostname = %APPEND% www.google.cn, www.g.cn
