@@ -1,4 +1,3 @@
-#说明
-ipv6数据来源 https://raw.githubusercontent.com/carrnot/china-ip-list/release/ipv6.txt
+关于Pikpak网盘检测到大陆ip禁止使用的问题
 
-https://github.com/gaoyifan/china-operator-ip/tree/ip-lists
+拦截  access.mypikpak.com  域名即可
