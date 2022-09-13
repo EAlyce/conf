@@ -1,5 +1,5 @@
 # Surge 最精简配置
-# 来源 https://community.nssurge.com/d/1214
+来源 https://community.nssurge.com/d/1214
 
 [General]
 skip-proxy = 192.168.0.0/24, 10.0.0.0/8, 172.16.0.0/12, 127.0.0.1, localhost, *.local
