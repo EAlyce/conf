@@ -1,6 +1,6 @@
 # 免责声明
 
-   所有软件与代码均为网络搜集，非本人原创
+   所有代码均为网络搜集，非本人原创
    
    一切使用本仓库软件以及代码行为均被视为已经仔细阅读并完全同意以下条款：
    
@@ -14,4 +14,4 @@
 
  5.本声明未涉及的问题请参见国家有关法律法规，当本声明与国家有关法律法规冲突时，以国家法律法规为准。本软件以及代码相关声明版权及其修改权、更新权和最终解释权均属作者所有。
  
- All software and code are collected from the Internet, not original by me. All use of the software and code in this warehouse is deemed to have carefully read and fully agreed to the following terms: 1. It is only for personal study and communication, and is strictly prohibited for commercial and bad purposes. . The author has the right to revoke the right of use if any commercial behavior and bad use are found. 2. The risks that exist will be entirely borne by the user himself, and the author will not bear any responsibility. 3. In addition to the stated terms of service, any accident, negligence, contract damage, defamation, copyright or other intellectual property infringement and any loss caused by improper use of the software and code, and any loss caused by the author of this software and code, the author of this software and code shall not be liable for is not responsible and does not assume any legal responsibility. 4. The author does not assume any responsibility for service interruption or other defects caused by force majeure or uncontrollable reasons such as hacker attack and communication line interruption, resulting in the user's inability to use it normally, but will try his best to reduce the loss or impact caused to the user. . 5. For issues not covered by this statement, please refer to the relevant national laws and regulations. When this statement conflicts with relevant national laws and regulations, the national laws and regulations shall prevail. The copyright of this software and the relevant statements of the code, as well as the right of modification, update and final interpretation, belong to the author.
+ 
