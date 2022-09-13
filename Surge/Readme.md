@@ -8,7 +8,6 @@ internet-test-url = http://taobao.com/
 proxy-test-url = http://www.apple.com/
 test-timeout = 2
 dns-server = 223.5.5.5, 114.114.114.114
-# encrypted-dns-server = https://223.5.5.5/ // 除非当地 ISP 有严重的 DNS 污染问题，否则没必要开启 DoH，传统 DNS 的性能最优，网络异常后恢复速度最快
 wifi-assist = true
 ipv6 = false // 如无特殊需求不应开启 IPv6，目前网络环境下 IPv6 只会带来问题。
 
@@ -21,7 +20,6 @@ DOMAIN-SUFFIX,ls.apple.com,DIRECT // Apple Maps
 DOMAIN-SUFFIX,store.apple.com,DIRECT // Apple Store Online
 RULE-SET,SYSTEM,Proxy
 RULE-SET,https://github.com/Blankwonder/surge-list/raw/master/apple.list,Proxy
-# 以下规则将触发本地 DNS 解析
 RULE-SET,LAN,DIRECT
 GEOIP,CN,DIRECT
 FINAL,Proxy,dns-failed
