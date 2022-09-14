@@ -42,7 +42,40 @@ RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Ap
 # 阻止google.com 跳转到google.com.hk
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
+# missav 播放页弹窗
+https?:\/\/[0-9a-zA-Z]{10,16}\.cloudfront\.net\/\?[a-z]{3,7}=\d{4,8} - reject
 
+# Avple 弹窗跳转
+^https?:\/\/assert\.avple\.tv\/file\/avple-images\/ad\.js - reject
+
+# www.tvn.cc 韩剧TV
+
+# Pornhub 视频广告
+^https:\/\/(cn|www)\.pornhub\.com\/_xa\/ads.* - reject
+
+# javmost 播放页弹窗广告
+^https:\/\/suzihaza\.com\/asset\/jquery\/slim-3\.2\.min\.js.* - reject
+
+# 百度网页跳转至手机网页版本
+www.baidu.com(?!.*?(\.(css|js|jpeg|jpg|png|php|gif|ico|mp3|mp4|svg|tff|PNG|woff|woff2|m3u8))) m.baidu.com 302
+
+# 禁知乎网页广告
+https://(www|zhuanlan)\.zhihu\.com/api/v4/questions/\d+/related-readings - reject
+https://(www|zhuanlan)\.zhihu\.com/api/v4/answers/\d+/related-readings - reject
+#https://(www|zhuanlan)\.zhihu\.com/api/v4/hot_recommendation - reject
+https://(www|zhuanlan)\.zhihu\.com/commercial_api/banners_v3/(mobile_banner|mobile_question) - reject
+https://(www|zhuanlan)\.zhihu\.com/api/articles/\d+/recommendation - reject
+
+
+[Header Rewrite]
+#!^https?:\/\/(\w{0,3}(\.){0,1}(ddrk|ddys|ddys2)(\.)\w{0,3})(?!.*?(\.webmanifest|/(cdn-cgi)))(?!.*?(\.(css|js|jpeg|jpg|png|php|gif|ico|mp3|mp4|svg|tff|PNG|woff|woff2|m3u8))).* header-replace User-Agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36"
+
+[Script]
+知道搜索广告(baidu) = type=http-response,pattern="^https?:\/\/(zhidao)\.baidu\.com\/(question|index|\?fr|\?word)",requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/surge_baidu.zhidao.js,script-update-interval=0
+搜索首页广告(baidu) = type=http-response,pattern="^https?:\/\/(www|m)\.baidu\.com(/$|\/\?ref.*)(?!.*?(\.(css|js|jpeg|jpg|png|php|gif|ico|mp3|mp4|svg|tff|PNG|woff|woff2|m3u8)))",requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/surge_baidu.index.js,script-update-interval=0
+搜索结果广告(baidu) = type=http-response,pattern="^https?:\/\/(www|m)\.baidu\.com(\/s\?word.*|\/from.*?\/s\?word.*|\/from.*?word=.*)",requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/surge_baidu.js,script-update-interval=0
+内容农场(bing) = type=http-response,pattern="https?:\/\/(www\.bing)(\.\w{2,4}){1,2}\/(search\?.*|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
+内容农场(google) = type=http-response,pattern="https?:\/\/(www\.google)(\.\w{2,4}){1,2}\/(search\?|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
 
 [Host]
 # > 该段定义本地 DNS 记录
@@ -55,4 +88,4 @@ mtalk.google.com = 108.177.125.188
 enable = true
 tcp-connection = false
 skip-server-cert-verify = true
-hostname = %APPEND% www.google.cn, www.g.cn
+hostname = %APPEND% www.google.cn, www.g.cn, www.javmost.xyz, javmost.xyz, www5.javmost.xyz, www5.javmost.com, zhuanlan.zhihu.com, www.zhihu.com,jable.tv,www.google.com, www.google.com.hk, cn.pornhub.com, missav.com, *.javbus.*, www.baidu.com, m.baidu.com, zhidao.baidu.com
