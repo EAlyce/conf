@@ -2,7 +2,7 @@
 #!desc=2022-09-13
 [Rule]
 # > Spotify
-DOMAIN-SUFFIX,ap.spotify.com,Direct
+DOMAIN-SUFFIX,ap.spotify.com,DIRECT
 # > Google
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
@@ -16,36 +16,26 @@ DOMAIN,alt7-mtalk.google.com,DIRECT
 DOMAIN,alt8-mtalk.google.com,DIRECT
 DOMAIN,alt9-mtalk.google.com,DIRECT
 DOMAIN-SUFFIX,mobile-gtalk.l.google.com,DIRECT
-# > PayPal
-# DOMAIN-SUFFIX,paypal.com,PayPal
-# DOMAIN-SUFFIX,paypal.me,PayPal
-# DOMAIN-SUFFIX,paypalobjects.com,PayPal
+
 # > Client
 # > Proxy
-PROCESS-NAME,v2ray,Direct
-PROCESS-NAME,ss-local,Direct
-PROCESS-NAME,UUBooster,Direct
+PROCESS-NAME,v2ray,DIRECT
+PROCESS-NAME,ss-local,DIRECT
+PROCESS-NAME,UUBooster,DIRECT
 
 # > Download
-PROCESS-NAME,aria2c,Direct
-PROCESS-NAME,fdm,Direct
-PROCESS-NAME,Folx,Direct
-PROCESS-NAME,NetTransport,Direct
-PROCESS-NAME,Thunder,Direct
-PROCESS-NAME,Transmission,Direct
-PROCESS-NAME,uTorrent,Direct
-PROCESS-NAME,WebTorrent,Direct
-PROCESS-NAME,WebTorrent Helper,Direct
+PROCESS-NAME,aria2c,DIRECT
+PROCESS-NAME,fdm,DIRECT
+PROCESS-NAME,Folx,DIRECT
+PROCESS-NAME,NetTransport,DIRECT
+PROCESS-NAME,Thunder,DIRECT
+PROCESS-NAME,Transmission,DIRECT
+PROCESS-NAME,uTorrent,DIRECT
+PROCESS-NAME,WebTorrent,DIRECT
+PROCESS-NAME,WebTorrent Helper,DIRECT
 # > Apple
 RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_CDN.list,𝐀𝐩𝐩𝐥𝐞
 RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_API.list,𝐀𝐩𝐩𝐥𝐞
-# > Local Area Network 局域网
-IP-CIDR,192.168.0.0/16,DIRECT
-IP-CIDR,10.0.0.0/8,DIRECT
-IP-CIDR,172.16.0.0/12,DIRECT
-IP-CIDR,127.0.0.0/8,DIRECT
-IP-CIDR,100.64.0.0/10,DIRECT
-IP-CIDR,224.0.0.0/4,DIRECT
 
 
 [URL Rewrite]
