@@ -1,9 +1,87 @@
 #!name=Redirect
 #!desc=2022-09-13
+[Rule]
+# > Spotify
+DOMAIN-SUFFIX,ap.spotify.com,Direct
+# > Google
+DOMAIN,mtalk.google.com,DIRECT
+DOMAIN,mobile-gtalk.l.google.com,DIRECT
+DOMAIN,alt1-mtalk.google.com,DIRECT
+DOMAIN,alt2-mtalk.google.com,DIRECT
+DOMAIN,alt3-mtalk.google.com,DIRECT
+DOMAIN,alt4-mtalk.google.com,DIRECT
+DOMAIN,alt5-mtalk.google.com,DIRECT
+DOMAIN,alt6-mtalk.google.com,DIRECT
+DOMAIN,alt7-mtalk.google.com,DIRECT
+DOMAIN,alt8-mtalk.google.com,DIRECT
+DOMAIN,alt9-mtalk.google.com,DIRECT
+DOMAIN-SUFFIX,mobile-gtalk.l.google.com,DIRECT
+# > PayPal
+# DOMAIN-SUFFIX,paypal.com,PayPal
+# DOMAIN-SUFFIX,paypal.me,PayPal
+# DOMAIN-SUFFIX,paypalobjects.com,PayPal
+# > Client
+# > Proxy
+PROCESS-NAME,v2ray,Direct
+PROCESS-NAME,ss-local,Direct
+PROCESS-NAME,UUBooster,Direct
+
+# > Download
+PROCESS-NAME,aria2c,Direct
+PROCESS-NAME,fdm,Direct
+PROCESS-NAME,Folx,Direct
+PROCESS-NAME,NetTransport,Direct
+PROCESS-NAME,Thunder,Direct
+PROCESS-NAME,Transmission,Direct
+PROCESS-NAME,uTorrent,Direct
+PROCESS-NAME,WebTorrent,Direct
+PROCESS-NAME,WebTorrent Helper,Direct
+# > Apple
+RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_CDN.list,𝐀𝐩𝐩𝐥𝐞
+RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_API.list,𝐀𝐩𝐩𝐥𝐞
+# > Local Area Network 局域网
+IP-CIDR,192.168.0.0/16,DIRECT
+IP-CIDR,10.0.0.0/8,DIRECT
+IP-CIDR,172.16.0.0/12,DIRECT
+IP-CIDR,127.0.0.0/8,DIRECT
+IP-CIDR,100.64.0.0/10,DIRECT
+IP-CIDR,224.0.0.0/4,DIRECT
+
 
 [URL Rewrite]
 # 阻止google.com 跳转到google.com.hk
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
+
+# > 有两种重定向方式: 'header' 和 '302'
+# > 建议用模块
+
+# > Redirect Google Search Service
+^(http|https):\/\/(www.)?(g|google)\.cn https://www.google.com 302
+# AbeamTV Unlock
+^https?:\/\/api\.abema\.io\/v\d\/ip\/check - reject
+
+# Redirect Google Service
+^https?:\/\/(www.)?g\.cn https://www.google.com 302
+^https?:\/\/(www.)?google\.cn https://www.google.com 302
+
+# Redirect HTTP to HTTPS
+^https?:\/\/(www.)?taobao\.com\/ https://www.taobao.com/ 302
+^https?:\/\/(www.)?jd\.com\/ https://www.jd.com/ 302
+^https?:\/\/(www.)?mi\.com\/ https://www.mi.com/ 302
+^https?:\/\/you\.163\.com\/ https://you.163.com/ 302
+^https?:\/\/(www.)?suning\.com/ https://suning.com/ 302
+^https?:\/\/(www.)?yhd\.com https://yhd.com/ 302
+
+[Host]
+# > 该段定义本地 DNS 记录
+# > 该功能等同于 /etc/hosts，加上了泛解析和别名支持。
+
+# > Firebase Cloud Messaging
+mtalk.google.com = 108.177.125.188
+
 [MITM]
-hostname = %APPEND% www.google.cn, www.g.cn
+enable = true
+tcp-connection = false
+skip-server-cert-verify = true
+hostname = %APPEND% *.abema.tv, *.chelaile.net.cn, *.didistatic.com, *.google-analytics.com, *.googlevideo.com, *.iydsj.com, *.k.sohu.com, *.kfc.com, *.kingsoft-office-service.com, *.meituan.net, *.ofo.com, *.pixiv.net, *.pstatp.com, *.rixcloudservice.com, *.uve.weibo.com, *.wikipedia.org, *.wikiwand.com, *.ydstatic.com, *.youdao.com, *.youtube.com, *.zhuishushenqi.com, 119.18.193.135, 123.59.31.1, 153.3.236.81, 180.101.212.22, 218.11.3.70, 59.151.53.6, a.apicloud.com, a.applovin.com, a.qiumibao.com, a.sfansclub.com, a.wkanx.com, abema.tv, acs.m.taobao.com, act.vip.iqiyi.com, adse.ximalaya.com, api*.musical.ly, api*.tiktokv.com, api-release.wuta-cam.com, api.abema.io, api.bilibili.com, api.daydaycook.com.cn, api.gotokeep.com, api.intsig.net, api.jr.mi.com, api.jxedt.com, api.kkmh.com, api.m.jd.com, api.mgzf.com, api.psy-1.com, api.rr.tv, api.smzdm.com, api.tv.sohu.com, api.wallstreetcn.com, api.weibo.cn, api.xiachufang.com, api.zhihu.com, api.zhuishushenqi.com, api5.futunn.com, app.10086.cn, app.58.com, app.api.ke.com, app.bilibili.com, app.mixcapp.com, app.variflight.com, app.wy.guahao.com, b.zhuishushenqi.com, c.m.163.com, cap.caocaokeji.cn, capi.mwee.cn, cdn.moji.com, channel.beitaichufang.com, client.mail.163.com, cms.daydaycook.com.cn, dspsdk.abreader.com, fdfs.xmcdn.com, gateway.shouqiev.com, gw-passenger.01zhuanche.com, gw.alicdn.com, huichuan.sm.cn, i.weread.qq.com, i.ys7.com, iapi.bishijie.com, iface.iqiyi.com, img*.doubanio.com, img.jiemian.com, interface.music.163.com, ios.wps.cn, m*.amap.com, m.client.10010.com, m.creditcard.ecitic.com, m.ibuscloud.com, m.yap.yahoo.com, mapi.mafengwo.cn, mapi.weibo.com, media.qyer.com, mi.gdt.qq.com, mob.mddcloud.com.cn, mobile-api2011.elong.com, mp.weixin.qq.com, mrobot.pcauto.com.cn, mrobot.pconline.com.cn, ms.jr.jd.com, msspjh.emarbox.com, newsso.map.qq.com, nnapp.cloudbae.cn, open.qyer.com, portal-xunyou.qingcdn.com, pss.txffp.com, r.inews.qq.com, render.alipay.com, res-release.wuta-cam.com, richmanapi.jxedt.com, service.4gtv.tv, smkmp.96225.com, snailsleep.net, sp.kaola.com, ssl.kohsocialapp.qq.com, static.vuevideo.net, static1.keepcdn.com, support.you.163.com, thor.weidian.com, www.dandanzan.com, www.flyertea.com, www.zhihu.com, youtubei.googleapis.com, zhidao.baidu.com, *.music.163.com, *.music.126.net, music.163.com, music.126.net, api.weibo.cn, mapi.weibo.com, *.uve.weibo.com, ios.prod.ftl.netflix.com,  trade-acs.m.taobao.com, api.gotokeep.com, *.oxygenplaza.net,www.google.cn, www.g.cn
