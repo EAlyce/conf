@@ -11,7 +11,6 @@ DOMAIN,www.doca182.com
 DOMAIN-SUFFIX,szbdyd.com
 DOMAIN-SUFFIX,bytecdntp.com
 DOMAIN,j9.games
-DOMAIN,bit.ly
 DOMAIN,access.mypikpak.com
 IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
