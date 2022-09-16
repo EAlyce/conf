@@ -33,9 +33,7 @@ PROCESS-NAME,Transmission,DIRECT
 PROCESS-NAME,uTorrent,DIRECT
 PROCESS-NAME,WebTorrent,DIRECT
 PROCESS-NAME,WebTorrent Helper,DIRECT
-# > Apple
-RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_CDN.list,𝐀𝐩𝐩𝐥𝐞
-RULE-SET, https://raw.githubusercontent.com/eHpo1/Rules/master/Surge4/Ruleset/Apple_API.list,𝐀𝐩𝐩𝐥𝐞
+
 
 
 [URL Rewrite]
