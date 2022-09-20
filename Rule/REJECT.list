@@ -1,3 +1,4 @@
+#第一版主
 DOMAIN,679lkbf4.naisi-022.com
 DOMAIN-SUFFIX,naisi-022.com
 DOMAIN,d9cjtb89.naisi-040.com
@@ -11,11 +12,14 @@ DOMAIN,www.doca182.com
 DOMAIN-SUFFIX,szbdyd.com
 DOMAIN-SUFFIX,bytecdntp.com
 DOMAIN,j9.games
+#Pikpak网盘检测大陆ip
 DOMAIN,access.mypikpak.com
+#中国反诈官网
 IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,101.35.177.86/32,no-resolve
 DOMAIN,96110.pages.dev
+#补充
 DOMAIN-SUFFIX,539651.com
 DOMAIN-SUFFIX,y500.co
 DOMAIN-SUFFIX,14i8trbbx4.com
