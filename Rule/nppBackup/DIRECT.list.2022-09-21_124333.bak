@@ -388,7 +388,11 @@ DOMAIN-SUFFIX,zendesk.com
 DOMAIN-SUFFIX,zhihu.com
 DOMAIN-SUFFIX,zillow.com
 DOMAIN-SUFFIX,zoho.com
+
+
 DOMAIN-SUFFIX,cn
+GEOIP,CN
+
 # 手工定义的 Direct 列表
 #153
 DOMAIN-SUFFIX,icloud-content.com
@@ -404,6 +408,8 @@ DOMAIN-SUFFIX,cabdirect.org
 DOMAIN-SUFFIX,ieee.org
 DOMAIN-SUFFIX,nature.com
 DOMAIN-SUFFIX,osapublishing.org
+
+
 IP-CIDR,192.168.0.0/16,no-resolve
 IP-CIDR,10.0.0.0/8,no-resolve
 IP-CIDR,172.16.0.0/12,no-resolve
