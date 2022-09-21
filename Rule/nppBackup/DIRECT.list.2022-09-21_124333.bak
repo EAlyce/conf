@@ -46,10 +46,23 @@ DOMAIN,alt7-mtalk.google.com
 DOMAIN,alt8-mtalk.google.com
 DOMAIN,alt9-mtalk.google.com
 DOMAIN-SUFFIX,mobile-gtalk.l.google.com
+PROCESS-NAME,v2ray
+PROCESS-NAME,ss-local
+PROCESS-NAME,UUBooster
+PROCESS-NAME,aria2c
+PROCESS-NAME,fdm
+PROCESS-NAME,Folx
+PROCESS-NAME,NetTransport
+PROCESS-NAME,Thunder
+PROCESS-NAME,Transmission
+PROCESS-NAME,uTorrent
+PROCESS-NAME,WebTorrent
+PROCESS-NAME,WebTorrent Helper
 DOMAIN-SUFFIX,gc.com.cn
 DOMAIN-SUFFIX,mail.163.com
 DOMAIN-SUFFIX,mail.qq.com
 DOMAIN-SUFFIX,mail.icloud.com.cn
+# top500 direct list update time: 2019-01-25 21:45:02
 DOMAIN-SUFFIX,163.com
 DOMAIN-SUFFIX,1688.com
 DOMAIN-SUFFIX,1905.com
@@ -375,10 +388,17 @@ DOMAIN-SUFFIX,zendesk.com
 DOMAIN-SUFFIX,zhihu.com
 DOMAIN-SUFFIX,zillow.com
 DOMAIN-SUFFIX,zoho.com
+
+
 DOMAIN-SUFFIX,cn
+GEOIP,CN
+
+# 手工定义的 Direct 列表
+#153
 DOMAIN-SUFFIX,icloud-content.com
 DOMAIN-SUFFIX,api.cloudmobi.net
 DOMAIN-SUFFIX,hotmail.com
+#学术网站
 DOMAIN-SUFFIX,researchgate.net
 DOMAIN-SUFFIX,springer.com
 DOMAIN-SUFFIX,blackwell-synergy.com
@@ -388,6 +408,8 @@ DOMAIN-SUFFIX,cabdirect.org
 DOMAIN-SUFFIX,ieee.org
 DOMAIN-SUFFIX,nature.com
 DOMAIN-SUFFIX,osapublishing.org
+
+
 IP-CIDR,192.168.0.0/16,no-resolve
 IP-CIDR,10.0.0.0/8,no-resolve
 IP-CIDR,172.16.0.0/12,no-resolve
