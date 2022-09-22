@@ -1,13 +1,9 @@
-DOMAIN-SUFFIX,imap.gmail.com
-DOMAIN-SUFFIX,mail.icloud.com.cn
+//Spark mail
+USER-AGENT, *spark
+PROCESS-NAME,*spark
+USER-AGENT, *Spark
+//Services
+DOMAIN-SUFFIX,gmail.com
+DOMAIN-SUFFIX,outlook.com
 DOMAIN-SUFFIX,mail.me.com
-DOMAIN-SUFFIX,smtp.gmail.com
-DOMAIN,imap-mail.outlook.com
-DOMAIN,imap.gmail.com
-DOMAIN,outlook.office365.com
-DOMAIN,pop.gmail.com
-DOMAIN,smtp-mail.outlook.com
-DOMAIN,smtp.gmail.com
-DOMAIN,smtp.office365.com
-DOMAIN-SUFFIX,apple.imap.mail.yahoo.com
-DOMAIN-SUFFIX,m.hotmail.com
+DOMAIN-SUFFIX,mail.infomaniak.com
