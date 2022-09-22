@@ -9,7 +9,9 @@ DOMAIN,cdn777.com
 DOMAIN-SUFFIX,cncnails.net
 DOMAIN-SUFFIX,doca182.com
 DOMAIN,www.doca182.com
-DOMAIN-SUFFIX,szbdyd.com
+#哔哩哔哩
+#DOMAIN-SUFFIX,szbdyd.com
+        
 DOMAIN-SUFFIX,bytecdntp.com
 DOMAIN,j9.games
 #Pikpak网盘检测大陆ip
