@@ -1,0 +1,38 @@
+#!name=Network optimization
+#!desc=Alice
+
+[Rule]
+DOMAIN,safebrowsing.urlsec.qq.com,DIRECT # 如果您并不信任此服务提供商或防止其下载消耗过多带宽资源，可以进入 Safari 设置，关闭 Fraudulent Website Warning 功能，并使用 REJECT 策略。
+DOMAIN,safebrowsing.googleapis.com,DIRECT # 如果您并不信任此服务提供商或防止其下载消耗过多带宽资源，可以进入 Safari 设置，关闭 Fraudulent Website Warning 功能，并使用 REJECT 策略。
+DOMAIN,developer.apple.com,Proxy
+DOMAIN-SUFFIX,digicert.com,Proxy
+USER-AGENT,com.apple.trustd*,Proxy
+PROCESS-NAME,trustd,Proxy
+DOMAIN-SUFFIX,apple-dns.net,Proxy
+DOMAIN,testflight.apple.com,Proxy
+DOMAIN,sandbox.itunes.apple.com,Proxy
+DOMAIN,itunes.apple.com,Proxy
+DOMAIN-SUFFIX,apps.apple.com,Proxy
+DOMAIN-SUFFIX,blobstore.apple.com,Proxy
+DOMAIN,cvws.icloud-content.com,Proxy
+USER-AGENT,com.apple.appstored*,DIRECT
+USER-AGENT,AppStore*,DIRECT
+DOMAIN-SUFFIX,mzstatic.com,DIRECT
+DOMAIN-SUFFIX,itunes.apple.com,DIRECT
+DOMAIN-SUFFIX,icloud.com,DIRECT
+DOMAIN-SUFFIX,icloud-content.com,DIRECT
+USER-AGENT,cloudd*,DIRECT
+AND,((NOT,((USER-AGENT,*com.apple.WebKit*))),(USER-AGENT,*com.apple.*)),DIRECT
+DOMAIN-SUFFIX,me.com,DIRECT
+DOMAIN-SUFFIX,aaplimg.com,DIRECT
+DOMAIN-SUFFIX,cdn20.com,DIRECT
+DOMAIN-SUFFIX,cdn-apple.com,DIRECT
+DOMAIN-SUFFIX,akadns.net,DIRECT
+DOMAIN-SUFFIX,akamaiedge.net,DIRECT
+DOMAIN-SUFFIX,edgekey.net,DIRECT
+DOMAIN-SUFFIX,mwcloudcdn.com,DIRECT
+DOMAIN-SUFFIX,mwcname.com,DIRECT
+DOMAIN-SUFFIX,apple.com,DIRECT
+DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT
+DOMAIN-SUFFIX,apple-mapkit.com,DIRECT
+DOMAIN,e.crashlytics.com,REJECT //注释此选项有助于大多数App开发者分析崩溃信息；如果您拒绝一切崩溃数据统计、搜集，请取消 # 注释。
