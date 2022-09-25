@@ -4,36 +4,60 @@ DOMAIN-SUFFIX,oculus.com
 DOMAIN-SUFFIX,letsencrypt.org
 DOMAIN-SUFFIX,i-scmp.com
 DOMAIN-SUFFIX,search.xxx
-IP-CIDR,50.7.31.230/32,no-resolve
+IP-CIDR,50.7.31.230/32
 DOMAIN-SUFFIX,akamaihd.net
+# /twimg\.edgesuite\.net\/\/?appledaily
 DOMAIN-SUFFIX,4sqi.net
+# hkheadline.com*blog
 DOMAIN-SUFFIX,news.now.com
 DOMAIN-SUFFIX,picturedip.com
+# bbs.sina.com%2F
+# dailynews.sina.com%2F
 DOMAIN-SUFFIX,uchicago.edu
+# google.*/falun
 DOMAIN-KEYWORD,phobos
+# q=freedom
+# q%3Dfreedom
+# search*safeweb
+# q=triangle
+# q%3DTriangle
+# 修复 google voice #112
 IP-CIDR,74.125.23.127/32,no-resolve
+# hacker news web site
 DOMAIN-SUFFIX,news.ycombinator.com
+# 手工定义的 Proxy 列表
 DOMAIN-SUFFIX,theinitium.com
 DOMAIN-SUFFIX,netflix.com
+#161 可能以后会和GFWList重复
 DOMAIN-SUFFIX,9gag.com
+#instagram
 DOMAIN-SUFFIX,cdninstagram.com
 #disqus
 DOMAIN-SUFFIX,gist.github.com
+# 首页直连，但子域名需翻墙
 DOMAIN-SUFFIX,onedrive.live.com
+#20 开车
 DOMAIN-SUFFIX,t66y.com
 DOMAIN-SUFFIX,91porn.com
+#132
+#50 whatsapp
 DOMAIN-SUFFIX,whatsapp.com
 DOMAIN-SUFFIX,whatsapp.net
-IP-CIDR,18.194.0.0/15,no-resolve
-IP-CIDR,34.224.0.0/12,no-resolve
+IP-CIDR,18.194.0.0/15
+IP-CIDR,34.224.0.0/12
+#54 台湾香港澳门 常用网站
 DOMAIN-SUFFIX,ptt.cc
 DOMAIN-SUFFIX,mingpaocanada.com
 DOMAIN-SUFFIX,mingpao.com
 DOMAIN-SUFFIX,appledaily.tw
 DOMAIN-SUFFIX,nextmag.com.tw
 DOMAIN-SUFFIX,thestandnews.com
+#60 GMail
+# 手机 smtp 和 imap 需要用到
 DOMAIN-SUFFIX,gmail.com
-IP-CIDR,74.125.0.0/16,no-resolve
+#72 #112 Google Voice
+IP-CIDR,74.125.0.0/16
+#85（可能冗余）
 DOMAIN-SUFFIX,yt3.ggpht.com
 DOMAIN-SUFFIX,www-google-analytics.l.google.com
 DOMAIN-SUFFIX,ssl-google-analytics.l.google.com
@@ -44,8 +68,11 @@ DOMAIN-SUFFIX,pagead-tpc.l.google.com
 DOMAIN-SUFFIX,mobileads.google.com
 DOMAIN-SUFFIX,ads.google.com
 DOMAIN-SUFFIX,afd.l.google.com
+#175 华尔街邮报
 DOMAIN-SUFFIX,dowjones.com
+#159
 DOMAIN-SUFFIX,thetvdb.com
+#180 OneDrive（可能冗余）
 DOMAIN-SUFFIX,bcbits.com
 DOMAIN-SUFFIX,ogma.iad.appboy.com
 DOMAIN-SUFFIX,odc.officeapps.live.com
@@ -56,8 +83,11 @@ DOMAIN-SUFFIX,gate.hockeyapp.net
 DOMAIN-SUFFIX,skyapi.live.net
 DOMAIN-SUFFIX,api.onedrive.com
 DOMAIN-SUFFIX,vortex.data.microsoft.com
+#183
 DOMAIN-SUFFIX,mendeley.com
+#192 播客收听应用程序 overcast
 DOMAIN-SUFFIX,overcast.fm
+#205 APPLE NEWS
 DOMAIN-SUFFIX,news-events.apple.com
 DOMAIN-SUFFIX,news-edge.apple.com
 DOMAIN-SUFFIX,apple.comscoreresearch.com
@@ -72,6 +102,7 @@ DOMAIN-SUFFIX,gs-loc.apple.com
 DOMAIN-SUFFIX,bag.itunes.apple.com
 DOMAIN-SUFFIX,apple.news
 DOMAIN-SUFFIX,news.iadsdk.apple.com
+## 抗 DNS 污染
 DOMAIN-KEYWORD,amazon
 DOMAIN-KEYWORD,google
 DOMAIN-KEYWORD,gmail
@@ -86,6 +117,8 @@ DOMAIN-SUFFIX,twimg.com
 DOMAIN-KEYWORD,blogspot
 DOMAIN-SUFFIX,youtu.be
 DOMAIN-KEYWORD,whatsapp
+
+## 国外网站
 DOMAIN-SUFFIX,9to5mac.com
 DOMAIN-SUFFIX,abpchina.org
 DOMAIN-SUFFIX,adblockplus.org
@@ -355,6 +388,11 @@ DOMAIN-SUFFIX,yimg.com
 DOMAIN-SUFFIX,ying.com
 DOMAIN-SUFFIX,yoyo.org
 DOMAIN-SUFFIX,ytimg.com
+[Rule]
+
+# 此列表中的部分网站没有被 GFW 封锁，但使用代理会获得更快的速度，请选择性添加。
+
+## A
 DOMAIN-SUFFIX,amazon.com
 DOMAIN-SUFFIX,amazonaws.com
 DOMAIN-SUFFIX,archive.org
@@ -373,6 +411,8 @@ DOMAIN-SUFFIX,apkpure.com
 DOMAIN-SUFFIX,allconnected.co
 DOMAIN-SUFFIX,apkleecher.com
 DOMAIN-SUFFIX,appsonplaystore.com
+
+## B
 DOMAIN-SUFFIX,books.com.tw
 DOMAIN-SUFFIX,bloomberg.com
 DOMAIN-SUFFIX,bloglovin.com
@@ -384,6 +424,8 @@ DOMAIN-SUFFIX,bigsound.org
 DOMAIN-SUFFIX,bbtoystore.com
 DOMAIN-SUFFIX,boxun.com
 DOMAIN-SUFFIX,bandwagonhost.com
+
+## C
 DOMAIN-SUFFIX,cnn.com
 DOMAIN-SUFFIX,cdninstagram.com
 DOMAIN-SUFFIX,cbc.ca
@@ -391,6 +433,8 @@ DOMAIN-SUFFIX,census.gov
 DOMAIN-SUFFIX,cloudfront.net
 DOMAIN-SUFFIX,cn-proxy.com
 DOMAIN-SUFFIX,cccat.cc
+
+## D
 DOMAIN-SUFFIX,dw.com
 DOMAIN-SUFFIX,duckduckgo.com
 DOMAIN-SUFFIX,dropbox.com
@@ -399,11 +443,15 @@ DOMAIN-SUFFIX,disconnect.me
 DOMAIN-SUFFIX,dcmilitary.com
 DOMAIN-SUFFIX,digitaltrends.com
 DOMAIN-SUFFIX,daolan.net
+
+## E
 DOMAIN-SUFFIX,extmatrix.com
 DOMAIN-SUFFIX,easybib.com
 DOMAIN-SUFFIX,easybib.com
 DOMAIN-SUFFIX,economist.com
 DOMAIN-SUFFIX,edgecastcdn.net
+
+## F
 DOMAIN-SUFFIX,facebook.com
 DOMAIN-SUFFIX,facebook.net
 DOMAIN-SUFFIX,fbcdn.net
@@ -412,6 +460,8 @@ DOMAIN-SUFFIX,fzlm.net
 DOMAIN-SUFFIX,flitto.com
 DOMAIN-SUFFIX,flipkart.com
 DOMAIN-SUFFIX,flickr.com
+
+## G
 DOMAIN-SUFFIX,getcloudapp.com
 DOMAIN-SUFFIX,gunsamerica.com
 DOMAIN-SUFFIX,gravatar.com
@@ -420,17 +470,27 @@ DOMAIN-SUFFIX,getfoxyproxy.org
 DOMAIN-SUFFIX,go.com
 DOMAIN-SUFFIX,go.jp
 DOMAIN-SUFFIX,gfw.press
+
+## H
 DOMAIN-SUFFIX,howtoforge.com
 DOMAIN-SUFFIX,hootsuite.com
 DOMAIN-SUFFIX,homedepot.com
 DOMAIN-SUFFIX,hulu.com
+
+## I
 DOMAIN-SUFFIX,instagram.com
 DOMAIN-SUFFIX,icoco.com
 DOMAIN-SUFFIX,imgur.com
 DOMAIN-SUFFIX,instructables.com
 DOMAIN-SUFFIX,ift.tt
+
+## K
 DOMAIN-SUFFIX,kenengba.com
+
+## L
 DOMAIN-SUFFIX,logmein.com
+
+## M
 DOMAIN-SUFFIX,mp3buscador.com
 DOMAIN-SUFFIX,medium.com
 DOMAIN-SUFFIX,mlssoccer.com
@@ -438,6 +498,8 @@ DOMAIN-SUFFIX,marketwatch.com
 DOMAIN-SUFFIX,nih.gov
 DOMAIN-SUFFIX,mycnnews.com
 DOMAIN-SUFFIX,maplestage.com
+
+## N
 DOMAIN-SUFFIX,nytimes.com
 DOMAIN-SUFFIX,nytimg.com
 DOMAIN-SUFFIX,nrk.no
@@ -446,9 +508,13 @@ DOMAIN-SUFFIX,ndr.de
 DOMAIN-SUFFIX,nasa.gov
 DOMAIN-SUFFIX,netflix.com
 DOMAIN-SUFFIX,nintendo.com
+
+## O
 DOMAIN-SUFFIX,onlineyoutube.com
 DOMAIN-SUFFIX,osha.gov
 DOMAIN-SUFFIX,optimizely.com
+
+## P
 DOMAIN-SUFFIX,psiphon3.com
 DOMAIN-SUFFIX,puffinbrowser.com
 DOMAIN-SUFFIX,pubu.com.tw
@@ -457,12 +523,16 @@ DOMAIN-SUFFIX,popo.tw
 DOMAIN-SUFFIX,pokemon.com
 DOMAIN-SUFFIX,pastebin.com
 DOMAIN-SUFFIX,pandora.com
+
+## R
 DOMAIN-SUFFIX,rsf.org
 DOMAIN-SUFFIX,rileyguide.com
 DOMAIN-SUFFIX,rfi.fr
 DOMAIN-SUFFIX,reuters.com
 DOMAIN-SUFFIX,readmoo.com
 DOMAIN-SUFFIX,readingtimes.com.tw
+
+## S
 DOMAIN-SUFFIX,scribd.com
 DOMAIN-SUFFIX,sydneytoday.com
 DOMAIN-SUFFIX,surrenderat20.net
@@ -491,6 +561,8 @@ DOMAIN-SUFFIX,shutterstock.com
 DOMAIN-SUFFIX,sciencedaily.com
 DOMAIN-SUFFIX,signalsitemap.com
 DOMAIN-SUFFIX,surge.run
+
+## T
 DOMAIN-SUFFIX,twtkr.com
 DOMAIN-SUFFIX,twimg.com
 DOMAIN-SUFFIX,twitthat.com
@@ -533,6 +605,8 @@ DOMAIN-SUFFIX,tabtter.jp
 DOMAIN-SUFFIX,tablesgenerator.com
 DOMAIN-SUFFIX,tomshardware.com
 DOMAIN-SUFFIX,theverge.com
+
+## U
 DOMAIN-SUFFIX,ustream.tv
 DOMAIN-SUFFIX,uspto.gov
 DOMAIN-SUFFIX,usma.edu
@@ -549,6 +623,8 @@ DOMAIN-SUFFIX,ugo.com
 DOMAIN-SUFFIX,udn.com
 DOMAIN-SUFFIX,uchicago.edu
 DOMAIN-SUFFIX,usgs.gov
+
+## V
 DOMAIN-SUFFIX,vpngate.net
 DOMAIN-SUFFIX,vpnbook.com
 DOMAIN-SUFFIX,vpnaccount.org
@@ -570,6 +646,8 @@ DOMAIN-SUFFIX,v2ray.com
 DOMAIN-SUFFIX,verizonwireless.com
 DOMAIN-SUFFIX,vzw.com
 DOMAIN-SUFFIX,voachinese.com
+
+## W
 DOMAIN-SUFFIX,wwitv.com
 DOMAIN-SUFFIX,wsj.com
 DOMAIN-SUFFIX,wordpress.com
@@ -593,8 +671,12 @@ DOMAIN-SUFFIX,wattpad.com
 DOMAIN-SUFFIX,w3schools.com
 DOMAIN-SUFFIX,whatsapp.net
 DOMAIN-SUFFIX,winudf.com
+
+## X
 DOMAIN-SUFFIX,xuite.net
 DOMAIN-SUFFIX,xanga.com
+
+## Y
 DOMAIN-SUFFIX,yahoo.com
 DOMAIN-SUFFIX,yourlisten.com
 DOMAIN-SUFFIX,youmaker.com
@@ -605,9 +687,13 @@ DOMAIN-SUFFIX,yesasia.com
 DOMAIN-SUFFIX,yeeyi.com
 DOMAIN-SUFFIX,yasni.co.uk
 DOMAIN-SUFFIX,yastatic.net
+
+## Z
 DOMAIN-SUFFIX,zacebook.com
 DOMAIN-SUFFIX,zalmos.com
 DOMAIN-SUFFIX,zaobao.com.sg
 DOMAIN-SUFFIX,zeutch.com
+
+## 0-9
 DOMAIN-SUFFIX,4everproxy.com
 DOMAIN-SUFFIX,4shared.com
