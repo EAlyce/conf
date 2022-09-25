@@ -1,8 +1,6 @@
 #!name=通用模块
 #!desc=2022-09-13
 [Rule]
-# > Spotify
-DOMAIN-SUFFIX,ap.spotify.com,DIRECT
 # > Google
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
@@ -16,13 +14,6 @@ DOMAIN,alt7-mtalk.google.com,DIRECT
 DOMAIN,alt8-mtalk.google.com,DIRECT
 DOMAIN,alt9-mtalk.google.com,DIRECT
 DOMAIN-SUFFIX,mobile-gtalk.l.google.com,DIRECT
-
-# > Client
-# > Proxy
-PROCESS-NAME,v2ray,DIRECT
-PROCESS-NAME,ss-local,DIRECT
-PROCESS-NAME,UUBooster,DIRECT
-
 # > Download
 PROCESS-NAME,aria2c,DIRECT
 PROCESS-NAME,fdm,DIRECT
@@ -33,18 +24,10 @@ PROCESS-NAME,Transmission,DIRECT
 PROCESS-NAME,uTorrent,DIRECT
 PROCESS-NAME,WebTorrent,DIRECT
 PROCESS-NAME,WebTorrent Helper,DIRECT
-
-
-
 [URL Rewrite]
 # 阻止google.com 跳转到google.com.hk
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
-
-[Header Rewrite]
-#!^https?:\/\/(\w{0,3}(\.){0,1}(ddrk|ddys|ddys2)(\.)\w{0,3})(?!.*?(\.webmanifest|/(cdn-cgi)))(?!.*?(\.(css|js|jpeg|jpg|png|php|gif|ico|mp3|mp4|svg|tff|PNG|woff|woff2|m3u8))).* header-replace User-Agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36"
-
-
 [Host]
 # > 该段定义本地 DNS 记录
 # > 该功能等同于 /etc/hosts，加上了泛解析和别名支持。
