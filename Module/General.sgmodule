@@ -29,10 +29,7 @@ PROCESS-NAME,WebTorrent Helper,DIRECT
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
 [Host]
-# > 该段定义本地 DNS 记录
-# > 该功能等同于 /etc/hosts，加上了泛解析和别名支持。
 
-# > Firebase Cloud Messaging
 mtalk.google.com = 108.177.125.188
 
 [MITM]
