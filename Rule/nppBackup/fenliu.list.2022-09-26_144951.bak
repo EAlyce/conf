@@ -47,12 +47,12 @@ DOMAIN-KEYWORD,c1img.ali.kugou.com
 DOMAIN-KEYWORD,kgstaticdlbssdlbig.tx.kugou.com
 DOMAIN-KEYWORD,adsfilebssdlbig.ali.kugou.com
 DOMAIN-KEYWORD,splashimgbssdl.yun.kugou.com
-DOMAIN-KEYWORD,adservice.kugou.com
-DOMAIN-KEYWORD,kgipadstat.kugou.com
-DOMAIN-KEYWORD,kgipadstatbak.kugou.com
-DOMAIN-KEYWORD,logwebs.kugou.com
-DOMAIN-KEYWORD,tracker.kugou.com
-DOMAIN-KEYWORD,trackercdnbj.kugou.com
+DOMAIN-KEYWORD,adservice.kugou.com,REJECT
+DOMAIN-KEYWORD,kgipadstat.kugou.com,REJECT
+DOMAIN-KEYWORD,kgipadstatbak.kugou.com,REJECT
+DOMAIN-KEYWORD,logwebs.kugou.com,REJECT
+DOMAIN-KEYWORD,tracker.kugou.com,REJECT
+DOMAIN-KEYWORD,trackercdnbj.kugou.com,REJECT
 DOMAIN-KEYWORD,rich.kuwo.cn
 DOMAIN-KEYWORD,mobilead.kuwo.cn
 DOMAIN,adsfile.bssdlbig.kugou.com
@@ -158,16 +158,16 @@ DOMAIN,errlog.umeng.com
 DOMAIN,lf9-cdn-tos.bytegecko.com
 DOMAIN,novel.pangolin-sdk-toutiao.com
 # > 高德
-DOMAIN-KEYWORD,ossgw.alicdn.com
-DOMAIN-SUFFIX,adiu.amap.com
-DOMAIN,aboard.apilocate.amap.com
-DOMAIN,apiinit.amap.com
-DOMAIN,icloud-amap.com
-DOMAIN,logs.amap.com
-DOMAIN-SUFFIX,dualstack-logs.amap.com
-DOMAIN-SUFFIX,logs.amap.com
-DOMAIN-SUFFIX,optimus-ads.amap.com
-DOMAIN-SUFFIX,page.amap.com
+DOMAIN-KEYWORD,ossgw.alicdn.com,REJECT
+DOMAIN-SUFFIX,adiu.amap.com,REJECT
+DOMAIN,aboard.apilocate.amap.com,REJECT
+DOMAIN,apiinit.amap.com,REJECT
+DOMAIN,icloud-amap.com,REJECT
+DOMAIN,logs.amap.com,REJECT
+DOMAIN-SUFFIX,dualstack-logs.amap.com,REJECT
+DOMAIN-SUFFIX,logs.amap.com,REJECT
+DOMAIN-SUFFIX,optimus-ads.amap.com,REJECT
+DOMAIN-SUFFIX,page.amap.com,REJECT
 DOMAIN,optimus-ads.amap.com
 DOMAIN,optimus-ads.amap.com.w.alikunlun.com
 DOMAIN-SUFFIX,shouji.sougou.com
@@ -422,9 +422,9 @@ DOMAIN-SUFFIX,cbjs.baidu.com
 DOMAIN-SUFFIX,cpro2.baidu.com
 DOMAIN-SUFFIX,cpu-admin.baidu.com
 # > 百度贴吧屏蔽域名dns查询
-IP-CIDR,180.76.76.200/32
+IP-CIDR,180.76.76.200/32,REJECT
 # > 百度贴吧屏蔽ws(副作用:消息通知功能失效,需手动进入查看),强制帖子接口走http
-DOMAIN,im.tieba.baidu.com
+DOMAIN,im.tieba.baidu.com,REJECT
 ## /*  
 DOMAIN-SUFFIX,10086.cn.baidu.cdn.yiwk.com
 DOMAIN-SUFFIX,360baidus.com
@@ -1000,38 +1000,38 @@ DOMAIN-KEYWORD,ads.aws.viber.com
 DOMAIN-SUFFIX,alitui.weibo.com
 DOMAIN,adimg.uve.weibo.com
 DOMAIN,adimg.vue.weibo.com
-DOMAIN-KEYWORD,adimg.uve.weibo.com
-DOMAIN-KEYWORD,alitui.weibo.com
-DOMAIN-KEYWORD,biz.weibo.com
-DOMAIN-KEYWORD,game.weibo.cn
-DOMAIN-KEYWORD,game.weibo.com
-DOMAIN-KEYWORD,gw5.push.mcp.weibo.cn
-DOMAIN-KEYWORD,gw6.push.mcp.weibo.cn
-DOMAIN-KEYWORD,promote.biz.weibo.cn
-DOMAIN-KEYWORD,s.alitui.weibo.com
-DOMAIN-KEYWORD,sdkapp.uve.weibo.com
-DOMAIN-KEYWORD,weibomingzi.com
-DOMAIN-KEYWORD,zymo.mps.weibo.com
-DOMAIN-KEYWORD,adimg.vue.weibo.com
-DOMAIN-KEYWORD,dp.im.weibo.cn
-DOMAIN-KEYWORD,m.game.weibo.cn
-DOMAIN-KEYWORD,c.biz.weibo.com
-DOMAIN-KEYWORD,c.wcpt.biz.weibo.com
-DOMAIN-KEYWORD,click.uve.weibo.com
-DOMAIN-KEYWORD,wax.weibo.com
-DOMAIN-KEYWORD,wbapp.uve.weibo.com
-DOMAIN-KEYWORD,widget.weibo.com
-DOMAIN-KEYWORD,zc.biz.weibo.com
-DOMAIN-KEYWORD,dsp.edm.weibo.cn
-DOMAIN-KEYWORD,alitui.weibo.com.cn
-DOMAIN-KEYWORD,biz.weibo.com.cn
-DOMAIN-KEYWORD,game.weibo.com.cn
-DOMAIN-KEYWORD,tui.weibo.com
-DOMAIN-KEYWORD,wax.weibo.com.cn
-DOMAIN-KEYWORD,ad.weibo.com
-DOMAIN-KEYWORD,adstrategy.biz.weibo.com
-DOMAIN-KEYWORD,s.weibo.com
-DOMAIN-KEYWORD,vs.biz.weibo.com
+DOMAIN-KEYWORD,adimg.uve.weibo.com,REJECT
+DOMAIN-KEYWORD,alitui.weibo.com,REJECT
+DOMAIN-KEYWORD,biz.weibo.com,REJECT
+DOMAIN-KEYWORD,game.weibo.cn,REJECT
+DOMAIN-KEYWORD,game.weibo.com,REJECT
+DOMAIN-KEYWORD,gw5.push.mcp.weibo.cn,REJECT
+DOMAIN-KEYWORD,gw6.push.mcp.weibo.cn,REJECT
+DOMAIN-KEYWORD,promote.biz.weibo.cn,REJECT
+DOMAIN-KEYWORD,s.alitui.weibo.com,REJECT
+DOMAIN-KEYWORD,sdkapp.uve.weibo.com,REJECT
+DOMAIN-KEYWORD,weibomingzi.com,REJECT
+DOMAIN-KEYWORD,zymo.mps.weibo.com,REJECT
+DOMAIN-KEYWORD,adimg.vue.weibo.com,REJECT
+DOMAIN-KEYWORD,dp.im.weibo.cn,REJECT
+DOMAIN-KEYWORD,m.game.weibo.cn,REJECT
+DOMAIN-KEYWORD,c.biz.weibo.com,REJECT
+DOMAIN-KEYWORD,c.wcpt.biz.weibo.com,REJECT
+DOMAIN-KEYWORD,click.uve.weibo.com,REJECT
+DOMAIN-KEYWORD,wax.weibo.com,REJECT
+DOMAIN-KEYWORD,wbapp.uve.weibo.com,REJECT
+DOMAIN-KEYWORD,widget.weibo.com,REJECT
+DOMAIN-KEYWORD,zc.biz.weibo.com,REJECT
+DOMAIN-KEYWORD,dsp.edm.weibo.cn,REJECT
+DOMAIN-KEYWORD,alitui.weibo.com.cn,REJECT
+DOMAIN-KEYWORD,biz.weibo.com.cn,REJECT
+DOMAIN-KEYWORD,game.weibo.com.cn,REJECT
+DOMAIN-KEYWORD,tui.weibo.com,REJECT
+DOMAIN-KEYWORD,wax.weibo.com.cn,REJECT
+DOMAIN-KEYWORD,ad.weibo.com,REJECT
+DOMAIN-KEYWORD,adstrategy.biz.weibo.com,REJECT
+DOMAIN-KEYWORD,s.weibo.com,REJECT
+DOMAIN-KEYWORD,vs.biz.weibo.com,REJECT
 # > 喜马拉雅
 DOMAIN,adbehavior.ximalaya.com
 DOMAIN,adwbs.ximalaya.com
@@ -1072,7 +1072,7 @@ DOMAIN,mqtt.zhihu.com
 DOMAIN,sugar.zhihu.com
 DOMAIN,118.89.204.198
 IP-CIDR,118.89.204.198/32
-IP6-CIDR,2402:4e00:1200:ed00:0:9089:6dac:96b6/128
+IP6-CIDR,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT
 # > 中关村
 DOMAIN,apppv.zol.com.cn
 DOMAIN,pvnapp.zol.com.cn
@@ -1150,8 +1150,8 @@ DOMAIN-SUFFIX,zhengxiaoliu.top
 # > NicoNico
 DOMAIN,ads.nicovideo.jp
 # > HDO
-DOMAIN-SUFFIX,applovin.com
-DOMAIN-SUFFIX,applvn.com
+DOMAIN-SUFFIX,applovin.com,REJECT
+DOMAIN-SUFFIX,applvn.com,REJECT
 # > 多多视频
 DOMAIN-SUFFIX,bayescom.com
 # > 车来了（包括小程序）
