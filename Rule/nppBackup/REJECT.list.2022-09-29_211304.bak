@@ -47,6 +47,10 @@ DOMAIN-KEYWORD,usage
 DOMAIN-SUFFIX,vungle.com
 DOMAIN-KEYWORD,wlmonitor
 DOMAIN-KEYWORD,zjtoolbar
+[Rule]
+
+## 广告域名列表
+
 DOMAIN-SUFFIX,10up.com
 DOMAIN-SUFFIX,111cn.net
 DOMAIN-SUFFIX,114la.com
