@@ -119,6 +119,44 @@ DOMAIN-SUFFIX,pay.mobile.sina.cn
 # 有道词典
 DOMAIN-SUFFIX,gorgon.youdao.com
 DOMAIN-SUFFIX,impservice.youdao.com
+# 爱奇艺 PPS（可能有多余项）
+DOMAIN-SUFFIX,ad.m.iqiyi.com
+DOMAIN-SUFFIX,afp.iqiyi.com
+DOMAIN-SUFFIX,api.cupid.iqiyi.com
+DOMAIN-SUFFIX,c.uaa.iqiyi.com
+DOMAIN-SUFFIX,cloudpush.iqiyi.com
+DOMAIN-SUFFIX,cm.passport.iqiyi.com
+DOMAIN-SUFFIX,emoticon.sns.iqiyi.com
+DOMAIN-SUFFIX,gamecenter.iqiyi.com
+DOMAIN-SUFFIX,hotchat-im.iqiyi.com
+DOMAIN-SUFFIX,ifacelog.iqiyi.com
+DOMAIN-SUFFIX,mbdlog.iqiyi.com
+DOMAIN-SUFFIX,meta.video.qiyi.com
+DOMAIN-SUFFIX,paopao.iqiyi.com
+DOMAIN-SUFFIX,policy.video.iqiyi.com
+DOMAIN-SUFFIX,rcd.iqiyi.com
+DOMAIN-SUFFIX,cmts.iqiyi.com
+DOMAIN-SUFFIX,data.video.qiyi.com
+DOMAIN-SUFFIX,msg.71.am
+DOMAIN-SUFFIX,msga.cupid.iqiyi.com
+IP-CIDR,101.227.14.80/29
+IP-CIDR,101.227.200.0/22
+IP-CIDR,112.13.64.0/22
+IP-CIDR,112.253.36.0/24
+IP-CIDR,117.139.16.0/22
+IP-CIDR,117.139.18.141/22
+IP-CIDR,119.188.13.32/29
+IP-CIDR,119.188.172.192/28
+IP-CIDR,119.188.173.0/27
+IP-CIDR,119.188.43.61/32
+IP-CIDR,123.125.116.0/22
+IP-CIDR,123.125.117.0/22
+IP-CIDR,123.130.122.128/28
+IP-CIDR,183.221.244.0/22
+IP-CIDR,183.221.247.189/22
+IP-CIDR,27.221.89.128/28
+IP-CIDR,60.211.171.128/29
+IP-CIDR,60.211.211.1/32
 #99 提交的公告 未测试是否误杀
 #以下为杭州公交 APP 的广告调用地址，含京东广告
 DOMAIN-SUFFIX,im-x.jd.com
