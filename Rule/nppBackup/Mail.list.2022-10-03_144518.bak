@@ -7,7 +7,3 @@ DOMAIN-SUFFIX,gmail.com
 DOMAIN-SUFFIX,outlook.com
 DOMAIN-SUFFIX,mail.me.com
 DOMAIN-SUFFIX,mail.infomaniak.com
-# > Gmail
-DOMAIN,pop.gmail.com
-DOMAIN,imap.gmail.com
-DOMAIN,smtp.gmail.com
