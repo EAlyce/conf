@@ -1,9 +1,0 @@
-//Spark mail
-USER-AGENT, *spark
-PROCESS-NAME,*spark
-USER-AGENT, *Spark
-//Services
-DOMAIN-SUFFIX,gmail.com
-DOMAIN-SUFFIX,outlook.com
-DOMAIN-SUFFIX,mail.me.com
-DOMAIN-SUFFIX,mail.infomaniak.com
