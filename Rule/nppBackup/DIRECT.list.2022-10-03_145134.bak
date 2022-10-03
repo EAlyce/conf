@@ -3,12 +3,17 @@ USER-AGENT,MicroMessenger Client
 USER-AGENT,WeChat*
 USER-AGENT,MApi* // Dianping
 # Ali
+DOMAIN-KEYWORD,alipay
+DOMAIN-KEYWORD,alicdn
 DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,.tmall.
 IP-CIDR,100.64.0.0/10,no-resolve
 IP-CIDR,198.11.188.0/25,no-resolve
 IP-CIDR,198.11.136.0/24,no-resolve
+
 # China
+DOMAIN-KEYWORD,baidu
+DOMAIN-KEYWORD,taobao
 DOMAIN,szshort.weixin.qq.com
 DOMAIN,szextshort.weixin.qq.com
 DOMAIN,szminorshort.weixin.qq.com
