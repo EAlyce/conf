@@ -11,3 +11,5 @@ DOMAIN-SUFFIX,mail.infomaniak.com
 DOMAIN,pop.gmail.com
 DOMAIN,imap.gmail.com
 DOMAIN,smtp.gmail.com
+
+DOMAIN-SUFFIX,mail.me.com,𝐌𝐚𝐢𝐥 // Added for: p38-smtp.mail.me.com:25
