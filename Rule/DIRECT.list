@@ -41,3 +41,5 @@ IP-CIDR,192.168.0.0/16
 IP-CIDR,10.0.0.0/8
 IP-CIDR,17.0.0.0/8
 IP-CIDR,100.64.0.0/10
+
+DOMAIN-SUFFIX,mail.qq.com,DIRECT // Added for: iwx.mail.qq.com:443
