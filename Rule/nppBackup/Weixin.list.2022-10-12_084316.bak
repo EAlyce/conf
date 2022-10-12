@@ -1,3 +1,5 @@
+# 该规则集包含绝大部分微信/WeChat网络请求 (IPv4/IPv6)
+# 请注意，该规则集除 Surge 之外不应该使用 (由于双栈问题且考虑到规则数量，部分子规则写法仅与Surge兼容)
 DOMAIN-KEYWORD,43.156.222.
 # WeChat Pay SDK
 IP-CIDR6,2402:4E00:1900:1700:0:9554:1AD0:140A/128,no-resolve
