@@ -1,4 +1,14 @@
-
+# NAME: WeChat
+# AUTHOR: blackmatrix7
+# REPO: https://github.com/blackmatrix7/ios_rule_script
+# UPDATED: 2022-08-05 22:37:57
+# DOMAIN: 7
+# DOMAIN-KEYWORD: 233
+# DOMAIN-SUFFIX: 22
+# IP-CIDR: 12
+# IP-CIDR6: 66
+# USER-AGENT: 2
+# TOTAL: 342
 DOMAIN,apd-pcdnwxlogin.teg.tencent-cloud.net
 DOMAIN,dldir1.qq.com
 DOMAIN,slife.xy-asia.com
@@ -341,6 +351,9 @@ IP-CIDR6,240e:ff:9018:100::/60
 IP-CIDR6,240e:ff:f100::/44
 USER-AGENT,MicroMessenger*
 USER-AGENT,WeChat*
+# 该规则集包含绝大部分微信/WeChat网络请求 (IPv4/IPv6)
+# 请注意，该规则集除 Surge 之外不应该使用 (由于双栈问题且考虑到规则数量，部分子规则写法仅与Surge兼容)
+
 DOMAIN-KEYWORD,101.226.211.
 DOMAIN-KEYWORD,101.226.222.
 DOMAIN-KEYWORD,101.226.226.
