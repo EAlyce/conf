@@ -1,14 +1,14 @@
-
+# China Apps
 USER-AGENT,MicroMessenger Client
 USER-AGENT,WeChat*
-USER-AGENT,MApi* 
-
+USER-AGENT,MApi* // Dianping
+# Ali
 DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,.tmall.
 IP-CIDR,100.64.0.0/10,no-resolve
 IP-CIDR,198.11.188.0/25,no-resolve
 IP-CIDR,198.11.136.0/24,no-resolve
-
+# China
 DOMAIN,szshort.weixin.qq.com
 DOMAIN,szextshort.weixin.qq.com
 DOMAIN,szminorshort.weixin.qq.com
@@ -31,7 +31,15 @@ DOMAIN-SUFFIX,gc.com.cn
 DOMAIN-SUFFIX,mail.163.com
 DOMAIN-SUFFIX,mail.qq.com
 DOMAIN-SUFFIX,mail.icloud.com.cn
-
+## 国内网站
 DOMAIN-SUFFIX,cn
 DOMAIN-KEYWORD,-cn
 DOMAIN-SUFFIX,local
+IP-CIDR,127.0.0.0/8
+IP-CIDR,172.16.0.0/12
+IP-CIDR,192.168.0.0/16
+IP-CIDR,10.0.0.0/8
+IP-CIDR,17.0.0.0/8
+IP-CIDR,100.64.0.0/10
+
+DOMAIN-SUFFIX,mail.qq.com,DIRECT // Added for: iwx.mail.qq.com:443
