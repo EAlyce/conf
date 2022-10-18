@@ -1,8 +1,0 @@
-#!name=Notability
-#!desc=Test
-
-
-[Script]
-http-response ^https:\/\/notability\.com\/subscriptions script-path=https://raw.githubusercontent.com/PoetryU/Scientist/master/Scripts/notabilityvip.js, request-body=true
-[MITM]
-hostname = *notability.com,notability.com
