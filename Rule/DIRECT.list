@@ -1,20 +1,7 @@
-
-USER-AGENT,MicroMessenger Client
-USER-AGENT,WeChat*
-USER-AGENT,MApi* 
-
-DOMAIN-KEYWORD,aliyun
-DOMAIN-KEYWORD,.tmall.
-IP-CIDR,100.64.0.0/10,no-resolve
-IP-CIDR,198.11.188.0/25,no-resolve
-IP-CIDR,198.11.136.0/24,no-resolve
-
 DOMAIN,szshort.weixin.qq.com
 DOMAIN,szextshort.weixin.qq.com
 DOMAIN,szminorshort.weixin.qq.com
 DOMAIN,mp.weixin.qq.com 
-
-#complement
 DOMAIN,mtalk.google.com
 DOMAIN,mobile-gtalk.l.google.com
 DOMAIN,alt1-mtalk.google.com
@@ -31,7 +18,6 @@ DOMAIN-SUFFIX,gc.com.cn
 DOMAIN-SUFFIX,mail.163.com
 DOMAIN-SUFFIX,mail.qq.com
 DOMAIN-SUFFIX,mail.icloud.com.cn
-
 DOMAIN-SUFFIX,cn
 DOMAIN-KEYWORD,-cn
-DOMAIN-SUFFIX,local
+DOMAIN-KEYWORD,taobao
