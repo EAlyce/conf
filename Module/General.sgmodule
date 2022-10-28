@@ -27,25 +27,6 @@ PROCESS-NAME,WebTorrent Helper,DIRECT
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
 [Host]
 mtalk.google.com = 108.177.125.188
-dl.google.com = server:119.29.29.29
-dl.l.google.com = server:119.29.29.29
-update.googleapis.com = server:119.29.29.29
-*.dl.playstation.net = server:119.29.29.29
-amplifi.lan = server:syslib
-router.synology.com = server:syslib
-sila.razer.com = server:syslib
-router.asus.com = server:syslib
-routerlogin.net = server:syslib
-orbilogin.com = server:syslib
-www.LinksysSmartWiFi.com = server:syslib
-LinksysSmartWiFi.com = server:syslib
-myrouter.local = server:syslib
-www.miwifi.com = server:syslib
-miwifi.com = server:syslib
-mediarouter.home = server:syslib
-tplogin.cn = server:syslib 
-tplinklogin.net = server:syslib
-melogin.cn = server:syslib
-falogin.cn = server:syslib
+
 [MITM]
 hostname = %APPEND% www.google.cn, www.g.cn
