@@ -1,7 +1,6 @@
 #!name=通用模块
-#!desc=2022-09-13
+#!desc=2022/10/28 @ExaAlice
 [Rule]
-# > Google
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
 DOMAIN,alt1-mtalk.google.com,DIRECT
@@ -14,7 +13,6 @@ DOMAIN,alt7-mtalk.google.com,DIRECT
 DOMAIN,alt8-mtalk.google.com,DIRECT
 DOMAIN,alt9-mtalk.google.com,DIRECT
 DOMAIN-SUFFIX,mobile-gtalk.l.google.com,DIRECT
-# > Download
 PROCESS-NAME,aria2c,DIRECT
 PROCESS-NAME,fdm,DIRECT
 PROCESS-NAME,Folx,DIRECT
@@ -28,37 +26,26 @@ PROCESS-NAME,WebTorrent Helper,DIRECT
 ^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
 [Host]
-
-# > Firebase Cloud Messaging
 mtalk.google.com = 108.177.125.188
-
-# > Google Dl
 dl.google.com = server:119.29.29.29
 dl.l.google.com = server:119.29.29.29
 update.googleapis.com = server:119.29.29.29
-
-# > PlayStation
 *.dl.playstation.net = server:119.29.29.29
-
-# > Router Admin Panel
-amplifi.lan = server:syslib // Ubiquiti Amplifi Router
-router.synology.com = server:syslib // Synology Router
-sila.razer.com = server:syslib // Razer Sila Router
-router.asus.com = server:syslib // Asus Router
-routerlogin.net = server:syslib // Netgear Router
-orbilogin.com = server:syslib // Netgear Obri Router
-www.LinksysSmartWiFi.com = server:syslib // Linksys Router
-LinksysSmartWiFi.com = server:syslib // Linksys Router
-myrouter.local = server:syslib // Linksys Router
-www.miwifi.com = server:syslib // Xiaomi Mi WiFi Router
-miwifi.com = server:syslib // Xiaomi Mi WiFi Router
-mediarouter.home = server:syslib // Huawei Router
-tplogin.cn = server:syslib // TP-Link Router
-tplinklogin.net = server:syslib // TP-Link Router
-melogin.cn = server:syslib // MERCURY Router
-falogin.cn = server:syslib // FAST Router
-
-
+amplifi.lan = server:syslib
+router.synology.com = server:syslib
+sila.razer.com = server:syslib
+router.asus.com = server:syslib
+routerlogin.net = server:syslib
+orbilogin.com = server:syslib
+www.LinksysSmartWiFi.com = server:syslib
+LinksysSmartWiFi.com = server:syslib
+myrouter.local = server:syslib
+www.miwifi.com = server:syslib
+miwifi.com = server:syslib
+mediarouter.home = server:syslib
+tplogin.cn = server:syslib 
+tplinklogin.net = server:syslib
+melogin.cn = server:syslib
+falogin.cn = server:syslib
 [MITM]
-
 hostname = %APPEND% www.google.cn, www.g.cn
