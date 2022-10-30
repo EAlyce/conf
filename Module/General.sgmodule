@@ -23,8 +23,8 @@ PROCESS-NAME,uTorrent,DIRECT
 PROCESS-NAME,WebTorrent,DIRECT
 PROCESS-NAME,WebTorrent Helper,DIRECT
 [URL Rewrite]
-^https?:\/\/(www\.)?g\.cn https://www.google.com/ncr 302
-^https?:\/\/(www\.)?google\.cn https://www.google.com/ncr 302
+^https?:\/\/(www\.)?g\.cn https://www.google.com 302
+^https?:\/\/(www\.)?google\.cn https://www.google.com 302
 [Host]
 mtalk.google.com = 108.177.125.188
 
