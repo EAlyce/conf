@@ -1,7 +1,7 @@
-.gmail.com
-.imap.gmail.com
-.mail.infomaniak.com
-.mail.me.com
-.outlook.com
-.pop.gmail.com
-.smtp.gmail.com
+DOMAIN-SUFFIX,gmail.com
+DOMAIN-SUFFIX,outlook.com
+DOMAIN-SUFFIX,mail.infomaniak.com
+DOMAIN,pop.gmail.com
+DOMAIN,imap.gmail.com
+DOMAIN,smtp.gmail.com
+DOMAIN-SUFFIX,mail.me.com
