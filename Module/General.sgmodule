@@ -1,37 +1,6 @@
-#!name=通用模块
+#!name=谷歌重定向💫
 #!desc=2022/10/28 @ExaAlice
-[Rule]
-DOMAIN,mtalk.google.com,DIRECT
-DOMAIN,mobile-gtalk.l.google.com,DIRECT
-DOMAIN,alt1-mtalk.google.com,DIRECT
-DOMAIN,alt2-mtalk.google.com,DIRECT
-DOMAIN,alt3-mtalk.google.com,DIRECT
-DOMAIN,alt4-mtalk.google.com,DIRECT
-DOMAIN,alt5-mtalk.google.com,DIRECT
-DOMAIN,alt6-mtalk.google.com,DIRECT
-DOMAIN,alt7-mtalk.google.com,DIRECT
-DOMAIN,alt8-mtalk.google.com,DIRECT
-DOMAIN,alt9-mtalk.google.com,DIRECT
-DOMAIN-SUFFIX,mobile-gtalk.l.google.com,DIRECT
-PROCESS-NAME,v2ray,DIRECT
-PROCESS-NAME,xray,DIRECT
-PROCESS-NAME,clash,DIRECT
-PROCESS-NAME,naive,DIRECT
-PROCESS-NAME,trojan,DIRECT
-PROCESS-NAME,trojan-go,DIRECT
-PROCESS-NAME,ss-local,DIRECT
-PROCESS-NAME,privoxy,DIRECT
-PROCESS-NAME,leaf,DIRECT
-PROCESS-NAME,Thunder,DIRECT
-PROCESS-NAME,DownloadService,DIRECT
-PROCESS-NAME,qBittorrent,DIRECT
-PROCESS-NAME,Transmission,DIRECT
-PROCESS-NAME,fdm,DIRECT
-PROCESS-NAME,aria2c,DIRECT
-PROCESS-NAME,Folx,DIRECT
-PROCESS-NAME,NetTransport,DIRECT
-PROCESS-NAME,uTorrent,DIRECT
-PROCESS-NAME,WebTorrent,DIRECT
+
 [URL Rewrite]
 ^https?:\/\/(www\.)?g\.cn https://www.google.com 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com 302
