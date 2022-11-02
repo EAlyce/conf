@@ -22,12 +22,19 @@ DOMAIN-SUFFIX,skvqedp8.xyz,REJECT // 广告
 DOMAIN-SUFFIX,oppu778.top,REJECT // 广告
 DOMAIN-SUFFIX,xba777.xyz,REJECT // 广告
 DOMAIN-SUFFIX,wenkans.xyz,REJECT // 高腐屋广告
-DOMAIN-SUFFIX,gdgmhur.cn,DIRECT
-DOMAIN-SUFFIX,haochenjituan.hk,REJECT
-DOMAIN-SUFFIX,gdgmhur.cn,DIRECT
-DOMAIN-SUFFIX,bdxiguaimg.com,REJECT
-DOMAIN-SUFFIX,qlogo.cn,REJECT
-DOMAIN-SUFFIX,yichan.net.cn,REJECT
-DOMAIN-SUFFIX,meiweifood.xyz,REJECT // Added for: go.meiweifood.xyz:443
-DOMAIN-SUFFIX,ezxws.cyou,REJECT // Added for: vlets.ezxws.cyou:443
-DOMAIN-SUFFIX,bdstatic.com,REJECT // Added for: zz.bdstatic.com:443
+DOMAIN-SUFFIX,gdgmhur.cn
+DOMAIN-SUFFIX,haochenjituan.hk
+DOMAIN-SUFFIX,gdgmhur.cn
+DOMAIN-SUFFIX,bdxiguaimg.com
+DOMAIN-SUFFIX,qlogo.cn
+DOMAIN-SUFFIX,yichan.net.cn
+DOMAIN-SUFFIX,meiweifood.xyz // Added for: go.meiweifood.xyz:443
+DOMAIN-SUFFIX,ezxws.cyou // Added for: vlets.ezxws.cyou:443
+DOMAIN-SUFFIX,bdstatic.com // Added for: zz.bdstatic.com:443
+DOMAIN-SUFFIX,akfhe.xyz // Added for: akfhe.xyz:443
+DOMAIN-SUFFIX,yichan.net.cn
+DOMAIN-SUFFIX,bdxiguaimg.com
+DOMAIN-SUFFIX,byteimg.com
+DOMAIN-SUFFIX,haochenjituan.hk
+DOMAIN-SUFFIX,gdgmhur.cn
+DOMAIN-SUFFIX,gdsoq.com // Added for: f99.gdsoq.com:80 (http://f99.gdsoq.com/ah/?r=1667406248295&pt=2&ag=4954&c=1&v=89)
