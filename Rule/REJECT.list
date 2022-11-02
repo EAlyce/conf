@@ -17,3 +17,17 @@ DOMAIN-SUFFIX,cyaaa.me
 DOMAIN,cyaaa.me
 DOMAIN-SUFFIX,mtyshi.com
 DOMAIN-SUFFIX,qstzar.cn
+DOMAIN-SUFFIX,crashlyticsapi.com,REJECT
+DOMAIN-SUFFIX,skvqedp8.xyz,REJECT // 广告
+DOMAIN-SUFFIX,oppu778.top,REJECT // 广告
+DOMAIN-SUFFIX,xba777.xyz,REJECT // 广告
+DOMAIN-SUFFIX,wenkans.xyz,REJECT // 高腐屋广告
+DOMAIN-SUFFIX,gdgmhur.cn,DIRECT
+DOMAIN-SUFFIX,haochenjituan.hk,REJECT
+DOMAIN-SUFFIX,gdgmhur.cn,DIRECT
+DOMAIN-SUFFIX,bdxiguaimg.com,REJECT
+DOMAIN-SUFFIX,qlogo.cn,REJECT
+DOMAIN-SUFFIX,yichan.net.cn,REJECT
+DOMAIN-SUFFIX,meiweifood.xyz,REJECT // Added for: go.meiweifood.xyz:443
+DOMAIN-SUFFIX,ezxws.cyou,REJECT // Added for: vlets.ezxws.cyou:443
+DOMAIN-SUFFIX,bdstatic.com,REJECT // Added for: zz.bdstatic.com:443
