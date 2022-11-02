@@ -3,14 +3,8 @@ DOMAIN,szextshort.weixin.qq.com
 DOMAIN,szminorshort.weixin.qq.com
 DOMAIN,szshort.weixin.qq.com
 DOMAIN-KEYWORD,-cn
-DOMAIN-KEYWORD,.tmall.com
-DOMAIN-KEYWORD,alicdn
 DOMAIN-KEYWORD,alipay
-DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,baidu
-DOMAIN-KEYWORD,beplay
-DOMAIN-KEYWORD,microsoft
-DOMAIN-KEYWORD,officecdn
 DOMAIN-KEYWORD,taobao
 DOMAIN-SUFFIX,cn
 DOMAIN-SUFFIX,gc.com.cn
