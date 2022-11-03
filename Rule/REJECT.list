@@ -37,7 +37,8 @@ DOMAIN-SUFFIX,bdxiguaimg.com
 DOMAIN-SUFFIX,byteimg.com
 DOMAIN-SUFFIX,haochenjituan.hk
 DOMAIN-SUFFIX,gdgmhur.cn
-DOMAIN-SUFFIX,gdsoq.com // Added for: f99.gdsoq.com:80 (http://f99.gdsoq.com/ah/?r=1667406248295&pt=2&ag=4954&c=1&v=89)
+DOMAIN-SUFFIX,gdsoq.com 
+#missav
 DOMAIN-SUFFIX,creative.live.missav.com
 DOMAIN-SUFFIX,cashewsforlife208.com
 DOMAIN-SUFFIX,ingest.sentry
