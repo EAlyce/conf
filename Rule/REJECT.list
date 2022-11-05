@@ -1,10 +1,5 @@
 #Pikpak网盘检测大陆ip
 DOMAIN,access.mypikpak.com
-#中国反诈官网
-IP-CIDR,39.102.194.95/32,no-resolve
-IP-CIDR,182.43.124.6/32,no-resolve
-IP-CIDR,101.35.177.86/32,no-resolve
-DOMAIN,96110.pages.dev
 DOMAIN-SUFFIX,gdt.qq.com
 DOMAIN-SUFFIX,ssl.qhimg.com
 DOMAIN-SUFFIX,qubiankeji.com
@@ -13,26 +8,13 @@ DOMAIN-SUFFIX,bytecdntp.com
 DOMAIN-SUFFIX,mtyshi.com
 DOMAIN-SUFFIX,cyaaa.me
 DOMAIN-SUFFIX,mtyshi.com
-DOMAIN-SUFFIX,crashlyticsapi.com,REJECT
-DOMAIN-SUFFIX,skvqedp8.xyz,REJECT // 广告
-DOMAIN-SUFFIX,oppu778.top,REJECT // 广告
-DOMAIN-SUFFIX,xba777.xyz,REJECT // 广告
-DOMAIN-SUFFIX,wenkans.xyz,REJECT // 高腐屋广告
-#missav
-DOMAIN-SUFFIX,creative.live.missav.com
-DOMAIN-SUFFIX,cashewsforlife208.com
-DOMAIN-SUFFIX,ingest.sentry
-DOMAIN-SUFFIX,phloxsub73ulata.com
-DOMAIN-SUFFIX,xxxjmp.com
-DOMAIN-SUFFIX,pitrespite.com
-DOMAIN-SUFFIX,alexametrics.com
-DOMAIN-SUFFIX,designslicensedeep.com
-DOMAIN-SUFFIX,a.bestcontentfood.top
-DOMAIN-SUFFIX,tsyndicate.com
-DOMAIN-SUFFIX,cashewsforlife208.com
-DOMAIN-SUFFIX,mc7clurd09pla4nrtat7ion.com
-DOMAIN-SUFFIX,e67repidwnfu7gcha.com
-DOMAIN-SUFFIX, mc7clurd09pla4nrtat7ion.com
-DOMAIN-SUFFIX,e67repidwnfu7gcha.com
-DOMAIN-SUFFIX,wuzbhjpvsf.com
-DOMAIN-SUFFIX,a.realsrv.com
+DOMAIN-SUFFIX,crashlyticsapi.com
+DOMAIN-SUFFIX,skvqedp8.xyz// 广告
+DOMAIN-SUFFIX,oppu778.top // 广告
+DOMAIN-SUFFIX,xba777.xyz // 广告
+DOMAIN-SUFFIX,wenkans.xyz // 高腐屋广告
+#中国反诈官网
+IP-CIDR,39.102.194.95/32,no-resolve
+IP-CIDR,182.43.124.6/32,no-resolve
+IP-CIDR,101.35.177.86/32,no-resolve
+DOMAIN-SUFFIX,96110.pages.dev
