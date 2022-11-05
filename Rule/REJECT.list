@@ -8,36 +8,16 @@ DOMAIN,96110.pages.dev
 DOMAIN-SUFFIX,gdt.qq.com
 DOMAIN-SUFFIX,ssl.qhimg.com
 DOMAIN-SUFFIX,qubiankeji.com
-DOMAIN-SUFFIX,hm.baidu.com
 DOMAIN-SUFFIX,iemwbu.cn
 DOMAIN-SUFFIX,bytecdntp.com
-DOMAIN-SUFFIX,xcvhy.xyz
 DOMAIN-SUFFIX,mtyshi.com
 DOMAIN-SUFFIX,cyaaa.me
-DOMAIN,cyaaa.me
 DOMAIN-SUFFIX,mtyshi.com
-DOMAIN-SUFFIX,qstzar.cn
 DOMAIN-SUFFIX,crashlyticsapi.com,REJECT
 DOMAIN-SUFFIX,skvqedp8.xyz,REJECT // 广告
 DOMAIN-SUFFIX,oppu778.top,REJECT // 广告
 DOMAIN-SUFFIX,xba777.xyz,REJECT // 广告
 DOMAIN-SUFFIX,wenkans.xyz,REJECT // 高腐屋广告
-DOMAIN-SUFFIX,gdgmhur.cn
-DOMAIN-SUFFIX,haochenjituan.hk
-DOMAIN-SUFFIX,gdgmhur.cn
-DOMAIN-SUFFIX,bdxiguaimg.com
-DOMAIN-SUFFIX,qlogo.cn
-DOMAIN-SUFFIX,yichan.net.cn
-DOMAIN-SUFFIX,meiweifood.xyz // Added for: go.meiweifood.xyz:443
-DOMAIN-SUFFIX,ezxws.cyou // Added for: vlets.ezxws.cyou:443
-DOMAIN-SUFFIX,bdstatic.com // Added for: zz.bdstatic.com:443
-DOMAIN-SUFFIX,akfhe.xyz // Added for: akfhe.xyz:443
-DOMAIN-SUFFIX,yichan.net.cn
-DOMAIN-SUFFIX,bdxiguaimg.com
-DOMAIN-SUFFIX,byteimg.com
-DOMAIN-SUFFIX,haochenjituan.hk
-DOMAIN-SUFFIX,gdgmhur.cn
-DOMAIN-SUFFIX,gdsoq.com 
 #missav
 DOMAIN-SUFFIX,creative.live.missav.com
 DOMAIN-SUFFIX,cashewsforlife208.com
