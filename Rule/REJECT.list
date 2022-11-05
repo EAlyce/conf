@@ -9,11 +9,10 @@ DOMAIN-SUFFIX,mtyshi.com
 DOMAIN-SUFFIX,cyaaa.me
 DOMAIN-SUFFIX,mtyshi.com
 DOMAIN-SUFFIX,crashlyticsapi.com
-DOMAIN-SUFFIX,skvqedp8.xyz// 广告
-DOMAIN-SUFFIX,oppu778.top // 广告
-DOMAIN-SUFFIX,xba777.xyz // 广告
-DOMAIN-SUFFIX,wenkans.xyz // 高腐屋广告
-#中国反诈官网
+DOMAIN-SUFFIX,skvqedp8.xyz
+DOMAIN-SUFFIX,oppu778.top
+DOMAIN-SUFFIX,xba777.xyz
+DOMAIN-SUFFIX,wenkans.xyz
 IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,101.35.177.86/32,no-resolve
