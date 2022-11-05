@@ -1,8 +1,8 @@
-IP-ASN,211157,no-resolve
-IP-ASN,44907,no-resolve
-IP-ASN,59930,no-resolve
-IP-ASN,62014,no-resolve
-IP-ASN,62041,no-resolve
+IP-ASN,211157
+IP-ASN,44907
+IP-ASN,59930
+IP-ASN,62014
+IP-ASN,62041
 OR,((IP-ASN,44907,no-resolve),(IP-ASN,59930,no-resolve),(IP-ASN,62014,no-resolve),(IP-ASN,62041,no-resolve),(IP-ASN,211157,no-resolve))
 IP-CIDR,109.239.140.0/24,no-resolve
 IP-CIDR,149.154.160.0/20,no-resolve
