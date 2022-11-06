@@ -1,7 +1,17 @@
-#!name=谷歌重定向💫
-#!desc=2022/10/28 @ExaAlice
+#!name=General
+#!desc=2022-11-06 @ExaAlice
 [Rule]
 DOMAIN-SUFFIX,mail.icloud.com.cn,DIRECT
+DOMAIN,mp.weixin.qq.com,DIRECT
+DOMAIN,szextshort.weixin.qq.com,DIRECT
+DOMAIN,szminorshort.weixin.qq.com,DIRECT
+DOMAIN,szshort.weixin.qq.com,DIRECT
+DOMAIN-KEYWORD,alipay,DIRECT
+DOMAIN-KEYWORD,baidu,DIRECT
+DOMAIN-KEYWORD,taobao,DIRECT
+DOMAIN-SUFFIX,cn,DIRECT
+DOMAIN-SUFFIX,mail.163.com,DIRECT
+DOMAIN-SUFFIX,mail.qq.com,DIRECT
 [URL Rewrite]
 ^https?:\/\/(www\.)?g\.cn https://www.google.com 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com 302
