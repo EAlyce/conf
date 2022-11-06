@@ -1,5 +1,13 @@
 #!name=General
 #!desc=2022-11-06 @ExaAlice
+[General]
+dns-server = 223.5.5.5, 114.114.114.114
+exclude-simple-hostnames = true
+force-http-engine-hosts = *.ott.cibntv.net, 119.18.193.135, 122.14.246.33, 123.59.31.1, 175.102.178.52, 116.253.24.*, 124.193.*, 124.14*, 119.79*, 175.6.26.*, 211.162.*, 220.112.* 220.169.153.*,
+read-etc-hosts = true
+skip-proxy = 192.168.0.0/24, 10.0.0.0/8, 172.16.0.0/12, 127.0.0.1, localhost, *.local
+hijack-dns = 8.8.8.8:53, 1.1.1.1:53
+always-real-ip = *.msftconnecttest.com, *.msftncsi.com, *.srv.nintendo.net, *.stun.playstation.net, xbox.*.microsoft.com, *.xboxlive.com, *.logon.battlenet.com.cn, *.logon.battle.net, stun.l.google.com
 [Rule]
 DOMAIN-SUFFIX,mail.icloud.com.cn,DIRECT
 DOMAIN,mp.weixin.qq.com,DIRECT
@@ -29,16 +37,13 @@ IP-CIDR,39.102.194.95/32,REJECT,no-resolve
 IP-CIDR,182.43.124.6/32,REJECT,no-resolve
 IP-CIDR,101.35.177.86/32,REJECT,no-resolve
 DOMAIN-SUFFIX,96110.pages.dev,REJECT
-
 [URL Rewrite]
 ^https?:\/\/(www\.)?g\.cn https://www.google.com 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com 302
 [Host]
 mtalk.google.com = 108.177.125.188
-
 [MITM]
 hostname = %APPEND% www.google.cn, www.g.cn, www.google.com.hk
-
 [Script]
 内容农场(bing) = type=http-response,pattern="https?:\/\/(www\.bing)(\.\w{2,4}){1,2}\/(search\?.*|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
 内容农场(google) = type=http-response,pattern="https?:\/\/(www\.google)(\.\w{2,4}){1,2}\/(search\?|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
