@@ -35,7 +35,7 @@ DOMAIN-SUFFIX,96110.pages.dev,REJECT
 [Host]
 mtalk.google.com = 108.177.125.188
 [MITM]
-hostname = %APPEND% www.google.cn, www.g.cn, www.google.com.hk
+hostname = %APPEND% www.google.cn, www.g.cn
 [Script]
 内容农场(bing) = type=http-response,pattern="https?:\/\/(www\.bing)(\.\w{2,4}){1,2}\/(search\?.*|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
 内容农场(google) = type=http-response,pattern="https?:\/\/(www\.google)(\.\w{2,4}){1,2}\/(search\?|\?sa=|\?FORM)(?!.*?(apps=))",requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js,script-update-interval=0
