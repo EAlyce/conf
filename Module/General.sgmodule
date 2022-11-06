@@ -1,6 +1,7 @@
 #!name=谷歌重定向💫
 #!desc=2022/10/28 @ExaAlice
-
+[Rule]
+DOMAIN-SUFFIX,mail.icloud.com.cn,DIRECT
 [URL Rewrite]
 ^https?:\/\/(www\.)?g\.cn https://www.google.com 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com 302
