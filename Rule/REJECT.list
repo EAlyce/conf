@@ -16,3 +16,13 @@ IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,101.35.177.86/32,no-resolve
 DOMAIN-SUFFIX,96110.pages.dev
+DOMAIN-SUFFIX,cyaaa.me,REJECT // Added for: cyaaa.me:443
+DOMAIN-SUFFIX,qstzar.cn,REJECT-TINYGIF // Added for: 2vkjju.qstzar.cn:443
+DOMAIN-SUFFIX,mtyshi.com,REJECT-TINYGIF // Added for: mtyshi.com:443
+DOMAIN-SUFFIX,tatwa.cn,REJECT // Added for: apk.tatwa.cn:443
+DOMAIN-SUFFIX,hm.baidu.com,REJECT-TINYGIF // Added for: hm.baidu.com:443
+DOMAIN-SUFFIX,iyurw.xyz,REJECT // Added for: iyurw.xyz:443
+DOMAIN-SUFFIX,iemwbu.cn,REJECT // Added for: sski1v.iemwbu.cn:443
+DOMAIN-SUFFIX,renxingganwu.com,REJECT // Added for: kgju1c.renxingganwu.com:443
+DOMAIN-SUFFIX,chwgk9c.com,REJECT // Added for: chwgk9c.com:443
+DOMAIN-SUFFIX,cnfbveikeb.com,REJECT // Added for: cnfbveikeb.com:443
