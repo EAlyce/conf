@@ -28,6 +28,6 @@ IP-CIDR6,2a0a:f280:203::/48,no-resolve
 IP-CIDR6,2a0a:f280::/32,no-resolve
 OR,((IP-ASN,44907,no-resolve),(IP-ASN,59930,no-resolve),(IP-ASN,62014,no-resolve),(IP-ASN,62041,no-resolve),(IP-ASN,211157,no-resolve))
 IP-CIDR6,2001:b28:f23d::/48,no-resolve
-IP6-CIDR,2001:b28:f23c::/47,no-resolve
-IP6-CIDR,2001:b28:f23c::/48,no-resolve
-IP6-CIDR,2a0a:f280::/32,no-resolve
+IP-CIDR6,2001:b28:f23c::/47,no-resolve
+IP-CIDR6,2001:b28:f23c::/48,no-resolve
+IP-CIDR6,2a0a:f280::/32,no-resolve
