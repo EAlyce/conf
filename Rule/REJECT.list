@@ -15,6 +15,8 @@ IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,101.35.177.86/32,no-resolve
 DOMAIN-SUFFIX,96110.pages.dev
+IP-CIDR,0.0.0.1/32,no-resolve
+
 DOMAIN-SUFFIX,qstzar.cn
 DOMAIN-SUFFIX,tatwa.cn
 DOMAIN-SUFFIX,hm.baidu.com
