@@ -1,24 +1,5 @@
 #!name=General
 #!desc=2022-11-06 @ExaAlice
-[Rule]
-DOMAIN-SUFFIX,mail.icloud.com.cn,DIRECT
-DOMAIN,mp.weixin.qq.com,DIRECT
-DOMAIN,szextshort.weixin.qq.com,DIRECT
-DOMAIN,szminorshort.weixin.qq.com,DIRECT
-DOMAIN,szshort.weixin.qq.com,DIRECT
-DOMAIN-KEYWORD,alipay,DIRECT
-DOMAIN-KEYWORD,baidu,DIRECT
-DOMAIN-KEYWORD,taobao,DIRECT
-DOMAIN-SUFFIX,mail.163.com,DIRECT
-DOMAIN-SUFFIX,mail.qq.com,DIRECT
-DOMAIN-SUFFIX,access.mypikpak.com,REJECT
-DOMAIN-SUFFIX,gdt.qq.com,REJECT
-DOMAIN-SUFFIX,ssl.qhimg.com,REJECT
-DOMAIN-SUFFIX,qubiankeji.com,REJECT
-IP-CIDR,39.102.194.95/32,REJECT,no-resolve
-IP-CIDR,182.43.124.6/32,REJECT,no-resolve
-IP-CIDR,101.35.177.86/32,REJECT,no-resolve
-DOMAIN-SUFFIX,96110.pages.dev,REJECT
 [URL Rewrite]
 ^https?:\/\/(www\.)?g\.cn https://www.google.com 302
 ^https?:\/\/(www\.)?google\.cn https://www.google.com 302
