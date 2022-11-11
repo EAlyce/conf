@@ -31,9 +31,9 @@ DOMAIN-SUFFIX,itunes.apple.com
 DOMAIN-SUFFIX,itunes.com
 DOMAIN-SUFFIX,lencr.org
 DOMAIN-SUFFIX,letsencrypt.org
-DOMAIN-SUFFIX,lookup-api.apple.com // Dictionary
+DOMAIN-SUFFIX,lookup-api.apple.com
 DOMAIN-SUFFIX,me.com
-DOMAIN-SUFFIX,mzstatic.com // App Store & iTunes Images
+DOMAIN-SUFFIX,mzstatic.com
 DOMAIN-SUFFIX,news.now.com
 DOMAIN-SUFFIX,news.ycombinator.com
 DOMAIN-SUFFIX,oculus.com
@@ -46,5 +46,5 @@ DOMAIN-SUFFIX,uchicago.edu
 DOMAIN-SUFFIX,xda-developers.com
 DOMAIN-SUFFIX,youtu.be
 DOMAIN-SUFFIX,ytimg.com
-PROCESS-NAME,storedownloadd // Mac App Store
-USER-AGENT,com.apple.appstored* // iOS App Store
+PROCESS-NAME,storedownloadd
+USER-AGENT,com.apple.appstored*
