@@ -3,6 +3,7 @@
 #!system=ios
 
 [General]
+#来自mieqq
 compatibility-mode = 3
 force-http-engine-hosts = %APPEND% -<ip-address>, *
 
