@@ -1,9 +1,6 @@
 #!name=General
 #!desc=2022-11-06 @ExaAlice
 [Rule]
-# > Spotify
-DOMAIN-SUFFIX,ap.spotify.com,Direct
-# > Google
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
 DOMAIN,alt1-mtalk.google.com,DIRECT
