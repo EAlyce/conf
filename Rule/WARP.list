@@ -1,3 +1,4 @@
+#检测Warp+
 DOMAIN-SUFFIX,api.cloudflareclient.com
 IP-CIDR6,2606:4700:4700::1111
 DOMAIN-SUFFIX,cloudflare.com
