@@ -5,8 +5,7 @@
 [General]
 compatibility-mode = 3
 force-http-engine-hosts = %APPEND% -<ip-address>, *
-tun-excluded-routes = 239.255.255.250/32
-tun-included-routes = 192.168.1.12/32
+
 
 [MITM]
 tcp-connection = true
