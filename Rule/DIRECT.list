@@ -1,4 +1,15 @@
-#国内直连
+DOMAIN,mtalk.google.com
+DOMAIN,mobile-gtalk.l.google.com
+DOMAIN,alt1-mtalk.google.com
+DOMAIN,alt2-mtalk.google.com
+DOMAIN,alt3-mtalk.google.com
+DOMAIN,alt4-mtalk.google.com
+DOMAIN,alt5-mtalk.google.com
+DOMAIN,alt6-mtalk.google.com
+DOMAIN,alt7-mtalk.google.com
+DOMAIN,alt8-mtalk.google.com
+DOMAIN,alt9-mtalk.google.com
+DOMAIN-SUFFIX,mobile-gtalk.l.google.com
 DOMAIN,weixin.qq.com
 DOMAIN-KEYWORD,.tmall.
 DOMAIN-KEYWORD,alicdn
