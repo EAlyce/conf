@@ -1,8 +1,5 @@
 #国内直连
-DOMAIN,mp.weixin.qq.com
-DOMAIN,szextshort.weixin.qq.com
-DOMAIN,szminorshort.weixin.qq.com
-DOMAIN,szshort.weixin.qq.com
+DOMAIN,weixin.qq.com
 DOMAIN-KEYWORD,.tmall.
 DOMAIN-KEYWORD,alicdn
 DOMAIN-KEYWORD,alipay
