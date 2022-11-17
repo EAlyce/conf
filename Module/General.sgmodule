@@ -1,5 +1,5 @@
 #!name=General
-#!desc= 
+#!desc=通用设置
 [Rule]
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
