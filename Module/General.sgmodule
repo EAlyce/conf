@@ -1,5 +1,5 @@
 #!name=General
-#!desc=2022-11-06 @ExaAlice
+#!desc= 
 [Rule]
 DOMAIN,mtalk.google.com,DIRECT
 DOMAIN,mobile-gtalk.l.google.com,DIRECT
