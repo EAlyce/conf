@@ -5,3 +5,4 @@ DOMAIN-SUFFIX,ssl.qhimg.com
 IP-CIDR,101.35.177.86/32,no-resolve
 IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,39.102.194.95/32,no-resolve
+IP-CIDR,0.0.0.1/32,no-resolve
