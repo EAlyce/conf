@@ -7,12 +7,3 @@ IP-CIDR,182.43.124.6/32,no-resolve
 IP-CIDR,39.102.194.95/32,no-resolve
 IP-CIDR,0.0.0.1/32,no-resolve
 
-IP-CIDR,91.108.0.0/16,no-resolve
-IP-CIDR,91.108.12.0/22,no-resolve
-IP-CIDR,91.108.16.0/21,no-resolve
-IP-CIDR,91.108.16.0/22,no-resolve
-IP-CIDR,91.108.20.0/22,no-resolve
-IP-CIDR,91.108.4.0/22,no-resolve
-IP-CIDR,91.108.56.0/22,no-resolve
-IP-CIDR,91.108.8.0/21,no-resolve
-IP-CIDR,91.108.8.0/22,no-resolve
