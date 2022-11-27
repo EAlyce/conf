@@ -1,4 +1,9 @@
 DOMAIN-KEYWORD,blogspot
+IP-CIDR,66.94.0.0/19,no-resolve
+IP-CIDR,206.29.177.36/32,no-resolve
+IP-CIDR,208.54.0.0/16,no-resolve
+DOMAIN-SUFFIX,t-mobile.com
+DOMAIN-SUFFIX,pub.3gppnetwork.org
 DOMAIN-KEYWORD,digicer
 DOMAIN-KEYWORD,dropbox
 DOMAIN-KEYWORD,facebook
