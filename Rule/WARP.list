@@ -1,8 +1,0 @@
-#检测Warp+
-DOMAIN-SUFFIX,api.cloudflareclient.com
-IP-CIDR6,2606:4700:4700::1111
-DOMAIN-SUFFIX,cloudflare.com
-DOMAIN-SUFFIX,1.1.1.1
-DOMAIN-SUFFIX,zero-trust-client.cloudflareclient.com
-DOMAIN,https://[2606:4700:4700::1111]/cdn-cgi/trace
-DOMAIN-SUFFIX,cloudflare-dns.com
