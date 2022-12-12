@@ -12,10 +12,4 @@ DOMAIN-SUFFIX,gc.com.cn
 DOMAIN-SUFFIX,mail.163.com
 DOMAIN-SUFFIX,mail.icloud.com.cn
 DOMAIN-SUFFIX,mail.qq.com
-IP-CIDR,198.11.136.0/24,no-resolve
-IP-CIDR,198.11.188.0/25,no-resolve
-USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*
-USER-AGENT,MApi* // Dianping
-USER-AGENT,MicroMessenger Client
-USER-AGENT,WeChat*
 IP-ASN,132203,no-resolve
