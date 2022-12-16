@@ -6,7 +6,7 @@ DOMAIN-KEYWORD,alipay
 DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,baidu
 DOMAIN-KEYWORD,taobao
- DOMAIN-SUFFIX,cn
+DOMAIN-SUFFIX,cn
 DOMAIN-SUFFIX,gc.com.cn
 DOMAIN-SUFFIX,mail.163.com
 DOMAIN-SUFFIX,mail.icloud.com.cn
@@ -403,3 +403,8 @@ DOMAIN-SUFFIX,redacted.ch
 DOMAIN-SUFFIX,springsunday.net
 DOMAIN-SUFFIX,tjupt.org
 DOMAIN-SUFFIX,totheglory.im
+DOMAIN-SUFFIX,gdfgq.club
+DOMAIN-SUFFIX,jianguopuzi.com
+DOMAIN-SUFFIX,jianguoyun.com
+DOMAIN-SUFFIX,nutstore.net
+DOMAIN-SUFFIX,nutstorehq.com
