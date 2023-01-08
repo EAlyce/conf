@@ -66,7 +66,7 @@ DOMAIN-SUFFIX,dropboxusercontent.com
 DOMAIN-SUFFIX,getdropbox.com
 DOMAIN-SUFFIX,paper-attachments.s3.amazonaws.com
 DOMAIN-SUFFIX,cdn-apple.com
-DOMAIN-SUFFIX,mzstatic.com // App Store & iTunes Images
+DOMAIN-SUFFIX,mzstatic.com
 DOMAIN-SUFFIX,aaplimg.com
 DOMAIN-SUFFIX,apple.co
 DOMAIN-SUFFIX,apple.com
@@ -74,9 +74,8 @@ DOMAIN-SUFFIX,icloud-content.com
 DOMAIN-SUFFIX,icloud.com
 DOMAIN-SUFFIX,itunes.com
 DOMAIN-SUFFIX,itunes.apple.com
-DOMAIN-SUFFIX,lookup-api.apple.com // Dictionary
+DOMAIN-SUFFIX,lookup-api.apple.com
 DOMAIN-SUFFIX,me.com
-PROCESS-NAME,storedownloadd // Mac App Store
-USER-AGENT,com.apple.appstored* // iOS App Store
-
+PROCESS-NAME,storedownloadd
+USER-AGENT,com.apple.appstored*
 DOMAIN-SUFFIX,vercel.app
