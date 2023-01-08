@@ -47,70 +47,62 @@ DOMAIN-SUFFIX,ikjwmfeds.xyz
 DOMAIN-SUFFIX,oikjed.xyz
 DOMAIN-SUFFIX,huimengmai.com
 DOMAIN-SUFFIX,huijingye.com
-DOMAIN-SUFFIX,gtimg.cn // Added for: https://pgdt.gtimg.cn/141/20204/snscosdownload/SZ/reserved/638dd9f5000836d81d93a469488b910b0000008d00004eec?m=8aac98fdfacc6d3162198b590d529e3e&ck=8aac98fdfacc6d3162198b590d529e3e&sha256=54fb5400248f147d9e7b2f40531d44c19cdef6244048d0cdbd0beec8c093be65
-DOMAIN-SUFFIX,mc-cdn.cn // Added for: https://smart-789.mc-cdn.cn/advert-image/2022/12/23/18/68864bf1fd8b40f088255b4e4abd4d92.gif?width=670&height=732
-DOMAIN-SUFFIX,pglstatp-toutiao.com // Added for: http://p6-be-pack-sign.pglstatp-toutiao.com/web.business.image/202206255d0d7b7d2b09a5d64bf9af07~tplv-qgppglrh0x-cs:456:300:q80.jpeg?x-expires=1942272000&x-signature=Yfj1liNJYSP0tjuio51qnS7iO8k%3D
-URL-REGEX,^https:\/\/img\.faloo\.com\/ou\/2022\/20221227135110\.png$ // Added for: https://img.faloo.com/ou/2022/20221227135110.png
-URL-REGEX,^https:\/\/img\.faloo\.com\/ou\/2022\/20221227135149\.png$ // Added for: https://img.faloo.com/ou/2022/20221227135149.png
-DOMAIN-SUFFIX,s.faloo.com // Added for: https://s.faloo.com/app/img_yqm.png
-DOMAIN-SUFFIX,rmm7ss.top // Added for: https://www.rmm7ss.top/qby_14053_89u76.js?65238461672891772495
-DOMAIN-SUFFIX,dmm87d.xyz // Added for: www.dmm87d.xyz:4886
-DOMAIN-SUFFIX,4236t.com // Added for: 4236t.com:30653
-DOMAIN-SUFFIX,happyhelper.cc // Added for: https://onetst.happyhelper.cc/130171315224577/264998028902403.png
-DOMAIN-SUFFIX,nwesdf.xyz // Added for: https://nwesdf.xyz/images/go-safari.png
-DOMAIN-SUFFIX,sstar.xyz // Added for: https://desk.sstar.xyz/UploadPicture/20231414_1.gif
-DOMAIN-SUFFIX,share.mob.com // Added for: http://api.share.mob.com:80/log4
-DOMAIN-SUFFIX,skyapi.live.net // Added for: skyapi.live.net:443
-DOMAIN-SUFFIX,sdk.e.qq.com // Added for: sdk.e.qq.com:443
-DOMAIN-SUFFIX,hm.baidu.com // Added for: hm.baidu.com:443
-DOMAIN-SUFFIX,tatwa.cn // Added for: apk.tatwa.cn:443
-DOMAIN-SUFFIX,mitaovc.com // Added for: mitaovc.com:443
-DOMAIN-SUFFIX,pfnprpm.com // Added for: pfnprpm.com:443
-DOMAIN-SUFFIX,ipify.org // Added for: api.ipify.org:443
-DOMAIN-SUFFIX,aapippay.com // Added for: ver.aapippay.com:443
-DOMAIN-SUFFIX,zzxedr.xyz // Added for: zzxedr.xyz:443
-DOMAIN-SUFFIX,3v7c7y.com // Added for: https://abb.3v7c7y.com/slot?2377029035902478992-10960
-DOMAIN-SUFFIX,3v7c7y.com // Added for: https://abb.3v7c7y.com/slot?2377029035902478992-23081
-DOMAIN-SUFFIX,kguapp.com // Added for: http://mail.kguapp.com/ah/?r=1672675707036&pt=2&ag=4954&c=1&h=13&x=231&y=262&v=912
-DOMAIN-SUFFIX,to30.cc // Added for: https://to30.cc/?channelCode=kf861
-DOMAIN-SUFFIX,aliyuncs.com // Added for: https://dongjingzn.oss-cn-hangzhou.aliyuncs.com/tupian/foots.png
-DOMAIN-SUFFIX,aliyuncs.com // Added for: https://dongjingzn.oss-cn-hangzhou.aliyuncs.com/tupian/close.png
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/91porn\.png$ // Added for: https://yazhouse8.com/images/gg/91porn.png
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/kaiyun\.jpg$ // Added for: https://yazhouse8.com/images/gg/kaiyun.jpg
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/wanghong\.png$ // Added for: https://yazhouse8.com/images/gg/wanghong.png
-DOMAIN-SUFFIX,urimnugocfr.com // Added for: https://urimnugocfr.com/get/1546957?zoneid=1546957&jp=_clpyqdb7l9zgavnv2a5hrd&nojs=0&ix=0&abvar=0&t=1&x=801&y=801&wcks=1&wgl=1&cnvs=1&os=-480&md=0&bb=0&lang=zh-CN&pf=iPhone&cd=32&sp=0&cid=4331745114810992
-DOMAIN-SUFFIX,14i8trbbx4.com // Added for: https://14i8trbbx4.com/get/1916056?zoneid=1916056&jp=_cl5mvy07zbqnthqmfl2psc&nojs=0&ix=0&abvar=0&t=1&x=801&y=801&wcks=1&wgl=1&cnvs=1&os=-480&md=undefined&bb=0&lang=zh-CN&pf=iPhone&cd=32&freq=1&cid=4894695068208333
-DOMAIN-SUFFIX,bncloudfl.com // Added for: https://cdn.bncloudfl.com/bn/58e/6ce/ee8/58e6ceee8cd52613f4205d7a5360f04f4ecc8e38.gif
-DOMAIN-SUFFIX,unpkg.com // Added for: https://unpkg.com/jquery@3.5.1/dist/jquery.min.js
-DOMAIN-SUFFIX,tumblrpics.com // Added for: https://tumblrpics.com/images/loading.gif
-DOMAIN-SUFFIX,tumblr.com // Added for: https://64.media.tumblr.com/248431b103da20b42933d9b7bdf6c833/0a9827a2dad60be8-af/s500x750/4861bdd236c8793ae9e1824991096e67f2dd9973.png
-DOMAIN-SUFFIX,ttnigai.cyou // Added for: https://mobivx.ttnigai.cyou/tftf_23861_uiisxjs?9e768d9dbd2e420be94f86abb6eae577
-DOMAIN-SUFFIX,8861267ccc.com // Added for: https://8861267ccc.com/d09767b90dfd4b6c954ae4b030af2a41.gif
-DOMAIN-SUFFIX,stwqhfi.cn // Added for: https://xgnsvx.stwqhfi.cn/MDAwMg00020002/0927/1664263356.gif
-DOMAIN-SUFFIX,7tad.cn // Added for: https://h.7tad.cn/?c=ggcha
-DOMAIN-SUFFIX,xmoiqwj.cn // Added for: fc.xmoiqwj.cn:8001
-DOMAIN-SUFFIX,qvlybpf.cn // Added for: https://image.qvlybpf.cn/2021/09/26013502328.txt
-DOMAIN-SUFFIX,qvlybpf.cn // Added for: https://image.qvlybpf.cn/2021/09/26013502328.txt
-DOMAIN-SUFFIX,bofnhn.com // Added for: mc.bofnhn.com:8001
-DOMAIN-SUFFIX,huizhoumi.com // Added for: https://picm.huizhoumi.com/2020/09/27022043561.txt
-DOMAIN-SUFFIX,dklkxb.xyz // Added for: https://dklkxb.xyz/angular.js?16666912777757431672674922837
-DOMAIN-SUFFIX,ddtv215.com // Added for: https://xsferehghjfnbmuiopdf.ddtv215.com/index.php/ajax/banner/?type=9&order=rnd&num=1
-DOMAIN-SUFFIX,ztxh-bj.com // Added for: https://ab.ztxh-bj.com//template/UT_wap/static/images/default.53522430.png
-DOMAIN-SUFFIX,doklam.wang // Added for: http://tu.doklam.wang/youdao/wm/20220508/7.usd
-DOMAIN-SUFFIX,zzyl.mobi // Added for: http://hsd.zzyl.mobi/json/slider.json?callback=jsonp1
-DOMAIN-SUFFIX,huixiqu.com // Added for: https://2808.huixiqu.com/undefined
-DOMAIN-SUFFIX,nhsq901.com // Added for: https://m.nhsq901.com/img/logo.png
-DOMAIN-SUFFIX,539397377.com // Added for: https://539397377.com/88ff577fa7454b2e872f3e3be1a44878.gif
-DOMAIN-SUFFIX,ooqenfl.cn // Added for: https://s.ooqenfl.cn/png/2020/11/21/a4e9ba69448bd.html
-DOMAIN-SUFFIX,kvevv.com // Added for: https://kvevv.com/0b053b2b59fbca09d1f7557fbed9c224.gif
-URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$ // Added for: https://www.tongrenquan.org/e/public/ViewClick/?classid=2&id=6385&addclick=1
-URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$ // Added for: https://www.tongrenquan.org/e/public/ViewClick/?classid=2&id=6385&addclick=1
-DOMAIN-SUFFIX,googleadservices.com // Added for: https://partner.googleadservices.com/gampad/cookie.js?domain=www.tongrenquan.org&callback=_gfp_s_&client=ca-pub-2847597968175045&cookie=ID%3Dc1a27149ca2fc5a7-22413f6126d90076%3AT%3D1672673958%3ART%3D1672673958%3AS%3DALNI_MaW6_Q-mZ3JwLvv5PGdrRQ_NuueJA&gpic=UID%3D00000b9c95c17c49%3AT%3D1672673958%3ART%3D1672673958%3AS%3DALNI_MatfETd6t5pUP4VR825EmIfQa8tkA&gpid_exp=1
-URL-REGEX,^https:\/\/www\.tongrenquan\.org\/skin\/default\/images\/bbb2\.png$ // Added for: https://www.tongrenquan.org/skin/default/images/bbb2.png
-DOMAIN-SUFFIX,googleadservices.com // Added for: https://partner.googleadservices.com/gampad/cookie.js?domain=www.tongrenquan.org&callback=_gfp_s_&client=ca-pub-2847597968175045&cookie=ID%3Dc1a27149ca2fc5a7-22413f6126d90076%3AT%3D1672673958%3ART%3D1672673958%3AS%3DALNI_MaW6_Q-mZ3JwLvv5PGdrRQ_NuueJA&gpic=UID%3D00000b9c95c17c49%3AT%3D1672673958%3ART%3D1672673958%3AS%3DALNI_MatfETd6t5pUP4VR825EmIfQa8tkA&gpid_exp=1
-DOMAIN-SUFFIX,doubleclick.net // Added for: https://googleads.g.doubleclick.net/pagead/adview?ai=CIVS5QfyyY-XUG9H-2gS6u4z4DL3U7rBc8K_Evn3AjbcBEAEgAGDZAoIBF2NhLXB1Yi0yODQ3NTk3OTY4MTc1MDQ1yAEJqAMBqgTPAU_QnsrtAQ3Nw2lmsti96GMoouyFZ3aEOuVC73k6ouAxd6rtFv5n6FRk000jA46mVEvXHic4scEqnC8xce87WOQXHVtrzivZmuIWrHS2fwTWtbG3L7zQEesQ6Evs7KV0wYTfQuJxPcLZ5A83bqpVTScAE6Sph3HfYa3BWCM3nsKbjL-OEp7S9pcvGP7_ENllaycOKQEcECRPUCzNBeTfdwtBiEYCOBJsSscfVhq8YoM3Pu3fKAQrtR1nM_mnaymeJok5tZEi_9O3A7MtjghphIAG8qbiosTCwLT6AaAGIagHpr4bqAeW2BuoB6qbsQKoB_-esQKoB9-fsQLYBwDSCA4IiGEQATIDioIBOgKAQIAKAfoLAggBgAwB0BUBgBcBshcaChgSFHB1Yi0yODQ3NTk3OTY4MTc1MDQ1GAA&sigh=8KUNwZ4n4FY&uach_m=[UACH]&cid=CAQSPwDq26N94GMPfer6rbwYRkPsBM8Y52MUgE3pKttB6MFULdKDYT4uocs42Oe3AFWVXnje0ICll7lVlj4ipntl5hgBIBM&vis=1
-DOMAIN-SUFFIX,google-analytics.com // Added for: https://www.google-analytics.com/g/collect?v=2&tid=G-G6BQ6P9JNP&gtm=2oebu0&_p=2012341411&cid=509678312.1672673950&ul=zh-cn&sr=414x896&_s=1&sid=1672673949&sct=1&seg=1&dl=https%3A%2F%2Fwww.tongrenquan.org%2Ftongren%2F6385%2F3.html&dr=https%3A%2F%2Fwww.tongrenquan.org%2Ftongren%2F6385%2F2.html&dt=%E6%80%BB%E6%9C%89%E9%80%86%E5%BE%92%E6%83%B3%E6%AC%BA%E5%B8%88%E8%94%91%E7%A5%96%20%E7%AC%AC3%E7%AB%A0_%E5%90%8C%E4%BA%BA%E5%9C%88&en=page_view&_ee=1
-DOMAIN-SUFFIX,googlesyndication.com // Added for: https://tpc.googlesyndication.com/simgad/6913015220174126597/2728354180183721846?w=600&h=314
+DOMAIN-SUFFIX,gtimg.cn
+DOMAIN-SUFFIX,mc-cdn.cn
+DOMAIN-SUFFIX,pglstatp-toutiao.com
+URL-REGEX,^https:\/\/img\.faloo\.com\/ou\/2022\/20221227135149\.png$
+DOMAIN-SUFFIX,s.faloo.com
+DOMAIN-SUFFIX,rmm7ss.top
+DOMAIN-SUFFIX,dmm87d.xyz
+DOMAIN-SUFFIX,4236t.com
+DOMAIN-SUFFIX,happyhelper.cc
+DOMAIN-SUFFIX,nwesdf.xyz
+DOMAIN-SUFFIX,sstar.xyz
+DOMAIN-SUFFIX,share.mob.com
+DOMAIN-SUFFIX,skyapi.live.net
+DOMAIN-SUFFIX,sdk.e.qq.com
+DOMAIN-SUFFIX,hm.baidu.com
+DOMAIN-SUFFIX,tatwa.cn
+DOMAIN-SUFFIX,mitaovc.com
+DOMAIN-SUFFIX,pfnprpm.com
+DOMAIN-SUFFIX,aapippay.com
+DOMAIN-SUFFIX,zzxedr.xyz
+DOMAIN-SUFFIX,3v7c7y.com
+DOMAIN-SUFFIX,3v7c7y.com
+DOMAIN-SUFFIX,kguapp.com
+DOMAIN-SUFFIX,to30.cc
+DOMAIN-SUFFIX,aliyuncs.com
+DOMAIN-SUFFIX,aliyuncs.com 
+URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/91porn\.png$
+URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/kaiyun\.jpg$
+URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/wanghong\.png$
+DOMAIN-SUFFIX,urimnugocfr.com
+DOMAIN-SUFFIX,14i8trbbx4.com
+DOMAIN-SUFFIX,bncloudfl.com
+DOMAIN-SUFFIX,unpkg.com
+DOMAIN-SUFFIX,tumblrpics.com
+DOMAIN-SUFFIX,tumblr.com
+DOMAIN-SUFFIX,ttnigai.cyou
+DOMAIN-SUFFIX,8861267ccc.com
+DOMAIN-SUFFIX,stwqhfi.cn 
+DOMAIN-SUFFIX,7tad.cn
+DOMAIN-SUFFIX,qvlybpf.cn
+DOMAIN-SUFFIX,huizhoumi.com
+DOMAIN-SUFFIX,dklkxb.xyz
+DOMAIN-SUFFIX,ddtv215.com
+DOMAIN-SUFFIX,ztxh-bj.com 
+DOMAIN-SUFFIX,doklam.wang 
+DOMAIN-SUFFIX,zzyl.mobi
+DOMAIN-SUFFIX,huixiqu.com
+DOMAIN-SUFFIX,nhsq901.com
+DOMAIN-SUFFIX,539397377.com
+DOMAIN-SUFFIX,ooqenfl.cn
+DOMAIN-SUFFIX,kvevv.com
+URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$
+URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$
+DOMAIN-SUFFIX,googleadservices.com
+DOMAIN-SUFFIX,doubleclick.net
+DOMAIN-SUFFIX,googlesyndication.com
 DOMAIN-SUFFIX,pagead2.googlesyndication.com
 URL-REGEX,"^https:\/\/pagead2\.googlesyndication\.com\/pcs\/activeview\?xai=AKAOjstO8y6_TiD7of2AqWrDYEs1_8y8GZ370msZqHGRKVrENL3vP2E2agV8W_NXWmHzD9HCypq1N_9bvxLjpwYvfttj_DAu&sig=Cg0ArKJSzM7Tra7lH3BVEAE&id=lidar2&mcvt=1002&p=0,0,104,414&mtos=101,817,1002,1134,1251&tos=101,716,185,132,117&v=20221207&bin=7&avms=nio&bs=0,0&mc=1&if=1&vu=1&app=0&itpl=20&adk=1812271802&rs=2&la=0&cr=0&vs=4&r=v&rst=1672674244613&rpt=211&met=ie&wmsd=0&pbe=0$"
 DOMAIN-SUFFIX,criteo.com
