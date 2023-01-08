@@ -48,9 +48,7 @@ DOMAIN-SUFFIX,oikjed.xyz
 DOMAIN-SUFFIX,huimengmai.com
 DOMAIN-SUFFIX,huijingye.com
 DOMAIN-SUFFIX,gtimg.cn
-DOMAIN-SUFFIX,mc-cdn.cn
 DOMAIN-SUFFIX,pglstatp-toutiao.com
-URL-REGEX,^https:\/\/img\.faloo\.com\/ou\/2022\/20221227135149\.png$
 DOMAIN-SUFFIX,s.faloo.com
 DOMAIN-SUFFIX,rmm7ss.top
 DOMAIN-SUFFIX,dmm87d.xyz
@@ -73,9 +71,6 @@ DOMAIN-SUFFIX,kguapp.com
 DOMAIN-SUFFIX,to30.cc
 DOMAIN-SUFFIX,aliyuncs.com
 DOMAIN-SUFFIX,aliyuncs.com 
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/91porn\.png$
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/kaiyun\.jpg$
-URL-REGEX,^https:\/\/yazhouse8\.com\/images\/gg\/wanghong\.png$
 DOMAIN-SUFFIX,urimnugocfr.com
 DOMAIN-SUFFIX,14i8trbbx4.com
 DOMAIN-SUFFIX,bncloudfl.com
@@ -98,12 +93,9 @@ DOMAIN-SUFFIX,nhsq901.com
 DOMAIN-SUFFIX,539397377.com
 DOMAIN-SUFFIX,ooqenfl.cn
 DOMAIN-SUFFIX,kvevv.com
-URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$
-URL-REGEX,^https:\/\/www\.tongrenquan\.org\/e\/public\/ViewClick\/\?classid=2&id=6385&addclick=1$
 DOMAIN-SUFFIX,googleadservices.com
 DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,googlesyndication.com
 DOMAIN-SUFFIX,pagead2.googlesyndication.com
-URL-REGEX,"^https:\/\/pagead2\.googlesyndication\.com\/pcs\/activeview\?xai=AKAOjstO8y6_TiD7of2AqWrDYEs1_8y8GZ370msZqHGRKVrENL3vP2E2agV8W_NXWmHzD9HCypq1N_9bvxLjpwYvfttj_DAu&sig=Cg0ArKJSzM7Tra7lH3BVEAE&id=lidar2&mcvt=1002&p=0,0,104,414&mtos=101,817,1002,1134,1251&tos=101,716,185,132,117&v=20221207&bin=7&avms=nio&bs=0,0&mc=1&if=1&vu=1&app=0&itpl=20&adk=1812271802&rs=2&la=0&cr=0&vs=4&r=v&rst=1672674244613&rpt=211&met=ie&wmsd=0&pbe=0$"
 DOMAIN-SUFFIX,criteo.com
 DOMAIN-SUFFIX,criteo.net
