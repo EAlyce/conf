@@ -2,4 +2,4 @@
 #!desc=Perform MitM on all hostnames with port 443, except those to Apple and other common sites which can't be inspected. You still need configure CA certificate and enable the main switch of MitM.
 
 [MITM]
-hostname = -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.facebook.com, -*.instagram.com, *:0
+hostname = -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.facebook.com, -*.instagram.com, *:0,koprtgh.omhoa.com:443, -*icloud.com, www.google.cn, www.g.cn, -149.154.171.255, -149.154.175.211, -149.154.175.54, -149.154.175.55, -149.154.175.53, -*.icloud.com, -149.154.167.91, -149.154.167.35, -*.mzstatic.com, -*.apple.com, -*apple.com, magev6.if.qidian.com
