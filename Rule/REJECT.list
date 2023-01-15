@@ -1,4 +1,4 @@
-OR,((DOMAIN-SUFFIX,szbdyd.com), (DOMAIN-SUFFIX,mcdn.bilivideo.com), (DEST-PORT,4480))
+
 DOMAIN-SUFFIX,googleadservices.com
 DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,googlesyndication.com
