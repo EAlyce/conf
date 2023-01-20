@@ -1,0 +1,9 @@
+#!name=网易云开屏
+#重装app使用
+
+[Map Local]
+\/eapi\/ad\/ data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+
+
+[MITM]
+hostname = %APPEND% interface3.music.163.com
