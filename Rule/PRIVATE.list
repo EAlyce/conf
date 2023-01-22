@@ -1,6 +1,6 @@
 
 # 该规则需要搭配无审计节点使用
-# RULE-SET,https://raw.githubusercontent.com/ExaAlice/Alice/main/Rule/SSH.list
+
 DOMAIN-SUFFIX,yydstxt.cc
 DOMAIN-SUFFIX,rickandmorty1.ca
 DOMAIN-SUFFIX,nexconvert.com
@@ -8,4 +8,3 @@ DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
-# RULE-SET,https://raw.githubusercontent.com/ExaAlice/Alice/main/Rule/MAIL.list
