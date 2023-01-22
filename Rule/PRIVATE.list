@@ -9,7 +9,7 @@ DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
-DOMAIN-SUFFIX,telehub.com
+DOMAIN-SUFFIX,telghub.com
 
 # 针对某些机场屏蔽了ssh登陆端口，本规则应运而生
 DEST-PORT,22
