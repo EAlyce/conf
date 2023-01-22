@@ -1,6 +1,7 @@
 
 # 该规则需要搭配无审计节点使用
 
+# 自用
 DOMAIN-SUFFIX,yydstxt.cc
 DOMAIN-SUFFIX,rickandmorty1.ca
 DOMAIN-SUFFIX,nexconvert.com
@@ -8,7 +9,22 @@ DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
+DOMAIN-SUFFIX,telehub.com
 
-#针对某些机场屏蔽了ssh登陆端口，本规则应运而生
+# 针对某些机场屏蔽了ssh登陆端口，本规则应运而生
 DEST-PORT,22
 DEST-PORT,3389
+
+# 针对机场屏蔽邮件
+DOMAIN-SUFFIX,outlook.com
+DOMAIN-SUFFIX,mail.infomaniak.com
+DOMAIN-SUFFIX,mail.me.com
+DOMAIN-KEYWORD,gmail
+DOMAIN,imap.gmail.com
+DOMAIN,pop.gmail.com
+DOMAIN,smtp.gmail.com
+DOMAIN,m.hotmail.com
+DOMAIN,imap-mail.outlook.com
+DOMAIN,smtp-mail.outlook.com
+DOMAIN,outlook.office365.com
+DOMAIN,smtp.office365.com
