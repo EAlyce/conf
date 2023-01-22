@@ -1,3 +1,5 @@
+
+# WARP+显示增强保护
 DOMAIN-SUFFIX,api.cloudflareclient.com
 DOMAIN,2606:4700:4700::1111
 IP-CIDR6,2606:4700:4700::1111,no-resolve
