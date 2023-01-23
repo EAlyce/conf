@@ -11,6 +11,34 @@ DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,telghub.com
 
+t.ly
+bit.ly
+www.bit.ly
+ow.ly
+cdn.optimizely.com
+split.io
+s.shopify.com
+t.co
+miningpoolhub.com
+imgur.com
+cdn.cloudflare.net
+github.com
+github.io
+raw.githubusercontent.com
+xbox.ipv6.microsoft.com
+xboxexperiencesprod.experimentation.xboxlive.com
+no-ip.com
+
+#Google Play Store for Android
+android.clients.google.com
+client1.google.com
+client2.google.com
+client3.google.com
+client4.google.com
+client5.google.com
+client6.google.com
+
+
 # 针对某些机场屏蔽了ssh登陆端口，本规则应运而生
 DEST-PORT,22
 DEST-PORT,3389
