@@ -31,11 +31,3 @@ PROCESS-NAME,uTorrent
 PROCESS-NAME,WebTorrent
 PROCESS-NAME,WebTorrent Helper
 
-#Google Play Store for Android
-DOMAIN,android.clients.google.com
-DOMAIN,client1.google.com
-DOMAIN,client2.google.com
-DOMAIN,client3.google.com
-DOMAIN,client4.google.com
-DOMAIN,client5.google.com
-DOMAIN,client6.google.com
