@@ -1,4 +1,9 @@
 
+
+DOMAIN-SUFFIX,gc.com.cn
+DOMAIN-SUFFIX,hzyoka.com
+DOMAIN-SUFFIX,sanguosha.com
+DOMAIN-SUFFIX,bcebos.com
 # China Apps
 USER-AGENT,MicroMessenger Client
 USER-AGENT,WeChat*
