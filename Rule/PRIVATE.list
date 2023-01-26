@@ -1,6 +1,12 @@
 
 # This rule needs to be used together with the node without audit
 
+# Mac software
+PROCESS-NAME,DropboxFileProvider
+PROCESS-NAME,Dropbox
+PROCESS-NAME,electerm Helper
+PROCESS-NAME,FinalShell
+
 # Self-use
 # 解决Sub-Store无法联网
 DOMAIN-SUFFIX,vercel.app
