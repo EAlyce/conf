@@ -1,8 +1,12 @@
 
-# 该规则需要搭配无审计节点使用
+# This rule needs to be used together with the node without audit
 
-# 自用
-
+# Self-use
+# 解决Sub-Store无法联网
+DOMAIN-SUFFIX,vercel.app
+# Dropbox网盘
+DOMAIN-KEYWORD,dropbox
+# External Resource Update
 DOMAIN-SUFFIX,rickandmorty1.ca
 DOMAIN-SUFFIX,nexconvert.com
 DOMAIN-SUFFIX,huacloud.xyz
@@ -15,11 +19,11 @@ DOMAIN-SUFFIX,github.com
 DOMAIN-SUFFIX,nssurge.com
 DOMAIN-SUFFIX,dropbox.com
 
-# 针对某些机场屏蔽了ssh登陆端口
+# Blocked SSH login ports for some airports
 DEST-PORT,22
 DEST-PORT,3389
 
-# 针对机场屏蔽邮件
+# Blocking mail for airports
 DOMAIN-SUFFIX,outlook.com
 DOMAIN-SUFFIX,mail.infomaniak.com
 DOMAIN-SUFFIX,mail.me.com
