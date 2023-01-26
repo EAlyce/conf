@@ -7,4 +7,4 @@
 ^https?://(www.)?google.cn https://www.google.com 302
 
 [MITM]
-hostname = %APPEND% -149.154.171.255, -149.154.175.211, -149.154.175.54, -149.154.175.55, -149.154.175.53, -*.icloud.com, -149.154.167.91, -149.154.167.35, -*.mzstatic.com, -*.apple.com, -*apple.com, www.google.cn, www.g.cn
+hostname = %APPEND% -*.icloud.com,-*.mzstatic.com, -*.apple.com, -*apple.com, www.google.cn, www.g.cn
