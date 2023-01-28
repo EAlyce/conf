@@ -2,7 +2,7 @@
 # 该规则需要搭配无审计节点使用
 
 # 自用
-
+DOMAIN-SUFFIX,mail.google.com
 DOMAIN-SUFFIX,rickandmorty1.ca
 DOMAIN-SUFFIX,nexconvert.com
 DOMAIN-SUFFIX,huacloud.xyz
