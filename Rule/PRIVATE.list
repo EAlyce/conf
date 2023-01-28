@@ -13,7 +13,7 @@ DOMAIN-SUFFIX,cool18.com
 DOMAIN-SUFFIX,github.com
 DOMAIN-SUFFIX,nssurge.com
 DOMAIN-SUFFIX,dropbox.com
-
+DOMAIN-SUFFIX,vercel.app
 # 针对某些机场屏蔽了ssh登陆端口
 DEST-PORT,22
 DEST-PORT,3389
