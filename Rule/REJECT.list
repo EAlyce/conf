@@ -104,3 +104,18 @@ DOMAIN-SUFFIX,huixiangxiang.com
 DOMAIN-SUFFIX,oikmvpo.xyz
 DOMAIN-SUFFIX,nhjwh.com
 DOMAIN-SUFFIX,dicrlbd.cn
+DOMAIN-SUFFIX,bpbpxv.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: bpbpxv.xyz:443
+DOMAIN-SUFFIX,tfzozf.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: tfzozf.xyz:443
+DOMAIN-SUFFIX,fdgem.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: nggfe.fdgem.com:443
+DOMAIN-SUFFIX,ibjkqnhjwd.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: hbftgh.ibjkqnhjwd.xyz:443
+DOMAIN-SUFFIX,jknmthwd.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: gberfv.jknmthwd.xyz:443
+DOMAIN-SUFFIX,jkbuymjhp.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: kmopoer.jkbuymjhp.xyz:443
+DOMAIN-SUFFIX,fdtrjz.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: fdtrjz.xyz:443
+DOMAIN-SUFFIX,huangtaopage.oss-accelerate.aliyuncs.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: huangtaopage.oss-accelerate.aliyuncs.com:443
+DOMAIN,huangtaoapi.yjyfangfu.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: huangtaoapi.yjyfangfu.com:443
+DOMAIN-SUFFIX,kmmeopr.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: jmknler.kmmeopr.xyz:443
+DOMAIN-SUFFIX,huijudai.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: nset.huijudai.com:443
+DOMAIN-SUFFIX,faceauthors.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: st31030933.faceauthors.com:443
+DOMAIN-SUFFIX,kminker.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: kmopef.kminker.xyz:443
+DOMAIN-SUFFIX,mkjmdsc.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: poike.mkjmdsc.xyz:443
+RULE-SET,https://raw.githubusercontent.com/ExaAlice/Alice/main/Rule/REJECT.list,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏
