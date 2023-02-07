@@ -1,6 +1,6 @@
 # 来自Github收集，非原创
 DOMAIN-SUFFIX,mail.qq.com
-DOMAIN,weixin.qq.com
+DOMAIN-SUFFIX,weixin.qq.com
 DOMAIN-SUFFIX,127.net
 DOMAIN-SUFFIX,126.net
 DOMAIN-SUFFIX,163.com
