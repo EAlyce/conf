@@ -1,0 +1,4 @@
+#!name=MitM All
+
+[MITM]
+hostname = %APPEND% -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.facebook.com, -*.instagram.com, *:0 ,-*icloud.com, -*apple.com
