@@ -1,4 +1,20 @@
 
+
+
+
+
+
+DOMAIN-SUFFIX,lkdhlp.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://lkdhlp.xyz/htmx?166661692777795311677185488903
+URL-REGEX,^https:\/\/data\.flurry\.com\/v1\/flr\.do$,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://data.flurry.com/v1/flr.do
+URL-REGEX,^https:\/\/kmr\.mjnbrt\.xyz\/mnrt\/kmrr1\.png$,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://kmr.mjnbrt.xyz/mnrt/kmrr1.png
+DOMAIN-SUFFIX,hm.baidu.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://hm.baidu.com/hm.gif?hca=F31A8BAA590A2836&cc=0&ck=0&cl=32-bit&ds=414x896&vl=0&ep=31449%2C5324&et=3&ja=0&ln=zh-cn&lo=0&lt=1677184680&rnd=1176868273&si=9104d0237317236e7097bb1974bcd47f&su=https%3A%2F%2Fyydstxt.cc%2F&v=1.3.0&lv=2&sn=13367&r=0&ww=0&u=https%3A%2F%2Fkoprtgh.omhoa.com%2Ftongj.html
+DOMAIN-SUFFIX,rmb.bdstatic.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://pic.rmb.bdstatic.com/bjh/ec067afaa9c9956fe9948374e2d1a90b.gif
+URL-REGEX,^https:\/\/fdsnli\.nrkgalk\.cn\/MTUwOA15081508\/0813\/1660325239\.gif$,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: https://fdsnli.nrkgalk.cn/MTUwOA15081508/0813/1660325239.gif
+URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/kmopreytg\/3\.gif$,REJECT-TINYGIF // Added for: https://hnrte.ghkmoert.xyz/kmopreytg/3.gif
+URL-REGEX,^https:\/\/yydstxt\.cc\/images\/pf\.gif$,REJECT-TINYGIF // Added for: https://yydstxt.cc/images/pf.gif
+URL-REGEX,^https:\/\/yydstxt\.cc\/images\/mt2\.jpg$,REJECT-TINYGIF // Added for: https://yydstxt.cc/images/mt2.jpg
+URL-REGEX,^https:\/\/pic\.rmb\.bdstatic\.com\/bjh\/0954a080cebbb4995548e4d1ad8d001d\.gif$,REJECT-TINYGIF // Added for: https://pic.rmb.bdstatic.com/bjh/0954a080cebbb4995548e4d1ad8d001d.gif
+URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/shipin64\/5\.gif$,REJECT-TINYGIF // Added for: https://hnrte.ghkmoert.xyz/shipin64/5.gif
 URL-REGEX,^https:\/\/tuffhf\.xyz\/htmx\?166661692777795311677301367956$,REJECT-TINYGIF // Added for: https://tuffhf.xyz/htmx?166661692777795311677301367956
 DOMAIN-SUFFIX,tuffhf.xyz,REJECT-TINYGIF // Added for: https://tuffhf.xyz/htmx?166661692777795311677301367956
 DOMAIN-SUFFIX,tuffhf.xyz,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏 // Added for: tuffhf.xyz:443
