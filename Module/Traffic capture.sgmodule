@@ -1,7 +1,0 @@
-#!name=MitM All
-
-[General]
-include-all-networks = true
-include-local-networks = true
-[MITM]
-hostname = %APPEND% -43.231.145.10, -149.154.167.255, -149.154.167.223, -149.154.175.54, -149.154.167.91, *.bing.com, www.google.cn, www.g.cn, -*.crashlytics.com, -*.facebook.com, -*.instagram.com, -*.twiter.com, -*icloud.com, -149.154.171.255, -149.154.175.211, -149.154.175.54, -149.154.175.55, -149.154.175.53, -*.icloud.com, -149.154.167.35, -*.mzstatic.com, -*.apple.com, -*apple.com
