@@ -12,3 +12,8 @@ IP-CIDR,35.224.16.0/20, no-resolve
 IP-CIDR,35.192.0.0/12, no-resolve
 IP-CIDR,35.208.0.0/13, no-resolve
 IP-CIDR,35.224.0.0/16, no-resolve
+DOMAIN-SUFFIX, openai.com
+DOMAIN-SUFFIX, ai.com
+DOMAIN, cdn.auth0.com
+DOMAIN, openaiapi-site.azureedge.net
+DOMAIN-SUFFIX,challenges.cloudflare.com
