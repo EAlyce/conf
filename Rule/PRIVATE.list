@@ -1,6 +1,4 @@
-DOMAIN-SUFFIX,pixiv.net
 PROCESS-NAME,FinalShell
-DOMAIN-SUFFIX,tagsub.net
 DOMAIN-SUFFIX,mail.google.com
 DOMAIN-SUFFIX,rickandmorty1.ca
 DOMAIN-SUFFIX,nexconvert.com
@@ -10,7 +8,6 @@ DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,cool18.com
-DOMAIN-SUFFIX,github.com
 DOMAIN-SUFFIX,nssurge.com
 DOMAIN-SUFFIX,dropbox.com
 DOMAIN-SUFFIX,vercel.app
