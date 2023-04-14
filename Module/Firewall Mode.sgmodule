@@ -3,7 +3,7 @@
 [General]
 include-all-networks = true
 include-local-networks = true
-compatibility-mode = 4
+compatibility-mode = 3
 force-http-engine-hosts = %APPEND% -<ip-address>, *
 [MITM]
 tcp-connection = true
