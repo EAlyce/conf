@@ -103,5 +103,14 @@ URL-REGEX,^https:\/\/fdsnli\.nrkgalk\.cn\/MTUwOA15081508\/0813\/1660325239\.gif$
 URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/kmopreytg\/3\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/pf\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/mt2\.jpg$
+URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getmm$
+URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getw1$
+DOMAIN-SUFFIX,sessions.bugsnag.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏
+DOMAIN-SUFFIX,mtesc.xyz
+DOMAIN-SUFFIX,qinlei1.cn
+URL-REGEX,^https:\/\/js\.mtesc\.xyz\/o\.js$
+DOMAIN-SUFFIX,moott.xyz
+URL-REGEX,^https:\/\/pic\.link\.moott\.xyz\/sina\.com\.cn\.pic\/img\/78996394\.gif$
+DOMAIN-SUFFIX,9n0924.com
 URL-REGEX,^https:\/\/pic\.rmb\.bdstatic\.com\/bjh\/0954a080cebbb4995548e4d1ad8d001d\.gif$
 URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/shipin64\/5\.gif$
