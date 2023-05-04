@@ -109,6 +109,8 @@ DOMAIN-SUFFIX,sessions.bugsnag.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎�
 DOMAIN-SUFFIX,mtesc.xyz
 DOMAIN-SUFFIX,qinlei1.cn
 URL-REGEX,^https:\/\/js\.mtesc\.xyz\/o\.js$
+DOMAIN-SUFFIX,blvhq.com
+DOMAIN-SUFFIX,enhjqi.com
 DOMAIN-SUFFIX,moott.xyz
 URL-REGEX,^https:\/\/pic\.link\.moott\.xyz\/sina\.com\.cn\.pic\/img\/78996394\.gif$
 DOMAIN-SUFFIX,9n0924.com
