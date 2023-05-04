@@ -6,22 +6,18 @@ DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,openai.com
 DOMAIN-SUFFIX,sentry.io
-DOMAIN-SUFFIX, vimeo.com
-DOMAIN-SUFFIX, vimeocdn.com
-DOMAIN-SUFFIX, hcaptcha.com
-DOMAIN-SUFFIX, akamaized.com
+DOMAIN-SUFFIX,vimeo.com
+DOMAIN-SUFFIX,vimeocdn.com
+DOMAIN-SUFFIX,hcaptcha.com
+DOMAIN-SUFFIX,akamaized.com
 DOMAIN-KEYWORD,openai
-
-DOMAIN-SUFFIX, identrust.com
-DOMAIN, challenges.cloudflare.com
-DOMAIN-SUFFIX, openaiapi-site.azureedge.net
-DOMAIN-SUFFIX, openaicom.imgix.net
+DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,openaiapi-site.azureedge.net
+DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX, openaicomproductionae4b.blob.core.windows.net
-DOMAIN-SUFFIX, openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
+DOMAIN-SUFFIX,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
-DOMAIN, cdn.auth0.com
-DOMAIN, openaiapi-site.azureedge.net
 IP-CIDR,3.128.18.0/24,no-resolve
 IP-CIDR,3.129.0.0/16,no-resolve
 IP-CIDR,15.207.0.0/16,no-resolve
