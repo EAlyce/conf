@@ -103,6 +103,7 @@ URL-REGEX,^https:\/\/fdsnli\.nrkgalk\.cn\/MTUwOA15081508\/0813\/1660325239\.gif$
 URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/kmopreytg\/3\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/pf\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/mt2\.jpg$
+DOMAIN-SUFFIX,pcxtvr.xyz
 URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getmm$
 URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getw1$
 DOMAIN-SUFFIX,sessions.bugsnag.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏
