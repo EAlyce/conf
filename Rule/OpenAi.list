@@ -12,6 +12,8 @@ DOMAIN-SUFFIX,hcaptcha.com
 DOMAIN-SUFFIX,akamaized.com
 DOMAIN-KEYWORD,openai
 DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,openai.geekr.cool
+DOMAIN-SUFFIX,api.openai-proxy.com
 DOMAIN-SUFFIX,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX, openaicomproductionae4b.blob.core.windows.net
