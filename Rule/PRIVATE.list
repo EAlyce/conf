@@ -1,15 +1,8 @@
 PROCESS-NAME,FinalShell
 DOMAIN-SUFFIX,mail.google.com
-DOMAIN-SUFFIX,rickandmorty1.ca
-DOMAIN-SUFFIX,nexconvert.com
-DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-SUFFIX,githubusercontent.com
-DOMAIN-SUFFIX,jinglongyu.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,telghub.com
-DOMAIN-SUFFIX,cool18.com
-DOMAIN-SUFFIX,nssurge.com
-DOMAIN-SUFFIX,dropbox.com
 DOMAIN-SUFFIX,vercel.app
 DEST-PORT,22
 DEST-PORT,3389
@@ -24,11 +17,4 @@ DOMAIN-SUFFIX,imap-mail.outlook.com
 DOMAIN-SUFFIX,smtp-mail.outlook.com
 DOMAIN-SUFFIX,outlook.office365.com
 DOMAIN-SUFFIX,smtp.office365.com
-DOMAIN-SUFFIX,android.clients.google.com
-DOMAIN-SUFFIX,client1.google.com
-DOMAIN-SUFFIX,client2.google.com
-DOMAIN-SUFFIX,client3.google.com
-DOMAIN-SUFFIX,client4.google.com
-DOMAIN-SUFFIX,client5.google.com
-DOMAIN-SUFFIX,client6.google.com
 DOMAIN-KEYWORD,oracle
