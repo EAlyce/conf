@@ -1,3 +1,5 @@
+# OPENAI所用到的服务相关域名，包括Google和CloudFlare的人机验证之类
+
 DOMAIN,cdn.auth0.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,hcaptcha.com
@@ -34,6 +36,7 @@ DOMAIN-SUFFIX,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
+# 未知来源，测试中
 IP-CIDR,3.128.18.0/24,no-resolve
 IP-CIDR,3.129.0.0/16,no-resolve
 IP-CIDR,15.207.0.0/16,no-resolve
