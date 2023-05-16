@@ -106,10 +106,37 @@ URL-REGEX,^https:\/\/yydstxt\.cc\/images\/mt2\.jpg$
 DOMAIN-SUFFIX,pcxtvr.xyz
 URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getmm$
 URL-REGEX,^http:\/\/akctmc9ajndo\.qinlei1\.cn\/bbak\/dgname\/getw1$
-DOMAIN-SUFFIX,sessions.bugsnag.com,𝐑𝐄𝐉𝐄𝐂𝐓-𝐍𝐎-𝐃𝐎𝐑𝐏
+DOMAIN-SUFFIX,sessions.bugsnag.com
 DOMAIN-SUFFIX,mtesc.xyz
 DOMAIN-SUFFIX,qinlei1.cn
 URL-REGEX,^https:\/\/js\.mtesc\.xyz\/o\.js$
+OR,((DOMAIN-SUFFIX,szbdyd.com), (DOMAIN-SUFFIX,mcdn.bilivideo.com), (DEST-PORT,4480))
+URL-REGEX,^http:\/\/blockedvideoss\.xyz\/favicon\.ico$
+RULE-SET,https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adblock4limbo_surge.list
+DOMAIN-SUFFIX,01mltdeknko180.com
+DOMAIN-SUFFIX,xunuo.in
+DOMAIN-SUFFIX,fujifood.hk
+URL-REGEX,^https:\/\/0z76fj2\.xunuo\.in\/MTcyNg17261726\/0416\/1618545725\.gif$
+URL-REGEX,^https:\/\/bjkrcn6\.fujifood\.hk\/MTcyNg17261726\/0110\/1610268805\.gif\?bdSecret=495f06b244625c25af13df535c2d0054&DdTime=1683278807$
+DOMAIN-SUFFIX,lmlzht.xyz
+DOMAIN-SUFFIX,scizersp.com
+DOMAIN-SUFFIX,saknisjy.com
+DOMAIN-SUFFIX,2835177ccc.com
+URL-REGEX,^https:\/\/2835177ccc\.com\/b0780184e69c4ec8b6622bd7e86190aa\.gif$
+URL-REGEX,^https:\/\/p1\.meituan\.net\/dpplatform\/4146c8c39f79c0016ab0e10410941782109316\.gif$
+DOMAIN-SUFFIX,meituan.net
+DOMAIN-SUFFIX,images-baidu.com
+URL-REGEX,^https:\/\/cdn\.images-baidu\.com\/ss-x7\/2023\/04\/18\/1682380152610\.gif$
+URL-REGEX,^https:\/\/p26\.toutiaoimg\.com\/img\/tos-cn-i-0022\/985f05b601754b72abb6acc01834b19f~640x0\.image$
+DOMAIN-SUFFIX,toutiaoimg.com // Added for: https://p26.toutiaoimg.com/img/tos-cn-i-0022/985f05b601754b72abb6acc01834b19f~640x0.image
+URL-REGEX,^https:\/\/p9-tt-ipv6\.byteimg\.com\/origin\/pgc-image\/2289d68e24cd4ee4b79a4e4a8f3e2f35$
+DOMAIN-SUFFIX,6617398ccc.com // Added for: https://6617398ccc.com/0d778497f3ac4efbab23ed900047a7a6.gif
+URL-REGEX,^https:\/\/6617398ccc\.com\/0d778497f3ac4efbab23ed900047a7a6\.gif$
+URL-REGEX,^https:\/\/ubokdm0\.eyu2017\.xyz\/MTk1Mg19521952\/0628\/1593350680\.gif$ // Added for: https://ubokdm0.eyu2017.xyz/MTk1Mg19521952/0628/1593350680.gif
+DOMAIN-SUFFIX,eyu2017.xyz // Added for: https://ubokdm0.eyu2017.xyz/MTk1Mg19521952/0628/1593350680.gif
+URL-REGEX,^https:\/\/ubokdm0\.eyu2017\.xyz\/MDg0OA08480848\/0710\/1562746446\.gif$
+URL-REGEX,^https:\/\/xiod\.xyz\/ty640-200\.gif$
+
 DOMAIN-SUFFIX,blvhq.com
 DOMAIN-SUFFIX,enhjqi.com
 DOMAIN-SUFFIX,moott.xyz
