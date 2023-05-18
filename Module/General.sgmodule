@@ -1,10 +1,9 @@
 #!name=Google Rewrite
-#!desc=Safari 谷歌搜索重定向（Surge）
-#!system=ios
+#!desc=谷歌重定向
 
 [URL Rewrite]
 ^https?://(www.)?g.cn https://www.google.com 302
 ^https?://(www.)?google.cn https://www.google.com 302
 
 [MITM]
-hostname = %APPEND% -*.icloud.com,-*.mzstatic.com, -*.apple.com, -*apple.com, www.google.cn, www.g.cn
+hostname = %APPEND% www.google.cn, www.g.cn
