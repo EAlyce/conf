@@ -703,4 +703,31 @@ DOMAIN-SUFFIX,onedrive.net
 DOMAIN-SUFFIX,onedrive.org
 DOMAIN-SUFFIX,sharepoint.com
 DOMAIN-SUFFIX,sharepointonline.com
-
+# Alphabet
+DOMAIN-SUFFIX,gstatic.com
+DOMAIN-KEYWORD,blogspot
+DOMAIN-SUFFIX,letsencrypt.org
+DOMAIN-SUFFIX,android.com
+# Dropbox
+DOMAIN-KEYWORD,dropbox
+# Google
+DOMAIN-KEYWORD,google
+DOMAIN-SUFFIX,ampproject.org
+DOMAIN-KEYWORD,gmail
+DOMAIN-KEYWORD,youtube
+DOMAIN-SUFFIX,youtu.be
+# Instagram
+DOMAIN-KEYWORD,instagram
+# Meta
+DOMAIN-KEYWORD,facebook
+DOMAIN-SUFFIX,fb.me
+DOMAIN-SUFFIX,fbcdn.net
+DOMAIN-SUFFIX,oculuscdn.com
+DOMAIN-SUFFIX,oculus.com
+DOMAIN-KEYWORD,whatsapp
+# Twitter
+DOMAIN-KEYWORD,twitter
+DOMAIN-SUFFIX,twimg.com
+# Wikimedia Foundation
+DOMAIN-SUFFIX,wikimedia.org
+DOMAIN-SUFFIX,wikipedia.org
