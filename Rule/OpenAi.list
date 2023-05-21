@@ -4,7 +4,7 @@ DOMAIN,cdn.auth0.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,hcaptcha.com
 DOMAIN-SUFFIX,akamaized.net
-DOMAIN-SUFFIX,googleapis.com
+# DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,googletagmanager.com
