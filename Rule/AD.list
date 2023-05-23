@@ -44,10 +44,10 @@ DOMAIN-SUFFIX,hnrtg.iujkegbpo.xyz
 DOMAIN-SUFFIX,client4sub.faloo.com
 DOMAIN-SUFFIX,pkeog.cn
 DOMAIN-SUFFIX,app-measurement.com
-DOMAIN-SUFFIX,ios.bugly.qq.com
+# DOMAIN-SUFFIX,ios.bugly.qq.com
 DOMAIN-SUFFIX,sdk-open-phone.getui.com
 DOMAIN-SUFFIX,devs-data.dutils.com
-DOMAIN-SUFFIX,sdk.e.qq.com
+# DOMAIN-SUFFIX,sdk.e.qq.com
 DOMAIN-SUFFIX,17gouwuba.com
 DOMAIN-SUFFIX,xjpsrb.xyz
 DOMAIN-SUFFIX,ddtv309.com
@@ -56,7 +56,7 @@ DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,googlesyndication.com
 DOMAIN-SUFFIX,pagead2.googlesyndication.com
 DOMAIN-SUFFIX,96110.pages.dev
-DOMAIN-SUFFIX,gdt.qq.com
+# DOMAIN-SUFFIX,gdt.qq.com
 DOMAIN-SUFFIX,ssl.qhimg.com
 DOMAIN-SUFFIX,amdc.m.taobao.com
 DOMAIN-SUFFIX,ockcoo.xyz
