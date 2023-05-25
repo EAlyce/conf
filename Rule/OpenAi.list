@@ -23,7 +23,6 @@ DOMAIN-SUFFIX,edgecompute.app
 DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
-DOMAIN,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-SUFFIX,sentry.io
