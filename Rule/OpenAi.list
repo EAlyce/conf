@@ -35,3 +35,6 @@ DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
 
+DOMAIN-SUFFIX,featuregates.org
+DOMAIN-SUFFIX,statsigapi.net
+DOMAIN-SUFFIX,intercomcdn.com
