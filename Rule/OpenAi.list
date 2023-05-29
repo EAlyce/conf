@@ -28,11 +28,11 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,cloudflareinsights.com
 DOMAIN-SUFFIX,edgecompute.app
 DOMAIN-SUFFIX,compute-pipe.com
-
+DOMAIN-SUFFIX,stspg-customer.com
 IP-ASN,8057,DIRECT,no-resolve
 IP-ASN,13335,DIRECT,no-resolve
 IP-ASN,35913,DIRECT,no-resolve
-
+DOMAIN-SUFFIX,hosted-by-discourse.com
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,challenges.cloudflare.com
@@ -41,7 +41,8 @@ DOMAIN-SUFFIX,sentry.io
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
-
+DOMAIN-SUFFIX,auth0app.com
 DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN,openaiapi-site.azureedge.net
