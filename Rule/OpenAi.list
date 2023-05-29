@@ -1,5 +1,7 @@
 # OPENAI所用到的服务相关域名，包括Google和CloudFlare的人机验证之类
 
+# 请注意本规则不适用于所有人
+
 DOMAIN,cdn.auth0.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,blob.core.windows.net
@@ -7,7 +9,7 @@ DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,azureedge.net
-DOMAIN-SUFFIX,cdn.cloudflare.net
+DOMAIN-SUFFIX,cloudflare.net
 DOMAIN-SUFFIX,hcaptcha.com
 DOMAIN-SUFFIX,akamaized.net
 DOMAIN-SUFFIX,gstatic.com
@@ -26,6 +28,11 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,cloudflareinsights.com
 DOMAIN-SUFFIX,edgecompute.app
 DOMAIN-SUFFIX,compute-pipe.com
+
+IP-ASN,8057,DIRECT,no-resolve
+IP-ASN,13335,DIRECT,no-resolve
+IP-ASN,35913,DIRECT,no-resolve
+
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,challenges.cloudflare.com
