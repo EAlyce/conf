@@ -1,0 +1,7 @@
+#!name=Ozan跨设备同UUID登录
+#!desc=Ozan跨设备同UUID登录
+[Header Rewrite]
+# Ozan跨设备同UUID登录
+^https://op-prod-tr\.ozan\.com/api/.+ header-replace X-DEVICE-CODE 旧设备的UUID放这里
+[MITM]
+hostname = op-prod-tr.ozan.com
