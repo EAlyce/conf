@@ -17,7 +17,7 @@ DOMAIN-SUFFIX,bnqwer.qoifwjnksd.xyz
 DOMAIN-SUFFIX,bnmwt.qifjkbsdws.xyz
 DOMAIN-SUFFIX,lkdhlp.xyz
 DOMAIN-SUFFIX,hm.baidu.com
-DOMAIN-SUFFIX,rmb.bdstatic.com
+# DOMAIN-SUFFIX,rmb.bdstatic.com
 DOMAIN-SUFFIX,tuffhf.xyz
 DOMAIN-SUFFIX,wusuliriver.com
 DOMAIN-SUFFIX,4wens.org
@@ -174,7 +174,7 @@ URL-REGEX,^https:\/\/fdsnli\.nrkgalk\.cn\/MTUwOA15081508\/0813\/1660325239\.gif$
 URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/kmopreytg\/3\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/pf\.gif$
 URL-REGEX,^https:\/\/yydstxt\.cc\/images\/mt2\.jpg$
-URL-REGEX,^https:\/\/pic\.rmb\.bdstatic\.com\/bjh\/0954a080cebbb4995548e4d1ad8d001d\.gif$
+# URL-REGEX,^https:\/\/pic\.rmb\.bdstatic\.com\/bjh\/0954a080cebbb4995548e4d1ad8d001d\.gif$
 URL-REGEX,^https:\/\/hnrte\.ghkmoert\.xyz\/shipin64\/5\.gif$
 URL-REGEX,^https:\/\/tuffhf\.xyz\/htmx\?166661692777795311677301367956$
 URL-REGEX,^https:\/\/image1\.wusuliriver\.com\/upload\/img220711233155\.gif\?wsSecret=6a0a9035422d1dc669c16555c4b86a9f&wsTime=1677299500$
