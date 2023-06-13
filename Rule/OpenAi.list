@@ -1,25 +1,9 @@
 #OPENAI所用到的服务相关域名
 
 #请注意本规则不适用于所有人
-DOMAIN, cdn.auth0.com
-DOMAIN, o33249.ingest.sentry.io
-DOMAIN-SUFFIX, ai.com
-DOMAIN-SUFFIX, challenges.cloudflare.com
-DOMAIN-SUFFIX, identrust.com
-DOMAIN-SUFFIX, stripe.com
-DOMAIN-SUFFIX, poe.com
-DOMAIN-SUFFIX, intercom.io
-DOMAIN-SUFFIX, featuregates.org
-DOMAIN-SUFFIX, events.statsigapi.net
-DOMAIN-SUFFIX, intercomcdn.com
-DOMAIN-SUFFIX, openai.com
-DOMAIN-SUFFIX, chat.openai.com.cdn.cloudflare.net
-DOMAIN-SUFFIX, openaiapi-site.azureedge.net
-DOMAIN-SUFFIX, openaicom.imgix.net
-DOMAIN-SUFFIX, openaicomproductionae4b.blob.core.windows.net
-DOMAIN-SUFFIX, openaicom-api-bdcpf8c6d2e9atf6
 DOMAIN,cdn.auth0.com
-DOMAIN,challenges.cloudflare.com
+DOMAIN,o33249.ingest.sentry.io
+DOMAIN,chat.openai.com.cdn.cloudflare.net
 DOMAIN,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,openai.com
@@ -27,31 +11,16 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,hcaptcha.com
-DOMAIN-SUFFIX,akamaized.com
-DOMAIN-SUFFIX,openai.com
-DOMAIN-SUFFIX,ai.com
-DOMAIN,chat.openai.com.cdn.cloudflare.net
-DOMAIN,o33249.ingest.sentry.io
-DOMAIN,copenaiapi-site.azureedge.net
-DOMAIN,copenaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
-DOMAIN,openaiapi-site.azureedge.net
-DOMAIN-KEYWORD,openai
+DOMAIN-SUFFIX,akamaized.net
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,sentry.io
-DOMAIN,cdn.auth0.com
-DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,blob.core.windows.net
 DOMAIN-SUFFIX,googleapis.com
-DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,cloudflare.net
-DOMAIN-SUFFIX,hcaptcha.com
-DOMAIN-SUFFIX,akamaized.net
 DOMAIN-SUFFIX,gstatic.com
-DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,googletagmanager.com
-DOMAIN-SUFFIX,f7tk.com
 DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,google-analytics.com
 DOMAIN-SUFFIX,intercom.io
@@ -71,3 +40,5 @@ DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
 DOMAIN-SUFFIX,auth0app.com
+DOMAIN-SUFFIX,f7tk.com
+DOMAIN-SUFFIX,openaicom.imgix.net
