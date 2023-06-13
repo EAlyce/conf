@@ -15,7 +15,7 @@ DOMAIN-SUFFIX,akamaized.net
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,blob.core.windows.net
-DOMAIN-SUFFIX,googleapis.com
+# DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,cloudflare.net
