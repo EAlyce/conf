@@ -1,4 +1,6 @@
-# > @hututu0 edited
+# > 借鉴自 ：@hututu0 
+
+
 # > 遇到T-Mobile相关连接问题请将本规则走代理
 # > 注：1.代理线路需支持UDP 2.最好为美国线路IPLC
 IP-CIDR,66.94.0.0/19,no-resolve
