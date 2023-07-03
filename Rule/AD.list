@@ -71,3 +71,9 @@ DOMAIN-SUFFIX,ddtv302.com
 DOMAIN-SUFFIX,fdgem.com
 DOMAIN-SUFFIX,data.flurry.com
 DOMAIN-SUFFIX,app-measurement.com
+# 美团已废弃域名
+DOMAIN,al-log.d.meituan.net
+DOMAIN,babel-statistics-android.d.meituan.net
+DOMAIN,maplocatesdksnapshot.d.meituan.net
+DOMAIN,metrics-picture.d.meituan.net
+DOMAIN,route-stats.d.meituan.net
