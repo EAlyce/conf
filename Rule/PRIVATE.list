@@ -1,11 +1,30 @@
 PROCESS-NAME,FinalShell
+
 DOMAIN-SUFFIX,mail.google.com
 DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,vercel.app
+
+# 敏感端口
 DEST-PORT,22
 DEST-PORT,3389
+DEST-PORT,20
+DEST-PORT,21
+DEST-PORT,25
+DEST-PORT,26
+DEST-PORT,465
+DEST-PORT,587
+DEST-PORT,53
+DEST-PORT,443
+DEST-PORT,110
+DEST-PORT,143
+DEST-PORT,3306
+DEST-PORT,5432
+DEST-PORT,1433
+DEST-PORT,1521
+DEST-PORT,23
+
 DOMAIN-SUFFIX,dlandroid.rcv.sandai.net
 DOMAIN-SUFFIX,hub5idx.v6.shub.sandai.net
 DOMAIN-SUFFIX,hub5pn.wap.sandai.net
@@ -13,6 +32,7 @@ DOMAIN-SUFFIX,hub5pnc.sandai.net
 DOMAIN-SUFFIX,hub5pr.v6.phub.sandai.net
 DOMAIN-SUFFIX,hubciddata.sandai.net
 
+# 邮箱
 DOMAIN-SUFFIX,outlook.com
 DOMAIN-SUFFIX,mail.infomaniak.com
 DOMAIN-SUFFIX,mail.me.com
@@ -25,6 +45,7 @@ DOMAIN-SUFFIX,smtp-mail.outlook.com
 DOMAIN-SUFFIX,outlook.office365.com
 DOMAIN-SUFFIX,smtp.office365.com
 DOMAIN-SUFFIX,googlemail.com
+
 # > Oracle
 DOMAIN-KEYWORD,oracle
 DOMAIN,shop.oracle.com
@@ -50,4 +71,3 @@ DOMAIN-SUFFIX,trustarc.eu
 DOMAIN-SUFFIX,truste-svc.net
 DOMAIN-SUFFIX,consensu.org
 DOMAIN-SUFFIX,oraclecorp.com
-IP-CIDR,224.0.0.251/32,no-resolve
