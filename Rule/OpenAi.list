@@ -1,5 +1,8 @@
 #OPENAI所用到的服务相关域名
 #请注意本规则不适用于所有人
+DOMAIN-SUFFIX,eu-west-1.amazonaws.com
+DOMAIN-SUFFIX,cloud.culturedcode.com
+DOMAIN-SUFFIX,revenuecat.com
 DOMAIN,cdn.auth0.com
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN-SUFFIX,ai.com
