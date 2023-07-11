@@ -6,6 +6,13 @@ DOMAIN,openaiapi-site.azureedge.net
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaipublic
+DOMAIN-SUFFIX,openai.com
+DOMAIN-SUFFIX,sentry.io
+DOMAIN,static.metafi.codefi.network
+DOMAIN-SUFFIX,bing.com
+DOMAIN,nexus-websocket-a.intercom.io
+DOMAIN,api-iam.intercom.io
+DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,AI.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,akamaized.net
@@ -15,7 +22,6 @@ DOMAIN-SUFFIX,auth0app.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,bard.google.com
-DOMAIN-SUFFIX,bing.com
 DOMAIN-SUFFIX,blob.core.windows.net
 DOMAIN-SUFFIX,cdn.auth0.com
 DOMAIN-SUFFIX,challenges.cloudflare.com
@@ -43,7 +49,6 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
 DOMAIN-SUFFIX,invoice.stripe.com
-DOMAIN-SUFFIX,openai.com
 DOMAIN-SUFFIX,openai.nooc.ink
 DOMAIN-SUFFIX,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
@@ -55,8 +60,6 @@ DOMAIN-SUFFIX,pki.goog
 DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,revenuecat.com
-DOMAIN-SUFFIX,sentry.io
-DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,stspg-customer.com
