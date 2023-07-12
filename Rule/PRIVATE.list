@@ -7,13 +7,60 @@ DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,vercel.app
 # 敏感端口
 DEST-PORT,22
+# 媒体新闻类
+DOMAIN-SUFFIX,wikipedia.org
+DOMAIN-SUFFIX,bbc.co.uk
+DOMAIN-SUFFIX,twitter.com
+DOMAIN-SUFFIX,dw-world.de
+DOMAIN-SUFFIX,rfi.fr
+DOMAIN-SUFFIX,nytimes.com
+DOMAIN-SUFFIX,washingtonpost.com
+DOMAIN-SUFFIX,cnn.com
+DOMAIN-SUFFIX,voanews.com
+DOMAIN-SUFFIX,rfa.org
+DOMAIN-SUFFIX,boxun.com
+DOMAIN-SUFFIX,peacehall.com
+DOMAIN-SUFFIX,worldjournal.com
+DOMAIN-SUFFIX,singtao.com
+DOMAIN-SUFFIX,tvb.com
+DOMAIN-SUFFIX,rthk.hk
+DOMAIN-SUFFIX,ltn.com.tw
+DOMAIN-SUFFIX,cna.com.tw
+DOMAIN-SUFFIX,udn.com
+DOMAIN-SUFFIX,chinatimes.com
+DOMAIN-SUFFIX,zaobao.com
+DOMAIN-SUFFIX,minzhuzhongguo.org
+DOMAIN-SUFFIX,hrichina.org
+DOMAIN-SUFFIX,hrw.org
+DOMAIN-SUFFIX,huanghuagang.org
+DOMAIN-SUFFIX,xgmyd.com
+DOMAIN-SUFFIX,businessweek.com
+DOMAIN-SUFFIX,fortune.com
+DOMAIN-SUFFIX,ft.com
+DOMAIN-SUFFIX,economist.com
+DOMAIN-SUFFIX,caixin.com
+DOMAIN-SUFFIX,eeo.com.cn
+DOMAIN-SUFFIX,21cbh.com
+DOMAIN-SUFFIX,caijing.com.cn
+DOMAIN-SUFFIX,ycombinator.com
+DOMAIN-SUFFIX,reddit.com
+DOMAIN-SUFFIX,slashdot.org
+DOMAIN-SUFFIX,technologyreview.com
+DOMAIN-SUFFIX,solidot.org
+DOMAIN-SUFFIX,ifanr.com
+DOMAIN-SUFFIX,36kr.com
+DOMAIN-SUFFIX,cnbeta.com
+DOMAIN-SUFFIX,v2ex.com
+DOMAIN-SUFFIX,scientificamerican.com
+DOMAIN-SUFFIX,github.com
+DOMAIN-SUFFIX,stackoverflow.com
+DOMAIN-SUFFIX,codeproject.com
+DOMAIN-SUFFIX,codecademy.com
+DOMAIN-SUFFIX,ibm.com
+DOMAIN-SUFFIX,microsoft.com
 
-DOMAIN-SUFFIX,dlandroid.rcv.sandai.net
-DOMAIN-SUFFIX,hub5idx.v6.shub.sandai.net
-DOMAIN-SUFFIX,hub5pn.wap.sandai.net
-DOMAIN-SUFFIX,hub5pnc.sandai.net
-DOMAIN-SUFFIX,hub5pr.v6.phub.sandai.net
-DOMAIN-SUFFIX,hubciddata.sandai.net
+DOMAIN-SUFFIX,sandai.net
+
 
 # 邮箱
 DOMAIN-SUFFIX,outlook.com
