@@ -1,0 +1,5 @@
+#!name=哔哩哔哩优化
+#!desc=解决B站CDN导致视频加载卡顿
+# 原作者@LucaLin123
+[Rule]
+OR,((DEST-PORT,4480), (DEST-PORT,3478), (DOMAIN-SUFFIX,szbdyd.com)),REJECT-NO-DROP
