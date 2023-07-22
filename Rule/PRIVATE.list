@@ -7,7 +7,7 @@ DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,vercel.app
 # 敏感端口
 DEST-PORT,22
-# 媒体新闻类
+# GFWlist
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,bbc.co.uk
 DOMAIN-SUFFIX,twitter.com
