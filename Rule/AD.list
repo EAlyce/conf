@@ -76,10 +76,10 @@ DOMAIN-SUFFIX,sdk-open-phone.getui.com
 DOMAIN-SUFFIX,devs-data.dutils.com
 DOMAIN-SUFFIX,17gouwuba.com
 DOMAIN-SUFFIX,ddtv309.com
-DOMAIN-SUFFIX,googleadservices.com
+
 DOMAIN-SUFFIX,doubleclick.net
-DOMAIN-SUFFIX,googlesyndication.com
-DOMAIN-SUFFIX,pagead2.googlesyndication.com
+
+
 DOMAIN-SUFFIX,share.mob.com
 DOMAIN-SUFFIX,criteo.com
 DOMAIN-SUFFIX,criteo.net
@@ -87,7 +87,7 @@ DOMAIN-SUFFIX,trafficjunky.net
 DOMAIN-SUFFIX,ddtv302.com
 DOMAIN-SUFFIX,fdgem.com
 DOMAIN-SUFFIX,data.flurry.com
-DOMAIN-SUFFIX,app-measurement.com
+
 # 美团已废弃域名
 DOMAIN,al-log.d.meituan.net
 DOMAIN,babel-statistics-android.d.meituan.net
