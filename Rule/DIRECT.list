@@ -18,6 +18,11 @@ USER-AGENT,MApi*
 DOMAIN-KEYWORD,alipay
 DOMAIN-KEYWORD,taobao
 DOMAIN-KEYWORD,alicdn
+DOMAIN-SUFFIX,zhipin.com
+DOMAIN-SUFFIX,fqnovel.com
+DOMAIN-SUFFIX,branch.io
+DOMAIN-SUFFIX,byteimg.com
+DOMAIN-SUFFIX,zijieapi.com
 DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,.tmall.
 IP-CIDR,198.11.188.0/25,no-resolve

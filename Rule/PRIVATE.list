@@ -7,6 +7,16 @@ DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,vercel.app
 # 敏感端口
 DEST-PORT,22
+DOMAIN-SUFFIX,okcoin.com
+DOMAIN-SUFFIX,ozan.com
+DOMAIN-KEYWORD,obsidian
+DOMAIN-SUFFIX,tagsssubscribe.com
+DOMAIN-SUFFIX,pincong.rocks
+DOMAIN-SUFFIX,hostloc.com
+DOMAIN-SUFFIX,1password.com
+DOMAIN-SUFFIX,huacloud.xyz
+
+AND,((DOMAIN-KEYWORD,mail), (DOMAIN-KEYWORD,google))
 # GFWlist
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,bbc.co.uk
