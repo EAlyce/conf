@@ -85,7 +85,16 @@ DOMAIN-SUFFIX,smtp-mail.outlook.com
 DOMAIN-SUFFIX,outlook.office365.com
 DOMAIN-SUFFIX,smtp.office365.com
 DOMAIN-SUFFIX,googlemail.com
-
+DOMAIN,apple.imap.mail.yahoo.com
+DOMAIN,apple.smtp.mail.yahoo.com
+DOMAIN,imap-mail.outlook.com
+DOMAIN,imap.gmail.com
+DOMAIN,outlook.office365.com
+DOMAIN,pop.gmail.com
+DOMAIN,smtp-mail.outlook.com
+DOMAIN,smtp.gmail.com
+DOMAIN,smtp.office365.com
+DOMAIN-SUFFIX,m.hotmail.com
 # > Oracle
 DOMAIN-KEYWORD,oracle
 DOMAIN,shop.oracle.com
