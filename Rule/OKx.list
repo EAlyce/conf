@@ -1,25 +1,24 @@
-DOMAIN-SUFFIX, ouyicn.blue
-DOMAIN-SUFFIX, okx.com
-DOMAIN-SUFFIX, qqhrss.com
-DOMAIN-SUFFIX, coinall.ltd
-DOMAIN-SUFFIX, aliyuncs.com
-DOMAIN-SUFFIX, intercom.io
-DOMAIN-SUFFIX, intercomcdn.com
-DOMAIN-SUFFIX, geetest.com
-DOMAIN-SUFFIX, cdn-okx-dv.net
-DOMAIN-SUFFIX, okx-dv.net
-DOMAIN-SUFFIX, okx-dv.io
-DOMAIN-SUFFIX, cloudflare.net
-
-USER-AGENT, ouyicn
-USER-AGENT, ouyicn*
-USER-AGENT, *ouyicn
-PROCESS-NAME, ouyicn
-USER-AGENT, okx
-USER-AGENT, okx*
-USER-AGENT, *okx
-PROCESS-NAME, okx
-USER-AGENT, okexweb
-USER-AGENT, okexweb*
-USER-AGENT, *okexweb
-PROCESS-NAME, okexweb
+DOMAIN-SUFFIX,ouyicn.blue
+DOMAIN-SUFFIX,okx.com
+DOMAIN-SUFFIX,qqhrss.com
+DOMAIN-SUFFIX,coinall.ltd
+DOMAIN-SUFFIX,aliyuncs.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN-SUFFIX,geetest.com
+DOMAIN-SUFFIX,cdn-okx-dv.net
+DOMAIN-SUFFIX,okx-dv.net
+DOMAIN-SUFFIX,okx-dv.io
+DOMAIN-SUFFIX,cloudflare.net
+USER-AGENT,ouyicn
+USER-AGENT,ouyicn*
+USER-AGENT,*ouyicn
+PROCESS-NAME,ouyicn
+USER-AGENT,okx
+USER-AGENT,okx*
+USER-AGENT,*okx
+PROCESS-NAME,okx
+USER-AGENT,okexweb
+USER-AGENT,okexweb*
+USER-AGENT,*okexweb
+PROCESS-NAME,okexweb
