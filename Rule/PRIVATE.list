@@ -15,7 +15,7 @@ DOMAIN-SUFFIX,pincong.rocks
 DOMAIN-SUFFIX,hostloc.com
 DOMAIN-SUFFIX,1password.com
 DOMAIN-SUFFIX,huacloud.xyz
-
+DOMAIN-KEYWORD,ininal
 AND,((DOMAIN-KEYWORD,mail), (DOMAIN-KEYWORD,google))
 # GFWlist
 DOMAIN-SUFFIX,wikipedia.org
