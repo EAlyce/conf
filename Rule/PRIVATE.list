@@ -1,11 +1,13 @@
 PROCESS-NAME,FinalShell
+
 DOMAIN-SUFFIX,workingcopyapp.com
-DOMAIN-SUFFIX,mail.google.com
 DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,telghub.com
 DOMAIN-SUFFIX,vercel.app
+
 # 敏感端口
+
 #ssh登陆
 DEST-PORT,22
 
@@ -22,6 +24,7 @@ DEST-PORT,995
 DEST-PORT,143
 DEST-PORT,993
 
+#其他
 DOMAIN-SUFFIX,okcoin.com
 DOMAIN-SUFFIX,ozan.com
 DOMAIN-KEYWORD,obsidian
@@ -31,7 +34,9 @@ DOMAIN-SUFFIX,hostloc.com
 DOMAIN-SUFFIX,1password.com
 DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-KEYWORD,ininal
+
 AND,((DOMAIN-KEYWORD,mail), (DOMAIN-KEYWORD,google))
+
 # GFWlist
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,bbc.co.uk
@@ -83,9 +88,7 @@ DOMAIN-SUFFIX,codeproject.com
 DOMAIN-SUFFIX,codecademy.com
 DOMAIN-SUFFIX,ibm.com
 DOMAIN-SUFFIX,microsoft.com
-
 DOMAIN-SUFFIX,sandai.net
-
 
 # 邮箱
 DOMAIN-SUFFIX,outlook.com
@@ -109,7 +112,18 @@ DOMAIN,pop.gmail.com
 DOMAIN,smtp-mail.outlook.com
 DOMAIN,smtp.gmail.com
 DOMAIN,smtp.office365.com
-DOMAIN-SUFFIX,m.hotmail.com
+
+# 网易邮箱规则
+DOMAIN-SUFFIX,imap.163.com
+
+# QQ邮箱规则
+DOMAIN-SUFFIX,smtp.qq.com
+DOMAIN-SUFFIX,pop.exmail.qq.com
+DOMAIN-SUFFIX,imap.qq.com
+
+# 苹果邮箱规则
+DOMAIN-SUFFIX,smtp.mail.me.com
+
 # > Oracle
 DOMAIN-KEYWORD,oracle
 DOMAIN,shop.oracle.com
