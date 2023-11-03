@@ -1,8 +1,0 @@
-#!name=Bear
-#!desc=熊掌记CN官网失效
-
-[URL Rewrite]
-^https?://(www.)?bear.app/cn/ https://bear.app/ 302
-
-
-hostname = %APPEND% bear.app
