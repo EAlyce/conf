@@ -1,3 +1,5 @@
+DOMAIN,DOMAINcdn.openai.com
+DOMAIN,DOMAINchat.openai.com
 DOMAIN,cdn.auth0.com
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,openai
@@ -52,6 +54,7 @@ DOMAIN-SUFFIX,pki.goog
 DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,revenuecat.com
+DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,static.metafi.codefi.network
 DOMAIN-SUFFIX,statsigapi.net
