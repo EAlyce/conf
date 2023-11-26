@@ -1,40 +1,59 @@
-DOMAIN-SUFFIX,mail.qq.com
+# Social Media
 DOMAIN-SUFFIX,weixin.qq.com
+DOMAIN-SUFFIX,graph.qq.com
+
+# Email Services
+DOMAIN-SUFFIX,mail.qq.com
+DOMAIN-SUFFIX,163.com
 DOMAIN-SUFFIX,127.net
 DOMAIN-SUFFIX,126.net
-DOMAIN-SUFFIX,163.com
+
+# Image Hosting
 DOMAIN-SUFFIX,woozooo.com
 DOMAIN-SUFFIX,lanzoug.com
 DOMAIN-SUFFIX,netbian.com
 DOMAIN-SUFFIX,staticfile.org
-DOMAIN-SUFFIX,graph.qq.com
-DOMAIN-SUFFIX,gc.com.cn
-DOMAIN-SUFFIX,hzyoka.com
-DOMAIN-SUFFIX,sanguosha.com
-DOMAIN-SUFFIX,bcebos.com
-USER-AGENT,MicroMessenger Client
-USER-AGENT,WeChat*
-USER-AGENT,MApi*
+
+# Financial
 DOMAIN-KEYWORD,alipay
 DOMAIN-KEYWORD,taobao
 DOMAIN-KEYWORD,alicdn
+
+# E-commerce
+DOMAIN-KEYWORD,tmall
+
+# Social Networking
 DOMAIN-SUFFIX,zhipin.com
+DOMAIN-SUFFIX,hzyoka.com
+DOMAIN-SUFFIX,sanguosha.com
+
+# Cloud Services
+DOMAIN-KEYWORD,aliyun
+DOMAIN-SUFFIX,bcebos.com
+
+# User Agents 微信
+USER-AGENT,MicroMessenger Client
+USER-AGENT,WeChat*
+USER-AGENT,MApi*
+USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*
+
+# Miscellaneous
+DOMAIN-SUFFIX,zijieapi.com
 DOMAIN-SUFFIX,fqnovel.com
 DOMAIN-SUFFIX,branch.io
 DOMAIN-SUFFIX,byteimg.com
-DOMAIN-SUFFIX,zijieapi.com
-DOMAIN-KEYWORD,aliyun
-DOMAIN-KEYWORD,tmall
-IP-CIDR,198.11.188.0/25,no-resolve
-IP-CIDR,198.11.136.0/24,no-resolve
-USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*
 DOMAIN-SUFFIX,CN
-DOMAIN-SUFFIX,91huayi.cn
-DOMAIN-SUFFIX,91huayi.com
-DOMAIN-SUFFIX,91huayi.net
+
+# Government and Education
 DOMAIN-SUFFIX,gov.cn
-DOMAIN-SUFFIX,heart301.cn
+DOMAIN-SUFFIX,scncrc.com
 DOMAIN-SUFFIX,henancme.net
+DOMAIN-SUFFIX,shiyanma.org.cn
+DOMAIN-SUFFIX,robot301.net
+DOMAIN-SUFFIX,roboticsurg301.net
+
+# Healthcare
+DOMAIN-SUFFIX,heart301.cn
 DOMAIN-SUFFIX,huayi.cn
 DOMAIN-SUFFIX,huayiweibo.com
 DOMAIN-SUFFIX,huayiyuan.com
@@ -45,5 +64,9 @@ DOMAIN-SUFFIX,shiyanma.org.cn
 DOMAIN-SUFFIX,sqpx.org
 DOMAIN-SUFFIX,wsglw.com
 DOMAIN-SUFFIX,wsglw.net
+
+# Mobile
 DOMAIN-KEYWORD,ultramobile
+
+# Apple Services
 DOMAIN-SUFFIX,mail.icloud.com.cn
