@@ -112,16 +112,9 @@ DOMAIN,imap.gmail.com
 DOMAIN,outlook.office365.com
 DOMAIN,pop.gmail.com
 DOMAIN,smtp-mail.outlook.com
-DOMAIN,smtp.gmail.com
+# DOMAIN,smtp.gmail.com
 DOMAIN,smtp.office365.com
-
-# 网易邮箱规则
-DOMAIN-SUFFIX,imap.163.com
-
-# QQ邮箱规则
-DOMAIN-SUFFIX,smtp.qq.com
-DOMAIN-SUFFIX,pop.exmail.qq.com
-DOMAIN-SUFFIX,imap.qq.com
+DOMAIN-KEYWORD,mail
 
 # 苹果邮箱规则
 DOMAIN-SUFFIX,smtp.mail.me.com
