@@ -1,7 +1,7 @@
 # Social Media
 DOMAIN-SUFFIX,qq.com
 DOMAIN-KEYWORD,weixin
-DOMAIN-KEYWORD,cn
+DOMAIN-SUFFIX,.cn
 
 
 # Email Services
@@ -44,7 +44,7 @@ DOMAIN-SUFFIX,zijieapi.com
 DOMAIN-SUFFIX,fqnovel.com
 DOMAIN-SUFFIX,branch.io
 DOMAIN-SUFFIX,byteimg.com
-DOMAIN-SUFFIX,CN
+DOMAIN-SUFFIX,.CN
 
 # Government and Education
 # DOMAIN-SUFFIX,gov.cn
