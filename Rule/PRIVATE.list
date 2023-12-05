@@ -36,6 +36,8 @@ DOMAIN-SUFFIX,hostloc.com
 DOMAIN-SUFFIX,1password.com
 DOMAIN-SUFFIX,huacloud.xyz
 DOMAIN-KEYWORD,ininal
+DOMAIN-SUFFIX,wsj.com
+DOMAIN-KEYWORD,huobi
 
 AND,((DOMAIN-KEYWORD,mail), (DOMAIN-KEYWORD,google))
 
