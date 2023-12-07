@@ -1,31 +1,16 @@
-PROCESS-NAME,FinalShell
-
-DOMAIN-SUFFIX,workingcopyapp.com
-DOMAIN-SUFFIX,githubusercontent.com
-DOMAIN-SUFFIX,appstorrent.ru
-DOMAIN-SUFFIX,telghub.com
-DOMAIN-SUFFIX,vercel.app
-DOMAIN-KEYWORD,ininal
-DOMAIN-KEYWORD,okx
-
 # 敏感端口
-
 #ssh登陆
 DEST-PORT,22
-
 # SMTP 规则
 DEST-PORT,25
 DEST-PORT,465
 DEST-PORT,587
-
 # POP3 规则
 DEST-PORT,110
 DEST-PORT,995
-
 # IMAP 规则
 DEST-PORT,143
 DEST-PORT,993
-
 #其他
 DOMAIN-SUFFIX,okcoin.com
 DOMAIN-SUFFIX,ozan.com
@@ -35,12 +20,16 @@ DOMAIN-SUFFIX,pincong.rocks
 DOMAIN-SUFFIX,hostloc.com
 DOMAIN-SUFFIX,1password.com
 DOMAIN-SUFFIX,huacloud.xyz
-DOMAIN-KEYWORD,ininal
 DOMAIN-SUFFIX,wsj.com
 DOMAIN-KEYWORD,huobi
-
-AND,((DOMAIN-KEYWORD,mail), (DOMAIN-KEYWORD,google))
-
+PROCESS-NAME,FinalShell
+DOMAIN-SUFFIX,workingcopyapp.com
+DOMAIN-SUFFIX,githubusercontent.com
+DOMAIN-SUFFIX,appstorrent.ru
+DOMAIN-SUFFIX,telghub.com
+DOMAIN-SUFFIX,vercel.app
+DOMAIN-KEYWORD,ininal
+DOMAIN-KEYWORD,okx
 # GFWlist
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,bbc.co.uk
@@ -93,47 +82,19 @@ DOMAIN-SUFFIX,codecademy.com
 DOMAIN-SUFFIX,ibm.com
 DOMAIN-SUFFIX,microsoft.com
 DOMAIN-SUFFIX,sandai.net
-
 # 邮箱
-DOMAIN-SUFFIX,outlook.com
-DOMAIN-SUFFIX,mail.infomaniak.com
-DOMAIN-SUFFIX,mail.me.com
-DOMAIN-SUFFIX,imap.gmail.com
-DOMAIN-SUFFIX,pop.gmail.com
-DOMAIN-SUFFIX,smtp.gmail.com
-DOMAIN-SUFFIX,m.hotmail.com
-DOMAIN-SUFFIX,imap-mail.outlook.com
-DOMAIN-SUFFIX,smtp-mail.outlook.com
-DOMAIN-SUFFIX,outlook.office365.com
-DOMAIN-SUFFIX,smtp.office365.com
-DOMAIN-SUFFIX,googlemail.com
-DOMAIN,apple.imap.mail.yahoo.com
-DOMAIN,apple.smtp.mail.yahoo.com
-DOMAIN,imap-mail.outlook.com
-DOMAIN,imap.gmail.com
-DOMAIN,outlook.office365.com
-DOMAIN,pop.gmail.com
-DOMAIN,smtp-mail.outlook.com
-# DOMAIN,smtp.gmail.com
-DOMAIN,smtp.office365.com
+DOMAIN-KEYWORD,imap
+DOMAIN-KEYWORD,pop
+DOMAIN-KEYWORD,smtp
+DOMAIN-KEYWORD,outlook
 DOMAIN-KEYWORD,mail
-
-# 苹果邮箱规则
-DOMAIN-SUFFIX,smtp.mail.me.com
-
 # > Oracle
 DOMAIN-KEYWORD,oracle
-DOMAIN,shop.oracle.com
-DOMAIN,shop.oraclecloud.com
-DOMAIN-SUFFIX,oracle.com
-DOMAIN-SUFFIX,oraclecloud.com
 DOMAIN-SUFFIX,online-metrix.net
 DOMAIN-SUFFIX,2o7.net
 DOMAIN-SUFFIX,cybersource.com
-DOMAIN-SUFFIX,oracleinfinity.io
 DOMAIN-SUFFIX,atgsvcs.com
 DOMAIN-SUFFIX,custhelp.com
-DOMAIN-SUFFIX,oracleimg.com
 DOMAIN-SUFFIX,truste.com
 DOMAIN-SUFFIX,en25.com
 DOMAIN-SUFFIX,bkrtx.com
@@ -145,4 +106,3 @@ DOMAIN-SUFFIX,rfihub.com
 DOMAIN-SUFFIX,trustarc.eu
 DOMAIN-SUFFIX,truste-svc.net
 DOMAIN-SUFFIX,consensu.org
-DOMAIN-SUFFIX,oraclecorp.com
