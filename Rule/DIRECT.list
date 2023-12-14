@@ -1,11 +1,11 @@
 # Social Media
-DOMAIN-SUFFIX,qq.com
+DOMAIN-KEYWORD,qq.com
 DOMAIN-KEYWORD,weixin
-DOMAIN-SUFFIX,.cn
+DOMAIN-KEYWORD,cn
 
 
 # Email Services
-DOMAIN-SUFFIX,mail.qq.com
+
 DOMAIN-SUFFIX,163.com
 DOMAIN-SUFFIX,127.net
 DOMAIN-SUFFIX,126.net
@@ -40,11 +40,11 @@ USER-AGENT,MApi*
 USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*
 
 # Miscellaneous
-DOMAIN-SUFFIX,zijieapi.com
+DOMAIN-KEYWORD,zijieapi
 DOMAIN-SUFFIX,fqnovel.com
 DOMAIN-SUFFIX,branch.io
-DOMAIN-SUFFIX,byteimg.com
-DOMAIN-SUFFIX,.CN
+DOMAIN-KEYWORD,byteimg
+DOMAIN-KEYWORD,CN
 
 # Government and Education
 # DOMAIN-SUFFIX,gov.cn
@@ -69,6 +69,3 @@ DOMAIN-SUFFIX,wsglw.net
 
 # Mobile
 DOMAIN-KEYWORD,ultramobile
-
-# Apple Services
-# DOMAIN-SUFFIX,mail.icloud.com.cn
