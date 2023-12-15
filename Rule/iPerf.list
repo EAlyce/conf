@@ -1,11 +1,9 @@
 DOMAIN-SUFFIX,wobcom.de
 DOMAIN-SUFFIX,cdnst.net
 DOMAIN-SUFFIX,cellmaps.com
-DOMAIN-SUFFIX,ekahau.cloud
-DOMAIN-SUFFIX,ekahau.com
+DOMAIN-KEYWORD,ekahau
 DOMAIN-SUFFIX,fast.com
-DOMAIN-SUFFIX,ookla.com
-DOMAIN-SUFFIX,ooklaserver.net
+DOMAIN-KEYWORD,ookla
 DOMAIN-SUFFIX,pingtest.net
 DOMAIN-KEYWORD,speedtest
 USER-AGENT,SpeedTest*
