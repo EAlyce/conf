@@ -1,16 +1,14 @@
-DOMAIN-SUFFIX, ouyicn.blue
-
-DOMAIN-SUFFIX, qqhrss.com
-DOMAIN-SUFFIX, coinall.ltd
-DOMAIN-SUFFIX, aliyuncs.com
-DOMAIN-SUFFIX, intercom.io
-DOMAIN-SUFFIX, intercomcdn.com
-DOMAIN-SUFFIX, geetest.com
-
-USER-AGENT, ouyicn
-USER-AGENT, okx
-USER-AGENT, okexweb
-PROCESS-NAME, ouyicn
-PROCESS-NAME, okx
-PROCESS-NAME, okexweb
+DOMAIN-SUFFIX,ouyicn.blue
+DOMAIN-SUFFIX,qqhrss.com
+DOMAIN-SUFFIX,coinall.ltd
+DOMAIN-SUFFIX,aliyuncs.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN-SUFFIX,geetest.com
+USER-AGENT,ouyicn
+USER-AGENT,okx
+USER-AGENT,okexweb
+PROCESS-NAME,ouyicn
+PROCESS-NAME,okx
+PROCESS-NAME,okexweb
 DOMAIN-KEYWORD,okx
