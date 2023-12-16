@@ -97,3 +97,11 @@ DOMAIN-SUFFIX,xgmyd.com
 DOMAIN-SUFFIX,ycombinator.com
 DOMAIN-SUFFIX,zaobao.com
 PROCESS-NAME,FinalShell
+DOMAIN-KEYWORD,yandex
+DOMAIN-KEYWORD,yastatic
+DOMAIN-KEYWORD,egeturl
+DOMAIN-KEYWORD,cloudflare
+USER-AGENT,Binance*
+USER-AGENT,BNC*
+DOMAIN-KEYWORD,iyzico
+USER-AGENT,iyzico*
