@@ -2,8 +2,8 @@
 #!desc=番茄小说广告屏蔽
 [Rule]
 # 番茄小说 version = 3.1
-DOMAIN,p6-ad-sign.byteimg.com,REJECT
-DOMAIN,p9-ad-sign.byteimg.com,REJECT
+DOMAIN,p6-ad-sign.byteimg.com,REJECT-NO-DROP
+DOMAIN,p9-ad-sign.byteimg.com,REJECT-NO-DROP
 # DOMAIN-SUFFIX,byteimg.com,DIRECT
 DOMAIN,i.snssdk.com,REJECT-NO-DROP
 DOMAIN,i-lq.snssdk.com,REJECT-NO-DROP
