@@ -1,43 +1,63 @@
-IP-CIDR,109.239.140.0/24,no-resolve
-IP-CIDR,149.154.160.0/19,no-resolve
-IP-CIDR,149.154.164.0/23,no-resolve
-IP-CIDR,149.154.164.250/32,no-resolve
-IP-CIDR,149.154.164.8/29,no-resolve
-IP-CIDR,149.154.165.120/32,no-resolve
-IP-CIDR,149.154.166.120/32,no-resolve
-IP-CIDR,149.154.167.117/32,no-resolve
-IP-CIDR,149.154.167.118/32,no-resolve
-IP-CIDR,149.154.167.192/27,no-resolve
-IP-CIDR,149.154.167.40/32,no-resolve
-IP-CIDR,149.154.167.42/32,no-resolve
-IP-CIDR,149.154.167.50/32,no-resolve
-IP-CIDR,149.154.167.51/32,no-resolve
-IP-CIDR,149.154.167.90/32,no-resolve
-IP-CIDR,149.154.167.91/32,no-resolve
-IP-CIDR,149.154.167.99/32,no-resolve
+# AUTHOR: blackmatrix7 & DH & Luca
+DOMAIN,api.swiftgram.app
+DOMAIN-SUFFIX,comments.app
+DOMAIN-SUFFIX,contest.com
+DOMAIN-SUFFIX,graph.org
+DOMAIN-SUFFIX,legra.ph
+DOMAIN-SUFFIX,mbrx.app
+DOMAIN-SUFFIX,quiz.directory
+DOMAIN-SUFFIX,stel.com
+DOMAIN-SUFFIX,t.me
+DOMAIN-SUFFIX,tdesktop.com
+DOMAIN-SUFFIX,telega.one
+DOMAIN-SUFFIX,telegra.ph
+DOMAIN-SUFFIX,telesco.pe
+DOMAIN-SUFFIX,tg.dev
+DOMAIN-SUFFIX,tx.me
+DOMAIN-SUFFIX,usercontent.dev
+DOMAIN-KEYWORD,nicegram
+DOMAIN-KEYWORD,telegram
+# DC5
+IP-CIDR,91.108.16.0/22,no-resolve
+IP-CIDR,91.108.56.0/23,no-resolve
 IP-CIDR,149.154.168.0/22,no-resolve
-IP-CIDR,149.154.172.0/22,no-resolve
-IP-CIDR,149.154.175.10/32,no-resolve
-IP-CIDR,149.154.175.100/32,no-resolve
-IP-CIDR,149.154.175.117/32,no-resolve
-IP-CIDR,149.154.175.50/32,no-resolve
-IP-CIDR,185.76.151.0/24,no-resolve
-IP-CIDR,5.28.195.163/32,no-resolve
-IP-CIDR,5.28.195.205/32,no-resolve
-IP-CIDR,5.28.195.7/32,no-resolve
-IP-CIDR,91.105.192.0/23,no-resolve
-IP-CIDR,91.108.0.0/15,no-resolve
-IP-CIDR,91.108.12.0/22,no-resolve
-IP-CIDR,91.108.16.0/20,no-resolve
-IP-CIDR,91.108.32.0/20,no-resolve
-IP-CIDR,91.108.48.0/21,no-resolve
+# DC4
+IP-CIDR,91.108.4.0/22,no-resolve
+IP-CIDR,91.108.8.0/22,no-resolve
+IP-CIDR,91.108.56.0/22,no-resolve
 IP-CIDR,95.161.64.0/20,no-resolve
-IP-CIDR6,2001:67c:4e8::/48,no-resolve
-IP-CIDR6,2001:67c:4e8:f002::/127,no-resolve
-IP-CIDR6,2001:67c:4e8:f004::/127,no-resolve
-IP-CIDR6,2001:67c:4e8:fa60::/64,no-resolve
-IP-CIDR6,2001:b28:f23c::/47,no-resolve
-IP-CIDR6,2001:b28:f23d::/47,no-resolve
+IP-CIDR,149.154.160.0/22,no-resolve
+IP-CIDR,149.154.162.0/23,no-resolve
+IP-CIDR,149.154.164.0/22,no-resolve
+IP-CIDR,149.154.166.0/23,no-resolve
+# DC1
+IP-CIDR,91.108.12.0/22,no-resolve
+IP-CIDR,149.154.172.0/22,no-resolve
+# DC2
+IP-CIDR,91.108.20.0/22,no-resolve
+# DC3
+IP-CIDR,91.105.192.0/23,no-resolve
+IP-CIDR,185.76.151.0/24,no-resolve
+# DC5-V6
 IP-CIDR6,2001:b28:f23f::/48,no-resolve
-IP-CIDR6,2a0a:f280::/32,no-resolve
-OR,((IP-ASN,44907,no-resolve),(IP-ASN,59930,no-resolve),(IP-ASN,62014,no-resolve),(IP-ASN,62041,no-resolve),(IP-ASN,211157,no-resolve))
+# DC4-V6
+IP-CIDR6,2001:67c:4e8::/48,no-resolve
+# DC1-V6
+IP-CIDR6,2001:b28:f23d::/48,no-resolve
+# DC2-V6
+IP-CIDR6,2001:b28:f23c::/48,no-resolve
+# DC3-V6
+IP-CIDR6,2a0a:f280:203::/48,no-resolve
+# DC5-ASN
+IP-ASN,62014,no-resolve
+# DC4-ASN
+IP-ASN,62041,no-resolve
+# DC1-ASN
+IP-ASN,59930,no-resolve
+# DC2-ASN
+IP-ASN,44907,no-resolve
+# DC3-ASN
+IP-ASN,211157,no-resolve
+PROCESS-NAME,nekox.messenger
+PROCESS-NAME,org.telegram.messenger
+PROCESS-NAME,telegram-desktop
