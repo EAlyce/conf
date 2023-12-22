@@ -1,50 +1,9 @@
 #!/bin/bash
 
-check_root() {
-    if [[ $EUID -ne 0 ]]; then
-        echo "错误：本脚本需要 root 权限执行。" 1>&2
-        exit 1
-    fi
-}
-
-check_ip() {
-    country=$(curl --noproxy '*' -sSL https://api.myip.com/ | jq -r '.country' 2>/dev/null)
-    if [[ $? -ne 0 ]]; then
-        echo "警告：无法获取IP地址信息。" 1>&2
-    else
-        if [[ $country == "China" ]]; then
-            echo "错误：本脚本不支持境内服务器使用。" 1>&2
-            exit 1
-        fi
-    fi
-}
-
-check_sys() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        ID_LIKE=$(echo "$ID_LIKE" | awk '{print tolower($0)}')
-        ID=$(echo "$ID" | awk '{print tolower($0)}')
-        if [[ $ID == "debian" || $ID_LIKE == "debian" ]]; then
-            release="debian"
-        elif [[ $ID == "ubuntu" || $ID_LIKE == "ubuntu" ]]; then
-            release="ubuntu"
-        fi
-    fi
-}
-
-install_python() {
-    apt-get update -y >>/dev/null 2>&1
-    apt-get install -y python3 python3-pip neofetch libzbar-dev git >>/dev/null 2>&1
-    PYV=$(which python3)
-    if [ -z "$PYV" ]; then
-        echo "Python3 安装失败"
-        exit 1
-    fi
-}
 configure() {
     config_file=/var/lib/pagermaid/data/config.yml
     echo "生成配置文件中 . . ."
-    cp /var/lib/pagermaid/PagerMaid-Pyro/config.gen.yml $config_file
+    cp /var/lib/pagermaid/config.gen.yml $config_file
     printf "请输入应用程序 api_id："
     read -r api_id <&1
     sed -i "s/ID_HERE/$api_id/" $config_file
@@ -54,19 +13,7 @@ configure() {
 }
 
 login_screen() {
-    screen -S userbot -X quit >>/dev/null 2>&1
-    screen -dmS userbot
-    sleep 1
-    screen -x -S userbot -p 0 -X stuff "$PYV -m pagermaid"
-    screen -x -S userbot -p 0 -X stuff $'\n'
-    sleep 3
-    if [ "$(ps -def | grep [p]agermaid | grep -v grep)" == "" ]; then
-        echo "PagerMaid 运行时发生错误，错误信息："
-        $PYV -m pagermaid >err.log
-        cat err.log
-        screen -S userbot -X quit >>/dev/null 2>&1
-        exit 1
-    fi
+    python3 -m pagermaid
     systemctl_reload
 }
 
@@ -99,6 +46,8 @@ start_installation() {
     echo "系统检测通过。"
     install_python
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git
+    
+    cd /var/lib/pagermaid
     pip3 install -r requirements.txt
     mkdir -p /var/lib/pagermaid/data
     configure
