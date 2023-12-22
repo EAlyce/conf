@@ -51,17 +51,13 @@ configure() {
     printf "请输入应用程序 api_hash："
     read -r api_hash <&1
     sed -i "s/HASH_HERE/$api_hash/" $config_file
-	log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-    message="INFO [2023-12-22 14:39:26,199] [pagermaid] PagerMaid-Pyro 已启动，在任何聊天中输入 ,help 以获得帮助消息。"
-
-tail -f $log_file | while read line
-do
-    if [[ "$line" == *"$message"* ]]; then
-        exit 0
-    fi
-done
 }
-
+log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
+key1="PagerMaid-Pyro"
+key2="已启动"
+key3=",help"
+key4="以获得帮助消息"
+tail -f $log_file | awk "/$key1/ && /$key2/ && /$key3/ && /$key4/ {exit}" || exit 1
 login_screen() {
     python3 -m pagermaid
     systemctl_reload
