@@ -98,12 +98,6 @@ start_installation() {
     mkdir -p /var/lib/pagermaid/data
     configure
     login_screen
-    log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-    key1="PagerMaid-Pyro"
-    key2="已启动"
-    key3=",help"
-    key4="以获得帮助消息"
-    tail -f $log_file | awk "/$key1/ && /$key2/ && /$key3/ && /$key4/ {exit}" || exit 1
     echo "完成"
 }
 
