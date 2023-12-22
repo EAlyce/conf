@@ -97,6 +97,17 @@ start_installation() {
     pip3 install -r requirements.txt
     mkdir -p /var/lib/pagermaid/data
     configure
+    log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
+    key1="PagerMaid-Pyro"
+    key2="已启动"
+
+tail -f $log_file | while read line; do
+  echo $line | awk "/$key1/ && /$key2/ {exit}"
+  if [ $? -eq 0 ]; then
+    pkill -P $$
+    break
+  fi
+done
     login_screen
     echo "完成"
 }
