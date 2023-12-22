@@ -45,7 +45,7 @@ install_python() {
 configure() {
     config_file=/var/lib/pagermaid/data/config.yml
     echo "生成配置文件中 . . ."
-    cp /var/lib/PagerMaid-Pyro/config.gen.yml $config_file
+    cp /var/lib/pagermaid/config.gen.yml $config_file
     printf "请输入应用程序 api_id："
     read -r api_id <&1
     sed -i "s/ID_HERE/$api_id/" $config_file
