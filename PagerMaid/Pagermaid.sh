@@ -33,11 +33,15 @@ check_sys() {
 }
 
 install_python() {
+    
     apt-get update -y >>/dev/null 2>&1
     apt-get install -y python3 python3-pip neofetch libzbar-dev git >>/dev/null 2>&1
 }
 
 configure() {
+    sudo mv /var/lib/pagermaid/PagerMaid-Pyro/* /var/lib/pagermaid && sudo rm -r /var/lib/pagermaid/PagerMaid-Pyro
+    sudo mkdir -p /var/lib/pagermaid/data
+	cd /var/lib/pagermaid
     config_file=/var/lib/pagermaid/data/config.yml
     echo "生成配置文件中 . . ."
     cp /var/lib/pagermaid/config.gen.yml $config_file
