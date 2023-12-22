@@ -57,7 +57,7 @@ configure() {
 login_screen() {
     python3 -m pagermaid
 	log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-message="PagerMaid-Pyro 已启动，在任何聊天中输入 ,help 以获得帮助消息。"
+message="PagerMaid 已经安装完毕 请按下Ctrl+C继续"
 
 tail -f $log_file | while read line
 do
@@ -104,7 +104,7 @@ start_installation() {
     mkdir -p /var/lib/pagermaid/data
     configure
     login_screen
-    echo "PagerMaid 已经安装完毕 在telegram对话框中输入 ,help 并发送查看帮助列表"
+    echo "PagerMaid 已经安装完毕 请按下Ctrl+C继续"
 }
 
 cleanup() {
