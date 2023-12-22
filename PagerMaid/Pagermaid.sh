@@ -56,7 +56,6 @@ configure() {
 
 login_screen() {
     python3 -m pagermaid
-	
     systemctl_reload
 }
 
@@ -73,12 +72,12 @@ systemctl_reload() {
     [Service]
     Type=simple
     WorkingDirectory=/var/lib/pagermaid
-    ExecStart=$PYV -m pagermaid
+    ExecStart=/usr/bin/python3 -m pagermaid
     Restart=always
 TEXT
-    systemctl daemon-reload >>/dev/null 2>&1
-    systemctl start pagermaid >>/dev/null 2>&1
-    systemctl enable pagermaid >>/dev/null 2>&1
+    sudo systemctl daemon-reload >>/dev/null 2>&1
+    sudo systemctl start pagermaid >>/dev/null 2>&1
+    sudo systemctl enable --now pagermaid >>/dev/null 2>&1
 }
 
 start_installation() {
@@ -89,6 +88,7 @@ start_installation() {
     echo "系统检测通过。"
     install_python
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git
+    mv PagerMaid-Pyro /var/lib/pagermaid
     
     cd /var/lib/pagermaid
     pip3 install -r requirements.txt
