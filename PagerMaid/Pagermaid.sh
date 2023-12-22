@@ -52,12 +52,7 @@ configure() {
     read -r api_hash <&1
     sed -i "s/HASH_HERE/$api_hash/" $config_file
 }
-log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-key1="PagerMaid-Pyro"
-key2="已启动"
-key3=",help"
-key4="以获得帮助消息"
-tail -f $log_file | awk "/$key1/ && /$key2/ && /$key3/ && /$key4/ {exit}" || exit 1
+
 login_screen() {
     python3 -m pagermaid
     systemctl_reload
