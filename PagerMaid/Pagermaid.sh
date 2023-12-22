@@ -35,11 +35,6 @@ check_sys() {
 install_python() {
     apt-get update -y >>/dev/null 2>&1
     apt-get install -y python3 python3-pip neofetch libzbar-dev git >>/dev/null 2>&1
-    PYV=$(which python3)
-    if [ -z "$PYV" ]; then
-        echo "Python3 安装失败"
-        exit 1
-    fi
 }
 
 configure() {
@@ -57,7 +52,7 @@ configure() {
 login_screen() {
     python3 -m pagermaid
 	log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-message="PagerMaid 已经安装完毕 请按下Ctrl+C继续"
+    message="PagerMaid-Pyro 已启动"
 
 tail -f $log_file | while read line
 do
