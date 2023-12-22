@@ -39,7 +39,7 @@ install_python() {
 }
 
 configure() {
-    sudo rm -r /var/lib/PagerMaid-Pyro
+
     sudo mkdir -p /var/lib/pagermaid/data
 	cd /var/lib/pagermaid
     config_file=/var/lib/pagermaid/data/config.yml
