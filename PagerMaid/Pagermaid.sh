@@ -56,6 +56,15 @@ configure() {
 
 login_screen() {
     python3 -m pagermaid
+	log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
+message="PagerMaid-Pyro 已启动，在任何聊天中输入 ,help 以获得帮助消息。"
+
+tail -f $log_file | while read line
+do
+    if [[ "$line" == *"$message"* ]]; then
+        exit 0
+    fi
+done
     systemctl_reload
 }
 
