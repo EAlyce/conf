@@ -119,7 +119,7 @@ cleanup() {
         rm -rf /etc/systemd/system/pagermaid.service >>/dev/null 2>&1
         rm -rf /var/lib/pagermaid >>/dev/null 2>&1
 		cd /
-		sudo rm -r /var/lib/pagermaid
+
         echo "卸载完成 . . ."
     fi
 }
