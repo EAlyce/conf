@@ -103,11 +103,15 @@ cleanup() {
         echo "目录不存在不需要卸载。"
     else
         echo "正在关闭 PagerMaid . . ."
+		cd /
         systemctl disable pagermaid >>/dev/null 2>&1
         systemctl stop pagermaid >>/dev/null 2>&1
         echo "正在删除 PagerMaid 文件 . . ."
+		
         rm -rf /etc/systemd/system/pagermaid.service >>/dev/null 2>&1
         rm -rf /var/lib/pagermaid >>/dev/null 2>&1
+		cd /
+		sudo rm -r /var/lib/pagermaid
         echo "卸载完成 . . ."
     fi
 }
