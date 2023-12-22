@@ -39,7 +39,7 @@ install_python() {
 }
 
 configure() {
-    sudo mv /var/lib/PagerMaid-Pyro/* /var/lib/pagermaid && sudo rm -r /var/lib/PagerMaid-Pyro
+    sudo rm -r /var/lib/PagerMaid-Pyro
     sudo mkdir -p /var/lib/pagermaid/data
 	cd /var/lib/pagermaid
     config_file=/var/lib/pagermaid/data/config.yml
@@ -54,9 +54,8 @@ configure() {
 }
 
 login_screen() {
-    python3 -m pagermaid
 	log_file="/var/lib/pagermaid/data/pagermaid.log.txt"
-    message="PagerMaid-Pyro 已启动"
+    message="INFO [2023-12-22 14:39:26,199] [pagermaid] PagerMaid-Pyro 已启动，在任何聊天中输入 ,help 以获得帮助消息。"
 
 tail -f $log_file | while read line
 do
@@ -64,6 +63,7 @@ do
         exit 0
     fi
 done
+    python3 -m pagermaid
     systemctl_reload
 }
 
@@ -93,7 +93,7 @@ start_installation() {
     check_root
     check_ip
 
-    echo "系统检测通过。"
+    echo "正在克隆仓库"
     install_python
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git
     mv PagerMaid-Pyro /var/lib/pagermaid
@@ -103,7 +103,7 @@ start_installation() {
     mkdir -p /var/lib/pagermaid/data
     configure
     login_screen
-    echo "PagerMaid 已经安装完毕 请按下Ctrl+C继续"
+    echo "完成"
 }
 
 cleanup() {
