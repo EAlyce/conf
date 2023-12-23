@@ -51,16 +51,16 @@ DOMAIN-SUFFIX,127.net
 DOMAIN-SUFFIX,163.com
 DOMAIN-SUFFIX,bcebos.com
 DOMAIN-SUFFIX,bdstatic.com
-DOMAIN-SUFFIX,bilibili.com
+DOMAIN-KEYWORD,bili
 DOMAIN-SUFFIX,blog.google // Google Blog
 DOMAIN-SUFFIX,branch.io
-DOMAIN-SUFFIX,fqnovel.com
+DOMAIN-KEYWORD,fqnovel
 DOMAIN-SUFFIX,googletraveladservices.com // Google Flights
 DOMAIN-SUFFIX,henancme.net
 DOMAIN-SUFFIX,huayiweibo.com
 DOMAIN-SUFFIX,huayiyuan.com
 DOMAIN-SUFFIX,hzyoka.com
-DOMAIN-SUFFIX,lanzoug.com
+DOMAIN-KEYWORD,lanzoug
 DOMAIN-SUFFIX,launchdarkly.com
 DOMAIN-SUFFIX,netbian.com
 DOMAIN-SUFFIX,robot301.net
