@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
-
-container_name="" # 全局变量
-
-# 生成唯一容器名的函数
-generate_container_name() {
-    while : ; do
-        container_name="PagerMaid-$(openssl rand -hex 5)" # 给container_name赋值 
-        ! docker inspect "$container_name" &> /dev/null && break
-        sleep 1
-    done
-}
-
+if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
 docker_check() {
     sudo pkill -9 apt dpkg || true
     sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
@@ -21,32 +10,41 @@ docker_check() {
     command -v docker-compose &> /dev/null && echo "Docker Compose已安装" || { echo "Docker Compose安装失败。"; exit 1; }
 }
 
-build_docker() {
-    generate_container_name
-    echo "容器的名称为 $container_name"
-    echo "正在拉取 Docker 镜像 . . ."
-    docker rm -f "$container_name" > /dev/null 2>&1
-    docker pull teampgm/pagermaid_pyro
-}
-
-start_docker() {
+start_docker () {
+    echo "正在启动 Docker 容器 . . ."
     docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
+    echo
+    echo "开始配置参数 . . ."
+    echo "在登录后，请按 Ctrl + C 使容器在后台模式下重新启动。"
     sleep 3
     docker exec -it "$container_name" bash utils/docker-config.sh
+    echo
+    echo "Docker 重启中，如果失败，请手动重启容器。"
+    echo
     docker restart "$container_name"
+    echo
+    echo "Docker 创建完毕。"
+    echo
 }
 
-data_persistence() {
-    echo "数据持久化可以在升级或重新部署容器时保留配置文件和插件。"
-    data_path="/root/${container_name}"
-    mkdir -p "${data_path}"
+data_persistence () {
+    echo "数据持久化可以在升级或重新部署容器时保留配置文件和插件。现在开始进行数据持久化操作 ..."
+    data_path="/root/$container_name"
+    if [ ! -d "$data_path" ]; then
+        mkdir -p "$data_path"
+        echo "已创建目录 $data_path"
+    fi
     if docker inspect "$container_name" &>/dev/null; then
         docker cp "$container_name":/pagermaid/workdir "$data_path"
         docker stop "$container_name" &>/dev/null
         docker rm "$container_name" &>/dev/null
+        docker run -dit -v "$data_path"/workdir:/pagermaid/workdir --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
+        echo
+        echo "数据持久化操作完成。"
+        echo
+    else
+        echo "不存在名为 $container_name 的容器，退出。"
     fi
-    docker run -dit -v "$data_path":/pagermaid/workdir --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
-    echo -e "\n数据持久化操作完成。\n"
 }
 
 start_installation() {
@@ -54,29 +52,38 @@ start_installation() {
     build_docker
     start_docker
     data_persistence
+    exit
 }
 
+build_docker () {
+    container_name="PagerMaid-"$(openssl rand -hex 5)
+    while docker inspect "$container_name" &>/dev/null; do
+        container_name="PagerMaid-"$(openssl rand -hex 5)
+    done
+    echo "生成的容器名称为 $container_name"
+    echo "正在拉取 Docker 镜像 . . ."
+    docker pull teampgm/pagermaid_pyro
+}
 
 cleanup() {
-    echo "请选择你想删除的 PagerMaid 容器："
-    PS3='请输入选项对应的数字：'
-    select container_name in $(docker ps -a --format "{{ .Names }}" | grep PagerMaid-); do
-      [ "$container_name" = "" ] && echo "无效的选择!" && continue  
-      echo "开始删除 Docker 镜像 . . ."
-      if docker inspect "$container_name" &> /dev/null; then 
-          echo "开始删除名为 $container_name 的容器..."
-          docker rm -f "$container_name" &>/dev/null
-          if [ -d "/root/$container_name" ]; then
-              echo "开始删除 /root/$container_name 文件夹..."
-              rm -rf "/root/$container_name"
-          fi
-          shon_online
-      else 
-          echo "不存在名为 $container_name 的容器，退出。"; 
-          exit 1
-      fi
-      break
-    done
+    printf "请输入 PagerMaid 容器的名称："
+    read -r container_name <&1
+    if [[ -z $container_name ]]; then
+        echo "容器名称不能为空!"
+        return
+    fi
+    echo "开始删除 Docker 镜像 . . ."
+    if docker inspect "$container_name" &>/dev/null; then 
+        echo "开始删除名为 $container_name 的容器..."
+        docker rm -f "$container_name" &>/dev/null
+        if [ -d "/root/$container_name" ]; then
+            echo "开始删除 /root/$container_name 文件夹..."
+            rm -rf "/root/$container_name"
+        fi
+        shon_online
+    else 
+        echo "不存在名为 $container_name 的容器，退出。"; 
+    fi
 }
 
 shon_online() {
@@ -95,4 +102,5 @@ shon_online() {
            shon_online;;
     esac
 }
+
 shon_online
