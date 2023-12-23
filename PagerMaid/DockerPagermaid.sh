@@ -10,8 +10,8 @@ docker_check() {
     command -v docker-compose &> /dev/null && echo "Docker Compose已安装" || { echo "Docker Compose安装失败。"; exit 1; }
 }
 build_docker() {
-    printf "请输入 PagerMaid 容器的名称："
-    read -r container_name <&1
+    container_name="PagerMaid-$(date +%s)"
+    echo "容器的名称为 $container_name"
     echo "正在拉取 Docker 镜像 . . ."
     docker rm -f "$container_name" > /dev/null 2>&1
     docker pull teampgm/pagermaid_pyro
