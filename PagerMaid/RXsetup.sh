@@ -40,7 +40,7 @@ do
         
         0) 
             echo "退出"
-            exit 0
+            exit
             ;;
        
         *)
