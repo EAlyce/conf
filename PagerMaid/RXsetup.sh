@@ -73,6 +73,11 @@ set_custom_path() {
 
 # 调用设置 PATH 函数
 set_custom_path
+kill_process
+remove_locks
+configure_packages
+install_curl
+update_dns
 
 while :
 do
@@ -84,13 +89,6 @@ do
     echo "[2] Docker环境下安装"
     echo "[0] 退出"
     echo "----------------------------"
-
-    kill_process
-    remove_locks
-    configure_packages
-    install_curl
-    update_dns
-
     read -p "输入选项 [ 0 - 2 ] " choice
     
     case $choice in
