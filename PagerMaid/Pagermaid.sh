@@ -39,8 +39,31 @@ check_sys() {
 }
 
 install_python() {
-    apt-get update -qq && apt-get upgrade -y -qq
-    apt-get install -y python3 python3-pip neofetch libzbar-dev git -qq
+    # 更新系统
+    sudo apt-get update -qq
+    sudo apt-get upgrade -y -qq
+
+    # 安装一些Python的构建依赖
+    sudo apt-get install -y build-essential checkinstall
+    sudo apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+
+    # 下载Python 3.9.2
+    cd /usr/src
+    sudo wget https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz
+
+    # 解压缩
+    sudo tar xzf Python-3.9.2.tgz
+
+    # 进入Python源码目录
+    cd Python-3.9.2
+
+    # 编译安装
+    sudo ./configure --enable-optimizations
+    sudo make altinstall
+
+    # 设置Python的别名并激活
+    echo "alias python='/usr/local/bin/python3.9'" >> ~/.bashrc
+    source ~/.bashrc
 }
 
 configure() {
@@ -142,4 +165,7 @@ shon_online() {
 }
 
 check_sys
+install_python
+check_ip
+check_root
 shon_online
