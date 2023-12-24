@@ -22,10 +22,4 @@ for url in "${urls[@]}"; do
   # 输出结果
   echo "访问 $url 的结果：$result"
 
-  # 判断 CF 和 FY 的值是否为 true 或者找不到关键词
-  if [[ ( -z "$cf_value" || "$cf_value" == "true" ) && ( -z "$fy_value" || "$fy_value" == "true" ) ]]; then
-    echo "刷新成功！"
-  else
-    echo "刷新失败"
-  fi
 done
