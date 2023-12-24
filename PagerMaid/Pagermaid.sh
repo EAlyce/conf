@@ -37,8 +37,6 @@ check_sys() {
         exit 1
     fi
 }
-
-
 install_python() {
     # 更新系统
     sudo apt-get update -qq
@@ -51,23 +49,14 @@ install_python() {
     sudo apt-get install -y build-essential checkinstall
     sudo apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 
-    # 下载和编译安装Python
-    (
-        cd /usr/src
-        sudo wget https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz
-        sudo tar xzf Python-3.9.2.tgz
-
-        cd Python-3.9.2
-        sudo ./configure --enable-optimizations
-        sudo make altinstall
-    )
+    # 使用apt自动安装和升级Python
+    sudo apt-get install -y python3
+    sudo apt-get upgrade -y python3
 
     # 设置Python的别名并激活
-    echo "alias python='/usr/local/bin/python3.9'" >> ~/.bashrc
+    echo "alias python='python3'" >> ~/.bashrc
     source ~/.bashrc
 }
-
-
 configure() {
     sudo mkdir -p /var/lib/pagermaid/data
     cd /var/lib/pagermaid
