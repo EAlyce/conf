@@ -1,3 +1,5 @@
+#!/bin/bash
+
 kill_process() {
     echo "正在停止 apt 和 dpkg 进程..."
     sudo pkill -9 apt || true
@@ -27,33 +29,50 @@ update_dns() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 }
 
-install_linux() {
-    echo "您选择了Linux环境下安装。"
-    cd /var/lib
+install_pagermaid() {
+    local install_type="$1"
+    local installer_url
+
+    if [ "$install_type" == "Linux" ]; then
+        echo "您选择了 Linux 环境下安装。"
+        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh"
+    elif [ "$install_type" == "Docker" ]; then
+        echo "您选择了 Docker 环境下安装。"
+        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh"
+    else
+        echo "错误的安装类型。"
+        exit 1
+    fi
+
+    cd /var/lib || exit 1
     sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
-    curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh || {
+
+    curl -O "$installer_url" || {
         echo "下载 Installer 失败"
-        exit 1;
+        exit 1
     }
-    chmod +x Pagermaid.sh || {
+
+    chmod +x "$(basename "$installer_url")" || {
         echo "更改权限失败"
-        exit 1;
+        exit 1
     }
-    ./Pagermaid.sh
+
+    "./$(basename "$installer_url")"
 }
 
-install_docker() {
-    echo "您选择了Docker环境下安装。"
-    curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh || {
-        echo "下载 Docker Installer 失败"
-        exit 1;
-    }
-    chmod +x DockerPagermaid.sh || {
-        echo "更改权限失败"
-        exit 1;
-    }
-    ./DockerPagermaid.sh
+# 定义设置 PATH 的函数
+set_custom_path() {
+    # 检查是否存在 PATH 变量，如果不存在则设置
+    PATH_CHECK=$(crontab -l | grep -q '^PATH=' && echo "true" || echo "false")
+
+    if [ "$PATH_CHECK" == "false" ]; then
+        # 设置全面的 PATH
+        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    fi
 }
+
+# 调用设置 PATH 函数
+set_custom_path
 
 while :
 do
@@ -76,11 +95,11 @@ do
     
     case $choice in
         1) 
-            install_linux 
+            install_pagermaid "Linux"
             ;;
         
         2)
-            install_docker
+            install_pagermaid "Docker"
             ;;
         
         0) 
@@ -89,8 +108,9 @@ do
             ;;
        
         *)
-            echo "错误输入， 请重新选择!"
+            echo "错误输入，请重新选择!"
             ;;
     esac
+
     read -p "按任意键返回菜单 " 
 done
