@@ -1,0 +1,10 @@
+#!name=Auto module for JavaScripts
+#!desc=For those JavaScripts who should be disabled after evaluation successful.
+
+[Script]
+Auto join TF = type=cron,cronexp=*/1 * * * * *,script-path=https://cdn.jsdelivr.net/gh/DecoAri/JavaScript@main/Surge/Auto_join_TF.js?raw=true,wake-system=0,timeout=180
+
+#TF信息获取 = type=http-request,pattern=^https:\/\/testflight\.apple\.com\/v3\/accounts/.*\/apps$,requires-body=0,script-path=https://cdn.jsdelivr.net/gh/DecoAri/JavaScript@main/Surge/TF_keys.js?raw=true
+
+[MITM]
+hostname = %APPEND% testflight.apple.com
