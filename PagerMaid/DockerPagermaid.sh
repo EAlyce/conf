@@ -124,7 +124,6 @@ shon_online() {
         3) echo "正在退出脚本..."
            exit 0;;
         *) echo "无效的选择!";
-           sleep 5s; 
            shon_online;;
     esac
 }
