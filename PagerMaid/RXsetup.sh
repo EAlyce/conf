@@ -1,14 +1,60 @@
-# 如果必要，强制结束任何剩余的 apt、dpkg
-sudo pkill -9 apt || true
-sudo pkill -9 dpkg || true
+kill_process() {
+    echo "正在停止 apt 和 dpkg 进程..."
+    sudo pkill -9 apt || true
+    sudo pkill -9 dpkg || true
+}
 
-# 检查锁文件是否存在，如果存在则移除它们
-sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
+remove_locks() {
+    echo "正在移除锁文件..."
+    sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
+}
 
-# 配置未配置的包
-sudo dpkg --configure -a
-sudo apt install -y curl
-echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+configure_packages() {
+    echo "正在配置未配置的包..."
+    sudo dpkg --configure -a
+}
+
+install_curl() {
+    echo "正在安装 curl..."
+    sudo apt install -y curl || {
+        echo "安装 curl 失败"
+        exit 1
+    }
+}
+
+update_dns() {
+    echo "正在更新 DNS 到 Google 的 DNS..."
+    echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+}
+
+install_linux() {
+    echo "您选择了Linux环境下安装。"
+    cd /var/lib
+    sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
+    curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh || {
+        echo "下载 Installer 失败"
+        exit 1;
+    }
+    chmod +x Pagermaid.sh || {
+        echo "更改权限失败"
+        exit 1;
+    }
+    ./Pagermaid.sh
+}
+
+install_docker() {
+    echo "您选择了Docker环境下安装。"
+    curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh || {
+        echo "下载 Docker Installer 失败"
+        exit 1;
+    }
+    chmod +x DockerPagermaid.sh || {
+        echo "更改权限失败"
+        exit 1;
+    }
+    ./DockerPagermaid.sh
+}
+
 while :
 do
     clear
@@ -19,23 +65,22 @@ do
     echo "[2] Docker环境下安装"
     echo "[0] 退出"
     echo "----------------------------"
+
+    kill_process
+    remove_locks
+    configure_packages
+    install_curl
+    update_dns
+
     read -p "输入选项 [ 0 - 2 ] " choice
     
     case $choice in
-        1)
-            echo "您选择了Linux环境下安装。"
-            cd /var/lib
-            sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
-            curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh
-            chmod +x Pagermaid.sh
-            ./Pagermaid.sh
+        1) 
+            install_linux 
             ;;
         
         2)
-            echo "您选择了Docker环境下安装。"
-            curl -O https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh
-            chmod +x DockerPagermaid.sh
-            ./DockerPagermaid.sh
+            install_docker
             ;;
         
         0) 
