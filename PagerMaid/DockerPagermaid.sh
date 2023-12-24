@@ -4,12 +4,38 @@ docker_check() {
     sudo pkill -9 apt dpkg || true
     sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
     sudo dpkg --configure -a
+
+    # Install Docker if not already installed
     command -v docker &> /dev/null || { echo "Installing Docker..."; curl -fsSL https://test.docker.com | bash; }
     command -v docker &> /dev/null && echo "Docker已安装"
+
+    # Install Docker Compose if not already installed
     command -v docker-compose &> /dev/null || { echo "Installing Docker Compose..."; sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose; }
     command -v docker-compose &> /dev/null && echo "Docker Compose已安装" || { echo "Docker Compose安装失败。"; exit 1; }
-}
 
+    # Check Python version inside Docker container
+    docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
+    required_python_version="3.9.2"
+
+    if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
+        echo "Docker中的Python版本 ($docker_python_version) 大于 3.9.2"
+    else
+        echo "Docker中的Python版本 ($docker_python_version) 不符合要求，将尝试更新升级..."
+
+        # 更新 Docker 镜像中的 Python 版本
+        docker pull python:latest
+
+        # 重新检查 Python 版本
+        docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
+
+        if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
+            echo "Docker中的Python版本已成功更新为 $docker_python_version"
+        else
+            echo "错误: Docker中的Python版本无法更新升级。请手动检查并更新。"
+            exit 1
+        fi
+    fi
+}
 start_docker () {
     echo "正在启动 Docker 容器 . . ."
     docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
