@@ -28,3 +28,12 @@ DOMAIN-SUFFIX,letsencrypt.org
 DOMAIN-SUFFIX,android.com
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,githubusercontent.com
+DOMAIN-SUFFIX,ads-pixiv.net
+DOMAIN-SUFFIX,booth.pm
+DOMAIN-SUFFIX,fanbox.cc
+DOMAIN-SUFFIX,pixiv.cat
+DOMAIN-SUFFIX,pixiv.co.jp
+DOMAIN-SUFFIX,pixiv.me
+DOMAIN-SUFFIX,pixiv.net
+DOMAIN-SUFFIX,pixiv.org
+DOMAIN-SUFFIX,pximg.net
