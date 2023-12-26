@@ -2,8 +2,6 @@
 DOMAIN,cdn.auth0.com
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,openai
-USER-AGENT,analytics*
-USER-AGENT,ChatGPT*
 DOMAIN-SUFFIX,AI.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,akamaized.net
