@@ -6,5 +6,4 @@ DOMAIN-SUFFIX,fast.com
 DOMAIN-KEYWORD,ookla
 DOMAIN-SUFFIX,pingtest.net
 DOMAIN-KEYWORD,speedtest
-USER-AGENT,SpeedTest*
 DOMAIN-KEYWORD,speed
