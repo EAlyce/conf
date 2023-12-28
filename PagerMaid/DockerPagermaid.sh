@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
+
 docker_check() {
     sudo pkill -9 apt dpkg || true
     sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock

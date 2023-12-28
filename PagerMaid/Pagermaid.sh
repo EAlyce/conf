@@ -1,12 +1,4 @@
 #!/bin/bash
-
-check_root() {
-    if [[ $EUID -ne 0 ]]; then
-        echo "错误：本脚本需要 root 权限执行。" 1>&2
-        exit 1
-    fi
-}
-
 check_ip() {
     country=$(curl --noproxy '*' -sSL https://api.myip.com/ | jq -r '.country' 2>/dev/null)
     if [[ $? -ne 0 ]]; then
@@ -159,5 +151,4 @@ shon_online() {
 check_sys
 install_python
 check_ip
-check_root
 shon_online
