@@ -1,6 +1,7 @@
 #!name=番茄去广告
 #!desc=来自网络收集，非原创
 [Rule]
+
 DOMAIN-SUFFIX,ugsdk.cn,REJECT
 DOMAIN-SUFFIX,p3-reading-sign.fqnovelpic.com,REJECT
 DOMAIN-SUFFIX,p6-reading-sign.fqnovelpic.com,REJECT
