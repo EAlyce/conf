@@ -31,30 +31,28 @@ check_sys() {
 }
 install_python() {
     # 更新系统
-    sudo apt-get update -qq
-    sudo apt-get upgrade -y -qq
+    sudo apt-get update > /dev/null || true
+    sudo apt-get upgrade > /dev/null || true
 
     # 安装一些必要的库和工具
-    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y
+    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y > /dev/null || true
 
     # 安装一些Python的构建依赖
-    sudo apt-get install -y build-essential checkinstall
-    sudo apt-get install -y libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev
+    sudo apt-get install -y build-essential checkinstall > /dev/null || true
+    sudo apt-get install -y libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev > /dev/null || true libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
 
     # 使用apt自动安装和升级Python
-    sudo apt-get install -y python3
-    sudo apt-get upgrade -y python3
-
+    sudo apt-get install -y python3 > /dev/null || true
+    sudo apt-get upgrade -y python3 > /dev/null || true
+    
     # 设置Python的别名并激活
     echo "alias python='python3'" >> ~/.bashrc
     source ~/.bashrc
     python3 --version
 }
 configure() {
-    sudo mkdir -p /var/lib/pagermaid/data
-    cd /var/lib/pagermaid
-    config_file=/var/lib/pagermaid/data/config.yml
     echo "生成配置文件中 . . ."
+    config_file=/var/lib/pagermaid/data/config.yml
     cp /var/lib/pagermaid/config.gen.yml $config_file
     read -p "请输入应用程序 api_id：" -e api_id
     sed -i "s/ID_HERE/$api_id/" $config_file
@@ -62,27 +60,21 @@ configure() {
     sed -i "s/HASH_HERE/$api_hash/" $config_file
 }
 
-login_screen() {
-    cd /var/lib/pagermaid
-    python3 -m pagermaid
-    systemctl_reload
-}
-
 systemctl_reload() {
     echo "正在写入系统进程守护 . . ."
-    sudo cat <<'TEXT' > /etc/systemd/system/pagermaid.service
+    sudo cat <<-'TEXT' > /etc/systemd/system/pagermaid.service
     [Unit]
     Description=PagerMaid-Pyro Telegram Utility Daemon
     After=network.target
 
-    [Install]
-    WantedBy=multi-user.target
-
     [Service]
     Type=simple
     WorkingDirectory=/var/lib/pagermaid
-    ExecStart=/usr/bin/python3 -m pagermaid
+    ExecStart=/var/lib/pagermaid/venv/bin/python3 -m pagermaid
     Restart=always
+
+    [Install]
+    WantedBy=multi-user.target
 TEXT
     sudo systemctl daemon-reload >>/dev/null 2>&1
     sudo systemctl start pagermaid >>/dev/null 2>&1
@@ -91,20 +83,23 @@ TEXT
 
 start_installation() {
     check_sys
-    check_root
     check_ip
-    echo "正在克隆仓库"
-    if ! git clone https://github.com/TeamPGM/PagerMaid-Pyro.git; then
-        echo "错误：无法克隆仓库。" 1>&2
-        exit 1
-    fi
+    install_python
+    sudo rm -rf /var/lib/PagerMaid-Pyro
+    git clone https://github.com/TeamPGM/PagerMaid-Pyro.git > /dev/null || true
     mv PagerMaid-Pyro /var/lib/pagermaid
-    
     cd /var/lib/pagermaid
-    pip3 install -r requirements.txt
-    mkdir -p /var/lib/pagermaid/data
+    python3 -m venv venv
+    source venv/bin/activate
+    python3 -m pip install --upgrade pip > /dev/null || true
+    pip install coloredlogs > /dev/null || true
+    pip3 install -r requirements.txt > /dev/null || true
+    mkdir -p /var/lib/pagermaid/data > /dev/null || true
     configure
-    login_screen
+    python3 -m pagermaid
+    systemctl_reload
+    # 离开虚拟环境
+    deactivate
     echo "完成"
 }
 
@@ -148,7 +143,4 @@ shon_online() {
     esac
 }
 
-check_sys
-install_python
-check_ip
 shon_online
