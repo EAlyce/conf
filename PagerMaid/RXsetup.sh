@@ -1,4 +1,5 @@
 #!/bin/bash
+apt-get install sudo
 if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
 kill_process() {
     echo "正在停止 apt 和 dpkg 进程..."
