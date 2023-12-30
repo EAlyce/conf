@@ -19,7 +19,7 @@ configure_packages() {
 
 install_curl() {
     echo "正在安装 curl..."
-    sudo apt install -y curl || {
+    sudo apt-get install -y curl || {
         echo "安装 curl 失败"
         exit 1
     }
