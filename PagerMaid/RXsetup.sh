@@ -36,10 +36,10 @@ install_pagermaid() {
 
     if [ "$install_type" == "Linux" ]; then
         echo "您选择了 Linux 环境下安装。"
-        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh"
+        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh"
     elif [ "$install_type" == "Docker" ]; then
         echo "您选择了 Docker 环境下安装。"
-        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh"
+        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/DockerPagermaid.sh"
     else
         echo "错误的安装类型。"
         exit 1
