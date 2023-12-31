@@ -1,4 +1,5 @@
 #!/bin/bash
+apt-get install sudo
 if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
 kill_process() {
     echo "正在停止 apt 和 dpkg 进程..."
@@ -18,7 +19,7 @@ configure_packages() {
 
 install_curl() {
     echo "正在安装 curl..."
-    sudo apt install -y curl || {
+    sudo apt-get install -y curl || {
         echo "安装 curl 失败"
         exit 1
     }
@@ -35,10 +36,10 @@ install_pagermaid() {
 
     if [ "$install_type" == "Linux" ]; then
         echo "您选择了 Linux 环境下安装。"
-        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/Pagermaid.sh"
+        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh"
     elif [ "$install_type" == "Docker" ]; then
         echo "您选择了 Docker 环境下安装。"
-        installer_url="https://cdn.jsdelivr.net/gh/EAlyce/conf@main/PagerMaid/DockerPagermaid.sh"
+        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/DockerPagermaid.sh"
     else
         echo "错误的安装类型。"
         exit 1
