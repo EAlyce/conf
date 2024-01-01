@@ -3,7 +3,7 @@ setting_system() {
   rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
   dpkg --configure -a
   echo "export PS1='\h:\W \u\$ '" >> /root/.bashrc
-  sed -i '/nameserver/s/\S\+/8.8.8.8 8.8.4.4 1.1.1.1 1.0.0.1/' /etc/resolv.conf
+  sed -i '/nameserver/s/\S\+/8.8.8.8 8.8.4.4/' /etc/resolv.conf
 }
 
 # SSH窗口及系统优化
