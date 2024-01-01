@@ -1,9 +1,6 @@
 setting_system() {
-  pkill -9 apt || true && pkill -9 dpkg || true
-  rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
-  dpkg --configure -a
   echo "export PS1='\h:\W \u\$ '" >> /root/.bashrc
-  sed -i '/nameserver/s/\S\+/8.8.8.8 8.8.4.4/' /etc/resolv.conf
+  echo "nameserver 8.8.8.8" > /etc/resolv.conf && echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 }
 
 # SSH窗口及系统优化
@@ -33,7 +30,7 @@ install_python_docker() {
 clean_system_info() {
   apt clean && apt autoclean && apt autoremove -y && rm -rf /tmp/* && history -c && history -w && docker system prune -a --volumes -f && dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge
 }
-
+apt-get update && apt-get install -y tmux mosh curl wget git sudo > /dev/null 2>&1
 setting_system
 Time_Lang_system
 update_install_apps
