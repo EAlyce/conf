@@ -11,7 +11,6 @@ DOMAIN-SUFFIX,lf3-reading.fqnovelpic.com,REJECT
 DOMAIN-SUFFIX,mssdk.volces.com,REJECT
 DOMAIN-SUFFIX,toutiaocloud.net,REJECT 
 DOMAIN-SUFFIX,p9-reading-sign.fqnovelpic.com,REJECT
-DOMAIN-KEYWORD,dns,REJECT-NO-DROP,extended-matching
 DOMAIN-KEYWORD,lf-,REJECT-NO-DROP,extended-matching
 DOMAIN-SUFFIX,snssdk.com,REJECT ,extended-matching
 DOMAIN-SUFFIX,toutiaocloud.com,REJECT-NO-DROP,extended-matching 
