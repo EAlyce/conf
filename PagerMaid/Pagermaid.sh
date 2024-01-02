@@ -18,7 +18,7 @@ sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev
 
 # 使用apt自动安装和升级Python
 sudo apt-get install -y python3 > /dev/null || true
-#sudo apt-get upgrade -y python3 > /dev/null || true
+sudo apt-get upgrade -y python3 > /dev/null || true
 
 # 链接Python和pip
 sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
@@ -63,11 +63,11 @@ TEXT
 
 start_installation() {
     install_python
-    sudo rm -rf /var/lib/PagerMaid-Pyro
+    sudo rm -rf /var/lib/PagerMaid-Pyro > /dev/null || true
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git > /dev/null || true
-    mv PagerMaid-Pyro /var/lib/pagermaid
+    mv PagerMaid-Pyro /var/lib/pagermaid > /dev/null || true
     cd /var/lib/pagermaid
-    python3 -m venv venv
+    python3 -m venv venv > /dev/null
     source venv/bin/activate
     python3 -m pip install --upgrade pip > /dev/null || true
     pip install coloredlogs > /dev/null || true
@@ -78,7 +78,7 @@ start_installation() {
     systemctl_reload
     # 离开虚拟环境
     deactivate
-    echo "完成"
+    echo "PagerMaid部署完成"
 }
 
 cleanup() {
