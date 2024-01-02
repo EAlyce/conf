@@ -6,26 +6,26 @@ echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv
 
 sudo update-locale LANG=en_US.UTF-8 && sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
     # 更新系统
-#sudo apt-get update > /dev/null || true
-#sudo apt-get upgrade -y > /dev/null || true
+sudo apt-get update > /dev/null || true
+sudo apt-get upgrade -y > /dev/null || true
 
 # 安装必要的库和工具
 
-#sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
+sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
 
 # 安装Python构建依赖
-#sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
+sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
 
 # 使用apt自动安装和升级Python
-#sudo apt-get install -y python3 > /dev/null || true
+sudo apt-get install -y python3 > /dev/null || true
 #sudo apt-get upgrade -y python3 > /dev/null || true
 
 # 链接Python和pip
 sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 
 # 设置Python别名并激活
-#echo "alias python='python3'" >> ~/.bashrc
-#source ~/.bashrc
+echo "alias python='python3'" >> ~/.bashrc
+source ~/.bashrc
 
 # 验证Python版本
 python3 --version
