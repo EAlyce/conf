@@ -1,6 +1,26 @@
 #!/bin/bash
 check_ip() {
+    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    public_ip=""
+
+    for service in "${ip_services[@]}"; do
+        if public_ip=$(curl -s "$service" 2>/dev/null); then
+            if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "公网IP: $public_ip"
+                break
+            else
+                echo "$service 返回的不是一个有效的IP地址：$public_ip"
+            fi
+        else
+            echo "$service 无法连接或响应太慢"
+        fi
+        sleep 1  # 在尝试下一个服务之前稍微延迟
+    done
+
+    [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "所有服务都无法获取公网IP。"; exit 1; }
+
     country=$(curl --noproxy '*' -sSL https://api.myip.com/ | jq -r '.country' 2>/dev/null)
+
     if [[ $? -ne 0 ]]; then
         echo "警告：无法获取IP地址信息。" 1>&2
     else
