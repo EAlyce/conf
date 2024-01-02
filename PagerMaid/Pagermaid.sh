@@ -45,9 +45,13 @@ install_python() {
     sudo apt-get install -y python3 > /dev/null || true
     sudo apt-get upgrade -y python3 > /dev/null || true
     
+    apt update && apt install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+
     # 设置Python的别名并激活
     echo "alias python='python3'" >> ~/.bashrc
     source ~/.bashrc
+    apt update && apt install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+
     python3 --version
 }
 configure() {
