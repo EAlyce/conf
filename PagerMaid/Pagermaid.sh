@@ -1,54 +1,34 @@
 #!/bin/bash
-check_ip() {
-    country=$(curl --noproxy '*' -sSL https://api.myip.com/ | jq -r '.country' 2>/dev/null)
-    if [[ $? -ne 0 ]]; then
-        echo "警告：无法获取IP地址信息。" 1>&2
-    else
-        if [[ $country == "China" ]]; then
-            echo "错误：本脚本不支持境内服务器使用。" 1>&2
-            exit 1
-        fi
-    fi
-}
-
-check_sys() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        ID_LIKE=$(echo "$ID_LIKE" | awk '{print tolower($0)}')
-        ID=$(echo "$ID" | awk '{print tolower($0)}')
-        if [[ $ID == "debian" || $ID_LIKE == "debian" ]]; then
-            release="debian"
-        elif [[ $ID == "ubuntu" || $ID_LIKE == "ubuntu" ]]; then
-            release="ubuntu"
-        else
-            echo "错误：本脚本只支持 Debian 和 Ubuntu。" 1>&2
-            exit 1
-        fi
-    else
-        echo "错误：无法检测操作系统。" 1>&2
-        exit 1
-    fi
-}
 install_python() {
+apt-get update && apt-get install -y curl wget git sudo > /dev/null || true
+sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
+echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p > /dev/null || true
+
+sudo update-locale LANG=en_US.UTF-8 && sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
     # 更新系统
-    sudo apt-get update > /dev/null || true
-    sudo apt-get upgrade > /dev/null || true
+sudo apt-get update > /dev/null || true
+sudo apt-get upgrade -y > /dev/null || true
 
-    # 安装一些必要的库和工具
-    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y > /dev/null || true
+# 安装必要的库和工具
+sudo apt-get install dialog
+sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
 
-    # 安装一些Python的构建依赖
-    sudo apt-get install -y build-essential checkinstall > /dev/null || true
-    sudo apt-get install -y libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev > /dev/null || true libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
+# 安装Python构建依赖
+sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
 
-    # 使用apt自动安装和升级Python
-    sudo apt-get install -y python3 > /dev/null || true
-    sudo apt-get upgrade -y python3 > /dev/null || true
-    
-    # 设置Python的别名并激活
-    echo "alias python='python3'" >> ~/.bashrc
-    source ~/.bashrc
-    python3 --version
+# 使用apt自动安装和升级Python
+sudo apt-get install -y python3 > /dev/null || true
+sudo apt-get upgrade -y python3 > /dev/null || true
+
+# 链接Python和pip
+sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+
+# 设置Python别名并激活
+echo "alias python='python3'" >> ~/.bashrc
+source ~/.bashrc
+
+# 验证Python版本
+python3 --version
 }
 configure() {
     echo "生成配置文件中 . . ."
@@ -82,14 +62,12 @@ TEXT
 }
 
 start_installation() {
-    check_sys
-    check_ip
     install_python
-    sudo rm -rf /var/lib/PagerMaid-Pyro
+    sudo rm -rf /var/lib/PagerMaid-Pyro > /dev/null || true
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git > /dev/null || true
-    mv PagerMaid-Pyro /var/lib/pagermaid
+    mv PagerMaid-Pyro /var/lib/pagermaid > /dev/null || true
     cd /var/lib/pagermaid
-    python3 -m venv venv
+    python3 -m venv venv > /dev/null
     source venv/bin/activate
     python3 -m pip install --upgrade pip > /dev/null || true
     pip install coloredlogs > /dev/null || true
@@ -100,7 +78,7 @@ start_installation() {
     systemctl_reload
     # 离开虚拟环境
     deactivate
-    echo "完成"
+    echo "PagerMaid部署完成"
 }
 
 cleanup() {
