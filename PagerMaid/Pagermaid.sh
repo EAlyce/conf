@@ -1,10 +1,16 @@
 #!/bin/bash
 install_python() {
+apt-get update && apt-get install -y curl wget git sudo > /dev/null || true
+sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
+echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p > /dev/null || true
+
+sudo update-locale LANG=en_US.UTF-8 && sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
     # 更新系统
 sudo apt-get update > /dev/null || true
 sudo apt-get upgrade -y > /dev/null || true
 
 # 安装必要的库和工具
+
 sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
 
 # 安装Python构建依赖
