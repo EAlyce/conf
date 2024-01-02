@@ -10,7 +10,7 @@ sudo apt-get update > /dev/null || true
 sudo apt-get upgrade -y > /dev/null || true
 
 # 安装必要的库和工具
-
+sudo apt-get install dialog
 sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
 
 # 安装Python构建依赖
