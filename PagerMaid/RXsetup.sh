@@ -19,10 +19,9 @@ configure_packages() {
 
 install_curl() {
     echo "正在安装 curl..."
-    sudo apt-get install -y curl || {
-        echo "安装 curl 失败"
-        exit 1
-    }
+    apt-get install -y curl wget
+	apt clean && apt autoclean && apt autoremove -y && rm -rf /tmp/* && history -c && history -w && docker system prune -a --volumes -f && dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge
+    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
 }
 
 update_dns() {
