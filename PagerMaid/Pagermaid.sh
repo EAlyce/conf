@@ -55,7 +55,7 @@ install_python() {
     sudo apt-get upgrade > /dev/null || true
 
     # 安装一些必要的库和工具
-    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y > /dev/null || true
+    sudo apt-get install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y > /dev/null || true
 
     # 安装一些Python的构建依赖
     sudo apt-get install -y build-essential checkinstall > /dev/null || true
@@ -65,12 +65,12 @@ install_python() {
     sudo apt-get install -y python3 > /dev/null || true
     sudo apt-get upgrade -y python3 > /dev/null || true
     
-    apt update && apt install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+    apt-get update && apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 
     # 设置Python的别名并激活
     echo "alias python='python3'" >> ~/.bashrc
     source ~/.bashrc
-    apt update && apt install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+    apt-get update && apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 
     python3 --version
 }
