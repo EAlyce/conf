@@ -41,19 +41,21 @@ configure() {
 
 systemctl_reload() {
     echo "正在写入系统进程守护 . . ."
-    sudo cat <<-'TEXT' > /etc/systemd/system/pagermaid.service
-    [Unit]
-    Description=PagerMaid-Pyro Telegram Utility Daemon
-    After=network.target
+sudo cat <<'TEXT' > /etc/systemd/system/pagermaid.service
+[Unit]
+Description=PagerMaid-Pyro Telegram Utility Daemon
+After=network.target
 
-    [Service]
-    Type=simple
-    WorkingDirectory=/var/lib/pagermaid
-    ExecStart=/var/lib/pagermaid/venv/bin/python3 -m pagermaid
-    Restart=always
+[Install]
+WantedBy=multi-user.target
 
-    [Install]
-    WantedBy=multi-user.target
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/pagermaid
+ExecStart=/usr/bin/python3 -m pagermaid
+Restart=always
+TEXT
+
 TEXT
     sudo systemctl daemon-reload >>/dev/null 2>&1
     sudo systemctl start pagermaid >>/dev/null 2>&1
