@@ -1,65 +1,34 @@
 #!/usr/bin/env bash
 
-docker_check() {
-    sudo pkill -9 apt dpkg || true
-    sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
-    sudo dpkg --configure -a
+docker_check(){
+# 如果系统版本是 Debian 12，则重新添加 Docker 存储库，使用新的 signed-by 选项来指定验证存储库的 GPG 公钥
+if [ "$(lsb_release -cs)" = "bookworm" ]; then
+    # 重新下载 Docker GPG 公钥并保存到 /usr/share/keyrings/docker-archive-keyring.gpg
+sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-    update_docker_repository() {
-        local repo_keyring="/usr/share/keyrings/docker-archive-keyring.gpg"
-        local repo_url="https://download.docker.com/linux/debian"
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+fi
 
-        sudo rm -f "$repo_keyring"
-        sudo curl -fsSL "$repo_url/gpg" | sudo gpg --dearmor -o "$repo_keyring"
+# 更新 apt 存储库
+sudo apt update
 
-        echo "deb [arch=amd64 signed-by=$repo_keyring] $repo_url $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    }
-
-    if [ "$(lsb_release -cs)" = "bookworm" ]; then
-        update_docker_repository
-    fi
-
-    sudo apt update
-
-    install_package_if_not_exists() {
-        local package_name="$1"
-        if ! command -v "$package_name" &> /dev/null; then
-            sudo apt install -y "$package_name"
-            echo "$package_name 已安装成功"
-        else
-            echo "$package_name 已经安装"
-        fi
-    }
-
-    install_package_if_not_exists "docker-ce"
-    install_package_if_not_exists "docker-ce-cli"
-    install_package_if_not_exists "containerd.io"
-
+# 如果未安装，则使用包管理器安装 Docker
+if ! command -v docker &> /dev/null; then
+    sudo apt install -y docker-ce docker-ce-cli containerd.io
+    # 启用 Docker 服务
     sudo systemctl enable --now docker
+    echo "Docker 已安装并启动成功"
+else
+    echo "Docker 已经安装"
+fi
 
-    install_package_if_not_exists "docker-compose"
-
-    check_python_version() {
-        local docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
-        local required_python_version="3.9.2"
-
-        if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
-            echo "Docker中的Python版本 ($docker_python_version) 大于 3.9.2"
-        else
-            echo "Docker中的Python版本 ($docker_python_version) 不符合要求，将尝试更新升级..."
-            docker pull python:latest
-            docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
-
-            if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
-                echo "Docker中的Python版本已成功更新为 $docker_python_version"
-            else
-                echo "错误: Docker中的Python版本无法更新升级。请手动检查并更新。"
-                exit 1
-            fi
-        fi
-    }
-
-    check_python_version
+# 安装 Docker Compose
+if ! command -v docker-compose &> /dev/null; then
+    sudo apt install -y docker-compose
+    echo "Docker Compose 已安装成功"
+else
+    echo "Docker Compose 已经安装"
+fi
 }
 start_docker () {
     echo "正在启动 Docker 容器 . . ."
