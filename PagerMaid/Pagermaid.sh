@@ -1,30 +1,50 @@
 #!/bin/bash
-install_python() {
-    # 更新系统
-sudo apt-get update > /dev/null || true
-sudo apt-get upgrade -y > /dev/null || true
+# 检测本地系统是否安装Python 3.11+
+install_or_update_python() {
+    # 检测本地系统是否安装Python 3.11+
+    if command -v python3.11 &> /dev/null; then
+        # 如果已安装，则将python3默认使用3.11+
+        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+    else
+        # 如果未安装，则执行安装Python 3.11的代码
+        install_python() {
+            # 更新系统
+            apt update
 
-# 安装必要的库和工具
-sudo apt-get install dialog
-sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all > /dev/null || true
+            # 安装编译Python所需的依赖项
+            apt install -y build-essential zlib1g-dev libffi-dev libssl-dev libncurses-dev libsqlite3-dev libreadline-dev libbz2-dev liblzma-dev libgdbm-dev libdb5.3-dev libexpat1-dev libmpdec-dev libffi-dev tk-dev
 
-# 安装Python构建依赖
-sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
+            # 下载Python 3.11源代码
+            wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 
-# 使用apt自动安装和升级Python
-sudo apt-get install -y python3 > /dev/null || true
-sudo apt-get upgrade -y python3 > /dev/null || true
+            # 解压缩源代码
+            tar -xf Python-3.11.0.tar.xz
 
-# 链接Python和pip
-sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+            # 进入源代码目录
+            cd Python-3.11.0
 
-# 设置Python别名并激活
-echo "alias python='python3'" >> ~/.bashrc
-source ~/.bashrc
+            # 配置并安装Python 3.11
+            ./configure --enable-optimizations
+            make -j $(nproc)
+            make altinstall
 
-# 验证Python版本
-python3 --version
+            # 清理安装过程中的临时文件
+            cd ..
+            rm -rf Python-3.11.0
+            rm Python-3.11.0.tar.xz
+
+            # 创建软链接以使python3.11命令可用
+            ln -s /usr/local/bin/python3.11 /usr/bin/python3.11
+            alias python=python3.11
+            python --version
+        }
+
+        # 执行安装Python 3.11的函数
+        install_python
+    fi
 }
+
+
 configure() {
     echo "生成配置文件中 . . ."
     config_file=/var/lib/pagermaid/data/config.yml
@@ -55,21 +75,51 @@ TEXT
     sudo systemctl start pagermaid >>/dev/null 2>&1
     sudo systemctl enable --now pagermaid >>/dev/null 2>&1
 }
-
 start_installation() {
-    install_python
-    sudo rm -rf /var/lib/PagerMaid-Pyro > /dev/null || true
-    git clone https://github.com/TeamPGM/PagerMaid-Pyro.git > /dev/null || true
-    mv PagerMaid-Pyro /var/lib/pagermaid > /dev/null || true
+    install_or_update_python
+    sudo apt-get update && sudo apt-get install -y python3-venv
+	# 进入目录
+    cd /var/lib
+
+    # 删除旧文件夹
+    sudo rm -rf /var/lib/PagerMaid-Pyro
+    sudo rm -rf /var/lib/pagermaid
+
+    # 克隆新仓库
+    git clone https://github.com/TeamPGM/PagerMaid-Pyro.git
+
+    # 移动新文件夹
+    sudo mv PagerMaid-Pyro /var/lib/pagermaid
+
+    # 进入新目录
     cd /var/lib/pagermaid
-    python3 -m venv venv > /dev/null
-    source venv/bin/activate
-    python3 -m pip install --upgrade pip > /dev/null || true
-    pip install coloredlogs > /dev/null || true
-    pip3 install -r requirements.txt > /dev/null || true
-    mkdir -p /var/lib/pagermaid/data > /dev/null || true
-    configure
-    python3 -m pagermaid
+    # 创建 Python 3.11 虚拟环境并输出信息到/dev/null
+python3.11 -m venv venv > /dev/null
+
+# 激活虚拟环境
+source venv/bin/activate
+
+# 清除pip缓存
+python3.11 -m pip cache purge
+
+# 升级pip
+python3.11 -m pip install --upgrade pip
+
+# 强制重新安装 coloredlogs
+python3.11 -m pip install --force-reinstall coloredlogs
+
+# 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
+python3.11 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
+
+# 创建目录
+mkdir -p /var/lib/pagermaid/data
+
+# 运行 configure（假设这是一个可执行文件）
+configure
+
+# 运行 pagermaid
+python3.11 -m pagermaid
+
     systemctl_reload
     # 离开虚拟环境
     deactivate
