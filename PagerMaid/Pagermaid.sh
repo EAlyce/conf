@@ -14,7 +14,7 @@ sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev
 sudo apt remove --purge python3 -y
 
 sudo apt update && sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev && wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz && tar -xf Python-3.11.0.tar.xz && cd Python-3.11.0 && ./configure --enable-optimizations && make -j$(nproc) && sudo make altinstall
-
+apt-get install python3-pip
 # 使用apt自动安装和升级Python
 #sudo apt-get install -y python3 > /dev/null || true
 #sudo apt-get upgrade -y python3 > /dev/null || true
