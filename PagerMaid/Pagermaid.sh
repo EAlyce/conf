@@ -11,20 +11,16 @@ sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetc
 # 安装Python构建依赖
 sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
 
-sudo apt remove --purge python3 -y
-
-sudo apt update && sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev && wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz && tar -xf Python-3.11.0.tar.xz && cd Python-3.11.0 && ./configure --enable-optimizations && make -j$(nproc) && sudo make altinstall
-apt-get install python3-pip
 # 使用apt自动安装和升级Python
-#sudo apt-get install -y python3 > /dev/null || true
-#sudo apt-get upgrade -y python3 > /dev/null || true
+sudo apt-get install -y python3 > /dev/null || true
+sudo apt-get upgrade -y python3 > /dev/null || true
 
 # 链接Python和pip
-#sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+sudo apt-get update && sudo apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 
 # 设置Python别名并激活
-#echo "alias python='python3'" >> ~/.bashrc
-#source ~/.bashrc
+echo "alias python='python3'" >> ~/.bashrc
+source ~/.bashrc
 
 # 验证Python版本
 python3 --version
@@ -41,21 +37,19 @@ configure() {
 
 systemctl_reload() {
     echo "正在写入系统进程守护 . . ."
-sudo cat <<'TEXT' > /etc/systemd/system/pagermaid.service
-[Unit]
-Description=PagerMaid-Pyro Telegram Utility Daemon
-After=network.target
+    sudo cat <<-'TEXT' > /etc/systemd/system/pagermaid.service
+    [Unit]
+    Description=PagerMaid-Pyro Telegram Utility Daemon
+    After=network.target
 
-[Install]
-WantedBy=multi-user.target
+    [Service]
+    Type=simple
+    WorkingDirectory=/var/lib/pagermaid
+    ExecStart=/var/lib/pagermaid/venv/bin/python3 -m pagermaid
+    Restart=always
 
-[Service]
-Type=simple
-WorkingDirectory=/var/lib/pagermaid
-ExecStart=/usr/bin/python3 -m pagermaid
-Restart=always
-TEXT
-
+    [Install]
+    WantedBy=multi-user.target
 TEXT
     sudo systemctl daemon-reload >>/dev/null 2>&1
     sudo systemctl start pagermaid >>/dev/null 2>&1
@@ -68,8 +62,8 @@ start_installation() {
     git clone https://github.com/TeamPGM/PagerMaid-Pyro.git > /dev/null || true
     mv PagerMaid-Pyro /var/lib/pagermaid > /dev/null || true
     cd /var/lib/pagermaid
-    #python3 -m venv venv > /dev/null
-    #source venv/bin/activate
+    python3 -m venv venv > /dev/null
+    source venv/bin/activate
     python3 -m pip install --upgrade pip > /dev/null || true
     pip install coloredlogs > /dev/null || true
     pip3 install -r requirements.txt > /dev/null || true
@@ -78,7 +72,7 @@ start_installation() {
     python3 -m pagermaid
     systemctl_reload
     # 离开虚拟环境
-    #deactivate
+    deactivate
     echo "PagerMaid部署完成"
 }
 
