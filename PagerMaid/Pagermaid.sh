@@ -11,7 +11,7 @@ sudo apt-get install -y python3-pip python3-venv imagemagick libwebp-dev neofetc
 # 安装Python构建依赖
 sudo apt-get install -y build-essential checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev libreadline-dev > /dev/null || true
 
-sudo apt remove --purge python3
+sudo apt remove --purge python3 -y
 
 sudo apt update && sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev && wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz && tar -xf Python-3.11.0.tar.xz && cd Python-3.11.0 && ./configure --enable-optimizations && make -j$(nproc) && sudo make altinstall
 
