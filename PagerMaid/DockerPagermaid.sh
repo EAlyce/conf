@@ -5,36 +5,61 @@ docker_check() {
     sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
     sudo dpkg --configure -a
 
-    # Install Docker if not already installed
-    command -v docker &> /dev/null || { echo "Installing Docker..."; curl -fsSL https://test.docker.com | bash; }
-    command -v docker &> /dev/null && echo "Docker已安装"
+    update_docker_repository() {
+        local repo_keyring="/usr/share/keyrings/docker-archive-keyring.gpg"
+        local repo_url="https://download.docker.com/linux/debian"
 
-    # Install Docker Compose if not already installed
-    command -v docker-compose &> /dev/null || { echo "Installing Docker Compose..."; sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose; }
-    command -v docker-compose &> /dev/null && echo "Docker Compose已安装" || { echo "Docker Compose安装失败。"; exit 1; }
+        sudo rm -f "$repo_keyring"
+        sudo curl -fsSL "$repo_url/gpg" | sudo gpg --dearmor -o "$repo_keyring"
 
-    # Check Python version inside Docker container
-    docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
-    required_python_version="3.9.2"
+        echo "deb [arch=amd64 signed-by=$repo_keyring] $repo_url $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    }
 
-    if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
-        echo "Docker中的Python版本 ($docker_python_version) 大于 3.9.2"
-    else
-        echo "Docker中的Python版本 ($docker_python_version) 不符合要求，将尝试更新升级..."
+    if [ "$(lsb_release -cs)" = "bookworm" ]; then
+        update_docker_repository
+    fi
 
-        # 更新 Docker 镜像中的 Python 版本
-        docker pull python:latest
+    sudo apt update
 
-        # 重新检查 Python 版本
-        docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
+    install_package_if_not_exists() {
+        local package_name="$1"
+        if ! command -v "$package_name" &> /dev/null; then
+            sudo apt install -y "$package_name"
+            echo "$package_name 已安装成功"
+        else
+            echo "$package_name 已经安装"
+        fi
+    }
+
+    install_package_if_not_exists "docker-ce"
+    install_package_if_not_exists "docker-ce-cli"
+    install_package_if_not_exists "containerd.io"
+
+    sudo systemctl enable --now docker
+
+    install_package_if_not_exists "docker-compose"
+
+    check_python_version() {
+        local docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
+        local required_python_version="3.9.2"
 
         if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
-            echo "Docker中的Python版本已成功更新为 $docker_python_version"
+            echo "Docker中的Python版本 ($docker_python_version) 大于 3.9.2"
         else
-            echo "错误: Docker中的Python版本无法更新升级。请手动检查并更新。"
-            exit 1
+            echo "Docker中的Python版本 ($docker_python_version) 不符合要求，将尝试更新升级..."
+            docker pull python:latest
+            docker_python_version=$(docker run --rm python:latest python3 --version | awk '{print $2}')
+
+            if [[ "$(printf '%s\n' "$required_python_version" "$docker_python_version" | sort -V | head -n1)" == "$required_python_version" ]]; then
+                echo "Docker中的Python版本已成功更新为 $docker_python_version"
+            else
+                echo "错误: Docker中的Python版本无法更新升级。请手动检查并更新。"
+                exit 1
+            fi
         fi
-    fi
+    }
+
+    check_python_version
 }
 start_docker () {
     echo "正在启动 Docker 容器 . . ."
