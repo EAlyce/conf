@@ -110,7 +110,7 @@ do
         [0-3]) break;;
         *) echo "输入无效，请重新输入";;
     esac
-done
+
     case $choice in
         1) 
             install_pagermaid "Linuxpgp"
