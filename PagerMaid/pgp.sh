@@ -170,8 +170,8 @@ TEXT
     sudo systemctl enable --now pagermaid
     }
 
-    #echo "PagerMaid服务'$name'已成功设置并启动。"
-
+echo "正在使用PagerMaid多用户安装"
+echo
 prompt_choice() {
     while true; do
         echo "1: 安装"
