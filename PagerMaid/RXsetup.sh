@@ -84,10 +84,10 @@ install_pagermaid() {
         exit 1
     }
 
+    echo "正在执行 PagerMaid 安装脚本..."
     "./$(basename "$installer_url")"
+    echo "PagerMaid 安装脚本执行完毕."
 }
-
-main_menu() {
     while :
     do
         echo "----------------------------"
@@ -127,7 +127,3 @@ main_menu() {
 
         read -p "按任意键返回菜单 " 
     done
-}
-
-# 调用主菜单函数
-main_menu
