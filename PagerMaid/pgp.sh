@@ -150,35 +150,28 @@ setup_pagermaid() {
 
     # 创建systemd服务文件
     echo "正在写入系统进程守护 . . ."
-    sudo cat <<-'EOF' > /etc/systemd/system/pgp$name.service
+cat <<-'TEXT' > /etc/systemd/system/pgp$name.service
 [Unit]
-Description=PagerMaid-Pyro Telegram Utility Daemon
+Description=PagerMaid-Pyro telegram utility daemon
 After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/pgp$name
-ExecStart=/root/pgp$name/venv/bin/python3 -m pagermaid
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
-EOF
 
-    # 启用并启动服务
-    sudo systemctl enable --now "pgp$name" || {
-        echo "错误：无法启用服务 pgp$name"
-        return 1
-    }
-    sudo systemctl start "pgp$name" || {
-        echo "错误：无法启动服务 pgp$name"
-        return 1
-    }
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/pgp
+ExecStart=/root/pgp$name/venv/bin/python3 -m pagermaid
+Restart=always
+TEXT
 
+    sudo systemctl daemon-reload >>/dev/null 2>&1
+    sudo systemctl start pagermaid >>/dev/null 2>&1
+    sudo systemctl enable --now pagermaid >>/dev/null 2>&1
+    }
+{
     echo "PagerMaid服务'$name'已成功设置并启动。"
-    
 }
-
 prompt_choice() {
     while true; do
         echo "1: 安装"
