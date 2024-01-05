@@ -1,28 +1,45 @@
 #!/bin/bash
-apt-get install sudo
-if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
+if [[ $EUID -ne 0 ]]; then
+    echo "错误：本脚本需要 root 权限执行。" 1>&2
+    exit 1
+fi
+
+echo "正在安装 sudo，请稍候..."
+sudo apt-get install -qq sudo
+
 kill_process() {
     echo "正在停止 apt 和 dpkg 进程..."
     sudo pkill -9 apt || true
     sudo pkill -9 dpkg || true
 }
 
+echo "sudo 安装完成。"
 remove_locks() {
     echo "正在移除锁文件..."
     sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
+    echo "锁文件移除完成。"
 }
-
 configure_packages() {
     echo "正在配置未配置的包..."
     sudo dpkg --configure -a
+    echo "包配置完成。"
 }
 
 update_dns() {
-    apt-get update && apt-get install -y curl wget git sudo > /dev/null || true
-sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
-echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p > /dev/null || true
+    echo "正在更新 DNS 设置..."
+    
+    sudo apt-get update > /dev/null && sudo apt-get install -y curl wget git sudo > /dev/null || true
+    sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
+    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf > /dev/null || true
+    sudo sysctl -p > /dev/null || true
 
-sudo update-locale LANG=en_US.UTF-8 && sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
+    sudo update-locale LANG=en_US.UTF-8 > /dev/null && sudo locale-gen en_US.UTF-8 > /dev/null && sudo update-locale LANG=en_US.UTF-8 > /dev/null || true
+    sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
+
+    echo "DNS 更新完成。"
+    echo "export HISTSIZE=10000" >> ~/.bashrc
+source ~/.bashrc
+
 }
 
 install_pagermaid() {
@@ -87,16 +104,13 @@ do
     echo "[0] 退出"
     echo "----------------------------"
 
-    while true; do
-        read -r -p "输入选项 [0 - 3] (按回车默认为1): " choice
-        case "$choice" in
-            [0-3]) break;;
-            "") choice=1; break;;
-            *) echo "输入无效，请重新输入";;
-        esac
-    done
+    read -p "输入选项 [0 - 3]: " choice
+
+    case "$choice" in
+        [0-3]) break;;
+        *) echo "输入无效，请重新输入";;
+    esac
 done
-    
     case $choice in
         1) 
             install_pagermaid "Linuxpgp"
