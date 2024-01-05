@@ -143,7 +143,7 @@ setup_pagermaid() {
     }
 
     # 运行Python模块
-    python3 -m pagermaid || {
+    python3.11 -m pagermaid || {
         echo "错误：无法运行Python模块"
         return 1
     }
@@ -165,9 +165,9 @@ ExecStart=/root/pgp$name/venv/bin/python3 -m pagermaid
 Restart=always
 TEXT
 
-    sudo systemctl daemon-reload >>/dev/null 2>&1
-    sudo systemctl start pagermaid >>/dev/null 2>&1
-    sudo systemctl enable --now pagermaid >>/dev/null 2>&1
+    sudo systemctl daemon-reload
+    sudo systemctl start pagermaid
+    sudo systemctl enable --now pagermaid
     }
 {
     echo "PagerMaid服务'$name'已成功设置并启动。"
