@@ -88,7 +88,7 @@ do
     echo "----------------------------"
 
     while true; do
-        read -p "输入选项 [0 - 3] (按回车默认为1): " choice
+        read -r -p "输入选项 [0 - 3] (按回车默认为1): " choice
         case "$choice" in
             [0-3]) break;;
             "") choice=1; break;;
