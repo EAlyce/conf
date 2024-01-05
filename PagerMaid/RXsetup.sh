@@ -17,13 +17,6 @@ configure_packages() {
     sudo dpkg --configure -a
 }
 
-install_curl() {
-    echo "正在安装 curl..."
-    apt-get install -y curl wget
-	apt clean && apt autoclean && apt autoremove -y && rm -rf /tmp/* && history -c && history -w && docker system prune -a --volumes -f && dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge
-    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
-}
-
 update_dns() {
     apt-get update && apt-get install -y curl wget git sudo > /dev/null || true
 sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
@@ -77,26 +70,32 @@ set_custom_path() {
     fi
 }
 
-# 调用设置 PATH 函数
 set_custom_path
 kill_process
 remove_locks
 configure_packages
-install_curl
 update_dns
 
 while :
 do
-    clear
     echo "----------------------------"
-    echo " PagerMaid安装选项"
+    echo "      PagerMaid安装选项"
     echo "----------------------------"
-    echo "[1] Linux多用户环境下安装"
-    echo "[2] Linux环境下安装"
-    echo "[3] Docker环境下安装"
+    echo "[1] Linux多用户版本"
+    echo "[2] Linux(不推荐)"
+    echo "[3] Docker版本"
     echo "[0] 退出"
     echo "----------------------------"
-    read -p "输入选项 [ 0 - 3 ] " choice
+
+    while true; do
+        read -p "输入选项 [0 - 3] (按回车默认为1): " choice
+        case "$choice" in
+            [0-3]) break;;
+            "") choice=1; break;;
+            *) echo "输入无效，请重新输入";;
+        esac
+    done
+done
     
     case $choice in
         1) 
