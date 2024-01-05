@@ -36,7 +36,10 @@ install_pagermaid() {
     local install_type="$1"
     local installer_url
 
-    if [ "$install_type" == "Linux" ]; then
+    if [ "$install_type" == "Linuxpgp" ]; then
+        echo "您选择了 Linux多用户 环境下安装。"
+        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/pgp.sh"
+    elif [ "$install_type" == "Linux" ]; then
         echo "您选择了 Linux 环境下安装。"
         installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh"
     elif [ "$install_type" == "Docker" ]; then
@@ -88,18 +91,21 @@ do
     echo "----------------------------"
     echo " PagerMaid安装选项"
     echo "----------------------------"
-    echo "[1] Linux环境下安装"
-    echo "[2] Docker环境下安装"
+    echo "[1] Linux多用户环境下安装"
+    echo "[2] Linux环境下安装"
+    echo "[3] Docker环境下安装"
     echo "[0] 退出"
     echo "----------------------------"
-    read -p "输入选项 [ 0 - 2 ] " choice
+    read -p "输入选项 [ 0 - 3 ] " choice
     
     case $choice in
         1) 
+            install_pagermaid "Linuxpgp"
+            ;;
+        2)
             install_pagermaid "Linux"
             ;;
-        
-        2)
+        3)
             install_pagermaid "Docker"
             ;;
         
