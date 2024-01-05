@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [[ $EUID -ne 0 ]]; then
     echo "错误：本脚本需要 root 权限执行。" 1>&2
     exit 1
@@ -36,13 +37,10 @@ update_dns() {
     sudo update-locale LANG=en_US.UTF-8 > /dev/null && sudo locale-gen en_US.UTF-8 > /dev/null && sudo update-locale LANG=en_US.UTF-8 > /dev/null || true
     sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
 
-    echo "DNS 更新完成。"
+    echo "DNS 更新完成."
     echo "export HISTSIZE=10000" >> ~/.bashrc
-source ~/.bashrc
-
+    source ~/.bashrc
 }
-
-
 
 # 定义设置 PATH 的函数
 set_custom_path() {
@@ -54,43 +52,6 @@ set_custom_path() {
         PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     fi
 }
-#!/bin/bash
-
-install_pagermaid() {
-    local install_type="$1"
-    local installer_url
-
-    if [ "$install_type" == "Linuxpgp" ]; then
-        echo "您选择了 Linux多用户 环境下安装。"
-        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/pgp.sh"
-    elif [ "$install_type" == "Linux" ]; then
-        echo "您选择了 Linux 环境下安装。"
-        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh"
-    elif [ "$install_type" == "Docker" ]; then
-        echo "您选择了 Docker 环境下安装。"
-        installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/DockerPagermaid.sh"
-    else
-        echo "错误的安装类型。"
-        exit 1
-    fi
-
-    cd /var/lib || exit 1
-    sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
-
-    curl -O "$installer_url" || {
-        echo "下载 Installer 失败"
-        exit 1
-    }
-
-    chmod +x "$(basename "$installer_url")" || {
-        echo "更改权限失败"
-        exit 1
-    }
-
-    "./$(basename "$installer_url")"
-}
-
-#!/bin/bash
 
 install_pagermaid() {
     local install_type="$1"
@@ -167,12 +128,6 @@ main_menu() {
         read -p "按任意键返回菜单 " 
     done
 }
-set_custom_path
-kill_process
-remove_locks
-configure_packages
-update_dns
+
+# 调用主菜单函数
 main_menu
-
-
-
