@@ -11,7 +11,9 @@ fi
 
 # 更新 apt 存储库
 sudo apt update
-
+sudo apt-get update && sudo apt-get install --only-upgrade docker-ce && sudo rm -rf /sys/fs/cgroup/systemd && sudo mkdir /sys/fs/cgroup/systemd && sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+sudo apt update && sudo apt install docker.io docker-compose
+sudo apt update && sudo apt install python3-pip && sudo pip3 install docker-compose==1.29.2
 # 如果未安装，则使用包管理器安装 Docker
 if ! command -v docker &> /dev/null; then
     sudo apt install -y docker-ce docker-ce-cli containerd.io
