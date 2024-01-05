@@ -201,7 +201,6 @@ install() {
     setup_environment
     configure
     setup_pagermaid
-    sleep 5
     deactivate
     echo "安装完成"
 }
