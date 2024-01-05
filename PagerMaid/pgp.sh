@@ -169,9 +169,9 @@ TEXT
     sudo systemctl start pagermaid
     sudo systemctl enable --now pagermaid
     }
-{
-    echo "PagerMaid服务'$name'已成功设置并启动。"
-}
+
+    #echo "PagerMaid服务'$name'已成功设置并启动。"
+
 prompt_choice() {
     while true; do
         echo "1: 安装"
