@@ -41,21 +41,10 @@ define_name() {
 }
 
 clone_git() {
-    #更新Git
+    # 更新Git
     sudo apt install --upgrade git -y
     # 拉取git文件到/root目录
-    cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git
-
-    # 创建/root/pgp$name目录
-    mkdir "pgp$name"
-
-    # 将PagerMaid-Pyro文件夹的内容复制到/root/pgp$name目录
-    cp -r PagerMaid-Pyro/* "pgp$name"
-
-    # 删除PagerMaid-Pyro文件夹
-    rm -rf PagerMaid-Pyro
-
-    echo "文件已拉取到/root/pgp$name目录"
+    cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git "pgp$name" && cd "pgp$name"
 }
 
 open_all_ports() {
@@ -109,39 +98,35 @@ install_python() {
         
         # 更新python3链接
         sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3
+        echo "alias python3='python3.11'" >> ~/.bashrc && source ~/.bashrc
     fi
 }
 
 setup_environment() {
     # 创建并进入虚拟环境
-    python3 -m venv venv
+    python3.11 -m venv venv
     source venv/bin/activate
 
     # 更新pip
-    python3 -m pip install --upgrade pip
+    python3.11 -m pip install --upgrade pip
 
     # 清除pip缓存
-    python3 -m pip cache purge
+    python3.11 -m pip cache purge
 
     # 升级pip
-    python3 -m pip install --upgrade pip
+    # python3 -m pip install --upgrade pip
 
     # 强制重新安装 coloredlogs
-    python3 -m pip install --force-reinstall coloredlogs
-
-    # 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
-    if [ -f requirements.txt ]; then
-        python3 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
-    else
-        echo "requirements.txt 文件不存在"
-        exit 1
-    fi
+    python3.11 -m pip install --force-reinstall coloredlogs
+    cd /root/pgp$name
+    python3.11 -m pip install --force-reinstall -r /root/pgp$name/requirements.txt > /dev/null || true
 }
 
 configure() {
     echo "生成配置文件中 . . ."
-    config_file=/root/pgp$name/pagermaid/data/config.yml
-    cp /root/pgp$name/pagermaid/config.gen.yml $config_file
+    mkdir -p /root/pgp$name/data
+    config_file=/root/pgp$name/data/config.yml
+    cp /root/pgp$name/config.gen.yml $config_file
     read -p "请输入应用程序 api_id：" -e api_id
     sed -i "s/ID_HERE/$api_id/" $config_file
     read -p "请输入应用程序 api_hash：" -e api_hash
@@ -150,6 +135,8 @@ configure() {
 
 setup_pagermaid() {
     # 进入目录
+    cd /root
+   
     cd /root/pgp$name || {
         echo "错误：无法进入目录 /root/pgp$name"
         return 1
@@ -189,6 +176,7 @@ EOF
     }
 
     echo "PagerMaid服务'$name'已成功设置并启动。"
+    
 }
 
 prompt_choice() {
@@ -213,6 +201,8 @@ install() {
     setup_environment
     configure
     setup_pagermaid
+    sleep 5
+    deactivate
     echo "安装完成"
 }
 
