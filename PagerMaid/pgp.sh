@@ -42,9 +42,12 @@ define_name() {
 
 clone_git() {
     # 更新Git
-    sudo apt install --upgrade git -y
+    sudo apt install --upgrade git -y > /dev/null 2>&1 || { echo "Git更新失败，脚本终止。"; exit 1; }
+    echo "Git更新成功"
+
     # 拉取git文件到/root目录
-    cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git "pgp$name" && cd "pgp$name"
+    cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git "pgp$name" && cd "pgp$name" > /dev/null 2>&1 || { echo "Git文件拉取失败，脚本终止。"; exit 1; }
+    echo "Git文件拉取成功"
 }
 
 open_all_ports() {
@@ -54,11 +57,11 @@ open_all_ports() {
     if [[ $choice =~ ^[Yy](ES|es)?$ ]]
     then
         # 用户选择开放所有端口
-        sudo iptables -P INPUT ACCEPT
-        sudo iptables -P FORWARD ACCEPT
-        sudo iptables -P OUTPUT ACCEPT
-        sudo iptables -F
-        echo "所有端口已开放"
+        sudo iptables -P INPUT ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
+        sudo iptables -P FORWARD ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
+        sudo iptables -P OUTPUT ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
+        sudo iptables -F || { echo "开放所有端口失败，脚本终止。"; exit 1; }
+        echo "所有端口已开放成功"
     else
         # 用户选择不开放所有端口
         echo "所有端口保持原状"
@@ -66,8 +69,14 @@ open_all_ports() {
 }
 
 update_packages() {
-    sudo apt update && sudo apt upgrade -y
-    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y
+    sudo apt update || { echo "更新软件包信息失败，脚本终止。"; exit 1; }
+    echo "软件包信息更新成功"
+
+    sudo apt upgrade -y || { echo "升级软件包失败，脚本终止。"; exit 1; }
+    echo "软件包升级成功"
+
+    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y || { echo "安装依赖包失败，脚本终止。"; exit 1; }
+    echo "依赖包安装成功"
 }
 
 install_python() {
@@ -75,82 +84,174 @@ install_python() {
     python_version=$(python3 --version 2>&1 | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
     if [[ "$python_version" < "3.11" ]]; then
         echo "Python版本需要为3.11或更高，正在自动安装Python 3.11.0..."
-        
+
         # 下载Python 3.11.0
-        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
-        
+        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz > /dev/null 2>&1
+
         # 解压下载的文件
-        tar -xvf Python-3.11.0.tgz
-        
+        tar -xvf Python-3.11.0.tgz > /dev/null 2>&1
+
         # 进入解压后的目录
         cd Python-3.11.0
-        
+
         # 配置并编译安装
-        ./configure --enable-optimizations
-        make -j$(nproc)
-        sudo make altinstall
-        
+        (
+            echo -n "编译安装中，请稍候..."
+            ./configure --enable-optimizations > /dev/null 2>&1
+            make -j$(nproc) > /dev/null 2>&1
+            sudo make altinstall > /dev/null 2>&1
+            echo "完成"
+        ) &
+
+        # 调用spinner函数显示转圈圈
+        spinner $!
+
         # 返回到原来的目录
         cd ..
-        
+
         # 删除下载的文件和解压后的目录
         rm -rf Python-3.11.0.tgz Python-3.11.0
-        
+
         # 更新python3链接
         sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3
         echo "alias python3='python3.11'" >> ~/.bashrc && source ~/.bashrc
+    else
+        echo "Python版本符合要求"
     fi
+}
+
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spin='-\|/'
+
+    while ps -p $pid > /dev/null; do
+        for i in $(seq 0 3); do
+            echo -ne "\r[${spin:$i:1}] 编译安装中，请稍候..."
+            sleep $delay
+        done
+    done
+    echo -ne "\r[ ] 编译安装完成.        "
+    echo
 }
 
 setup_environment() {
     # 创建并进入虚拟环境
-    python3.11 -m venv venv
-    source venv/bin/activate
+    echo "正在设置虚拟环境..."
+    if python3.11 -m venv venv > /dev/null; then
+        source venv/bin/activate
+        echo "虚拟环境设置成功."
+    else
+        echo "设置虚拟环境失败，脚本终止."
+        exit 1
+    fi
 
     # 更新pip
-    python3.11 -m pip install --upgrade pip
+    echo "正在更新 pip..."
+    if python3.11 -m pip install --upgrade pip > /dev/null; then
+        echo "pip 更新成功."
+    else
+        echo "更新 pip 失败，脚本终止."
+        exit 1
+    fi
 
     # 清除pip缓存
-    python3.11 -m pip cache purge
-
-    # 升级pip
-    # python3 -m pip install --upgrade pip
+    echo "清除 pip 缓存..."
+    if python3.11 -m pip cache purge; then
+        echo "pip 缓存清除成功."
+    else
+        echo "清除 pip 缓存失败，脚本终止."
+        exit 1
+    fi
 
     # 强制重新安装 coloredlogs
-    python3.11 -m pip install --force-reinstall coloredlogs
+    echo "强制重新安装 coloredlogs..."
+    if python3.11 -m pip install --force-reinstall coloredlogs > /dev/null; then
+        echo "coloredlogs 安装成功."
+    else
+        echo "安装 coloredlogs 失败，脚本终止."
+        exit 1
+    fi
+
+    # 切换到目录并安装依赖
     cd /root/pgp$name
-    python3.11 -m pip install --force-reinstall -r /root/pgp$name/requirements.txt > /dev/null || true
+    echo "安装依赖..."
+    if python3.11 -m pip install --force-reinstall -r requirements.txt > /dev/null; then
+        echo "依赖安装成功."
+    else
+        echo "安装依赖失败，脚本终止."
+        exit 1
+    fi
+
+    echo "环境设置完成."
 }
 
 configure() {
     echo "生成配置文件中 . . ."
-    mkdir -p /root/pgp$name/data
-    config_file=/root/pgp$name/data/config.yml
-    cp /root/pgp$name/config.gen.yml $config_file
-    read -p "请输入应用程序 api_id：" -e api_id
-    sed -i "s/ID_HERE/$api_id/" $config_file
-    read -p "请输入应用程序 api_hash：" -e api_hash
-    sed -i "s/HASH_HERE/$api_hash/" $config_file
-}
 
+    # 创建目录
+    if mkdir -p /root/pgp$name/data; then
+        echo "创建目录成功."
+    else
+        echo "创建目录失败，脚本终止."
+        exit 1
+    fi
+
+    config_file=/root/pgp$name/data/config.yml
+
+    # 复制配置文件
+    if cp /root/pgp$name/config.gen.yml $config_file; then
+        echo "复制配置文件成功."
+    else
+        echo "复制配置文件失败，脚本终止."
+        exit 1
+    fi
+
+    # 输入并验证 api_id
+    while true; do
+        read -p "请输入应用程序 api_id：" -e api_id
+        if sed -i "s/ID_HERE/$api_id/" $config_file; then
+            echo "api_id 配置完成."
+            break
+        else
+            echo "配置 api_id 失败，请重新输入."
+        fi
+    done
+
+    # 输入并验证 api_hash
+    while true; do
+        read -p "请输入应用程序 api_hash：" -e api_hash
+        if sed -i "s/HASH_HERE/$api_hash/" $config_file; then
+            echo "api_hash 配置完成."
+            break
+        else
+            echo "配置 api_hash 失败，请重新输入."
+        fi
+    done
+
+    echo "配置文件生成完成."
+}
 setup_pagermaid() {
     # 进入目录
-    cd /root
-   
+    echo "进入目录 /root/pgp$name..."
     cd /root/pgp$name || {
         echo "错误：无法进入目录 /root/pgp$name"
         return 1
     }
+    echo "成功进入目录 /root/pgp$name."
 
     # 运行Python模块
-    python3.11 -m pagermaid || {
+    echo "运行Python模块..."
+    if python3.11 -m pagermaid; then
+        echo "Python模块运行成功."
+    else
         echo "错误：无法运行Python模块"
         return 1
-    }
+    fi
 
     # 创建systemd服务文件
     echo "正在写入系统进程守护 . . ."
-cat <<-'TEXT' > /etc/systemd/system/pgp$name.service
+    cat <<-'TEXT' > /etc/systemd/system/pgp$name.service
 [Unit]
 Description=PagerMaid-Pyro telegram utility daemon
 After=network.target
@@ -165,10 +266,32 @@ ExecStart=/root/pgp$name/venv/bin/python3 -m pagermaid
 Restart=always
 TEXT
 
-    sudo systemctl daemon-reload
-    sudo systemctl start pagermaid
-    sudo systemctl enable --now pagermaid
-    }
+    echo "重新加载systemd守护进程..."
+    if sudo systemctl daemon-reload; then
+        echo "systemd守护进程重新加载成功."
+    else
+        echo "错误：无法重新加载systemd守护进程"
+        return 1
+    fi
+
+    echo "启动PagerMaid服务..."
+    if sudo systemctl start pagermaid; then
+        echo "PagerMaid服务启动成功."
+    else
+        echo "错误：无法启动PagerMaid服务"
+        return 1
+    fi
+
+    echo "设置PagerMaid服务开机自启..."
+    if sudo systemctl enable --now pagermaid; then
+        echo "PagerMaid服务设置开机自启成功."
+    else
+        echo "错误：无法设置PagerMaid服务开机自启"
+        return 1
+    fi
+
+    echo "PagerMaid设置完成."
+}
 
 echo "正在使用PagerMaid多用户安装"
 echo
