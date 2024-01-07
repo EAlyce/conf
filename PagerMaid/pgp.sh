@@ -1,8 +1,6 @@
 #!/bin/bash
 #搭建多用户pagermaid-pyro
 #位置存放于/root/pgp$name
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-export PATH
 define_name() {
     # 使用openssl生成5位随机数
     random_number=$(openssl rand -hex 5)
@@ -279,9 +277,9 @@ setup_pagermaid() {
         return 1
     fi
 
-    # 创建systemd服务文件
-    echo "正在写入系统进程守护 . . ."
-    cat <<-'TEXT' > /etc/systemd/system/pgp$name.service
+# 创建systemd服务文件
+echo "正在写入系统进程守护 . . ."
+cat > /etc/systemd/system/pgp$name.service <<-TEXT
 [Unit]
 Description=PagerMaid-Pyro telegram utility daemon
 After=network.target
@@ -291,36 +289,57 @@ WantedBy=multi-user.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/lib/pgp
+WorkingDirectory=/root/pgp$name
 ExecStart=/root/pgp$name/venv/bin/python3 -m pagermaid
 Restart=always
 TEXT
+# 进入目录
+cd /root/pgp$name || { echo "错误：无法进入目录 /root/pgp$name"; return 1; }
 
-    echo "重新加载systemd守护进程..."
-    if sudo systemctl daemon-reload; then
-        echo "systemd守护进程重新加载成功."
-    else
-        echo "错误：无法重新加载systemd守护进程"
-        return 1
-    fi
+# 替换systemd服务文件中的pgp$name
+echo "替换systemd服务文件中的pgp$name..."
+sudo sed -i "s/pgp\$name/pgp$name/g" /etc/systemd/system/pgp$name.service
 
-    echo "启动PagerMaid服务..."
-    if sudo systemctl start pagermaid; then
-        echo "PagerMaid服务启动成功."
-    else
-        echo "错误：无法启动PagerMaid服务"
-        return 1
-    fi
+# 重新加载systemd守护进程
+echo "重新加载systemd守护进程..."
+if sudo systemctl daemon-reload; then
+    echo "systemd守护进程重新加载成功."
+else
+    echo "错误：无法重新加载systemd守护进程"
+    return 1
+fi
 
-    echo "设置PagerMaid服务开机自启..."
-    if sudo systemctl enable --now pagermaid; then
-        echo "PagerMaid服务设置开机自启成功."
-    else
-        echo "错误：无法设置PagerMaid服务开机自启"
-        return 1
-    fi
+# 启动PagerMaid服务
+echo "启动PagerMaid服务..."
+if sudo systemctl start pgp$name; then
+    echo "PagerMaid服务启动成功."
+else
+    echo "错误：无法启动PagerMaid服务"
+    journalctl -xe
+    return 1
+fi
 
-    echo "PagerMaid设置完成."
+# 设置PagerMaid服务开机自启
+echo "设置PagerMaid服务开机自启..."
+if sudo systemctl enable --now pgp$name; then
+    echo "PagerMaid服务设置开机自启成功."
+else
+    echo "错误：无法设置PagerMaid服务开机自启"
+    return 1
+fi
+
+# 重新启动PagerMaid服务
+echo "重新启动PagerMaid服务..."
+if sudo systemctl restart pgp$name; then
+    echo "PagerMaid服务重新启动成功."
+else
+    echo "错误：无法重新启动PagerMaid服务"
+    journalctl -xe
+    return 1
+fi
+
+echo "PagerMaid设置完成."
+
 }
 
 echo "正在使用PagerMaid多用户安装"
