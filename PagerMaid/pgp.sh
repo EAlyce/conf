@@ -136,6 +136,15 @@ spinner() {
 }
 
 setup_environment() {
+    # 安装虚拟环境和pip所需的依赖
+    echo "安装虚拟环境和pip依赖..."
+    if apt-get install -y python3-venv python3-pip libssl-dev > /dev/null; then
+        echo "虚拟环境和pip依赖安装成功."
+    else
+        echo "安装虚拟环境和pip依赖失败，脚本终止."
+        exit 1
+    fi
+
     # 创建并进入虚拟环境
     echo "正在设置虚拟环境..."
     if python3.11 -m venv venv > /dev/null; then
@@ -218,27 +227,36 @@ configure() {
         exit 1
     fi
 
-    # 输入并验证 api_id
-    while true; do
-        read -p "请输入应用程序 api_id：" -e api_id
-        if sed -i "s/ID_HERE/$api_id/" $config_file; then
+# 输入并验证 api_id
+while true; do
+    read -p "请输入应用程序 api_id：" -e api_id
+    if [[ $api_id =~ ^[0-9]{8}$ ]]; then
+        if sed -i "s/ID_HERE/$api_id/" "$config_file"; then
             echo "api_id 配置完成."
             break
         else
             echo "配置 api_id 失败，请重新输入."
         fi
-    done
+    else
+        echo "请输入8位数字的有效 api_id."
+    fi
+done
 
-    # 输入并验证 api_hash
-    while true; do
-        read -p "请输入应用程序 api_hash：" -e api_hash
-        if sed -i "s/HASH_HERE/$api_hash/" $config_file; then
+# 输入并验证 api_hash
+while true; do
+    read -p "请输入应用程序 api_hash：" -e api_hash
+    if [[ $api_hash =~ ^[0-9a-fA-F]{32}$ ]]; then
+        if sed -i "s/HASH_HERE/$api_hash/" "$config_file"; then
             echo "api_hash 配置完成."
             break
         else
             echo "配置 api_hash 失败，请重新输入."
         fi
-    done
+    else
+        echo "请输入32位十六进制字符串的有效 api_hash."
+    fi
+done
+
 
     echo "配置文件生成完成."
 }
