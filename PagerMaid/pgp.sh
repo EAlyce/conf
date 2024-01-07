@@ -87,7 +87,7 @@ install_python() {
 
         # 下载Python 3.11.0
         wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz > /dev/null 2>&1
-
+        apt-get install -y python3-venv python3-pip libssl-dev
         # 解压下载的文件
         tar -xvf Python-3.11.0.tgz > /dev/null 2>&1
 
