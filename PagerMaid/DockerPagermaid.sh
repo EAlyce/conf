@@ -15,6 +15,7 @@ sudo apt-get update && sudo apt-get install --only-upgrade docker-ce && sudo rm 
 sudo apt update && sudo apt install docker.io docker-compose
 sudo apt update && sudo apt install python3-pip && sudo pip3 install docker-compose==1.29.2
 # 如果未安装，则使用包管理器安装 Docker
+
 if ! command -v docker &> /dev/null; then
     sudo apt install -y docker-ce docker-ce-cli containerd.io
     # 启用 Docker 服务

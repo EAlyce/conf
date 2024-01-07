@@ -48,7 +48,6 @@ clone_git() {
     cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git "pgp$name" && cd "pgp$name" > /dev/null 2>&1 || { echo "Git文件拉取失败，脚本终止。"; exit 1; }
     echo "Git文件拉取成功"
 }
-
 open_all_ports() {
     # 提示用户是否开放所有端口
     read -p "是否开放所有端口（y/n）: " choice

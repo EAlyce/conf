@@ -1,5 +1,6 @@
 #!/bin/bash
 # 定义设置 PATH 的函数
+
 set_custom_path() {
     echo "开始检查 PATH 变量..."
     # 检查是否存在 PATH 变量，如果不存在则设置
