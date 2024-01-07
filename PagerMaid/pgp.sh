@@ -146,7 +146,7 @@ setup_environment() {
         exit 1
     fi
 
-    # 更新pip
+    # 更新 pip
     echo "正在更新 pip..."
     if python3.11 -m pip install --upgrade pip > /dev/null; then
         echo "pip 更新成功."
@@ -155,7 +155,7 @@ setup_environment() {
         exit 1
     fi
 
-    # 清除pip缓存
+    # 清除 pip 缓存
     echo "清除 pip 缓存..."
     if python3.11 -m pip cache purge; then
         echo "pip 缓存清除成功."
@@ -164,17 +164,24 @@ setup_environment() {
         exit 1
     fi
 
-# 强制重新安装 coloredlogs
-echo "强制重新安装 coloredlogs..."
+    # 尝试安装 coloredlogs，轮流使用 pip、python、python3
+    echo "尝试安装 coloredlogs..."
+    installation_success=false
 
-# 使用 Debian 默认的 python3.11 版本进行 pip 安装
-if python3.11 -m pip uninstall -y coloredlogs > /dev/null && python3.11 -m pip install coloredlogs > /dev/null; then
-    echo "coloredlogs 安装成功."
-else
-    echo "安装 coloredlogs 失败，脚本终止."
-    exit 1
-fi
+    if pip install coloredlogs > /dev/null 2>&1; then
+        installation_success=true
+    elif python -m pip install coloredlogs > /dev/null 2>&1; then
+        installation_success=true
+    elif python3 -m pip install coloredlogs > /dev/null 2>&1; then
+        installation_success=true
+    fi
 
+    if [ "$installation_success" = true ]; then
+        echo "coloredlogs 安装成功."
+    else
+        echo "安装 coloredlogs 失败，脚本终止."
+        exit 1
+    fi
 
     # 切换到目录并安装依赖
     cd /root/pgp$name
@@ -188,6 +195,7 @@ fi
 
     echo "环境设置完成."
 }
+
 
 configure() {
     echo "生成配置文件中 . . ."
