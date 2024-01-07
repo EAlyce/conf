@@ -22,7 +22,6 @@ install_or_update_python() {
 
             # 进入源代码目录
             cd Python-3.11.0
-
             # 配置并安装Python 3.11
             ./configure --enable-optimizations
             make -j $(nproc)
