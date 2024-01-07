@@ -1,7 +1,8 @@
 #!/bin/bash
 #搭建多用户pagermaid-pyro
 #位置存放于/root/pgp$name
-
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
 define_name() {
     # 使用openssl生成5位随机数
     random_number=$(openssl rand -hex 5)
