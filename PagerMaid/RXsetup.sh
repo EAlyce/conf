@@ -1,35 +1,69 @@
 #!/bin/bash
+# 定义设置 PATH 的函数
+set_custom_path() {
+    echo "开始检查 PATH 变量..."
+    # 检查是否存在 PATH 变量，如果不存在则设置
+    PATH_CHECK=$(crontab -l | grep -q '^PATH=' && echo "true" || echo "false")
+
+    if [ "$PATH_CHECK" == "false" ]; then
+        echo "PATH 变量不存在，开始设置..."
+        # 设置全面的 PATH
+        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        if [ $? -eq 0 ]; then
+            echo "PATH 变量设置成功."
+        else
+            echo "错误：无法设置 PATH 变量"
+            return 1
+        fi
+    else
+        echo "PATH 变量已存在，无需设置."
+    fi
+}
+# 安装 sudo
+echo "开始安装 sudo..."
 apt-get install sudo
-if [[ $EUID -ne 0 ]]; then echo "错误：本脚本需要 root 权限执行。" 1>&2; exit 1; fi
+if [ $? -eq 0 ]; then
+    echo "sudo 安装成功."
+else
+    echo "错误：无法安装 sudo"
+    return 1
+fi
+
+# 检查是否以 root 权限运行
+echo "检查是否以 root 权限运行..."
+if [[ $EUID -ne 0 ]]; then 
+    echo "错误：本脚本需要 root 权限执行。" 1>&2
+    exit 1
+else
+    echo "确认以 root 权限运行."
+fi
+
+# 定义停止 apt 和 dpkg 进程的函数
 kill_process() {
-    echo "正在停止 apt 和 dpkg 进程..."
-    sudo pkill -9 apt || true
-    sudo pkill -9 dpkg || true
+    echo "开始停止 apt 和 dpkg 进程..."
+    sudo pkill -9 apt || echo "没有找到正在运行的 apt 进程"
+    sudo pkill -9 dpkg || echo "没有找到正在运行的 dpkg 进程"
+    echo "apt 和 dpkg 进程已成功停止."
 }
 
 remove_locks() {
-    echo "正在移除锁文件..."
-    sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
+    echo "开始移除锁文件..."
+    sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock > /dev/null 2>&1 && echo "锁文件已成功移除." || echo "错误：无法移除锁文件"
 }
 
 configure_packages() {
-    echo "正在配置未配置的包..."
-    sudo dpkg --configure -a
+    echo "开始配置未配置的包..."
+    sudo dpkg --configure -a > /dev/null 2>&1 && echo "未配置的包已成功配置." || echo "错误：无法配置未配置的包"
 }
 
 install_curl() {
-    echo "正在安装 curl..."
-    apt-get install -y curl wget
-	apt clean && apt autoclean && apt autoremove -y && rm -rf /tmp/* && history -c && history -w && docker system prune -a --volumes -f && dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge
-    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
+    echo "开始安装 curl..."
+    apt-get install -y curl wget > /dev/null 2>&1 && echo "curl 已成功安装." || echo "错误：无法安装 curl"
 }
 
 update_dns() {
-    apt-get update && apt-get install -y curl wget git sudo > /dev/null || true
-sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null || true
-echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p > /dev/null || true
-
-sudo update-locale LANG=en_US.UTF-8 && sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null || true
+    echo "开始更新 DNS..."
+    apt-get update > /dev/null 2>&1 && apt-get install -y curl wget git sudo > /dev/null 2>&1 && sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null 2>&1 && echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf > /dev/null 2>&1 && sudo sysctl -p > /dev/null 2>&1 && sudo update-locale LANG=en_US.UTF-8 > /dev/null 2>&1 && sudo locale-gen en_US.UTF-8 > /dev/null 2>&1 && sudo update-locale LANG=en_US.UTF-8 > /dev/null 2>&1 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1 && echo "DNS 已成功更新." || echo "错误：无法更新 DNS"
 }
 
 install_pagermaid() {
@@ -51,33 +85,17 @@ install_pagermaid() {
     fi
 
     cd /var/lib || exit 1
-    sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
+    sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \; > /dev/null 2>&1
 
-    curl -O "$installer_url" || {
-        echo "下载 Installer 失败"
-        exit 1
-    }
+    echo "开始下载 Installer..."
+    curl -O "$installer_url" > /dev/null 2>&1 && echo "Installer 下载成功." || { echo "下载 Installer 失败"; exit 1; }
 
-    chmod +x "$(basename "$installer_url")" || {
-        echo "更改权限失败"
-        exit 1
-    }
+    echo "开始更改权限..."
+    chmod +x "$(basename "$installer_url")" > /dev/null 2>&1 && echo "权限更改成功." || { echo "更改权限失败"; exit 1; }
 
+    echo "开始执行 Installer..."
     "./$(basename "$installer_url")"
 }
-
-# 定义设置 PATH 的函数
-set_custom_path() {
-    # 检查是否存在 PATH 变量，如果不存在则设置
-    PATH_CHECK=$(crontab -l | grep -q '^PATH=' && echo "true" || echo "false")
-
-    if [ "$PATH_CHECK" == "false" ]; then
-        # 设置全面的 PATH
-        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    fi
-}
-
-# 调用设置 PATH 函数
 set_custom_path
 kill_process
 remove_locks
@@ -96,7 +114,7 @@ do
     echo "[3] Docker环境下安装"
     echo "[0] 退出"
     echo "----------------------------"
-    read -p "输入选项 [ 0 - 3 ] " choice
+    read -p "输入选项 [ 0 - 3 ]：" choice
     
     case $choice in
         1) 
