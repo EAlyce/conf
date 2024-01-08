@@ -109,9 +109,9 @@ do
     echo "----------------------------"
     echo "      PagerMaid安装选项"
     echo "----------------------------"
-    echo "[1] Linux多用户环境下安装"
-    echo "[2] Linux环境下安装"
-    echo "[3] Docker环境下安装"
+    echo "[1] Linux多用户(推荐)"
+    echo "[2] Linux单用户"
+    echo "[3] Docker多用户"
     echo "[0] 退出"
     echo "----------------------------"
     read -p "输入选项 [ 0 - 3 ]：" choice
