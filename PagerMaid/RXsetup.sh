@@ -107,7 +107,7 @@ while :
 do
     clear
     echo "----------------------------"
-    echo " PagerMaid安装选项"
+    echo "      PagerMaid安装选项"
     echo "----------------------------"
     echo "[1] Linux多用户环境下安装"
     echo "[2] Linux环境下安装"
