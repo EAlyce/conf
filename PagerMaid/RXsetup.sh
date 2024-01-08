@@ -19,18 +19,12 @@ set_custom_path() {
         echo "PATH 变量已存在，无需设置."
     fi
 }
-# 安装 sudo
-echo "开始安装 sudo..."
-apt-get install sudo
-if [ $? -eq 0 ]; then
-    echo "sudo 安装成功."
-else
-    echo "错误：无法安装 sudo"
-    return 1
-fi
+# 安装 sudo 并隐藏输出过程
+echo "开始优化"
+apt-get install sudo > /dev/null 2>&1
 
 # 检查是否以 root 权限运行
-echo "检查是否以 root 权限运行..."
+echo "检查root 权限"
 if [[ $EUID -ne 0 ]]; then 
     echo "错误：本脚本需要 root 权限执行。" 1>&2
     exit 1
