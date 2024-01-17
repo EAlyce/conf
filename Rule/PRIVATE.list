@@ -10,6 +10,7 @@ DEST-PORT,587
 DEST-PORT,993
 DEST-PORT,995
 DOMAIN-KEYWORD,amazonaws
+DOMAIN-SUFFIX,ocsp.pki.goog
 DOMAIN-KEYWORD,cloudflare
 DOMAIN,api.msn.com
 DOMAIN,assets.msn.com
