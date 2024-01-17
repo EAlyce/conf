@@ -1,4 +1,6 @@
 #源自网络收集，未整理，仅自用
+DOMAIN-KEYWORD,vodafone
+DOMAIN-KEYWORD,iyzico
 DEST-PORT,110
 DEST-PORT,143
 DEST-PORT,22
@@ -9,23 +11,23 @@ DEST-PORT,993
 DEST-PORT,995
 DOMAIN-KEYWORD,amazonaws
 DOMAIN-KEYWORD,cloudflare
-DOMAIN, api.msn.com
-DOMAIN, assets.msn.com
-DOMAIN, dealczars.bing-shopping.microsoft-falcon.io
-# DOMAIN, eas.outlook.com
-DOMAIN, gateway.bingviz.microsoftapp.net
-DOMAIN, location.microsoft.com
-DOMAIN, login.microsoftonline.com
-DOMAIN, self.events.data.microsoft.com
-DOMAIN, services.bingapis.com
-DOMAIN, shopping.bing-shopping.microsoft-falcon.io
-DOMAIN, sapphire.api.microsoftapp.net
-DOMAIN, sr.bing.com
-DOMAIN, sydney.bing.com
-DOMAIN, ssl.bing.com
-DOMAIN, th.bing.com
-DOMAIN, www.bing.com
-DOMAIN, www.bingapis.com
+DOMAIN,api.msn.com
+DOMAIN,assets.msn.com
+DOMAIN,dealczars.bing-shopping.microsoft-falcon.io
+# DOMAIN,eas.outlook.com
+DOMAIN,gateway.bingviz.microsoftapp.net
+DOMAIN,location.microsoft.com
+DOMAIN,login.microsoftonline.com
+DOMAIN,self.events.data.microsoft.com
+DOMAIN,services.bingapis.com
+DOMAIN,shopping.bing-shopping.microsoft-falcon.io
+DOMAIN,sapphire.api.microsoftapp.net
+DOMAIN,sr.bing.com
+DOMAIN,sydney.bing.com
+DOMAIN,ssl.bing.com
+DOMAIN,th.bing.com
+DOMAIN,www.bing.com
+DOMAIN,www.bingapis.com
 DOMAIN-KEYWORD,egeturl
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,imap
