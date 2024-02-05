@@ -12,6 +12,13 @@ DOMAIN-KEYWORD,pddpic
 DOMAIN-KEYWORD,pinduoduo
 DOMAIN-KEYWORD,qq.com
 IP-CIDR,120.77.9.240/32
+DOMAIN-SUFFIX,os-os.com
+DOMAIN-SUFFIX,umengcloud.com
+
+USER-AGENT,MicroMessenger Client
+DOMAIN-SUFFIX,icloud.com.cn
+DOMAIN-KEYWORD,weixin
+DOMAIN-SUFFIX,coolccloud.com
 DOMAIN-SUFFIX,coolccloud.com
 DOMAIN-SUFFIX,umeng.com
 DOMAIN-KEYWORD,taobao
