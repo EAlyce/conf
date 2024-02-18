@@ -56,7 +56,6 @@ URL-REGEX,*-default.ixigua.com
 URL-REGEX,.+web\.business\.image
 URL-REGEX,^http:\/\/.+\.byteimg\.com\/ad-app-package
 URL-REGEX,^http:\/\/.+\.byteimg\.com\/web\.business\.image
-# 番茄视频广告页的sdk agent都是ttplayer
 USER-AGENT,ttplayer*
 DOMAIN-SUFFIX,fqnovelpic.com
 DOMAIN,p9-reading-sign.fqnovelpic.com
