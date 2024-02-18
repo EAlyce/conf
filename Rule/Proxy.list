@@ -6,6 +6,11 @@ DOMAIN-SUFFIX,nodeseek.com
 DOMAIN-KEYWORD,tiktok
 DOMAIN-KEYWORD,google
 DOMAIN-KEYWORD,mixpanel
+DOMAIN-SUFFIX,googlevideo.com
+DOMAIN-SUFFIX,ahcdn.com
+DOMAIN,video.twimg.com
+DOMAIN-KEYWORD,github
+DOMAIN-KEYWORD,spotify
 DOMAIN-KEYWORD,mojang
 DOMAIN-KEYWORD,minecraft
 DOMAIN-KEYWORD,termius
