@@ -2,7 +2,6 @@
 #!desc=This configuration specifies network proxy and DNS settings, including disabling IPv6, specifying DNS servers, and setting up Wi-Fi access.
 
 [General]
-
 tun-excluded-routes = 239.255.255.250/32
 ipv6 = false
 udp-priority = false
