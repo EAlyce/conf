@@ -3,5 +3,5 @@
 #!category=
 
 [General]
-# @xream
+# 作者 @xream
 tun-excluded-routes = %INSERT% 239.255.255.250/32, 224.0.0.167/32
