@@ -2,7 +2,7 @@ DOMAIN-KEYWORD,aweme
 DOMAIN-KEYWORD,amemv
 DOMAIN-KEYWORD,byteimg
 DOMAIN-KEYWORD,ixigua
-DOMAIN-KEYWORD,fqnovelpic
+#DOMAIN-KEYWORD,fqnovelpic
 DOMAIN-KEYWORD,pstatp
 DOMAIN-KEYWORD,snssdk
 DOMAIN-KEYWORD,toutiao
@@ -22,9 +22,9 @@ DOMAIN-KEYWORD,bytedance
 DOMAIN-SUFFIX,bytegoofy.com
 DOMAIN-SUFFIX,byteorge.com
 
-DOMAIN-SUFFIX,api5-normal-lq.fqnovel.com
-DOMAIN-SUFFIX,api3-normal-lq.fqnovel.com
-DOMAIN-SUFFIX,api3-normal-sinfonlinea.fqnovel.com
+#DOMAIN-SUFFIX,api5-normal-lq.fqnovel.com
+#DOMAIN-SUFFIX,api3-normal-lq.fqnovel.com
+#DOMAIN-SUFFIX,api3-normal-sinfonlinea.fqnovel.com
 
 DOMAIN-KEYWORD,douyin
 DOMAIN-SUFFIX,d1yt8zt4633tzi.cloudfront.net
@@ -72,11 +72,10 @@ DOMAIN-KEYWORD,ecombd
 DOMAIN-SUFFIX,jqpejp.xyz
 DOMAIN-SUFFIX,mizsman28.com
 DOMAIN-SUFFIX,2333333333333.com
-DOMAIN-SUFFIX,365yg.com
+
 DOMAIN-SUFFIX,activitybyte.com
 DOMAIN-SUFFIX,aihst8.com
-DOMAIN-SUFFIX,amemv.cn
-DOMAIN-SUFFIX,amemv.net
+
 DOMAIN-SUFFIX,baike.com
 DOMAIN-SUFFIX,bcy.net
 DOMAIN-SUFFIX,bcyimg.com
@@ -282,6 +281,6 @@ DOMAIN-SUFFIX,zjbyte.net
 DOMAIN-SUFFIX,zjcdn.com
 DOMAIN-SUFFIX,zjgslb.com
 DOMAIN-SUFFIX,zjurl.cn
-IP-CIDR,114.246.10.65/32,no-resolve
+IP-CIDR,114.246.10.65/32
 USER-AGENT,TikTok*
 PROCESS-NAME,com.zhiliaoapp.musically
