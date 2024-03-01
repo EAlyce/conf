@@ -1,0 +1,7 @@
+#!name=VIF Excluded Routes
+#!desc=LG ThinQ, 投屏, LocalSend
+#!category=
+
+[General]
+# @xream
+tun-excluded-routes = %INSERT% 239.255.255.250/32, 224.0.0.167/32
