@@ -15,7 +15,6 @@ DOMAIN-KEYWORD,-alisc
 DOMAIN-KEYWORD,-aliec
 DOMAIN-SUFFIX,pitaya.bytedance.com
 DOMAIN-SUFFIX,feedback-c.zijieapi.com
-DOMAIN-SUFFIX,app-measurement.com
 DOMAIN-SUFFIX,lf3-pitaya.bytetos.com
 DOMAIN-SUFFIX,ma.zijieapi.com
 DOMAIN-SUFFIX,lf-webcast-gr-sourcecdn.bytegecko.com
@@ -28,6 +27,5 @@ DOMAIN-SUFFIX,gecko5-lq.zijieapi.com
 DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
 DOMAIN-SUFFIX,applog.zijieapi.com
 DOMAIN-SUFFIX,ads3-normal-lq.zijieapi.com
-# DOMAIN-SUFFIX,byteimg.com
 DOMAIN-SUFFIX,imapi5-oth-hl.zijieapi.com
 DOMAIN-SUFFIX,ads5-normal-lq.zijieapi.com
