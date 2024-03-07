@@ -2,7 +2,7 @@ DOMAIN-KEYWORD,snssdk
 DOMAIN-KEYWORD,toutiao
 DOMAIN-KEYWORD,ugsdk.cn
 DOMAIN-SUFFIX,bwlcpr.xyz
-DOMAIN-KEYWORD,-applog-l
+DOMAIN-KEYWORD,applog
 DOMAIN-KEYWORD,365yg
 DOMAIN-SUFFIX,app-measurement.com
 DOMAIN-SUFFIX,bdurl.net
@@ -28,6 +28,6 @@ DOMAIN-SUFFIX,gecko5-lq.zijieapi.com
 DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
 DOMAIN-SUFFIX,applog.zijieapi.com
 DOMAIN-SUFFIX,ads3-normal-lq.zijieapi.com
-DOMAIN-SUFFIX,byteimg.com
+# DOMAIN-SUFFIX,byteimg.com
 DOMAIN-SUFFIX,imapi5-oth-hl.zijieapi.com
 DOMAIN-SUFFIX,ads5-normal-lq.zijieapi.com
