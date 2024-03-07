@@ -1,8 +1,6 @@
 DOMAIN-KEYWORD,snssdk
 DOMAIN-KEYWORD,toutiao
-DOMAIN-KEYWORD,ugsdk.cn
 DOMAIN-SUFFIX,bwlcpr.xyz
-DOMAIN-KEYWORD,applog
 DOMAIN-KEYWORD,365yg
 DOMAIN-SUFFIX,app-measurement.com
 DOMAIN-SUFFIX,bdurl.net
@@ -10,22 +8,22 @@ DOMAIN-KEYWORD,douyin
 DOMAIN-KEYWORD,misc-l
 DOMAIN-KEYWORD,mssdk
 USER-AGENT,ttplayer*
-DOMAIN-KEYWORD,ecombd
 DOMAIN-KEYWORD,-alisc
 DOMAIN-KEYWORD,-aliec
 DOMAIN-SUFFIX,pitaya.bytedance.com
 DOMAIN-SUFFIX,feedback-c.zijieapi.com
+DOMAIN-SUFFIX,app-measurement.com
 DOMAIN-SUFFIX,lf3-pitaya.bytetos.com
 DOMAIN-SUFFIX,ma.zijieapi.com
 DOMAIN-SUFFIX,lf-webcast-gr-sourcecdn.bytegecko.com
-DOMAIN-SUFFIX,frontier.fqnovel.com
 DOMAIN-SUFFIX,tnc11-alisc1.zijieapi.com
 DOMAIN-SUFFIX,gecko3-lq.zijieapi.com
 DOMAIN-SUFFIX,timon.zijieapi.com
 DOMAIN-SUFFIX,mon.zijieapi.com
 DOMAIN-SUFFIX,gecko5-lq.zijieapi.com
 DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
-DOMAIN-SUFFIX,applog.zijieapi.com
 DOMAIN-SUFFIX,ads3-normal-lq.zijieapi.com
+# DOMAIN-SUFFIX,byteimg.com
 DOMAIN-SUFFIX,imapi5-oth-hl.zijieapi.com
 DOMAIN-SUFFIX,ads5-normal-lq.zijieapi.com
+DOMAIN-SUFFIX,vcs.zijieapi.com
