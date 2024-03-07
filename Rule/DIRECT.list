@@ -20,7 +20,6 @@ USER-AGENT,MicroMessenger Client
 DOMAIN-SUFFIX,icloud.com.cn
 DOMAIN-KEYWORD,weixin
 DOMAIN-SUFFIX,coolccloud.com
-DOMAIN-SUFFIX,coolccloud.com
 DOMAIN-SUFFIX,umeng.com
 DOMAIN-KEYWORD,taobao
 DOMAIN-SUFFIX,flytoto2.top
@@ -31,7 +30,6 @@ DOMAIN-KEYWORD,tmall
 DOMAIN-SUFFIX,svedeu.lol
 DOMAIN-KEYWORD,toutiao
 DOMAIN-KEYWORD,ultramobile
-DOMAIN-KEYWORD,weixin
 DOMAIN-KEYWORD,zhipin
 DOMAIN-KEYWORD,zijie
 DOMAIN-KEYWORD,zijieapi
@@ -64,4 +62,3 @@ DOMAIN-SUFFIX,wsglw.net
 DOMAIN-SUFFIX,zhipin.com
 USER-AGENT,TIM*
 DOMAIN-SUFFIX,kinhrobot.com
-
