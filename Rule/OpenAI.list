@@ -37,14 +37,13 @@ DOMAIN,shopping.bing-shopping.microsoft-falcon.io
 DOMAIN,sr.bing.com
 DOMAIN,ssl.bing.com
 DOMAIN,static.cloudflareinsights.com
-DOMAIN,sydney.bing.com
-DOMAIN,th.bing.com
-DOMAIN,www.bing.com
 DOMAIN,www.bingapis.com
 DOMAIN,www2.bing.com
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom-api
+DOMAIN-KEYWORD,bing
+DOMAIN-KEYWORD,msn.com
 DOMAIN-SUFFIX,AI.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,akamaized.net
