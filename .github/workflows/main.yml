@@ -1,0 +1,41 @@
+name: Merge Domains
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge_domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl is not installed, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          fi
+
+      - name: Get domains from source file
+        id: get_domains
+        run: |
+          curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep '^DOMAIN' > domains.tmp
+          echo "::set-output name=domains::$(cat domains.tmp)"
+
+      - name: Append domains to target file
+        run: |
+          echo "${{ steps.get_domains.outputs.domains }}" >> DIRECT.list
+          cat DIRECT.list
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git add DIRECT.list
+          git commit -m "Merge DOMAIN rules"
+          git push
