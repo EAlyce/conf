@@ -46,7 +46,6 @@ jobs:
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
-        fi
 
       - name: Commit changes
         if: steps.git-check.outputs.stdout != 'Files have changed'
@@ -54,4 +53,3 @@ jobs:
           git add Rule/OpenAI.list
           git commit -m "Merge OpenAI lists to Rule/OpenAI.list"
           git push origin main
-        fi
