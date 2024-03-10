@@ -1,4 +1,4 @@
-name: Backup_Repository
+name: Backup Repository
 on:
   schedule:
     - cron: "0 0 * * *"
@@ -19,7 +19,15 @@ jobs:
           mkdir backup
           cp -r * backup/
           zip -r backup.zip backup/
-          git checkout -b backup-branch
+          mv backup.zip backup/
+
+      - name: Set Git configuration
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "EAlyce"
+
+      - name: Commit changes
+        run: |
           git add backup.zip
           git commit -m "Backup repository"
-          git push origin backup-branch
+          git push origin main:backup-branch
