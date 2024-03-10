@@ -30,7 +30,6 @@ jobs:
           mkdir -p Rule/backup
           mv Rule/DIRECT.list Rule/backup/$(date -u "+%Y-%m-%d_%H-%M-%S")_DIRECT.list
 
-
       - name: Merge with existing DIRECT.list
         run: |
           mv DIRECT.tmp Rule/DIRECT.list
@@ -42,6 +41,6 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add Rule/DIRECT.list Rule/backup/time_DIRECT.list
+          git add Rule/DIRECT.list Rule/backup/*
           git commit -m "Merge China_All.list to Rule/DIRECT.list"
           git push origin main
