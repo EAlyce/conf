@@ -40,6 +40,10 @@ jobs:
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
 
+      - name: Pull latest changes from main branch
+        run: |
+          git pull origin main
+
       - name: Commit changes
         run: |
           git add Rule/DIRECT.list
