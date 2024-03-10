@@ -47,13 +47,9 @@ jobs:
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
 
-      - name: Check if Rule/OpenAI.list exists
-        run: |
-          ls -l Rule
-
       - name: Commit changes
         if: steps.git-check.outputs.stdout != 'Files have changed'
         run: |
           git add Rule/OpenAI.list
-          git commit -m "Merge OpenAI lists to Rule/OpenAI.list"
+          git diff --cached --quiet || git commit -m "Merge OpenAI lists to Rule/OpenAI.list"
           git push origin main
