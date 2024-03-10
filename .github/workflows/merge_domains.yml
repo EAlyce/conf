@@ -37,11 +37,18 @@ jobs:
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
 
+      - name: Add domains.tmp to git
+        run: |
+          git add domains.tmp
+
+      - name: Commit changes
+        run: |
+          git add DIRECT.list
+          git commit -m "Merge DOMAIN rules"
+
       - name: Force push changes
         run: |
           git fetch --all
           git reset --hard origin/main
           git pull origin main
-          git add DIRECT.list
-          git commit -m "Merge DOMAIN rules"
           git push --force origin main
