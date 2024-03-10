@@ -1,0 +1,48 @@
+name: Merge_OpenAI_lists_to_Rule_OpenAI.list
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  merge_domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl is not installed, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          fi
+
+      - name: Get domains from source files
+        run: |
+          curl -s https://ruleset.skk.moe/List/non_ip/ai.conf | grep -v '^#' | grep -v '^$' | sort | uniq > ai.conf.tmp
+          curl -s https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' | sort | uniq > OpenAI.list.tmp
+          curl -s https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list?ref_type=heads | grep -v '^#' | grep -v '^$' | sort | uniq > AI.list.tmp
+          curl -s https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' | sort | uniq > Copilot.list.tmp
+
+      - name: Merge with existing Rule/OpenAI.list
+        run: |
+          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp | sort | uniq > Rule/OpenAI.list.tmp
+          mv Rule/OpenAI.list.tmp Rule/OpenAI.list
+          rm ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp
+
+      - name: Set Git configuration
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "EAlyce"
+
+      - name: Commit changes
+        run: |
+          git add Rule/OpenAI.list
+          git commit -m "Merge OpenAI lists to Rule/OpenAI.list"
+          git push origin main
