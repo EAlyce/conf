@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 12 * * *"
+    - cron: "0 */12 * * *"
 
 jobs:
   merge_domains:
@@ -29,7 +29,7 @@ jobs:
           curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' | sort | uniq > OpenAI.list.tmp
           curl -sL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list?ref_type=heads | grep -v '^#' | grep -v '^$' | sort | uniq > AI.list.tmp
           curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' | sort | uniq > Copilot.list.tmp
-          curl -sL https://github.com/Repcz/Tool/blob/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list | grep -v '^#' | grep -v '^$' | sort | uniq | sed 's/, //' > Repcz.list.tmp
+          curl -sL https://raw.githubusercontent.com/Repcz/Tool/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list | grep -v '^#' | grep -v '^$' | sort | uniq > Repcz.list.tmp
 
       - name: Merge with existing Rule/OpenAI.list
         run: |
