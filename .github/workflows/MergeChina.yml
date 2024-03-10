@@ -38,5 +38,9 @@ jobs:
 
       - name: Commit changes
         run: |
-          git commit -m "Merge China_All.list to Rule/DIRECT.list"
-          git push origin main
+          if [[ -n $(git status -s) ]]; then
+            git commit -m "Merge China_All.list to Rule/DIRECT.list"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
