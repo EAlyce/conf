@@ -1,0 +1,53 @@
+name: Merge_Global_All.list_to_Proxy.list
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 */12 * * *"
+
+jobs:
+  merge_domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl is not installed, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          fi
+
+      - name: Get domains from source file
+        run: |
+          curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Proxy.tmp
+
+      - name: Merge with existing Proxy.list
+        run: |
+          if [ -f "Rule/Proxy.list" ]; then
+            cat Rule/Proxy.list Proxy.tmp | sort | uniq > Rule/Proxy.tmp
+            mv Rule/Proxy.tmp Rule/Proxy.list
+          else
+            mv Proxy.tmp Rule/Proxy.list
+          fi
+          rm Proxy.tmp
+
+      - name: Set Git configuration
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "EAlyce"
+
+      - name: Commit changes
+        run: |
+          if [[ -n $(git status -s) ]]; then
+            git add Rule/Proxy.list
+            git commit -m "Merge Global_All.list to Rule/Proxy.list"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
