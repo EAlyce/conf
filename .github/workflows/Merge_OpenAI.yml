@@ -25,15 +25,15 @@ jobs:
 
       - name: Get domains from source files
         run: |
-          curl -s https://github.com/SukkaW/Surge/blob/master/Source/non_ip/ai.conf | grep -v '^#' | grep -v '^$' | sort | uniq > ai.conf.tmp
-          curl -s https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' | sort | uniq > OpenAI.list.tmp
-          curl -s https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' | sort | uniq > Copilot.list.tmp
+          curl -s https://github.com/SukkaW/Surge/raw/master/Source/non_ip/ai.conf | grep -v '^#' | grep -v '^$' | sort | uniq > ai.conf.tmp
+          curl -s https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' | sort | uniq > OpenAI.list.tmp
+          curl -s https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' | sort | uniq > Copilot.list.tmp
 
       - name: Merge with existing Rule/OpenAI.list
         run: |
-          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp | sort | uniq | sed '/^[[:space:]]*$/d' > Rule/OpenAI.list.tmp
+          cat ai.conf.tmp OpenAI.list.tmp Copilot.list.tmp | sort | uniq | sed '/^[[:space:]]*$/d' > Rule/OpenAI.list.tmp
           mv Rule/OpenAI.list.tmp Rule/OpenAI.list
-          rm ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp
+          rm ai.conf.tmp OpenAI.list.tmp Copilot.list.tmp
 
       - name: Set Git configuration
         run: |
