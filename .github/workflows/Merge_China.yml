@@ -1,4 +1,4 @@
-name: Merge China_All.list to Rule/DIRECT.list
+name: Merge_China_All.list_to_Rule/DIRECT.list
 
 on:
   schedule:
