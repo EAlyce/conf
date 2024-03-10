@@ -5,5 +5,3 @@
 
 未经允许，禁止将其用于任何违法活动。对于其他使用该仓库的人造成的任何问题，本人概不负责。
 
-
-[点击跳转](surge:///install-module?url=https://raw.githubusercontent.com/mieqq/mieqq/master/skip-proxy-lists.sgmodule)
