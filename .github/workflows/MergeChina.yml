@@ -38,6 +38,5 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add Rule/DIRECT.list
           git commit -m "Merge China_All.list to Rule/DIRECT.list"
           git push origin main
