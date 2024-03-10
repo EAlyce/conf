@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 12 * * *'
+    - cron: "0 */12 * * *"
 
 jobs:
   merge_domains:
@@ -27,11 +27,6 @@ jobs:
         run: |
           curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > DIRECT.tmp
 
-      - name: Backup previous DIRECT.list
-        run: |
-          mkdir -p Rule/backup
-          mv Rule/DIRECT.list Rule/backup/$(date -u "+%Y-%m-%d_%H-%M-%S")_DIRECT.list
-
       - name: Merge with existing DIRECT.list
         run: |
           mv DIRECT.tmp Rule/DIRECT.list
@@ -43,6 +38,6 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add Rule/DIRECT.list Rule/backup/*
+          git add Rule/DIRECT.list
           git commit -m "Merge China_All.list to Rule/DIRECT.list"
           git push origin main
