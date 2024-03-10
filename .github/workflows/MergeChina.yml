@@ -38,7 +38,13 @@ jobs:
           else
             mv DIRECT.tmp Rule/DIRECT.list
           fi
-          rm DIRECT.tmp
+
+      - name: Check if DIRECT.tmp exists
+        run: |
+          if [ ! -f "DIRECT.tmp" ]; then
+            echo "DIRECT.tmp does not exist"
+            exit 1
+          fi
 
       - name: Set Git configuration
         run: |
