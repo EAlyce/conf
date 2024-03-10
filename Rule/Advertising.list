@@ -13,8 +13,3 @@ DOMAIN-SUFFIX,d133ozkaej7dh1.cloudfront.net
 DOMAIN-SUFFIX,dkjwbv.xyz
 DOMAIN-SUFFIX,gjfzpt.cn
 DOMAIN-SUFFIX,sgbh6.com
-URL-REGEX,\/amdc\/mobileDispatch
-URL-REGEX,^https?:\/\/api\.zhihu\.com\/brand\/question\/\d+/card\?
-URL-REGEX,^https?:\/\/api\.zhihu\.com\/commercial_api\/launch_v2\?
-URL-REGEX,^https?:\/\/api\.zhihu\.com\/commercial_api\/real_time_launch_v2\?
-URL-REGEX,^https?:\/\/www\.zhihu\.com\/api\/v\d+\/brand\/question/\d+/card\?
