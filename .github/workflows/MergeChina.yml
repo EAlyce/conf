@@ -32,19 +32,7 @@ jobs:
 
       - name: Merge with existing DIRECT.list
         run: |
-          if [ -f "Rule/DIRECT.list" ]; then
-            cat Rule/DIRECT.list DIRECT.tmp | sort | uniq > Rule/DIRECT.tmp
-            mv Rule/DIRECT.tmp Rule/DIRECT.list
-          else
-            mv DIRECT.tmp Rule/DIRECT.list
-          fi
-
-      - name: Check if DIRECT.tmp exists
-        run: |
-          if [ ! -f "DIRECT.tmp" ]; then
-            echo "DIRECT.tmp does not exist"
-            exit 1
-          fi
+          mv DIRECT.tmp Rule/DIRECT.list
 
       - name: Set Git configuration
         run: |
