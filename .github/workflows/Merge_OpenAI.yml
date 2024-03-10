@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: '0 12 * * *'
 
 jobs:
   merge_domains:
@@ -25,14 +25,14 @@ jobs:
 
       - name: Get domains from source files
         run: |
-          curl -s https://ruleset.skk.moe/List/non_ip/ai.conf | grep -v '^#' | grep -v '^$' | sort | uniq > ai.conf.tmp
-          curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' | sort | uniq > OpenAI.list.tmp
-          curl -sL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list?ref_type=heads | grep -v '^#' | grep -v '^$' | sort | uniq > AI.list.tmp
-          curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' | sort | uniq > Copilot.list.tmp
+          curl -s https://ruleset.skk.moe/List/non_ip/ai.conf | grep -v '^#' | sed '/^[[:space:]]*$/d' | sort | uniq > ai.conf.tmp
+          curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | sed '/^[[:space:]]*$/d' | sort | uniq > OpenAI.list.tmp
+          curl -sL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list?ref_type=heads | grep -v '^#' | sed '/^[[:space:]]*$/d' | sort | uniq > AI.list.tmp
+          curl -sL https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | sed '/^[[:space:]]*$/d' | sort | uniq > Copilot.list.tmp
 
       - name: Merge with existing Rule/OpenAI.list
         run: |
-          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp | sort | uniq > Rule/OpenAI.list
+          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp | sort | uniq | sed '/^[[:space:]]*$/d' > Rule/OpenAI.list
           rm ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp
 
       - name: Set Git configuration
