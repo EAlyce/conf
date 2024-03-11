@@ -11,17 +11,23 @@ jobs:
   process:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Download file
         run: |
+          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
           curl https://raw.githubusercontent.com/EAlyce/conf/main/Rule/OpenAI.list -o OpenAI.list
 
       - name: Process file
         run: |
+          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
           sed -i 's/, /,/g' OpenAI.list  # 去除逗号后的空格
           sort -u -o OpenAI.list OpenAI.list  # 去重
 
       - name: Commit changes
         run: |
+          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
           git add OpenAI.list
