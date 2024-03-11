@@ -32,4 +32,4 @@ jobs:
           git config --global user.name "EAlyce"
           git add OpenAI.list
           git commit -m "Remove comma spaces and deduplicate in OpenAI.list"
-          git push
+          git push -f  # 强制覆盖远程仓库的内容
