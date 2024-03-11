@@ -6,7 +6,7 @@ DOMAIN-SUFFIX,app-measurement.com
 DOMAIN-SUFFIX,bdurl.net
 DOMAIN-KEYWORD,misc-l
 DOMAIN-KEYWORD,mssdk
-USER-AGENT,ttplayer*
+# USER-AGENT,ttplayer*
 DOMAIN-KEYWORD,-alisc
 DOMAIN-KEYWORD,-aliec
 DOMAIN-SUFFIX,pitaya.bytedance.com
