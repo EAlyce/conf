@@ -1,9 +1,9 @@
-DOMAIN-SUFFIX,speedtest.wobcom.de
+DOMAIN-KEYWORD,ekahau
+DOMAIN-KEYWORD,ookla
+DOMAIN-KEYWORD,speed
+DOMAIN-KEYWORD,speedtest
 DOMAIN-SUFFIX,cdnst.net
 DOMAIN-SUFFIX,cellmaps.com
-DOMAIN-KEYWORD,ekahau
 DOMAIN-SUFFIX,fast.com
-DOMAIN-KEYWORD,ookla
 DOMAIN-SUFFIX,pingtest.net
-DOMAIN-KEYWORD,speedtest
-DOMAIN-KEYWORD,speed
+DOMAIN-SUFFIX,speedtest.wobcom.de

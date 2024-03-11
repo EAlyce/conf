@@ -6,6 +6,7 @@ DEST-PORT,465
 DEST-PORT,587
 DEST-PORT,993
 DEST-PORT,995
+DOMAIN-KEYWORD,1password
 DOMAIN-KEYWORD,amazonaws
 DOMAIN-KEYWORD,api.msn.com
 DOMAIN-KEYWORD,bing.com
@@ -34,10 +35,10 @@ DOMAIN-KEYWORD,outlook
 DOMAIN-KEYWORD,pop
 DOMAIN-KEYWORD,smtp
 DOMAIN-KEYWORD,vodafone
+DOMAIN-KEYWORD,workingcopy
 DOMAIN-KEYWORD,yahoo.com
 DOMAIN-KEYWORD,yandex
 DOMAIN-KEYWORD,yastatic
-DOMAIN-KEYWORD,1password
 DOMAIN-SUFFIX,21cbh.com
 DOMAIN-SUFFIX,2o7.net
 DOMAIN-SUFFIX,36kr.com
@@ -220,7 +221,6 @@ DOMAIN-SUFFIX,washingtonpost.com
 DOMAIN-SUFFIX,weijingsheng.org
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,woodpeckerlog.com
-DOMAIN-KEYWORD,workingcopy
 DOMAIN-SUFFIX,workingcopyapp.com
 DOMAIN-SUFFIX,worldjournal.com
 DOMAIN-SUFFIX,wsj.com
