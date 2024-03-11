@@ -16,6 +16,12 @@ jobs:
         with:
           fetch-depth: 0  # 强制拉取所有历史记录
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'  # 自动选择最新的长期支持版本
+          check-latest: true  # 启用此选项以检查最新版本
+
       - name: Process files
         run: |
           cd $GITHUB_WORKSPACE/Rule  # 切换到Rule目录
