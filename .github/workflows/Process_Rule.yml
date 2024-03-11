@@ -1,0 +1,37 @@
+name: Process Rule files
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 每天下午3点执行
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # 强制拉取所有历史记录
+
+      - name: Process files
+        run: |
+          cd $GITHUB_WORKSPACE/Rule  # 切换到Rule目录
+          for file in *; do
+            if [ -f "$file" ]; then  # 检查是否是文件
+              # 去除注释和空行
+              sed -i '/^\s*#/d;/^\s*$/d' "$file"
+              # 去除逗号后的空格
+              sed -i 's/, /,/g' "$file"
+              # 去重
+              sort -u -o "$file" "$file"
+            fi
+          done
+
+      - name: Commit changes
+        run: |
+          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "EAlyce"
+          git add Rule/*
+          git diff --staged --quiet || git commit -m "Process Rule files: remove duplicates, comments, and comma spaces" 
+          git push -f  # 强制覆盖提交
