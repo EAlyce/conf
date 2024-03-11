@@ -1,4 +1,4 @@
-name: Process DIRECT.list
+name: Process OpenAI.list
 
 on:
   schedule:
@@ -14,12 +14,12 @@ jobs:
       - name: Process file
         run: |
           sed -i 's/, /,/g' Rule/DIRECT.list  # 去除逗号后的空格
-          sort -u -o Rule/DIRECT.list Rule/DIRECT.list  # 去重
+          sort -u -o Rule/OpenAI.list Rule/OpenAI.list  # 去重
           
       - name: Commit changes
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
           git add Rule/DIRECT.list
-          git commit -m "Remove comma spaces and deduplicate in DIRECT.list"
+          git commit -m "Remove comma spaces and deduplicate in OpenAI.list"
           git push
