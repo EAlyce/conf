@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 15 * * *'  # 每天下午1点执行
+    - cron: '0 15 * * *'  # 每天下午3点执行
 
 jobs:
   process:
@@ -25,6 +25,8 @@ jobs:
               sed -i '/^\s*#/d;/^\s*$/d' "$file"
               # 去除逗号后的空格
               sed -i 's/, /,/g' "$file"
+              # 去除空行和空白字符
+              sed -i '/^[[:space:]]*$/d' "$file"
               # 去重
               sort -u -o "$file" "$file"
             fi
@@ -32,7 +34,6 @@ jobs:
 
       - name: Commit changes
         run: |
-          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
           git add Rule/*
