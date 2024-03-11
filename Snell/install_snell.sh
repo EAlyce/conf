@@ -190,7 +190,7 @@ select_architecture() {
 }
 
 generate_port() {
-  EXCLUDED_PORTS=(5432 5554 5800 5900 6379 8080 9996)
+  EXCLUDED_PORTS=(5432 5554 5800 5900 6379 8080 9996 1053 5353 8053 9153 9253)
 
   if ! command -v nc.traditional &> /dev/null; then
     sudo apt-get update
