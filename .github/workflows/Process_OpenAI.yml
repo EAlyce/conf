@@ -16,13 +16,15 @@ jobs:
 
       - name: Process file
         run: |
+          cd conf  # 切换到仓库目录
           sed -i 's/, /,/g' Rule/DIRECT.list  # 去除逗号后的空格
           sort -u -o Rule/OpenAI.list Rule/OpenAI.list  # 去重
-          
+
       - name: Commit changes
         run: |
+          cd conf  # 切换到仓库目录
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "EAlyce"
-          git add Rule/DIRECT.list
+          git add Rule/DIRECT.list Rule/OpenAI.list
           git commit -m "Remove comma spaces and deduplicate in OpenAI.list"
           git push
