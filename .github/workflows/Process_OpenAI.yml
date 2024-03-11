@@ -13,15 +13,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Download file
-        run: |
-          cd $GITHUB_WORKSPACE  # 切换到仓库根目录
-          curl https://raw.githubusercontent.com/EAlyce/conf/main/Rule/OpenAI.list -o OpenAI.list
+        with:
+          fetch-depth: 0  # 强制拉取所有历史记录
 
       - name: Process file
         run: |
           cd $GITHUB_WORKSPACE  # 切换到仓库根目录
+          curl -o OpenAI.list https://raw.githubusercontent.com/EAlyce/conf/main/Rule/OpenAI.list
           sed -i 's/, /,/g' OpenAI.list  # 去除逗号后的空格
           sort -u -o OpenAI.list OpenAI.list  # 去重
 
@@ -32,4 +30,4 @@ jobs:
           git config --global user.name "EAlyce"
           git add OpenAI.list
           git commit -m "Remove comma spaces and deduplicate in OpenAI.list"
-          git push -f  # 强制覆盖远程仓库的内容
+          git push -f  # 强制覆盖提交
