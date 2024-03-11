@@ -1,8 +1,11 @@
 name: Process Rule files
 
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: '0 15 * * *'  # 每天下午3点执行
+    - cron: '0 15 * * *'  # 每天下午1点执行
 
 jobs:
   process:
