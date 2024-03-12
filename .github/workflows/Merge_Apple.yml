@@ -1,0 +1,53 @@
+name: Merge_AI
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  merge_domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check if curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl is not installed, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          fi
+
+      - name: Get domains from source files
+        run: |
+          curl -s https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > apple_cdn.conf.tmp
+          curl -s https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > apple_services.conf.tmp
+          curl -sL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Apple_All.list.tmp
+
+      - name: Merge with existing Rule/Apple.list
+        run: |
+          cat apple_cdn.conf.tmp apple_services.conf.tmp Apple_All.list.tmp | sort | uniq > Rule/Apple.list
+          sed -i 's/, /,/g' Rule/Apple.list
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet || echo "Files have changed"
+
+      - name: Set Git configuration
+        if: steps.git-check.outputs.stdout != 'Files have changed'
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "EAlyce"
+
+      - name: Commit changes
+        if: steps.git-check.outputs.stdout != 'Files have changed'
+        run: |
+          git add Rule/Apple.list
+          git diff --cached --quiet || git commit -m "Merge Apple lists to Rule/Apple.list"
+          git push -f origin main
