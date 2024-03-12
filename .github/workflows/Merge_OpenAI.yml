@@ -45,7 +45,7 @@ jobs:
       - name: Replace commas with English format
         run: |
           sed -i 's/,/，/g' Rule/OpenAI.list
-          sed -i 's/， /，/g'
+          sed -i 's/， /，/g' Rule/OpenAI.list
 
       - name: Check for changes
         id: git-check
