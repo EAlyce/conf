@@ -9,8 +9,7 @@ on:
 
 jobs:
   merge_domains:
-    runs-on: self-hosted
-    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
