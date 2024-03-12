@@ -1,4 +1,4 @@
-### Engincan Veske 👨‍💻
+### Alas 👨‍💻
 
 [![Twitter](https://img.shields.io/badge/-Twitter-222222?style=flat-square&logo=twitter&logoColor=white&link=https://twitter.com/EngincanVeske)](https://twitter.com/EngincanVeske)
 [![Linkedin](https://img.shields.io/badge/-LinkedIn-222222?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/engincan-veske-b4a75b145/)](https://www.linkedin.com/in/engincan-veske-b4a75b145/)
@@ -19,4 +19,4 @@
 
 🌱 Learning all about **Open Source**
 
-⭐️ From [EngincanV](https://github.com/EngincanV)
+⭐️ From [Alas](https://github.com/EAlyce)
