@@ -9,7 +9,7 @@ DEST-PORT,995
 DOMAIN-KEYWORD,1password
 DOMAIN-KEYWORD,amazonaws
 DOMAIN-KEYWORD,api.msn.com
-DOMAIN-KEYWORD,bing.com
+DOMAIN-KEYWORD,bing
 DOMAIN-KEYWORD,bingapis.com
 DOMAIN-KEYWORD,browser-intake-datadoghq.com
 DOMAIN-KEYWORD,cloudflare
