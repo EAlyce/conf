@@ -1,11 +1,11 @@
-name: Merge_Global_All.list_to_Proxy.list
+name: Merge_Global
 
 on:
   push:
     branches:
       - main
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 * * * *'
 
 jobs:
   merge_domains:

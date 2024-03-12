@@ -1,4 +1,4 @@
-name: Merge_OpenAI_lists_to_Rule_OpenAI.list
+name: Merge_AI
 
 on:
   push:

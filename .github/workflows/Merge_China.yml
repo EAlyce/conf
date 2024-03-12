@@ -1,11 +1,11 @@
-name: Merge_China_All.list_to_Rule_DIRECT.list
+name: Merge_China
 
 on:
   push:
     branches:
       - main
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 * * * *'
 
 jobs:
   merge_domains:
