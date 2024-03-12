@@ -26,6 +26,7 @@ jobs:
       - name: Get domains from source file
         run: |
           curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > DIRECT.tmp
+          curl -s https://raw.githubusercontent.com/Blankwonder/surge-list/master/cn.list | grep -v '^#' | grep -v '^$' | sort | uniq >> DIRECT.tmp
 
       - name: Merge with existing DIRECT.list
         run: |
