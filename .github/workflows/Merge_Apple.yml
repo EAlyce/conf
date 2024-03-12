@@ -31,7 +31,7 @@ jobs:
 
       - name: Merge with existing Rule/Apple.list
         run: |
-          cat apple_cdn.conf.tmp apple_services.conf.tmp Apple_All.list.tmp | sort | uniq > Rule/Apple.list
+          cat apple_cdn.conf.tmp apple_services.conf.tmp Apple_All.list.tmp | sort | uniq | sed 's/,\./,/g' > Rule/Apple.list
           sed -i 's/, /,/g' Rule/Apple.list
 
       - name: Check for changes
