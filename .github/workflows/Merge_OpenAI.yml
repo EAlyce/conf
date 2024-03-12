@@ -36,6 +36,12 @@ jobs:
           cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp Repcz.list.tmp | sort | uniq | sed '/^[[:space:]]*$/d' > Rule/OpenAI.list
           rm ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp Repcz.list.tmp
 
+      - name: Remove empty lines and whitespaces
+        run: |
+          sed -i '/^[[:space:]]*$/d' Rule/OpenAI.list
+          sed -i 's/^[[:space:]]*//' Rule/OpenAI.list
+          sed -i 's/[[:space:]]*$//' Rule/OpenAI.list
+
       - name: Check for changes
         id: git-check
         run: |
