@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Alas</h1>
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=ealyce&label=Profile%20views&color=0e75b6&style=flat" alt="ealyce" /> </p>
 
-<h3 align="left">Connect with me:</h3>
+<h3 align="left">Connect with me: msosjaahwwj@gmail.com </h3>
 <p align="left">
 </p>
 
