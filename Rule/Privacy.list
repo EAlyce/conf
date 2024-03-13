@@ -36,7 +36,7 @@ DOMAIN-KEYWORD,pop
 DOMAIN-KEYWORD,smtp
 DOMAIN-KEYWORD,vodafone
 DOMAIN-KEYWORD,workingcopy
-DOMAIN-KEYWORD,yahoo.com
+DOMAIN-KEYWORD,yahoo
 DOMAIN-KEYWORD,yandex
 DOMAIN-KEYWORD,yastatic
 DOMAIN-SUFFIX,21cbh.com
@@ -48,7 +48,6 @@ DOMAIN-SUFFIX,addthis.com.edgekey.net
 DOMAIN-SUFFIX,addthiscdn.com
 DOMAIN-SUFFIX,addthisedge.com
 DOMAIN-SUFFIX,algolia.net
-DOMAIN-SUFFIX,aliyuncs.com
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,appsflyer.com
 DOMAIN-SUFFIX,appstorrent.ru
