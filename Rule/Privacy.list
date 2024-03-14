@@ -1,4 +1,4 @@
-DEST-PORT,110
+6DEST-PORT,110
 DEST-PORT,143
 DEST-PORT,22
 DEST-PORT,25
@@ -37,10 +37,7 @@ DOMAIN-SUFFIX,21cbh.com
 DOMAIN-SUFFIX,2o7.net
 DOMAIN-SUFFIX,36kr.com
 DOMAIN-SUFFIX,aboluowang.org
-DOMAIN-SUFFIX,addthis.com
-DOMAIN-SUFFIX,addthis.com.edgekey.net
-DOMAIN-SUFFIX,addthiscdn.com
-DOMAIN-SUFFIX,addthisedge.com
+DOMAIN-KEYWORD,addthis
 DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,appsflyer.com
@@ -49,7 +46,6 @@ DOMAIN-SUFFIX,arxiv.org
 DOMAIN-SUFFIX,assets.adobedtm.com
 DOMAIN-SUFFIX,ateam-oracle.com
 DOMAIN-SUFFIX,atgsvcs.com
-DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,bannedbook.org
 DOMAIN-SUFFIX,bbc.co.uk
 DOMAIN-SUFFIX,beijingspring.org
