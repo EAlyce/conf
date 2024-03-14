@@ -9,12 +9,8 @@ DEST-PORT,995
 DEST-PORT,53
 DOMAIN-KEYWORD,1password
 DOMAIN-KEYWORD,amazonaws
-DOMAIN-KEYWORD,msn.com
-DOMAIN-KEYWORD,bing
 DOMAIN-KEYWORD,browser-intake-datadoghq.com
-DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,egeturl
-DOMAIN-KEYWORD,generativelanguage.googleapis.com
 DOMAIN-KEYWORD,gppnetwork
 DOMAIN-KEYWORD,hotmail
 DOMAIN-KEYWORD,huobi
@@ -24,8 +20,6 @@ DOMAIN-KEYWORD,interco
 DOMAIN-KEYWORD,iyzico
 DOMAIN-KEYWORD,java
 DOMAIN-KEYWORD,mail
-DOMAIN-KEYWORD,microsoft
-DOMAIN-KEYWORD,msn.com
 DOMAIN-KEYWORD,obsidian
 DOMAIN-KEYWORD,ocsp
 DOMAIN-KEYWORD,okx
@@ -38,6 +32,7 @@ DOMAIN-KEYWORD,workingcopy
 DOMAIN-KEYWORD,yahoo
 DOMAIN-KEYWORD,yandex
 DOMAIN-KEYWORD,yastatic
+DOMAIN-KEYWORD,binance
 DOMAIN-SUFFIX,21cbh.com
 DOMAIN-SUFFIX,2o7.net
 DOMAIN-SUFFIX,36kr.com
@@ -152,9 +147,7 @@ DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,observeit.net
 DOMAIN-SUFFIX,ogate.org
-DOMAIN-SUFFIX,okcoin.com
 DOMAIN-SUFFIX,online-metrix.net
-DOMAIN-SUFFIX,oracle
 DOMAIN-SUFFIX,ouyicn.blue
 DOMAIN-SUFFIX,ozan.com
 DOMAIN-SUFFIX,peacehall.com
@@ -228,8 +221,7 @@ DOMAIN-SUFFIX,xinsheng.org
 DOMAIN-SUFFIX,xizang-zhiye.org
 DOMAIN-SUFFIX,ycombinator.com
 DOMAIN-SUFFIX,zaobao.com
-DOMAIN-SUFFIX,zhengjian.org
-DOMAIN-SUFFIX,zhimg.com
+DOMAIN-SUFFIX,zhengjian.org 
 DOMAIN-SUFFIX,zhuichaguoji.org
 IP-ASN,14061,no-resolve
 IP-ASN,20473,no-resolve
