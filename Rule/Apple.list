@@ -16,7 +16,11 @@ DOMAIN-KEYWORD,buy.itunes.apple.com
 DOMAIN-KEYWORD,icloud.com.akadns.net
 DOMAIN-KEYWORD,smp-device
 DOMAIN-KEYWORD,testflight
-DOMAIN-SUFFIX,mzstatic.com
+DOMAIN-SUFFIX,a1.mzstatic.com
+DOMAIN-SUFFIX,a2.mzstatic.com
+DOMAIN-SUFFIX,a3.mzstatic.com
+DOMAIN-SUFFIX,a4.mzstatic.com
+DOMAIN-SUFFIX,a5.mzstatic.com
 DOMAIN-SUFFIX,adcdownload.apple.com
 DOMAIN-SUFFIX,adcdownload.apple.com.akadns.net
 DOMAIN-SUFFIX,amp-api.media.apple.com
