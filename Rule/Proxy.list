@@ -64,6 +64,7 @@ DOMAIN,practivate.adobe
 DOMAIN,practivate.adobe.ipp
 DOMAIN,practivate.adobe.newoa
 DOMAIN,practivate.adobe.ntp
+DOMAIN,public-us-pingsx.api.clonoth.com
 DOMAIN,push-apple.com.akadns.net
 DOMAIN,qualcomm.sc.omtrdc.net
 DOMAIN,tesla-cdn.thron.com
@@ -16623,6 +16624,7 @@ DOMAIN-SUFFIX,pinduck.com
 DOMAIN-SUFFIX,pinflix.com
 DOMAIN-SUFFIX,ping.fm
 DOMAIN-SUFFIX,ping.pe
+DOMAIN-SUFFIX,ping.sx
 DOMAIN-SUFFIX,pingguotv.xyz
 DOMAIN-SUFFIX,pingxiangpuer.com
 DOMAIN-SUFFIX,pinimg.com
@@ -20464,6 +20466,8 @@ DOMAIN-SUFFIX,tiktok.com
 DOMAIN-SUFFIX,tiktokcdn-us.com
 DOMAIN-SUFFIX,tiktokcdn.com
 DOMAIN-SUFFIX,tiktokv.com
+DOMAIN-SUFFIX,tiktokv.us
+DOMAIN-SUFFIX,tiktokw.us
 DOMAIN-SUFFIX,tiltbrush.com
 DOMAIN-SUFFIX,timdir.com
 DOMAIN-SUFFIX,time.com
