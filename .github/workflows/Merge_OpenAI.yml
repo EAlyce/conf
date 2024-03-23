@@ -34,7 +34,7 @@ jobs:
 
       - name: Merge with existing Rule/OpenAI.list
         run: |
-          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp Repcz.list.tmp | sort | uniq > Rule/OpenAI.list
+          cat ai.conf.tmp OpenAI.list.tmp AI.list.tmp Copilot.list.tmp Repcz.list.tmp Microsoft.list.tmp | sort | uniq > Rule/OpenAI.list
           sed -i 's/, /,/g' Rule/OpenAI.list
           cat Rule/OpenAI.list  # 调试信息：显示合并后的文件内容
 
