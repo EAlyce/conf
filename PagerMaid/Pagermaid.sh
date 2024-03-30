@@ -105,7 +105,7 @@ python3.11 -m pip cache purge
 python3.11 -m pip install --upgrade pip
 
 # 强制重新安装 coloredlogs
-python3.11 -m pip install --force-reinstall coloredlogs
+python3.11 -m pip install --force-reinstall coloredlogs emoji
 
 # 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
 python3.11 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
