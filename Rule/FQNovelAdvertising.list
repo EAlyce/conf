@@ -1,4 +1,4 @@
-#自用规则，不对其他人负责，已屏蔽抖音相关域名，会无法观看抖音
+# 自用规则，不对使用者负责，已屏蔽抖音相关域名，无法观看抖音
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-aliec
 DOMAIN-KEYWORD,-alisc
