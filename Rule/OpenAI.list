@@ -5,6 +5,7 @@ DOMAIN,assets.msn.com
 DOMAIN,bard.google.com
 DOMAIN,browser-intake-datadoghq.com
 DOMAIN,cdn.openai.com
+
 DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
 DOMAIN,copilot.microsoft.com
