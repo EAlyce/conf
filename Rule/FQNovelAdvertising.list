@@ -1,4 +1,9 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，无法观看抖音
+
+DOMAIN-SUFFIX,saveu5-normal-lq.zijieapi.com
+DOMAIN-SUFFIX,netease.com
+DOMAIN-SUFFIX,tsyndicate.com
+DOMAIN-SUFFIX,assistads.net
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-aliec
 DOMAIN-KEYWORD,-alisc
