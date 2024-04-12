@@ -1,5 +1,5 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，可能无法观看抖音
-
+# 推荐使用  REJECT-DROP
 DOMAIN-SUFFIX,netease.com
 DOMAIN-SUFFIX,tsyndicate.com
 DOMAIN-SUFFIX,assistads.net
