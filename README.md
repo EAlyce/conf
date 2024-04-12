@@ -1,4 +1,4 @@
-
+# 自用规则，其他人使用造成任何规则与本仓库作者无关
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=ealyce&label=Profile%20views&color=0e75b6&style=flat" alt="ealyce" /> </p>
 
