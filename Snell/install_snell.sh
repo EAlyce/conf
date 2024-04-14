@@ -42,14 +42,25 @@ dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | gre
 echo "Cleaning completed"
 }
 
+# 检测是否已安装 Docker
+if ! command -v docker &> /dev/null; then
+    echo "Docker 未安装，开始安装..."
+    # 安装 Docker
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+else
+    echo "Docker 已安装，跳过安装步骤。"
+fi
 install_docker_and_compose(){
-# 安装 Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-# 安装 Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+# 检测是否已安装 Docker Compose
+if ! command -v docker-compose &> /dev/null; then
+    echo "Docker Compose 未安装，开始安装..."
+    # 安装 Docker Compose
+    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+else
+    echo "Docker Compose 已安装，跳过安装步骤。"
+fi
 }
 get_public_ip() {
     ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
