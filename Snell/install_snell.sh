@@ -24,13 +24,6 @@ check_root() {
     [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
 
-install_tools() {
-
-    echo "Start updating the system..." && sudo apt-get update -y > /dev/null || true && \
-echo "Start installing software..." && sudo apt-get install -y curl wget mosh ncat netcat-traditional nmap apt-utils apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
-echo "operation completed"
-}
-
 clean_lock_files() {
 
    echo "Start cleaning the system..." && \
@@ -49,43 +42,14 @@ dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | gre
 echo "Cleaning completed"
 }
 
-# 错误代码
-ERR_DOCKER_INSTALL=1
-ERR_COMPOSE_INSTALL=2
 install_docker_and_compose(){
-#sudo rm -rf /sys/fs/cgroup/systemd && sudo mkdir /sys/fs/cgroup/systemd && sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd && echo "修复完成"
-
-echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf > /dev/null 2>&1 && sudo sysctl -p > /dev/null 2>&1 && echo "System settings have been updated"
-
-
-echo "Update Docker Key..." && sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1 && sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1 && echo "Docker key updated"
-sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common > /dev/null 2>&1 && curl -fsSL https://get.docker.com | sudo bash > /dev/null 2>&1 && sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y docker-compose > /dev/null 2>&1 && echo "Docker installation completed"
-
-# 如果系统版本是 Debian 12，则重新添加 Docker 存储库，使用新的 signed-by 选项来指定验证存储库的 GPG 公钥
-if [ "$(lsb_release -cs)" = "bookworm" ]; then
-    # 重新下载 Docker GPG 公钥并保存到 /usr/share/keyrings/docker-archive-keyring.gpg
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && echo "Source added"
-fi
-
-# 更新 apt 存储库
-sudo apt update > /dev/null 2>&1 && sudo apt upgrade -y > /dev/null 2>&1 && sudo apt autoremove -y > /dev/null 2>&1 && echo "System update completed"
-
-# 如果未安装，则使用包管理器安装 Docker
-if ! command -v docker &> /dev/null; then
-    sudo apt install -y docker-ce docker-ce-cli containerd.io > /dev/null 2>&1
-    sudo systemctl enable --now docker > /dev/null 2>&1
-    echo "Docker installed and started successfully"
-else
-    echo "Docker has been installed"
-fi
+# 安装 Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 
 # 安装 Docker Compose
-if ! command -v docker-compose &> /dev/null; then
-    sudo apt install -y docker-compose
-    echo "Docker Composite installed successfully"
-else
-    echo "Docker Composite installed successfully"
-fi
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 }
 get_public_ip() {
     ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
@@ -279,7 +243,6 @@ apt-get install sudo > /dev/null
 select_version
 set_custom_path
 clean_lock_files
-install_tools
 install_docker_and_compose
 get_public_ip
 get_location
