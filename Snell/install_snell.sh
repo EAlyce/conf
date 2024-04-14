@@ -1,6 +1,4 @@
 #!/bin/bash
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common && curl -fsSL https://test.docker.com | bash && apt update && apt install -y docker-compose
-
 set_custom_path() {
     if ! command -v cron &> /dev/null; then
     sudo apt-get update > /dev/null
