@@ -1,4 +1,6 @@
-# 自用，其他人使用本仓库内容造成任何损失，与本仓库作者无关。
+# 自用
+
+本仓库随时跑路，其他人使用本仓库内容造成任何损失，与本仓库作者无关。
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=ealyce&label=Profile%20views&color=0e75b6&style=flat" alt="ealyce" /> </p>
 
