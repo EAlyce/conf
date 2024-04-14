@@ -104,7 +104,7 @@ do
     echo "      PagerMaid安装选项"
     echo "----------------------------"
     echo "[1] Linux多用户(推荐)"
-    echo "[2] Linux单用户"
+    echo "[2] 官方Linux单用户"
     echo "[3] Docker多用户"
     echo "[0] 退出"
     echo "----------------------------"
