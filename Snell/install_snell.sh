@@ -1,73 +1,76 @@
 #!/bin/bash
+
+# 定义变量
+DNS_SERVERS="8.8.4.4 8.8.8.8"
+UDP_PORTS="60000:61000"
+
 set_custom_path() {
     if ! command -v cron &> /dev/null; then
-    sudo apt-get update > /dev/null
-    sudo apt-get install -y cron > /dev/null
-fi
+        sudo apt-get update > /dev/null
+        sudo apt-get install -y cron > /dev/null
+    fi
 
-if ! systemctl is-active --quiet cron; then
-    sudo systemctl start cron > /dev/null
-fi
+    if ! systemctl is-active --quiet cron; then
+        sudo systemctl start cron > /dev/null
+    fi
 
-if ! systemctl is-enabled --quiet cron; then
-    sudo systemctl enable cron > /dev/null
-fi
+    if ! systemctl is-enabled --quiet cron; then
+        sudo systemctl enable cron > /dev/null
+    fi
 
-if ! grep -q '^PATH=' /etc/crontab; then
-    echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' >> /etc/crontab
-    systemctl reload cron > /dev/null
-fi
+    if ! grep -q '^PATH=' /etc/crontab; then
+        printf 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n' >> /etc/crontab
+        systemctl reload cron > /dev/null
+    fi
 }
 
-
 check_root() {
-    [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
+    if [ "$(id -u)" != "0" ]; then
+        echo "Error: You must be root to run this script"
+        exit 1
+    fi
 }
 
 clean_lock_files() {
-
-   echo "Start cleaning the system..." && \
-sudo pkill -9 apt > /dev/null || true && \
-sudo pkill -9 dpkg > /dev/null || true && \
-sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} > /dev/null || true && \
-sudo dpkg --configure -a > /dev/null || true && \
-sudo apt-get clean > /dev/null && \
-sudo apt-get autoclean > /dev/null && \
-sudo apt-get autoremove -y > /dev/null && \
-sudo rm -rf /tmp/* > /dev/null && \
-history -c > /dev/null && \
-history -w > /dev/null && \
-#docker system prune -a --volumes -f > /dev/null && \
-dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge > /dev/null && \
-echo "Cleaning completed"
+    echo "Start cleaning the system..." && \
+    sudo pkill -9 apt > /dev/null || true && \
+    sudo pkill -9 dpkg > /dev/null || true && \
+    sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} > /dev/null || true && \
+    sudo dpkg --configure -a > /dev/null || true && \
+    sudo apt-get clean > /dev/null && \
+    sudo apt-get autoclean > /dev/null && \
+    sudo apt-get autoremove -y > /dev/null && \
+    sudo rm -rf /tmp/* > /dev/null && \
+    history -c > /dev/null && \
+    history -w > /dev/null && \
+    dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge > /dev/null && \
+    echo "Cleaning completed"
 }
 
-# 检测是否已安装 Docker
-if ! command -v docker &> /dev/null; then
-    echo "Docker 未安装，开始安装..."
-    # 安装 Docker
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-else
-    echo "Docker 已安装，跳过安装步骤。"
-fi
 install_docker_and_compose(){
-# 检测是否已安装 Docker Compose
-if ! command -v docker-compose &> /dev/null; then
-    echo "Docker Compose 未安装，开始安装..."
-    # 安装 Docker Compose
-    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-else
-    echo "Docker Compose 已安装，跳过安装步骤。"
-fi
+    if ! command -v docker &> /dev/null; then
+        echo "Docker 未安装，开始安装..."
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
+    else
+        echo "Docker 已安装，跳过安装步骤。"
+    fi
+
+    if ! command -v docker-compose &> /dev/null; then
+        echo "Docker Compose 未安装，开始安装..."
+        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+    else
+        echo "Docker Compose 已安装，跳过安装步骤。"
+    fi
 }
+
 get_public_ip() {
     ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     public_ip=""
     for service in "${ip_services[@]}"; do
         if public_ip=$(curl -s "$service" 2>/dev/null); then
-            if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            if [[ "$public_ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
                 echo "Local IP: $public_ip"
                 break
             else
@@ -78,7 +81,7 @@ get_public_ip() {
         fi
         sleep 1
     done
-    [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "All services are unable to obtain public IP addresses"; exit 1; }
+    [[ "$public_ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || { echo "All services are unable to obtain public IP addresses"; exit 1; }
 }
 
 get_location() {
@@ -97,173 +100,33 @@ get_location() {
 }
 
 setup_environment() {
-echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
-echo "DNS servers updated successfully."
+    printf 'nameserver %s\nnameserver %s\n' $DNS_SERVERS > /etc/resolv.conf
+    echo "DNS servers updated successfully."
 
-export DEBIAN_FRONTEND=noninteractive
-apt-get update > /dev/null || true
-echo "Necessary packages installed."
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update > /dev/null || true
+    echo "Necessary packages installed."
 
-iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
-echo "UDP port range opened."
-sudo mkdir -p /etc/iptables
-sudo touch /etc/iptables/rules.v4 > /dev/null || true
-iptables-save > /etc/iptables/rules.v4
-service netfilter-persistent reload > /dev/null || true
-echo "Iptables saved."
+    iptables -A INPUT -p udp --dport $UDP_PORTS -j ACCEPT > /dev/null || true
+    echo "UDP port range opened."
+    sudo mkdir -p /etc/iptables
+    sudo touch /etc/iptables/rules.v4 > /dev/null || true
+    iptables-save > /etc/iptables/rules.v4
+    service netfilter-persistent reload > /dev/null || true
+    echo "Iptables saved."
 
-apt-get upgrade -y > /dev/null || true
-echo "Packages updated."
+    apt-get upgrade -y > /dev/null || true
+    echo "Packages updated."
 
-echo "export HISTSIZE=10000" >> ~/.bashrc
-source ~/.bashrc
-
-if [ -f "/proc/sys/net/ipv4/tcp_fastopen" ]; then
-  echo 3 > /proc/sys/net/ipv4/tcp_fastopen > /dev/null || true
-  echo "TCP fast open enabled."
-fi
-
-docker system prune -af --volumes > /dev/null || true
-echo "Docker system pruned."
-
-iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
-echo "SYN packets accepted."
-
-curl -fsSL https://raw.githubusercontent.com/EAlyce/ToolboxScripts/master/Linux.sh | bash > /dev/null && echo "Network optimization completed"
-
+    echo "export HISTSIZE=10000" >> ~/.bashrc
+    source ~/.bashrc
 }
 
-select_version() {
-  echo "Please select the version of Snell："
-  echo "1. v3 "
-  echo "2. v4 Exclusive to Surge"
-  echo "0. 退出脚本"
-  read -p "输入选择（回车默认2）: " choice
-
-  choice="${choice:-2}"
-
-  case $choice in
-    0) echo "退出脚本"; exit 0 ;;
-    1) BASE_URL="https://github.com/xOS/Others/raw/master/snell"; SUB_PATH="v3.0.1/snell-server-v3.0.1"; VERSION_NUMBER="3" ;;
-    2) BASE_URL="https://dl.nssurge.com/snell"; SUB_PATH="snell-server-v4.0.1"; VERSION_NUMBER="4" ;;
-    *) echo "无效选择"; exit 1 ;;
-  esac
-}
-
-
-select_architecture() {
-  ARCH="$(uname -m)"
-  ARCH_TYPE="linux-amd64.zip"
-
-  if [ "$ARCH" == "aarch64" ]; then
-    ARCH_TYPE="linux-aarch64.zip"
-  fi
-
-  SNELL_URL="${BASE_URL}/${SUB_PATH}-${ARCH_TYPE}"
-}
-
-generate_port() {
-  EXCLUDED_PORTS=(5432 5554 5800 5900 6379 8080 9996 1053 5353 8053 9153 9253)
-
-  if ! command -v nc.traditional &> /dev/null; then
-    sudo apt-get update
-    sudo apt-get install netcat-traditional
-  fi
-
-  while true; do
-    PORT_NUMBER=$(shuf -i 5000-9999 -n 1)
-
-    if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER" && [[ ! " ${EXCLUDED_PORTS[@]} " =~ " ${PORT_NUMBER} " ]]; then
-      break
-    fi
-  done
-}
-
-setup_firewall() {
-  sudo iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
-  echo "Firewall rule added, allowing port $PORT_NUMBER's traffic"
-}
-
-generate_password() {
-  PASSWORD=$(openssl rand -base64 12) || { echo "Error: Unable to generate password"; exit 1; }
-  echo "Password generated：$PASSWORD"
-}
-
-setup_docker() {
-  NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
-  
-  mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
-  cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
-
-  cat <<EOF > docker-compose.yml
-version: "3.9"
-services:
-  snell:
-    image: accors/snell:latest
-    container_name: Snell$PORT_NUMBER
-    restart: always
-    network_mode: host
-    privileged: true
-    environment:
-      - SNELL_URL=$SNELL_URL
-    volumes:
-      - ./snell-conf/snell.conf:/etc/snell-server.conf
-EOF
-
-  mkdir -p ./snell-conf || { echo "Error: Unable to create directory $NODE_DIR/snell-conf"; exit 1; }
-  cat <<EOF > ./snell-conf/snell.conf
-[snell-server]
-listen = 0.0.0.0:$PORT_NUMBER
-psk = $PASSWORD
-tfo = true
-obfs = off
-ipv6 = false
-EOF
-
-  docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-
-  echo "Node setup completed. Here is your node information"
-}
-print_node() {
-  if [ "$choice" == "1" ]; then
-    echo
-    echo
-    echo "  - name: $LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER"
-    echo "    type: snell"
-    echo "    server: $public_ip"
-    echo "    port: $PORT_NUMBER"
-    echo "    psk: $PASSWORD"
-    echo "    version: $VERSION_NUMBER"
-    echo "    udp: true"
-    echo
-    echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
-    echo
-    echo
-  elif [ "$choice" == "2" ]; then
-    echo
-    echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
-    echo
-  fi
-}
-
-
-main(){
+# 调用函数
 check_root
-sudo apt-get autoremove -y > /dev/null
-apt-get install sudo > /dev/null
-select_version
 set_custom_path
 clean_lock_files
 install_docker_and_compose
 get_public_ip
 get_location
 setup_environment
-select_architecture
-generate_port
-setup_firewall
-generate_password
-setup_docker
-print_node
-}
-
-main
