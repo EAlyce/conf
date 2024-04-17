@@ -13,7 +13,8 @@ clean_lock_files() {
 echo "Start cleaning the system..."
 
 # Kill apt and dpkg processes if they are running
-sudo pkill -9 apt dpkg || true
+sudo pkill -9 apt || true
+sudo pkill -9 dpkg || true
 
 # Remove lock files
 sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
@@ -192,7 +193,7 @@ setup_docker() {
     cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
 
     cat <<EOF > docker-compose.yml
-version: "3.9"
+version: "3.3"
 services:
   snell:
     image: accors/snell:latest
