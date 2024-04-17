@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "top -b" >> ~/.bashrc
+
 check_root() {
     [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
@@ -10,19 +12,38 @@ install_tools() {
 }
 
 clean_lock_files() {
-    echo "Start cleaning the system..." && \
-    sudo pkill -9 apt > /dev/null || true && \
-    sudo pkill -9 dpkg > /dev/null || true && \
-    sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} > /dev/null || true && \
-    sudo dpkg --configure -a > /dev/null || true && \
-    sudo apt-get clean > /dev/null && \
-    sudo apt-get autoclean > /dev/null && \
-    sudo apt-get autoremove -y > /dev/null && \
-    sudo rm -rf /tmp/* > /dev/null && \
-    history -c > /dev/null && \
-    history -w > /dev/null && \
-    dpkg --list | egrep -i 'linux-image|linux-headers' | awk '/^ii/{print $2}' | grep -v `uname -r` | xargs apt-get -y purge > /dev/null && \
-    echo "Cleaning completed"
+echo "Start cleaning the system..."
+
+# Kill apt and dpkg processes if they are running
+sudo pkill -9 apt dpkg || true
+
+# Remove lock files
+sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
+
+# Configure dpkg
+sudo dpkg --configure -a > /dev/null || true
+
+# Clean apt cache
+sudo apt-get clean > /dev/null
+
+# Autoclean apt
+sudo apt-get autoclean > /dev/null
+
+# Autoremove unused packages
+sudo apt-get autoremove -y > /dev/null
+
+# Remove temporary files
+sudo rm -rf /tmp/* > /dev/null
+
+# Clear command history
+history -c > /dev/null
+history -w > /dev/null
+
+# Purge old linux-image and linux-headers packages
+dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs sudo apt-get -y purge > /dev/null
+
+echo "Cleaning completed"
+
 }
 
 install_docker_and_compose() {
