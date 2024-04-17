@@ -2,9 +2,9 @@
 # 检测本地系统是否安装Python 3.11+
 install_or_update_python() {
     # 检测本地系统是否安装Python 3.11+
-    if command -v python3 &> /dev/null; then
-        # 如果已安装，则将python3默认使用3.11+
-        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3 1
+    if command -v python3.11.0 &> /dev/null; then
+        # 如果已安装，则将python3.11.0默认使用3.11+
+        update-alternatives --install /usr/bin/python3.11.0 python3.11.0 /usr/bin/python3.11.0 1
     else
         # 如果未安装，则执行安装Python 3.11的代码
         install_python() {
@@ -18,10 +18,10 @@ install_or_update_python() {
             wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 
             # 解压缩源代码
-            tar -xf Python-3.11.tar.xz
+            tar -xf Python-3.11.0.tar.xz
 
             # 进入源代码目录
-            cd Python-3.11
+            cd Python-3.11.0
             # 配置并安装Python 3.11
             ./configure --enable-optimizations
             make -j $(nproc)
@@ -29,11 +29,11 @@ install_or_update_python() {
 
             # 清理安装过程中的临时文件
             cd ..
-            rm -rf Python-3.11
+            rm -rf Python-3.11.0
             rm Python-3.11.0.tar.xz
 
-            # 创建软链接以使python3命令可用
-            ln -s /usr/local/bin/python3 /usr/bin/python3
+            # 创建软链接以使python3.11.0命令可用
+            ln -s /usr/local/bin/python3.11.0.11.0 /usr/bin/python3.11.0
             alias python=python3
             python --version
         }
@@ -64,7 +64,7 @@ systemctl_reload() {
     [Service]
     Type=simple
     WorkingDirectory=/var/lib/pagermaid
-    ExecStart=/var/lib/pagermaid/venv/bin/python3 -m pagermaid
+    ExecStart=/var/lib/pagermaid/venv/bin/python3.11.0 -m pagermaid
     Restart=always
 
     [Install]
@@ -76,7 +76,7 @@ TEXT
 }
 start_installation() {
     install_or_update_python
-    sudo apt-get update && sudo apt-get install -y python3-venv
+    sudo apt-get update && sudo apt-get install -y python3.11.0-venv
 	# 进入目录
     cd /var/lib
 
@@ -93,22 +93,22 @@ start_installation() {
     # 进入新目录
     cd /var/lib/pagermaid
     # 创建 Python 3.11 虚拟环境并输出信息到/dev/null
-python3 -m venv venv > /dev/null
+python3.11.0 -m venv venv > /dev/null
 
 # 激活虚拟环境
 source venv/bin/activate
 
 # 清除pip缓存
-python3 -m pip cache purge
+python3.11.0 -m pip cache purge
 
 # 升级pip
-python3 -m pip install --upgrade pip
+python3.11.0 -m pip install --upgrade pip
 
 # 强制重新安装 coloredlogs
-python3 -m pip install --force-reinstall coloredlogs emoji
+python3.11.0 -m pip install --force-reinstall coloredlogs emoji
 
 # 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
-python3 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
+python3.11.0 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
 
 # 创建目录
 mkdir -p /var/lib/pagermaid/data
@@ -117,7 +117,7 @@ mkdir -p /var/lib/pagermaid/data
 configure
 
 # 运行 pagermaid
-python3 -m pagermaid
+python3.11.0 -m pagermaid
 
     systemctl_reload
     # 离开虚拟环境
