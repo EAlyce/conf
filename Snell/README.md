@@ -1,6 +1,6 @@
 
 ```
-curl -sL https://github.com/EAlyce/conf/raw/main/Snell/install_snell.sh && chmod +x install_snell.sh && ./install_snell.sh
+curl -s https://github.com/EAlyce/conf/raw/main/Snell/install_snell.sh && chmod +x install_snell.sh && ./install_snell.sh
 ```
 
 ```
