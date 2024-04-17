@@ -78,41 +78,45 @@ update_packages() {
 }
 
 install_python() {
-    # 获取当前系统的 Python 版本
+    # 首先，我们需要确认Python的版本是否为3.11或更高
     python_version=$(python3 --version 2>&1 | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
-    
-    # 如果 Python 版本小于 3.11，则开始安装 Python 3.11
     if [[ "$python_version" < "3.11" ]]; then
         echo "Python版本需要为3.11或更高，正在自动安装Python 3.11.0..."
 
-        # 安装编译 Python 所需的依赖
-        sudo apt-get update
-        sudo apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+        # 下载Python 3.11.0
+        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz > /dev/null 2>&1
+        apt-get install -y python3-venv python3-pip libssl-dev
+        # 解压下载的文件
+        tar -xvf Python-3.11.0.tgz > /dev/null 2>&1
 
-        # 下载 Python 3.11.0 源码并解压
-        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
-        tar -xvf Python-3.11.0.tgz
+        # 进入解压后的目录
         cd Python-3.11.0
 
-        # 配置并编译安装 Python 3.11.0
-        ./configure --enable-optimizations
-        make -j$(nproc)
-        sudo make altinstall
+        # 配置并编译安装
+        (
+            echo -n "编译安装中，请稍候..."
+            ./configure --enable-optimizations > /dev/null 2>&1
+            make -j$(nproc) > /dev/null 2>&1
+            sudo make altinstall > /dev/null 2>&1
+            echo "完成"
+        ) &
 
-        # 返回上级目录并清理安装文件
+        # 调用spinner函数显示转圈圈
+        spinner $!
+
+        # 返回到原来的目录
         cd ..
+
+        # 删除下载的文件和解压后的目录
         rm -rf Python-3.11.0.tgz Python-3.11.0
 
-        # 更新 python3 链接，并设置别名
+        # 更新python3链接
         sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3
         echo "alias python3='python3.11'" >> ~/.bashrc && source ~/.bashrc
-
-        echo "Python 3.11.0 安装完成"
     else
-        echo "Python 版本符合要求"
+        echo "Python版本符合要求"
     fi
 }
-
 
 spinner() {
     local pid=$1
