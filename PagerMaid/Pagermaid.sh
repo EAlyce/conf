@@ -18,10 +18,10 @@ install_or_update_python() {
             wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 
             # 解压缩源代码
-            tar -xf Python-3.11.0.tar.xz
+            tar -xf Python-3.11.tar.xz
 
             # 进入源代码目录
-            cd Python-3.11.0
+            cd Python-3.11
             # 配置并安装Python 3.11
             ./configure --enable-optimizations
             make -j $(nproc)
@@ -29,7 +29,7 @@ install_or_update_python() {
 
             # 清理安装过程中的临时文件
             cd ..
-            rm -rf Python-3.11.0
+            rm -rf Python-3.11
             rm Python-3.11.0.tar.xz
 
             # 创建软链接以使python3.11命令可用
