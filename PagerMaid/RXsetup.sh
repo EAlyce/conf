@@ -19,17 +19,32 @@ set_custom_path() {
         echo "PATH 变量已存在，无需设置."
     fi
 }
-# 安装 sudo 并隐藏输出过程
-echo "开始优化"
-apt-get install sudo > /dev/null 2>&1
+optimize_system() {
+    echo "开始优化"
+    sudo apt-get clean
+    sudo apt-get update
+    sudo apt-get install -y python3.11
 
-# 检查是否以 root 权限运行
-echo "检查root 权限"
+    sudo dpkg --configure -a
+    sudo apt-get install -f
+
+    # 安装 sudo
+    if ! command -v sudo &> /dev/null; then
+        echo "安装 sudo"
+        apt-get install -y sudo > /dev/null 2>&1
+    fi
+
+    sudo apt-get install -y aptitude
+    sudo aptitude install -y libmagick++-dev
+}
+
+echo "检查root权限"
 if [[ $EUID -ne 0 ]]; then 
     echo "错误：本脚本需要 root 权限执行。" 1>&2
     exit 1
 else
     echo "确认以 root 权限运行."
+    optimize_system
 fi
 
 # 定义停止 apt 和 dpkg 进程的函数
@@ -91,6 +106,7 @@ install_pagermaid() {
     "./$(basename "$installer_url")"
 }
 set_custom_path
+optimize_system
 kill_process
 remove_locks
 configure_packages
