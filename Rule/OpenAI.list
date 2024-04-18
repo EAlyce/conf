@@ -8,8 +8,6 @@ DOMAIN,browser.events.data.microsoft.com
 DOMAIN,cdn.openai.com
 DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
-DOMAIN,config.edge.skype.com
-DOMAIN,content.lifecycle.office.net
 DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
 DOMAIN,edge.microsoft.com
@@ -19,6 +17,7 @@ DOMAIN,gemini.google.com
 DOMAIN,generativelanguage.googleapis.com
 DOMAIN,ios.chat.openai.com
 DOMAIN,login.live.com
+DOMAIN,nav-edge.smartscreen.microsoft.com
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,openai-api.arkoselabs.com
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
@@ -29,8 +28,11 @@ DOMAIN,static.cloudflareinsights.com
 DOMAIN,storage.live.com
 DOMAIN,strict.bing.com
 DOMAIN,sydney.bing.com
+DOMAIN,th.bing.com
 DOMAIN,www.bing.com
 DOMAIN,www.bingapis.com
+DOMAIN,www.clarity.ms
+DOMAIN,www2.bing.com
 DOMAIN,ai.google.dev
 DOMAIN,alkalicore-pa.clients6.google.com
 DOMAIN,alkalimakersuite-pa.clients6.google.com
@@ -65,14 +67,7 @@ DOMAIN-KEYWORD,openaicom-api
 DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,auth0.com
-DOMAIN-SUFFIX,bing.com
-DOMAIN-SUFFIX,bing.com.cn
 DOMAIN-SUFFIX,bing.net
-DOMAIN-SUFFIX,bingagencyawards.com
-DOMAIN-SUFFIX,bingapistatistics.com
-DOMAIN-SUFFIX,bingsandbox.com
-DOMAIN-SUFFIX,bingvisualsearch.com
-DOMAIN-SUFFIX,bingworld.com
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,claude.ai
