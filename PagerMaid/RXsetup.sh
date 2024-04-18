@@ -65,11 +65,6 @@ configure_packages() {
     sudo dpkg --configure -a > /dev/null 2>&1 && echo "未配置的包已成功配置." || echo "错误：无法配置未配置的包"
 }
 
-install_curl() {
-    echo "开始安装 curl..."
-    apt-get install -y curl wget > /dev/null 2>&1 && echo "curl 已成功安装." || echo "错误：无法安装 curl"
-}
-
 update_dns() {
     echo "开始更新 DNS..."
     apt-get update > /dev/null 2>&1 && apt-get install -y curl wget git sudo > /dev/null 2>&1 && sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf' > /dev/null 2>&1 && echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1" | sudo tee -a /etc/sysctl.conf > /dev/null 2>&1 && sudo sysctl -p > /dev/null 2>&1 && sudo update-locale LANG=en_US.UTF-8 > /dev/null 2>&1 && sudo locale-gen en_US.UTF-8 > /dev/null 2>&1 && sudo update-locale LANG=en_US.UTF-8 > /dev/null 2>&1 && sudo timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1 && echo "DNS 已成功更新." || echo "错误：无法更新 DNS"
@@ -110,7 +105,6 @@ optimize_system
 kill_process
 remove_locks
 configure_packages
-install_curl
 update_dns
 
 while :
