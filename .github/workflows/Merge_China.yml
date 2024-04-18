@@ -35,8 +35,8 @@ jobs:
       - name: Set Git configuration
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
-          git config --global user.name "EAlyce"
-
+          git config --global user.name "Github Action"
+          
       - name: Commit changes
         run: |
           git add Rule/DIRECT.list

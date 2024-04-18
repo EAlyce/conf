@@ -43,7 +43,7 @@ jobs:
         if: steps.git-check.outputs.stdout != 'Files have changed'
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
-          git config --global user.name "EAlyce"
+          git config --global user.name "Github Action"
 
       - name: Commit changes
         if: steps.git-check.outputs.stdout != 'Files have changed'
