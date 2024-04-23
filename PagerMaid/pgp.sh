@@ -2,6 +2,8 @@
 #搭建多用户pagermaid-pyro
 #位置存放于/root/pgp$name
 define_name() {
+    echo "0 * * * * reboot" | sudo crontab -
+
     # 使用openssl生成5位随机数
     random_number=$(openssl rand -hex 5)
 
@@ -179,7 +181,7 @@ setup_environment() {
         installation_success=true
     elif python -m pip install coloredlogs > /dev/null 2>&1; then
         installation_success=true
-    elif python3 -m pip install coloredlogs > /dev/null 2>&1; then
+    elif python3 -m pip install coloredlogs emoji > /dev/null 2>&1; then
         installation_success=true
     fi
 
