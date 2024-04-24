@@ -36,6 +36,7 @@ DOMAIN-SUFFIX,vcs.zijieapi.com
 DOMAIN,ad.zijieapi.com
 
 # Other 懒得分开了直接合并
+
 DOMAIN,appcloud.zhihu.com
 DOMAIN,appcloud2.in.zhihu.com
 DOMAIN,boot.biz.weibo.com
