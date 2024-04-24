@@ -1,5 +1,6 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，可能无法观看抖音
 # 用法： RULE-SET,https://cdn.jsdelivr.net/gh/EAlyce/conf@main/Rule/FQNovelAdvertising.list,REJECT-DROP,extended-matching
+
 AND,((DOMAIN-KEYWORD,zijieapi,extended-matching), (DOMAIN-KEYWORD,ads,extended-matching))
 DOMAIN-SUFFIX,netease.com
 DOMAIN-SUFFIX,tsyndicate.com
