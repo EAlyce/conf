@@ -10,6 +10,7 @@ DOMAIN,origin-a.akamaihd.ne
 DOMAIN,origin-a.akamaihd.net
 DOMAIN,sms.imagetasks.com
 DOMAIN,steamcommunity-a.akamaihd.net
+DOMAIN,weixin.com
 DOMAIN,www.libvideo.com
 DOMAIN,www.yxssp.com
 DOMAIN-KEYWORD,.tmall.com
@@ -3301,7 +3302,6 @@ DOMAIN-SUFFIX,weilaiyunxiao.com
 DOMAIN-SUFFIX,weiphone.com
 DOMAIN-SUFFIX,weiphone.net
 DOMAIN-SUFFIX,weixinbridge.com
-DOMAIN-SUFFIX,weixing.com
 DOMAIN-SUFFIX,weiyangx.com
 DOMAIN-SUFFIX,weiyun.com
 DOMAIN-SUFFIX,welltrend-edu.com
