@@ -1,6 +1,5 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，可能无法观看抖音
 
-AND,((DOMAIN-KEYWORD,zijieapi), (DOMAIN-KEYWORD,ads))
 DOMAIN-SUFFIX,netease.com
 DOMAIN-SUFFIX,tsyndicate.com
 DOMAIN-SUFFIX,assistads.net
