@@ -10,9 +10,6 @@ DEST-PORT,53
 DOMAIN-KEYWORD,1password
 DOMAIN-KEYWORD,htx
 DOMAIN-KEYWORD,amazonaws
-DOMAIN-KEYWORD,browser-intake-datadoghq.com
-DOMAIN-KEYWORD,egeturl
-DOMAIN-KEYWORD,gppnetwork
 DOMAIN-KEYWORD,hotmail
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,imap
@@ -44,8 +41,7 @@ DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,appsflyer.com
 DOMAIN-SUFFIX,appstorrent.ru
 DOMAIN-SUFFIX,arxiv.org
-DOMAIN-SUFFIX,assets.adobedtm.com
-DOMAIN-SUFFIX,ateam-oracle.com
+DOMAIN-SUFFIX,adobedtm.com
 DOMAIN-SUFFIX,atgsvcs.com
 DOMAIN-SUFFIX,bannedbook.org
 DOMAIN-SUFFIX,bbc.co.uk
@@ -166,11 +162,6 @@ DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,shenyun.org
 DOMAIN-SUFFIX,shenyunperformingarts.org
 DOMAIN-SUFFIX,appsflayer.com
-DOMAIN-SUFFIX,binance.cloud
-DOMAIN-SUFFIX,binance.com
-DOMAIN-SUFFIX,binance.me
-DOMAIN-SUFFIX,binancecnt.com
-DOMAIN-SUFFIX,binancefuture.com
 DOMAIN-SUFFIX,bnappzh.co
 DOMAIN-SUFFIX,bnbstatic.com
 DOMAIN-SUFFIX,bnbzh.ac
@@ -231,11 +222,3 @@ DOMAIN-SUFFIX,zaobao.com
 DOMAIN-SUFFIX,zhengjian.org
 DOMAIN-SUFFIX,.org
 DOMAIN-SUFFIX,zhuichaguoji.org
-IP-ASN,14061
-IP-ASN,20473
-IP-CIDR,206.29.177.36/32
-IP-CIDR,208.54.0.0/16
-IP-CIDR,24.199.123.28/32
-IP-CIDR,52.219.16.127/32
-IP-CIDR,64.23.132.171/32
-IP-CIDR,66.94.0.0/19
