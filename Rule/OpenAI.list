@@ -1,4 +1,6 @@
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-eastus-),(DOMAIN-KEYWORD,.webpubsub.azure.com))
+DOMAIN,ai.google.dev // 网页相关
+DOMAIN,aistudio.google.com // 网页相关
 DOMAIN,api.githubcopilot.com
 DOMAIN,bard.google.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
@@ -6,6 +8,7 @@ DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
 DOMAIN,gemini.google.com
 DOMAIN,imagine.meta.com
+DOMAIN,makersuite.google.com // 网页相关
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,openaiapi-site.azureedge.net
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
