@@ -2,7 +2,7 @@
 DOMAIN,dig.zjurl.cn
 DOMAIN,dig.bdurl.net
 AND,((DOMAIN-SUFFIX,zijieapi.com), (DOMAIN-KEYWORD,ad))
-DOMAIN,is.snssdk.com
+
 DOMAIN-SUFFIX,tsyndicate.com
 DOMAIN-SUFFIX,assistads.net
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
