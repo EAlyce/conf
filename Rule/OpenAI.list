@@ -1,5 +1,6 @@
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-eastus-),(DOMAIN-KEYWORD,.webpubsub.azure.com))
 DOMAIN,ai.google.dev
+DOMAIN,aida.googleapis.com
 DOMAIN,aistudio.google.com
 DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,api.githubcopilot.com
@@ -54,6 +55,7 @@ DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,claude.ai
 DOMAIN-SUFFIX,grazie.ai
+DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
