@@ -108,6 +108,7 @@ IP-ASN,14061,no-resolve
 IP-ASN,20473,no-resolve
 IP-CIDR,160.79.104.0/23,no-resolve
 IP-CIDR,104.238.150.13/32,no-resolve
+IP-CIDR,129.146.3.78/32,no-resolve
 IP-CIDR,143.110.232.239/32,no-resolve
 IP-CIDR,143.198.200.27/32,no-resolve
 IP-CIDR,159.89.204.203/32,no-resolve
