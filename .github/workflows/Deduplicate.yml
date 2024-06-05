@@ -13,7 +13,7 @@ jobs:
 
     - name: Deduplicate Log.list
       run: |
-        sort -u Rule/Log.list -o Rule/Log.list
+        sort -u -o Rule/Log.list Rule/Log.list
 
     - name: Remove Empty Lines
       run: |
@@ -29,10 +29,7 @@ jobs:
       run: |
         git config --global user.email "msosjaahwwj@gmail.com"
         git config --global user.name "Github Action"
-      run: |
         git fetch origin main  # 确保获取最新的 main 分支
         git checkout main  # 确保在 main 分支上
         git add Rule/Log.list  # 添加特定目录中的文件
-        git commit -m "Log Update"
-        git pull origin main --rebase  # 确保最新的更改被拉取并合并
-        git push origin main  # 强制推送到 main 分支
+        git diff --quiet --exit-code -- Rule/Log.list || (git commit -m "Log Update" && git pull origin main --rebase && git push origin main)  # 仅在文件有更改时才提交和推送
