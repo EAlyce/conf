@@ -29,7 +29,7 @@ jobs:
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        git checkout main  # 确保在 main 分支上
         git add -A
         git commit -m "Deduplicate and remove empty lines from Log.list, add DOMAIN-SUFFIX if missing" || exit 0   # 如果没有变化则退出
-        git push origin HEAD:main  # 确保推送到正确的分支
+        git push origin main  # 确保推送到正确的分支
