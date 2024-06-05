@@ -1,4 +1,4 @@
-name: Merge_Global
+name: Merge Proxy
 
 on:
   push:
