@@ -25,6 +25,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add target_file.txt
+          git checkout main
+          cat target_file.txt > Log.list
+          git add Log.list
           git commit -m "Remove duplicates from Log.list"
           git push
