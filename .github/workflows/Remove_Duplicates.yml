@@ -1,12 +1,11 @@
-name: Real-time File Processing
+name: Remove Duplicates
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
-  process_file:
+  remove_duplicates:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -14,19 +13,17 @@ jobs:
 
       - name: Download target file
         run: |
-          curl -sSL -o target_file.txt https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
+          curl -sSL -o Log.list https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
 
       - name: Remove duplicates
         run: |
-          awk '!seen[$0]++' target_file.txt > target_file.tmp
-          mv target_file.tmp target_file.txt
+          awk '!seen[$0]++' Log.list > Log.tmp
+          mv Log.tmp Log.list
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git checkout main
-          cat target_file.txt > Log.list
           git add Log.list
           git commit -m "Remove duplicates from Log.list"
           git push
