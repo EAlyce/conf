@@ -6,6 +6,7 @@ on:
       - main
   schedule:
     - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   deduplicate_and_remove_empty_lines:
@@ -53,22 +54,10 @@ jobs:
         git branch -a  # 确保当前分支正确设置
         git status  # 输出当前状态，供调试使用
 
-    - name: Checkout to main branch
-      run: |
-        git checkout main
-
-    - name: Pull latest changes
-      run: |
-        git pull origin main
-
-    - name: Checkout back to original branch
-      run: |
-        git checkout ${{ github.head_ref }}
-
-    - name: Commit and push
+    - name: Commit and force push to main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git add Rule/Log.list
         git commit -m "自动处理 Log"
-        git push origin main
+        git push origin HEAD:main --force
