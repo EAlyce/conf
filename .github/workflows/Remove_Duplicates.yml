@@ -1,69 +1,30 @@
-name: Remove Duplicate Entries
+name: Real-time File Processing
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"
 
 jobs:
-  merge_domains:
+  process_file:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Download Log.list file
+      - name: Download target file
         run: |
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list > Log.tmp
+          curl -sSL -o target_file.txt https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
 
-      - name: Remove duplicate entries
+      - name: Remove duplicates
         run: |
-          awk '!seen[$0]++' Log.tmp > Log.list
-          rm Log.tmp
+          awk '!seen[$0]++' target_file.txt > target_file.tmp
+          mv target_file.tmp target_file.txt
 
-      - name: Check for changes
-        id: git-check
+      - name: Commit changes
         run: |
-          git diff --quiet || echo "Files have changed"
-
-      - name: Set Git configuration and commit changes
-        if: steps.git-check.outputs.stdout != 'Files have changed'
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const { context, github } = require('@actions/github');
-            const { owner, repo } = context.repo;
-            
-            // Set git configuration
-            await exec('git', ['config', '--global', 'user.email', 'msosjaahwwj@gmail.com']);
-            await exec('git', ['config', '--global', 'user.name', 'Github Action']);
-            
-            // Add and commit changes
-            await exec('git', ['add', 'Rule/Log.list']);
-            await exec('git', ['commit', '-m', 'Remove Duplicate Entries']);
-            
-            // Push changes
-            await exec('git', ['pull', 'origin', 'main', '--ff-only']);
-            await exec('git', ['checkout', '--theirs', '.']);
-            await exec('git', ['add', '.']);
-            await exec('git', ['commit', '-m', 'Auto-resolve merge conflict']);
-            await exec('git', ['push', 'origin', 'main']);
-
-            function exec(command, args) {
-              return new Promise((resolve, reject) => {
-                const { exec } = require('child_process');
-                exec(command + ' ' + args.join(' '), (error, stdout, stderr) => {
-                  if (error) {
-                    console.error(`exec error: ${error}`);
-                    reject(error);
-                    return;
-                  }
-                  console.log(stdout);
-                  resolve(stdout.trim());
-                });
-              });
-            }
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add target_file.txt
+          git commit -m "Remove duplicates from Log.list"
+          git push
