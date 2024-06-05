@@ -14,7 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        ref: main  # 确保使用正确的分支名称
+        ref: ${{ github.ref }}  # 使用当前分支名称
 
     - name: Add DOMAIN-SUFFIX if missing
       run: |
@@ -34,5 +34,5 @@ jobs:
         git config --global user.name "Github Action"
         git add Rule/Log.list
         git commit -m "自动处理 Log"
-        git pull origin main
-        git push origin main --force
+        git pull origin ${{ github.ref }}
+        git push origin ${{ github.ref }} --force
