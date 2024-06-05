@@ -1,0 +1,59 @@
+name: Merge Proxy
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  merge_domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check if curl is installed and install if not
+        run: sudo apt-get install -y curl
+
+      - name: Get domains from source file and merge
+        run: |
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq > Rule/Proxy.list
+
+          curl -sL https://ruleset.skk.moe/List/non_ip/stream.conf |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq >> Rule/Proxy.list
+
+          curl -sL https://ruleset.skk.moe/List/non_ip/cdn.conf |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq >> Rule/Proxy.list
+
+          curl -sL https://ruleset.skk.moe/List/non_ip/global.conf |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq >> Rule/Proxy.list
+
+      - name: Set Git configuration
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "Github Action"
+
+      - name: Commit changes
+        run: |
+          if ! git diff --quiet; then
+            git add Rule/Proxy.list
+            git commit -m "Merge Global_All.list, stream.conf, cdn.conf, and global.conf to Rule/Proxy.list"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
