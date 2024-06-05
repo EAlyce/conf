@@ -32,7 +32,7 @@ jobs:
     - name: Configure Git
       run: |
         git config --global user.email "msosjaahwwj@gmail.com"
-        git config --global user.name "Github Action"
+        git config --global user.name "EAlyce"
         git branch -a  # 确保当前分支正确设置
         git status  # 输出当前状态，供调试使用
 
