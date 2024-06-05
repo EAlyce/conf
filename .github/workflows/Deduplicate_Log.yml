@@ -14,20 +14,37 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        ref: ${{ github.ref }}  # 使用当前分支名称
+        ref: ${{ github.head_ref }}  # 使用当前分支名称
         fetch-depth: 0           # 克隆完整的提交历史
+
+    - name: Display file content before modification
+      run: |
+        cat Rule/Log.list
 
     - name: Remove Empty Lines
       run: |
         sed -i '/^[[:space:]]*$/d' Rule/Log.list
+      continue-on-error: true  # 继续执行，即使命令失败
+
+    - name: Display file content after removing empty lines
+      run: |
+        cat Rule/Log.list
 
     - name: Add DOMAIN-SUFFIX if missing
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
 
+    - name: Display file content after adding DOMAIN-SUFFIX
+      run: |
+        cat Rule/Log.list
+
     - name: Deduplicate Log.list
       run: |
         sort -u -o Rule/Log.list Rule/Log.list
+
+    - name: Display file content after deduplication
+      run: |
+        cat Rule/Log.list
 
     - name: Configure Git
       run: |
@@ -46,7 +63,7 @@ jobs:
 
     - name: Checkout back to original branch
       run: |
-        git checkout ${{ github.ref }}
+        git checkout ${{ github.head_ref }}
 
     - name: Commit and push
       env:
@@ -54,5 +71,4 @@ jobs:
       run: |
         git add Rule/Log.list
         git commit -m "自动处理 Log"
-        git pull origin ${{ github.ref }}
-        git push origin ${{ github.ref }} --force
+        git push origin main
