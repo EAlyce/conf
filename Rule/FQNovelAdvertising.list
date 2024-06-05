@@ -1,45 +1,11 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，可能无法观看抖音
-DOMAIN,dig.zjurl.cn
-DOMAIN,dig.bdurl.net
-AND,((DOMAIN-SUFFIX,zijieapi.com), (DOMAIN-KEYWORD,ad))
-
-DOMAIN-SUFFIX,tsyndicate.com
-DOMAIN-SUFFIX,assistads.net
-DOMAIN-KEYWORD,-ad-sign.byteimg.com
-DOMAIN-KEYWORD,-aliec
-DOMAIN-KEYWORD,-alisc
-DOMAIN-KEYWORD,-applog-lq.fqnovel
-DOMAIN-KEYWORD,-bjlgy
-DOMAIN-KEYWORD,365yg
-DOMAIN-KEYWORD,misc-l
-DOMAIN-KEYWORD,mssdk
-DOMAIN-KEYWORD,snssdk
-DOMAIN-KEYWORD,toutiao
-DOMAIN-SUFFIX,ad.doubleclick.net
-DOMAIN-SUFFIX,applog.zijieapi.com
-DOMAIN-SUFFIX,bdurl.net
-DOMAIN-SUFFIX,bwlcpr.xyz
-DOMAIN-SUFFIX,feedback-c.zijieapi.com
-DOMAIN-SUFFIX,gecko3-lq.zijieapi.com
-DOMAIN-SUFFIX,gecko5-lq.zijieapi.com
-DOMAIN-SUFFIX,imapi5-oth-hl.zijieapi.com
-DOMAIN-SUFFIX,lf-webcast-gr-sourcecdn.bytegecko.com
-DOMAIN-SUFFIX,lf3-pitaya.bytetos.com
-DOMAIN-SUFFIX,ma.zijieapi.com
-DOMAIN-SUFFIX,mon.zijieapi.com
-DOMAIN-SUFFIX,pitaya.bytedance.com
-DOMAIN-SUFFIX,timon.zijieapi.com
-DOMAIN-SUFFIX,tnc11-alisc1.zijieapi.com
-DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
-DOMAIN-SUFFIX,ugsdk.cn
-DOMAIN-SUFFIX,vcs.zijieapi.com
-DOMAIN,ad.zijieapi.com
-URL-REGEX,^http:\/\/sf3-be-pack\.pglstatp-toutiao\.com\/obj\/ad-app-package\/
-AND,((DOMAIN-KEYWORD,ads), (DOMAIN-KEYWORD,normal), (DOMAIN-SUFFIX,zijieapi.com))
 AND,((DOMAIN-KEYWORD,-ad-), (DOMAIN-SUFFIX,byteimg.com))
+AND,((DOMAIN-KEYWORD,ads), (DOMAIN-KEYWORD,normal), (DOMAIN-SUFFIX,zijieapi.com))
 AND,((DOMAIN-KEYWORD,gecko), (DOMAIN-SUFFIX,zijieapi.com))
 AND,((DOMAIN-KEYWORD,minigame), (DOMAIN-SUFFIX,zijieapi.com))
+AND,((DOMAIN-SUFFIX,zijieapi.com), (DOMAIN-KEYWORD,ad))
 DOMAIN,abtest3-misc.zijieapi.com
+DOMAIN,ad.zijieapi.com
 DOMAIN,bsync3-normal.zijieapi.com
 DOMAIN,content-open.douyin.com
 DOMAIN,dig.bdurl.net
@@ -67,3 +33,34 @@ DOMAIN,ug.snssdk.com
 DOMAIN,vcs.zijieapi.com
 DOMAIN,webcast-open.douyin.com
 DOMAIN,zlink.ugsdk.cn
+DOMAIN-KEYWORD,-ad-sign.byteimg.com
+DOMAIN-KEYWORD,-aliec
+DOMAIN-KEYWORD,-alisc
+DOMAIN-KEYWORD,-applog-lq.fqnovel
+DOMAIN-KEYWORD,-bjlgy
+DOMAIN-KEYWORD,365yg
+DOMAIN-KEYWORD,misc-l
+DOMAIN-KEYWORD,mssdk
+DOMAIN-KEYWORD,snssdk
+DOMAIN-KEYWORD,toutiao
+DOMAIN-SUFFIX,ad.doubleclick.net
+DOMAIN-SUFFIX,applog.zijieapi.com
+DOMAIN-SUFFIX,assistads.net
+DOMAIN-SUFFIX,bdurl.net
+DOMAIN-SUFFIX,bwlcpr.xyz
+DOMAIN-SUFFIX,feedback-c.zijieapi.com
+DOMAIN-SUFFIX,gecko3-lq.zijieapi.com
+DOMAIN-SUFFIX,gecko5-lq.zijieapi.com
+DOMAIN-SUFFIX,imapi5-oth-hl.zijieapi.com
+DOMAIN-SUFFIX,lf-webcast-gr-sourcecdn.bytegecko.com
+DOMAIN-SUFFIX,lf3-pitaya.bytetos.com
+DOMAIN-SUFFIX,ma.zijieapi.com
+DOMAIN-SUFFIX,mon.zijieapi.com
+DOMAIN-SUFFIX,pitaya.bytedance.com
+DOMAIN-SUFFIX,timon.zijieapi.com
+DOMAIN-SUFFIX,tnc11-alisc1.zijieapi.com
+DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
+DOMAIN-SUFFIX,tsyndicate.com
+DOMAIN-SUFFIX,ugsdk.cn
+DOMAIN-SUFFIX,vcs.zijieapi.com
+URL-REGEX,^http:\/\/sf3-be-pack\.pglstatp-toutiao\.com\/obj\/ad-app-package\/
