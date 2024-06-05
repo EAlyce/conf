@@ -16,17 +16,15 @@ jobs:
       with:
         ref: main  # 确保使用正确的分支名称
 
-    - name: Deduplicate Log.list
-      run: |
-        sort -u -o Rule/Log.list Rule/Log.list
-
-    - name: Remove Empty Lines
-      run: |
-        sed -i '/^[[:space:]]*$/d' Rule/Log.list
-
     - name: Add DOMAIN-SUFFIX if missing
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
+    - name: Deduplicate Log.list
+      run: |
+        sort -u -o Rule/Log.list Rule/Log.list
+    - name: Remove Empty Lines
+      run: |
+        sed -i '/^[[:space:]]*$/d' Rule/Log.list
 
     - name: Commit and push
       env:
