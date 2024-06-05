@@ -1,0 +1,27 @@
+name: Remove Duplicate Entries
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  remove_duplicates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download Log.list file
+        run: curl -o Log.list https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
+
+      - name: Remove duplicate entries
+        run: awk '!seen[$0]++' Log.list > Log.tmp && mv Log.tmp Log.list
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Log.list
+          git commit -m "Remove duplicate entries"
+          git push
