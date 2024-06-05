@@ -26,11 +26,12 @@ jobs:
       - name: Get domains from source file
         run: |
           curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Proxy.tmp
+          curl -s https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list | grep -v '^#' | grep -v '^$' | sort | uniq > Log.tmp
 
-      - name: Merge with existing Proxy.list
+      - name: Merge 
         run: |
           if [ -f "Rule/Proxy.list" ]; then
-            cat Rule/Proxy.list Proxy.tmp | sort | uniq > Rule/Proxy.tmp
+            cat Rule/Proxy.list Proxy.tmp Log.tmp | sort | uniq > Rule/Proxy.tmp
             mv Rule/Proxy.tmp Rule/Proxy.list
           else
             mv Proxy.tmp Rule/Proxy.list
