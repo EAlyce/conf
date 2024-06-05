@@ -1,6 +1,11 @@
 name: Deduplicate Log
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 * * * *"
 
 jobs:
   deduplicate_and_remove_empty_lines:
