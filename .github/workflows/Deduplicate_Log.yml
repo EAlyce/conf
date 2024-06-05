@@ -36,7 +36,15 @@ jobs:
         git branch -a  # 确保当前分支正确设置
         git status  # 输出当前状态，供调试使用
 
-    - name: Checkout to sync branch
+    - name: Checkout to main branch
+      run: |
+        git checkout main
+
+    - name: Pull latest changes
+      run: |
+        git pull origin main
+
+    - name: Checkout back to original branch
       run: |
         git checkout ${{ github.ref }}
 
