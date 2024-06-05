@@ -35,15 +35,15 @@ jobs:
           mkdir -p Rule
 
       - name: Merge with existing Rule/Proxy.list
-        run: |
-          if [ -f "Rule/Proxy.list" ]; then
-            cat Rule/Proxy.list Proxy.tmp Log.tmp | sort | uniq > Rule/Proxy.tmp
-            mv Rule/Proxy.tmp Rule/Proxy.list
-          else
-            mv Proxy.tmp Rule/Proxy.list
-          fi
-          rm Log.tmp
-
+  run: |
+    if [ -f "Rule/Proxy.list" ]; then
+      cat Rule/Proxy.list Proxy.tmp Log.tmp | sort | uniq > Rule/Proxy.tmp
+      mv Rule/Proxy.tmp Rule/Proxy.list
+    else
+      mv Proxy.tmp Rule/Proxy.list
+    fi
+    rm Log.tmp
+    git add Proxy.tmp  # 将新增的文件添加到暂存区
       - name: Set Git configuration
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
