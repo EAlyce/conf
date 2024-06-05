@@ -25,7 +25,7 @@ jobs:
 
       - name: Get domains from source files
         run: |
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list?$(date +%s) | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
       
       - name: Add DOMAIN-SUFFIX prefix
         run: |
@@ -33,25 +33,26 @@ jobs:
 
       - name: Merge with existing Rule/Log.list
         run: |
-          cat Logsource.list.tmp | sort | uniq >> Rule/Log.list
-          sed -i 's/, /,/g' Rule/Log.list
-          cat Rule/Log.list  # 调试信息：显示合并后的文件内容
+          while IFS= read -r line; do
+            echo "DOMAIN-SUFFIX,$line" >> Rule/Log.list
+          done < Logsource.list.tmp
+          sort -o Rule/Log.list Rule/Log.list  # 自动排序
 
       - name: Check for changes
         id: git-check
         run: |
-          git diff --quiet || echo "Files have changed"
+          git diff --exit-code || echo "Files have changed"
           git status  # 调试信息：显示当前 Git 状态
 
       - name: Set Git configuration
-        if: steps.git-check.outputs.stdout != 'Files have changed'
+        if: steps.git-check.outputs.exit-code != 0
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "Github Action"
           git config --global user.email  # 调试信息：显示配置的 Git 用户邮箱
 
       - name: Commit changes
-        if: steps.git-check.outputs.stdout != 'Files have changed'
+        if: steps.git-check.outputs.exit-code != 0
         run: |
           git add Rule/Log.list
           git diff --cached --quiet || git commit -m "Merge Log"
