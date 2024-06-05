@@ -23,19 +23,19 @@ jobs:
               sudo apt-get install -y curl
           fi
 
-     - name: Get domains from source files
-  run: |
-    curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
-    
-- name: Add DOMAIN-SUFFIX prefix
-  run: |
-    sed -i 's/^/DOMAIN-SUFFIX,/' Logsource.list.tmp
-    
-- name: Merge with existing Rule/Log.list
-  run: |
-    cat Logsource.list.tmp | sort | uniq >> Rule/Log.list
-    sed -i 's/, /,/g' Rule/Log.list
-    cat Rule/Log.list  # 调试信息：显示合并后的文件内容
+      - name: Get domains from source files
+        run: |
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
+      
+      - name: Add DOMAIN-SUFFIX prefix
+        run: |
+          sed -i 's/^/DOMAIN-SUFFIX,/' Logsource.list.tmp
+
+      - name: Merge with existing Rule/Log.list
+        run: |
+          cat Logsource.list.tmp | sort | uniq >> Rule/Log.list
+          sed -i 's/, /,/g' Rule/Log.list
+          cat Rule/Log.list  # 调试信息：显示合并后的文件内容
 
       - name: Check for changes
         id: git-check
