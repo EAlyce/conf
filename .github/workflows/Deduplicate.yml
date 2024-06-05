@@ -33,6 +33,6 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git checkout main  # 确保在 main 分支上
-        git add -A
+        git add Rule/Log.list
         git commit -m "处理Log"
         git push origin main  # 确保推送到正确的分支
