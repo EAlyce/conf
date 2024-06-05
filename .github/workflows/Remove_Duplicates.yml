@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download Log.list file
         run: curl -o Log.list https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
@@ -24,4 +24,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add Log.list
           git commit -m "Remove duplicate entries"
-          git push
+          git push origin main
