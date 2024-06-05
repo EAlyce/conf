@@ -16,21 +16,29 @@ jobs:
       with:
         ref: ${{ github.ref }}  # 使用当前分支名称
         fetch-depth: 0           # 克隆完整的提交历史
+
     - name: Remove Empty Lines
       run: |
         sed -i '/^[[:space:]]*$/d' Rule/Log.list
+
     - name: Add DOMAIN-SUFFIX if missing
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
+
     - name: Deduplicate Log.list
       run: |
         sort -u -o Rule/Log.list Rule/Log.list
+
     - name: Configure Git
       run: |
         git config --global user.email "msosjaahwwj@gmail.com"
         git config --global user.name "Github Action"
         git branch -a  # 确保当前分支正确设置
         git status  # 输出当前状态，供调试使用
+
+    - name: Checkout to sync branch
+      run: |
+        git checkout ${{ github.ref }}
 
     - name: Commit and push
       env:
