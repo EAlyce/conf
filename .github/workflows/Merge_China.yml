@@ -16,21 +16,16 @@ jobs:
 
       - name: Check if curl is installed
         run: |
-          if ! command -v curl &> /dev/null
-          then
-              echo "curl is not installed, installing..."
-              sudo apt-get update
-              sudo apt-get install -y curl
-          fi
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       - name: Get domains from source file
         run: |
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > DIRECT.tmp
-          curl -sL https://raw.githubusercontent.com/Blankwonder/surge-list/master/cn.list | grep -v '^#' | grep -v '^$' | sort | uniq >> DIRECT.tmp
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/DIRECT.tmp
 
       - name: Merge with existing DIRECT.list
         run: |
-          mv DIRECT.tmp Rule/DIRECT.list
+          mv Rule/DIRECT.tmp Rule/DIRECT.list
 
       - name: Set Git configuration
         run: |
@@ -40,9 +35,9 @@ jobs:
       - name: Commit changes
         run: |
           git add Rule/DIRECT.list
-          if [[ -n $(git status -s) ]]; then
-            git commit -m "Merge China_All.list to Rule/DIRECT.list"
-            git push origin main
-          else
+          if git diff --quiet; then
             echo "No changes to commit"
+          else
+            git commit -m "合并DIRECT完成"
+            git push origin main
           fi
