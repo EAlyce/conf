@@ -1,10 +1,14 @@
 
 DEST-PORT,22
 DEST-PORT,53
-
-# > 邮箱服务默认端口
-OR,((DEST-PORT,995), (DEST-PORT,993), (DEST-PORT,587), (DEST-PORT,465), (DEST-PORT,143), (DEST-PORT,110), (DEST-PORT,109), (DEST-PORT,25))
-
+DEST-PORT,995
+DEST-PORT,993
+DEST-PORT,587
+DEST-PORT,465
+DEST-PORT,143
+DEST-PORT,110
+DEST-PORT,109
+DEST-PORT,25
 DOMAIN-KEYWORD,1password
 DOMAIN-KEYWORD,htx
 DOMAIN-KEYWORD,amazonaws
@@ -96,7 +100,7 @@ DOMAIN-SUFFIX,epochtimes.com
 DOMAIN-SUFFIX,epochtimes.org
 DOMAIN-SUFFIX,epochweekly.org
 DOMAIN-SUFFIX,erabaru.org
-DOMAIN-SUFFIX,events.statsigapi.net
+DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,falunaz.org
 DOMAIN-SUFFIX,falundafa.org
 DOMAIN-SUFFIX,falungong.org
@@ -105,7 +109,7 @@ DOMAIN-SUFFIX,fgmtv.org
 DOMAIN-SUFFIX,fortune.com
 DOMAIN-SUFFIX,ft.com
 DOMAIN-SUFFIX,geetest.com
-DOMAIN-SUFFIX,host.livekit.cloud
+DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,hostloc.com
 DOMAIN-SUFFIX,hrichina.org
 DOMAIN-SUFFIX,hrw.org
@@ -201,7 +205,6 @@ DOMAIN-SUFFIX,washingtonpost.com
 DOMAIN-SUFFIX,weijingsheng.org
 DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,woodpeckerlog.com
-DOMAIN-SUFFIX,workingcopyapp.com
 DOMAIN-SUFFIX,worldjournal.com
 DOMAIN-SUFFIX,wsj.com
 DOMAIN-SUFFIX,wujieliulan.org
@@ -211,5 +214,4 @@ DOMAIN-SUFFIX,xizang-zhiye.org
 DOMAIN-SUFFIX,ycombinator.com
 DOMAIN-SUFFIX,zaobao.com
 DOMAIN-SUFFIX,zhengjian.org
-DOMAIN-SUFFIX,.org
 DOMAIN-SUFFIX,zhuichaguoji.org
