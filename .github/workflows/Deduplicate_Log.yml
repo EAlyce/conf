@@ -31,12 +31,17 @@ jobs:
     - name: Commit and push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的 GITHUB_TOKEN
-      run: |
-        git config --global user.email "msosjaahwwj@gmail.com"
-        git config --global user.name "Github Action"
-        git fetch origin main  # 确保获取最新的 main 分支
-        git checkout main  # 确保在 main 分支上
-        git add Rule/Log.list  # 添加特定目录中的文件
-        git commit -m "Log Update"
-        git pull origin main --rebase  # 确保最新的更改被拉取并合并
-        git push origin main  # 强制推送到 main 分支
+      - name: Set Git configuration
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "Github Action"
+
+      - name: Commit changes
+        run: |
+          if ! git diff --quiet; then
+            git add Rule/Proxy.list
+            git commit -m "自动处理 Log.list"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi

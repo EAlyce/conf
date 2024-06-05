@@ -52,7 +52,7 @@ jobs:
         run: |
           if ! git diff --quiet; then
             git add Rule/Proxy.list
-            git commit -m "Merge Global_All.list, stream.conf, cdn.conf, and global.conf to Rule/Proxy.list"
+            git commit -m "Merge Proxy.list"
             git push origin main
           else
             echo "No changes to commit"
