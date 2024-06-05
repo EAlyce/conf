@@ -15,25 +15,24 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Log.list file
-        run: curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list > Log.tmp
+        run: |
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list > Log.tmp
 
       - name: Remove duplicate entries
-        run: awk '!seen[$0]++' Log.tmp > Log.list
+        run: |
+          awk '!seen[$0]++' Log.tmp > Log.list
+          rm Log.tmp
 
       - name: Check for changes
         id: git-check
         run: |
           git diff --quiet || echo "Files have changed"
 
-      - name: Set Git configuration
+      - name: Set Git configuration and commit changes
         if: steps.git-check.outputs.stdout != 'Files have changed'
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "Github Action"
-
-      - name: Commit changes
-        if: steps.git-check.outputs.stdout != 'Files have changed'
-        run: |
           git add Rule/Log.list
           git diff --cached --quiet || git commit -m "Remove Duplicate Entries"
           git pull origin main --ff-only || echo "Merge conflict"
