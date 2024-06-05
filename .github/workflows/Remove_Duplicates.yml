@@ -36,4 +36,8 @@ jobs:
         run: |
           git add Rule/Log.list
           git diff --cached --quiet || git commit -m "Remove Duplicate Entries"
-          git push -f origin main
+          git pull origin main --ff-only || echo "Merge conflict"
+          git checkout --theirs .
+          git add .
+          git commit -m "Auto-resolve merge conflict"
+          git push origin main
