@@ -8,6 +8,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: main  # 确保使用正确的分支名称
 
     - name: Deduplicate Log.list
       run: |
@@ -26,5 +28,5 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add -A
-        git commit -m "自动处理Log文件" || exit 0   # 如果没有变化则退出
-        git push
+        git commit -m "Deduplicate and remove empty lines from Log.list, add DOMAIN-SUFFIX if missing" || exit 0   # 如果没有变化则退出
+        git push origin main  # 确保推送到正确的分支
