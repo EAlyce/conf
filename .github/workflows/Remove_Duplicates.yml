@@ -20,6 +20,10 @@ jobs:
           awk '!seen[$0]++' Log.list > Log.tmp
           mv Log.tmp Log.list
 
+      - name: Pull latest changes
+        run: |
+          git pull origin main
+
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
