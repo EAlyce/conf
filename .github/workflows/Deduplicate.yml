@@ -24,9 +24,12 @@ jobs:
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
 
     - name: Commit and push if changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的 GITHUB_TOKEN
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
         git add -A
         git commit -m "Deduplicate and remove empty lines from Log.list, add DOMAIN-SUFFIX if missing" || exit 0   # 如果没有变化则退出
-        git push origin main  # 确保推送到正确的分支
+        git push origin HEAD:main  # 确保推送到正确的分支
