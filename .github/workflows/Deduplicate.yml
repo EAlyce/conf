@@ -23,7 +23,7 @@ jobs:
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
 
-    - name: Commit and push if changes
+    - name: Commit and push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的 GITHUB_TOKEN
       run: |
@@ -32,4 +32,6 @@ jobs:
         git fetch origin main  # 确保获取最新的 main 分支
         git checkout main  # 确保在 main 分支上
         git add Rule/Log.list  # 添加特定目录中的文件
-        git diff --quiet --exit-code -- Rule/Log.list || (git commit -m "Log Update" && git pull origin main --rebase && git push origin main)  # 仅在文件有更改时才提交和推送
+        git commit -m "Log Update"
+        git pull origin main --rebase  # 确保最新的更改被拉取并合并
+        git push origin main  # 强制推送到 main 分支
