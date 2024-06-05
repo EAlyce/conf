@@ -28,15 +28,13 @@ jobs:
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
 
-- name: Commit and push
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  run: |
-    git config --global user.email "msosjaahwwj@gmail.com"
-    git config --global user.name "Github Action"
-    git fetch origin main
-    git checkout -B main origin/main
-    git add Rule/Log.list
-    git commit -m "自动处理 Log"
-    git pull origin main --rebase
-    git push origin main --force
+    - name: Commit and push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.email "msosjaahwwj@gmail.com"
+        git config --global user.name "Github Action"
+        git add Rule/Log.list
+        git commit -m "自动处理 Log"
+        git pull origin main
+        git push origin main --force
