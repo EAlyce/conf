@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 * * * *"
+    - cron: '0 * * * *'
 
 jobs:
   merge_domains:
@@ -14,46 +14,64 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check if curl is installed
+      - name: Check if curl is installed and install if not
         run: |
-          if ! command -v curl &> /dev/null
-          then
+          if ! command -v curl &> /dev/null; then
               echo "curl is not installed, installing..."
               sudo apt-get update
               sudo apt-get install -y curl
+          else
+              echo "curl is already installed"
           fi
 
-      - name: Get domains from source files
+      - name: Get domains from source file
         run: |
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list?$(date +%s) | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
-      
-      - name: Add DOMAIN-SUFFIX prefix
-        run: |
-          sed -i 's/^/DOMAIN-SUFFIX,/' Logsource.list.tmp
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq > Log.tmp
 
-      - name: Merge with existing Rule/Log.list
-        run: |
-          while IFS= read -r line; do
-            echo "DOMAIN-SUFFIX,$line" >> Rule/Log.list
-          done < Logsource.list.tmp
-          sort -o Rule/Log.list Rule/Log.list  # 自动排序
+      - name: Ensure Rule directory exists
+        run: mkdir -p Rule
 
-      - name: Check for changes
-        id: git-check
+      - name: Merge with existing Rule/Proxy.list
         run: |
-          git diff --exit-code || echo "Files have changed"
-          git status  # 调试信息：显示当前 Git 状态
+          if [ -f "Rule/Proxy.list" ]; then
+            cat Rule/Proxy.list Log.tmp | sort | uniq > Rule/Proxy.tmp
+            mv Rule/Proxy.tmp Rule/Proxy.list
+          else
+            mv Log.tmp Rule/Proxy.list
+          fi
+          rm Log.tmp
+          git add Rule/Proxy.list
+
+      - name: Process and append Logsource list to Log list
+        run: |
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq > Logsource.tmp
+
+          if [ -s "Logsource.tmp" ]; then
+            echo "" >> Rule/Log.list
+            cat Logsource.tmp >> Rule/Log.list
+          fi
+
+          rm Logsource.tmp
+          git add Rule/Log.list
 
       - name: Set Git configuration
-        if: steps.git-check.outputs.exit-code != 0
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
           git config --global user.name "Github Action"
-          git config --global user.email  # 调试信息：显示配置的 Git 用户邮箱
 
       - name: Commit changes
-        if: steps.git-check.outputs.exit-code != 0
         run: |
-          git add Rule/Log.list
-          git diff --cached --quiet || git commit -m "Merge Log"
-          git push -f origin main
+          if ! git diff --quiet; then
+            git commit -m "Merge Logsource.list to Rule/Proxy.list and append Logsource.list to Log.list"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
