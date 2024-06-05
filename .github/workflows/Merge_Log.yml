@@ -25,7 +25,7 @@ jobs:
 
       - name: Get domains from source files
         run: |
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Logsource.list?$(date +%s) | grep -v '^#' | grep -v '^$' | sort | uniq > Logsource.list.tmp
       
       - name: Add DOMAIN-SUFFIX prefix
         run: |
@@ -33,8 +33,9 @@ jobs:
 
       - name: Merge with existing Rule/Log.list
         run: |
-          cat Logsource.list.tmp | sort | uniq >> Rule/Log.list
-          sed -i 's/, /,/g' Rule/Log.list
+          while IFS= read -r line; do
+            echo "DOMAIN-SUFFIX,$line" >> Rule/Log.list
+          done < Logsource.list.tmp
           sort -o Rule/Log.list Rule/Log.list  # 自动排序
 
       - name: Check for changes
