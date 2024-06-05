@@ -25,8 +25,8 @@ jobs:
 
       - name: Get domains from source file
         run: |
-          curl -s https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Proxy.tmp
-          curl -s https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list | grep -v '^#' | grep -v '^$' | sort | uniq > Log.tmp
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Proxy.tmp
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list | grep -v '^#' | grep -v '^$' | sort | uniq > Log.tmp
 
       - name: Merge 
         run: |
