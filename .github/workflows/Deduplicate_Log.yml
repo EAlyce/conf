@@ -15,21 +15,28 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}  # 使用当前分支名称
-    - name: 删除空行
-      run: |
-        sed -i '/^[[:space:]]*$/d' Rule/Log.list
-    - name: 添加前缀
+
+    - name: Add DOMAIN-SUFFIX if missing
       run: |
         awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
-    - name: 去重
+    - name: Deduplicate Log.list
       run: |
         sort -u -o Rule/Log.list Rule/Log.list
+    - name: Remove Empty Lines
+      run: |
+        sed -i '/^[[:space:]]*$/d' Rule/Log.list
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "msosjaahwwj@gmail.com"
+        git config --global user.name "Github Action"
+        git branch -a  # 确保当前分支正确设置
+        git status  # 输出当前状态，供调试使用
+
     - name: Commit and push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config --global user.email "msosjaahwwj@gmail.com"
-        git config --global user.name "Github Action"
         git add Rule/Log.list
         git commit -m "自动处理 Log"
         git pull origin ${{ github.ref }}
