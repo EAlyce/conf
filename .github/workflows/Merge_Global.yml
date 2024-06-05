@@ -14,10 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check if curl is installed
+      - name: Check if curl is installed and install if not
         run: |
-          if ! command -v curl &> /dev/null
-          then
+          if ! command -v curl &> /dev/null; then
               echo "curl is not installed, installing..."
               sudo apt-get update
               sudo apt-get install -y curl
@@ -27,23 +26,32 @@ jobs:
 
       - name: Get domains from source file
         run: |
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Proxy.tmp
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list | grep -v '^#' | grep -v '^$' | sort | uniq > Log.tmp
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq > Proxy.tmp
+
+          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list |
+          grep -v '^#' |
+          grep -v '^$' |
+          sort |
+          uniq > Log.tmp
 
       - name: Ensure Rule directory exists
-        run: |
-          mkdir -p Rule
+        run: mkdir -p Rule
 
       - name: Merge with existing Rule/Proxy.list
-  run: |
-    if [ -f "Rule/Proxy.list" ]; then
-      cat Rule/Proxy.list Proxy.tmp Log.tmp | sort | uniq > Rule/Proxy.tmp
-      mv Rule/Proxy.tmp Rule/Proxy.list
-    else
-      mv Proxy.tmp Rule/Proxy.list
-    fi
-    rm Log.tmp
-    git add Proxy.tmp  # 将新增的文件添加到暂存区
+        run: |
+          if [ -f "Rule/Proxy.list" ]; then
+            cat Rule/Proxy.list Proxy.tmp Log.tmp | sort | uniq > Rule/Proxy.tmp
+            mv Rule/Proxy.tmp Rule/Proxy.list
+          else
+            mv Proxy.tmp Rule/Proxy.list
+          fi
+          rm Log.tmp
+          git add Rule/Proxy.list
+
       - name: Set Git configuration
         run: |
           git config --global user.email "msosjaahwwj@gmail.com"
@@ -51,8 +59,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          if [[ -n $(git status -s) ]]; then
-            git add Rule/Proxy.list
+          if ! git diff --quiet; then
             git commit -m "Merge Global_All.list to Rule/Proxy.list"
             git push origin main
           else
