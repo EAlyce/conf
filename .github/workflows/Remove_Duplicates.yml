@@ -4,24 +4,36 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: "0 * * * *"
 
 jobs:
-  remove_duplicates:
+  merge_domains:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Download Log.list file
-        run: curl -o Log.list https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list
+        run: curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Log.list > Log.tmp
 
       - name: Remove duplicate entries
-        run: awk '!seen[$0]++' Log.list > Log.tmp && mv Log.tmp Log.list
+        run: awk '!seen[$0]++' Log.tmp > Log.list
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet || echo "Files have changed"
+
+      - name: Set Git configuration
+        if: steps.git-check.outputs.stdout != 'Files have changed'
+        run: |
+          git config --global user.email "msosjaahwwj@gmail.com"
+          git config --global user.name "Github Action"
 
       - name: Commit changes
+        if: steps.git-check.outputs.stdout != 'Files have changed'
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add Log.list
-          git commit -m "Remove duplicate entries"
-          git push origin main
+          git add Rule/Log.list
+          git diff --cached --quiet || git commit -m "Remove Duplicate Entries"
+          git push -f origin main

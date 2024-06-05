@@ -25,8 +25,8 @@ jobs:
 
       - name: Get domains from source files
         run: |
-          curl -s https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > apple_cdn.conf.tmp
-          curl -s https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > apple_services.conf.tmp
+          curl -sL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > apple_cdn.conf.tmp
+          curl -sL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > apple_services.conf.tmp
           curl -sL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Apple_All.list.tmp
 
       - name: Merge with existing Rule/Apple.list
