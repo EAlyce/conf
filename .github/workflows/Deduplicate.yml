@@ -1,0 +1,22 @@
+name: Deduplicate Log.list
+
+on: [push]
+
+jobs:
+  deduplicate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deduplicate Log.list
+      run: |
+        sort -u Rule/Log.list -o Rule/Log.list
+
+    - name: Commit and push if changes
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add -A
+        git commit -m "Deduplicate Log.list" || exit 0   # 如果没有变化则退出
+        git push
