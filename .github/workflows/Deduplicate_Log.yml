@@ -12,52 +12,52 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.head_ref }}  # 使用当前分支名称
-        fetch-depth: 0           # 克隆完整的提交历史
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}  # 使用当前分支名称
+          fetch-depth: 0           # 克隆完整的提交历史
 
-    - name: Display file content before modification
-      run: |
-        cat Rule/Log.list
+      - name: Display file content before modification
+        run: |
+          cat Rule/Log.list
 
-    - name: Remove Empty Lines
-      run: |
-        sed -i '/^[[:space:]]*$/d' Rule/Log.list
-      continue-on-error: true  # 继续执行，即使命令失败
+      - name: Remove Empty Lines
+        run: |
+          sed -i '/^[[:space:]]*$/d' Rule/Log.list
+        continue-on-error: true  # 继续执行，即使命令失败
 
-    - name: Display file content after removing empty lines
-      run: |
-        cat Rule/Log.list
+      - name: Display file content after removing empty lines
+        run: |
+          cat Rule/Log.list
 
-    - name: Add DOMAIN-SUFFIX if missing
-      run: |
-        awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
+      - name: Add DOMAIN-SUFFIX if missing
+        run: |
+          awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
 
-    - name: Display file content after adding DOMAIN-SUFFIX
-      run: |
-        cat Rule/Log.list
+      - name: Display file content after adding DOMAIN-SUFFIX
+        run: |
+          cat Rule/Log.list
 
-    - name: Deduplicate Log.list
-      run: |
-        sort -u -o Rule/Log.list Rule/Log.list
+      - name: Deduplicate Log.list
+        run: |
+          sort -u -o Rule/Log.list Rule/Log.list
 
-    - name: Display file content after deduplication
-      run: |
-        cat Rule/Log.list
+      - name: Display file content after deduplication
+        run: |
+          cat Rule/Log.list
 
-    - name: Configure Git
-      run: |
-        git config --global user.email "msosjaahwwj@gmail.com"
-        git config --global user.name "EAlyce"
-        git branch -a  # 确保当前分支正确设置
-        git status  # 输出当前状态，供调试使用
+      - name: Configure Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git branch -a  # 确保当前分支正确设置
+          git status  # 输出当前状态，供调试使用
 
-    - name: Commit and force push to main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git add Rule/Log.list
-        git commit -m "自动处理 Log"
-        git push origin HEAD:main --force
+      - name: Commit and force push to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add Rule/Log.list
+          git commit -m "Automatically process Log"
+          git push origin HEAD:main --force
