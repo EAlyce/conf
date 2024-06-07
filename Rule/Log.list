@@ -2,15 +2,9 @@ DOMAIN-SUFFIX,1rx.io
 DOMAIN-SUFFIX,3lift.com
 DOMAIN-SUFFIX,86uk.com
 DOMAIN-SUFFIX,a-mx.com
-DOMAIN-SUFFIX,ad.gt
-DOMAIN-SUFFIX,audrte.com
-DOMAIN-SUFFIX,sportradarserving.com
-DOMAIN-SUFFIX,tribalfusion.com
-DOMAIN-SUFFIX,vidoomy.com
 DOMAIN-SUFFIX,abtasty.com
 DOMAIN-SUFFIX,ad-delivery.net
 DOMAIN-SUFFIX,ad.gt
-DOMAIN-SUFFIX,turn.com
 DOMAIN-SUFFIX,adform.net
 DOMAIN-SUFFIX,adingo.jp
 DOMAIN-SUFFIX,adition.com
@@ -18,11 +12,6 @@ DOMAIN-SUFFIX,adjust.com
 DOMAIN-SUFFIX,admanmedia.com
 DOMAIN-SUFFIX,adnxs.com
 DOMAIN-SUFFIX,adroll.com
-DOMAIN-SUFFIX,betweendigital.com
-DOMAIN-SUFFIX,pubmatic.com
-DOMAIN-SUFFIX,travelaudience.com
-DOMAIN-SUFFIX,e-planning.net
-DOMAIN-SUFFIX,yieldmo.com
 DOMAIN-SUFFIX,adsafeprotected.com
 DOMAIN-SUFFIX,adsrvr.org
 DOMAIN-SUFFIX,affiliates.bybit.cloud
@@ -44,9 +33,11 @@ DOMAIN-SUFFIX,api3.byd3c3.com
 DOMAIN-SUFFIX,appier.net
 DOMAIN-SUFFIX,applovin.com
 DOMAIN-SUFFIX,appsflyersdk.com
+DOMAIN-SUFFIX,audrte.com
 DOMAIN-SUFFIX,ayxbk.com
 DOMAIN-SUFFIX,b1sync.zemanta.com
 DOMAIN-SUFFIX,behaviour.surfshark.events
+DOMAIN-SUFFIX,betweendigital.com
 DOMAIN-SUFFIX,bh.contextweb.com
 DOMAIN-SUFFIX,bidswitch.net
 DOMAIN-SUFFIX,bitderiv.com
@@ -112,6 +103,7 @@ DOMAIN-SUFFIX,dotomi.com
 DOMAIN-SUFFIX,dps.jp.cinarra.com
 DOMAIN-SUFFIX,dsum-sec.casalemedia.com
 DOMAIN-SUFFIX,dt.adsafeprotected.com
+DOMAIN-SUFFIX,e-planning.net
 DOMAIN-SUFFIX,eb2.3lift.com
 DOMAIN-SUFFIX,ekiga.net
 DOMAIN-SUFFIX,engage7.com
@@ -258,6 +250,7 @@ DOMAIN-SUFFIX,simpli.fi
 DOMAIN-SUFFIX,smartadserver.com
 DOMAIN-SUFFIX,sonobi.com
 DOMAIN-SUFFIX,spadsync.com
+DOMAIN-SUFFIX,sportradarserving.com
 DOMAIN-SUFFIX,springserve.com
 DOMAIN-SUFFIX,ssbsync-us.smartadserver.com
 DOMAIN-SUFFIX,ssbsync.smartadserver.com
@@ -301,6 +294,8 @@ DOMAIN-SUFFIX,tlx.3lift.com
 DOMAIN-SUFFIX,tma.org.tw
 DOMAIN-SUFFIX,token.rubiconproject.com
 DOMAIN-SUFFIX,trackingplan.com
+DOMAIN-SUFFIX,travelaudience.com
+DOMAIN-SUFFIX,tribalfusion.com
 DOMAIN-SUFFIX,truoptik.com
 DOMAIN-SUFFIX,tsu.tw
 DOMAIN-SUFFIX,turn.com
