@@ -37,18 +37,16 @@ jobs:
           sed -i 's/, /,/g' Rule/OpenAI.list
           cat Rule/OpenAI.list  # 调试信息：显示合并后的文件内容
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          git diff --quiet || echo "Files have changed"
-          git status  # 调试信息：显示当前 Git 状态
-
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
           git branch -a
           git status
+
+      - name: Check for changes
+        run: |
+          git diff --exit-code || exit 0
 
       - name: Commit and force push to main
         env:
