@@ -4,24 +4,29 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
 
 jobs:
-  merge_domains:
+  deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - name: Update package lists
-        run: sudo apt-get update
+      - uses: actions/checkout@v4
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Check if curl is installed and install if not
-        run: sudo apt-get install -y curl
-
+      - name: Delay for 10 seconds
+        run: sleep 10
+        
+      - name: Ensure curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl could not be found, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          else
+              echo "curl is already installed"
+          fi
+          
       - name: Get domains from source file and merge
+      
         run: |
           cd Rule
           curl -sfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |

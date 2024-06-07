@@ -4,26 +4,27 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
 
 jobs:
-  merge_domains:
+  deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Check if curl is installed
+      - name: Delay for 10 seconds
+        run: sleep 10
+
+      - name: Ensure curl is installed
         run: |
           if ! command -v curl &> /dev/null
           then
-              echo "curl is not installed, installing..."
+              echo "curl could not be found, installing..."
               sudo apt-get update
               sudo apt-get install -y curl
+          else
+              echo "curl is already installed"
           fi
-
+          
       - name: Get domains from source files
         run: |
           curl -sL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > apple_cdn.conf.tmp

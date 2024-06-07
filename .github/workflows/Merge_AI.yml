@@ -4,16 +4,15 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
 
 jobs:
-  merge_domains:
+  deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Delay for 10 seconds
+        run: sleep 10
 
       - name: Check if curl is installed
         run: |
