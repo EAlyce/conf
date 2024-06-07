@@ -1,23 +1,3 @@
-cdn.ss-cdn.com
-behaviour.surfshark.events
-
-www.turingfraud.net
-
-www.turingfraud.net
-
-allocproxylist-prod.callback-api.io
-
-imp-adedge.i-mobile.co.jp
-
-ssp-bidapi.i-mobile.co.jp
-
-j.amoad.com
-
-n.amoad.com
-
-ssp-sync.i-mobile.co.jp
-
-
 DOMAIN-SUFFIX,1rx.io
 DOMAIN-SUFFIX,3lift.com
 DOMAIN-SUFFIX,86uk.com
@@ -183,7 +163,9 @@ DOMAIN-SUFFIX,imagedelivery.net
 DOMAIN-SUFFIX,img88.tuky889900.com
 DOMAIN-SUFFIX,imgoss1010.top
 DOMAIN-SUFFIX,imgoss1010.top cooann.top
+DOMAIN-SUFFIX,imp-adedge.i-mobile.co.jp
 DOMAIN-SUFFIX,ipac.ctnsnet.com
+DOMAIN-SUFFIX,j.amoad.com
 DOMAIN-SUFFIX,jadserve.postrelease.com
 DOMAIN-SUFFIX,jtezxmpb.xyz
 DOMAIN-SUFFIX,kinhrobot.com
@@ -207,6 +189,7 @@ DOMAIN-SUFFIX,microsoft.com
 DOMAIN-SUFFIX,mmn712.top
 DOMAIN-SUFFIX,mmn712.top 
 DOMAIN-SUFFIX,mokexapp.com
+DOMAIN-SUFFIX,n.amoad.com
 DOMAIN-SUFFIX,office.com
 DOMAIN-SUFFIX,oklink.com
 DOMAIN-SUFFIX,onetag-sys.com
@@ -279,6 +262,8 @@ DOMAIN-SUFFIX,springserve.com
 DOMAIN-SUFFIX,ssbsync-us.smartadserver.com
 DOMAIN-SUFFIX,ssbsync.smartadserver.com
 DOMAIN-SUFFIX,ssc-cms.33across.com
+DOMAIN-SUFFIX,ssp-bidapi.i-mobile.co.jp
+DOMAIN-SUFFIX,ssp-sync.i-mobile.co.jp
 DOMAIN-SUFFIX,ssp.api.tappx.com
 DOMAIN-SUFFIX,ssum-sec.casalemedia.com
 DOMAIN-SUFFIX,ssum.casalemedia.com
