@@ -45,16 +45,16 @@ jobs:
           git diff --quiet || echo "Files have changed"
           git status  # 调试信息：显示当前 Git 状态
 
-      - name: Set Git configuration
-        if: steps.git-check.outputs.stdout != 'Files have changed'
+      - name: Configure Git
         run: |
-          git config --global user.email "msosjaahwwj@gmail.com"
-          git config --global user.name "Github Action"
-          git config --global user.email  # 调试信息：显示配置的 Git 用户邮箱
-
-      - name: Commit changes
-        if: steps.git-check.outputs.stdout != 'Files have changed'
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git branch -a
+          git status
+      - name: Commit and force push to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/OpenAI.list
-          git diff --cached --quiet || git commit -m "Merge OpenAI lists to Rule/OpenAI.list"
-          git push -f origin main
+          git commit -m "OpenAI"
+          git push origin HEAD:main --force

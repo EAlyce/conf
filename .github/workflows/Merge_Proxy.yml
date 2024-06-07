@@ -48,18 +48,16 @@ jobs:
           sort |
           uniq >> Proxy.list
 
-      - name: Set Git configuration
+      - name: Configure Git
         run: |
-          git config --global user.email "msosjaahwwj@gmail.com"
-          git config --global user.name "Github Action"
-
-      - name: Commit changes
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git branch -a
+          git status
+      - name: Commit and force push to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd Rule
-          if ! git diff --quiet; then
-            git add Proxy.list
-            git commit -m "Merge Proxy.list"
-            git push origin main
-          else
-            echo "No changes to commit"
-          fi
+          git add Rule/Proxy.list
+          git commit -m "Proxy"
+          git push origin HEAD:main --    force

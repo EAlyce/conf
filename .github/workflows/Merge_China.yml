@@ -28,17 +28,16 @@ jobs:
         run: |
           mv Rule/DIRECT.tmp Rule/DIRECT.list
 
-      - name: Set Git configuration
+      - name: Configure Git
         run: |
-          git config --global user.email "msosjaahwwj@gmail.com"
-          git config --global user.name "Github Action"
-          
-      - name: Commit changes
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git branch -a
+          git status
+      - name: Commit and force push to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/DIRECT.list
-          if git diff --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "合并DIRECT完成"
-            git push origin main
-          fi
+          git commit -m "DIRECT"
+          git push origin HEAD:main --    force
