@@ -28,7 +28,6 @@ jobs:
 
       - name: Convert third-level domains to second-level domains
         run: sed -E -i '' 's/^([a-z0-9-]+\.)?([a-z0-9-]+\.[a-z]+(\.[a-z]+)?),*$/\2/' Rule/Log.list
-        cat Rule/Log.list
 
       - name: Display file content after converting third-level domains to second-level domains
         run: cat Rule/Log.list
