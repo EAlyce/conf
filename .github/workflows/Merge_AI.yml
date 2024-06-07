@@ -53,5 +53,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/OpenAI.list
-          git commit -m "Auto Update AI"
+          git commit -m "Auto Update OpenAI.list"
           git push origin HEAD:main --force
