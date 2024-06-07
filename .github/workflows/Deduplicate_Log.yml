@@ -1,4 +1,4 @@
-代码勘误：name: Deduplicate Log
+name: Deduplicate Log
 
 on: 
   push:
