@@ -67,5 +67,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/Proxy.list
-          git commit -m "Proxy"
+          git commit -m "Auto Update Proxy.list"
           git push origin HEAD:main --force
