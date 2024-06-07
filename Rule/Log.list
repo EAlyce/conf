@@ -1,8 +1,3 @@
-
-cdn.ss-cdn.com
-behaviour.surfshark.events
-
-
 DOMAIN-SUFFIX,1rx.io
 DOMAIN-SUFFIX,3lift.com
 DOMAIN-SUFFIX,86uk.com
@@ -50,6 +45,7 @@ DOMAIN-SUFFIX,applovin.com
 DOMAIN-SUFFIX,appsflyersdk.com
 DOMAIN-SUFFIX,ayxbk.com
 DOMAIN-SUFFIX,b1sync.zemanta.com
+DOMAIN-SUFFIX,behaviour.surfshark.events
 DOMAIN-SUFFIX,bh.contextweb.com
 DOMAIN-SUFFIX,bidswitch.net
 DOMAIN-SUFFIX,bitderiv.com
@@ -71,6 +67,7 @@ DOMAIN-SUFFIX,cdn-teams-slug.flaticon.com
 DOMAIN-SUFFIX,cdn.hadronid.net
 DOMAIN-SUFFIX,cdn.id5-sync.com
 DOMAIN-SUFFIX,cdn.springserve.com
+DOMAIN-SUFFIX,cdn.ss-cdn.com
 DOMAIN-SUFFIX,cdn.tailwindcss.com
 DOMAIN-SUFFIX,cdnpk.net
 DOMAIN-SUFFIX,ce.lijit.com
