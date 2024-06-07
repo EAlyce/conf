@@ -23,15 +23,14 @@ jobs:
           else
               echo "curl is already installed"
           fi
-          
+
       - name: Get and merge domains from source files
         run: |
-          mkdir -p Rule
-          curl -sSfL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > Rule/apple_cdn.conf
-          curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/apple_services.conf
-          curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Apple_All.list
-          cat Rule/apple_cdn.conf Rule/apple_services.conf Rule/Apple_All.list | sort | uniq | sed 's/,\./,/g' > Rule/Apple.list
-          sed -i 's/, /,/g' Rule/Apple.list
+          {
+            curl -sSfL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//';
+            curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$';
+            curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$';
+          } | sort | uniq | sed 's/,\./,/g' > Rule/Apple.list
 
       - name: Check and Configure Git
         run: |
