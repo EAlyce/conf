@@ -44,6 +44,10 @@ jobs:
           git config --global user.name "github-actions"
           git branch -a
           git status
+          
+      - name: Check for changes
+        run: |
+          git diff --exit-code || exit 0
 
       - name: Commit and force push to main
         env:
