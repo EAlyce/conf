@@ -1,13 +1,3 @@
-stun.voipraider.com
-sub.cnmmb.com
-
-sub.cnmmb.com
-
-sub.cnmmb.com
-
-sub.cnmmb.com
-
-
 DOMAIN-SUFFIX,1rx.io
 DOMAIN-SUFFIX,33across.com
 DOMAIN-SUFFIX,3lift.com
@@ -271,6 +261,8 @@ DOMAIN-SUFFIX,static.adsafeprotected.com
 DOMAIN-SUFFIX,static.criteo.net
 DOMAIN-SUFFIX,stbuttons.click
 DOMAIN-SUFFIX,strpst.com
+DOMAIN-SUFFIX,stun.voipraider.com
+DOMAIN-SUFFIX,sub.cnmmb.com
 DOMAIN-SUFFIX,support.astrill.org
 DOMAIN-SUFFIX,surfshark.events
 DOMAIN-SUFFIX,surfsharkdns.com
