@@ -9,7 +9,8 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Delay for 10 seconds
         run: sleep 10
@@ -24,11 +25,7 @@ jobs:
               echo "curl is already installed"
           fi
           
-          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/DIRECT.tmp
-
-      - name: Merge with existing DIRECT.list
-        run: |
-          mv Rule/DIRECT.tmp Rule/DIRECT.list
+          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/DIRECT.list
 
       - name: Configure Git
         run: |
@@ -36,6 +33,10 @@ jobs:
           git config --global user.name "github-actions"
           git branch -a
           git status
+
+      - name: Check for changes
+        run: |
+          git diff --exit-code || exit 0
 
       - name: Commit and force push to main
         env:
