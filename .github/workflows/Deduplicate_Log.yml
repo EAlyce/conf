@@ -1,7 +1,9 @@
 name: Deduplicate Log
 
 on: 
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # 将 'main' 改为你想要监控的分支
 
 jobs:
   deduplicate_and_remove_empty_lines:
@@ -10,8 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}  # 使用当前分支名称
-          fetch-depth: 0           # 克隆完整的提交历史
+          fetch-depth: 0  # 克隆完整的提交历史
+
+      - name: Delay for 10 seconds
+        run: sleep 10
 
       - name: Display file content before modification
         run: |
