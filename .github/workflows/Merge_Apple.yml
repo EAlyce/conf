@@ -43,10 +43,12 @@ jobs:
         run: |
           git diff --exit-code || (echo "There are changes in the working directory. Please commit or discard them."; exit 1)
 
+      - name: Force add changes
+        run: git add -u
+
       - name: Commit and force push to main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Apple.list
           git commit -m "Auto Update Apple.list"
           git push origin HEAD:main --force
