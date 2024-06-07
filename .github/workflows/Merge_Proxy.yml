@@ -54,21 +54,19 @@ jobs:
           sort |
           uniq >> Rule/Proxy.list
 
-      - name: Configure Git
+      - name: Check and Configure Git
         run: |
+          git diff --quiet || echo "Files have changed"
+          git status
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-          git branch -a
-          git status
           
-      - name: Check for changes
-        run: |
-          git diff --exit-code || exit 0
+      - name: Force add changes
+        run: git add -u
 
       - name: Commit and force push to main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Proxy.list
           git commit -m "Auto Update Proxy.list"
           git push origin HEAD:main --force
