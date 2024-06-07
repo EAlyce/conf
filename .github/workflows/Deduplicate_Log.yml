@@ -1,6 +1,6 @@
 name: Deduplicate Log
 
-on: [push]
+on: workflow_dispatch:
 
 jobs:
   deduplicate_and_remove_empty_lines:
