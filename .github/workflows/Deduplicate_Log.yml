@@ -9,7 +9,8 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Delay for 10 seconds
         run: sleep 10
@@ -55,4 +56,4 @@ jobs:
         run: |
           git add Rule/Log.list
           git commit -m "Log"
-          git push origin HEAD:main --    force
+          git push origin HEAD:main --force
