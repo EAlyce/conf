@@ -26,32 +26,30 @@ jobs:
           fi
           
       - name: Get domains from source file and merge
-      
         run: |
-          cd Rule
-          curl -sfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
+          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
           grep -v '^#' |
           grep -v '^$' |
           sort |
-          uniq > Proxy.list
+          uniq > Rule/Proxy.list
 
-          curl -sfL https://ruleset.skk.moe/List/non_ip/stream.conf |
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/stream.conf |
           grep -v '^#' |
           grep -v '^$' |
           sort |
-          uniq >> Proxy.list
+          uniq >> Rule/Proxy.list
 
-          curl -sfL https://ruleset.skk.moe/List/non_ip/cdn.conf |
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/cdn.conf |
           grep -v '^#' |
           grep -v '^$' |
           sort |
-          uniq >> Proxy.list
+          uniq >> Rule/Proxy.list
 
-          curl -sfL https://ruleset.skk.moe/List/non_ip/global.conf |
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/global.conf |
           grep -v '^#' |
           grep -v '^$' |
           sort |
-          uniq >> Proxy.list
+          uniq >> Rule/Proxy.list
 
       - name: Configure Git
         run: |
@@ -59,10 +57,15 @@ jobs:
           git config --global user.name "github-actions"
           git branch -a
           git status
+          
+      - name: Check if there are changes
+        run: |
+          git diff --exit-code || (echo "There are changes in the working directory. Please commit or discard them."; exit 1)
+
       - name: Commit and force push to main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/Proxy.list
           git commit -m "Proxy"
-          git push origin HEAD:main --    force
+          git push origin HEAD:main --force

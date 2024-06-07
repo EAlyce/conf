@@ -16,8 +16,7 @@ jobs:
 
       - name: Ensure curl is installed
         run: |
-          if ! command -v curl &> /dev/null
-          then
+          if ! command -v curl &> /dev/null; then
               echo "curl could not be found, installing..."
               sudo apt-get update
               sudo apt-get install -y curl
@@ -25,8 +24,7 @@ jobs:
               echo "curl is already installed"
           fi
           
-        run: |
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/DIRECT.tmp
+          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/DIRECT.tmp
 
       - name: Merge with existing DIRECT.list
         run: |
@@ -38,10 +36,11 @@ jobs:
           git config --global user.name "github-actions"
           git branch -a
           git status
+
       - name: Commit and force push to main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/DIRECT.list
-          git commit -m "DIRECT"
-          git push origin HEAD:main --    force
+          git commit -m "Update DIRECT.list"
+          git push origin HEAD:main --force

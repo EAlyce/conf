@@ -16,8 +16,7 @@ jobs:
 
       - name: Ensure curl is installed
         run: |
-          if ! command -v curl &> /dev/null
-          then
+          if ! command -v curl &> /dev/null; then
               echo "curl could not be found, installing..."
               sudo apt-get update
               sudo apt-get install -y curl
@@ -25,32 +24,30 @@ jobs:
               echo "curl is already installed"
           fi
           
-      - name: Get domains from source files
+      - name: Get and merge domains from source files
         run: |
-          curl -sL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > apple_cdn.conf.tmp
-          curl -sL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > apple_services.conf.tmp
-          curl -sL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Apple_All.list.tmp
-
-      - name: Merge with existing Rule/Apple.list
-        run: |
-          cat apple_cdn.conf.tmp apple_services.conf.tmp Apple_All.list.tmp | sort | uniq | sed 's/,\./,/g' > Rule/Apple.list
+          mkdir -p Rule
+          curl -sSfL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//' | sort | uniq > Rule/apple_cdn.conf
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/apple_services.conf
+          curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Apple_All.list
+          cat Rule/apple_cdn.conf Rule/apple_services.conf Rule/Apple_All.list | sort | uniq | sed 's/,\./,/g' > Rule/Apple.list
           sed -i 's/, /,/g' Rule/Apple.list
 
-      - name: Check for changes
-        id: git-check
+      - name: Check and Configure Git
         run: |
           git diff --quiet || echo "Files have changed"
-
-      - name: Configure Git
-        run: |
+          git status
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-          git branch -a
-          git status
+          
+      - name: Check if there are changes
+        run: |
+          git diff --exit-code || (echo "There are changes in the working directory. Please commit or discard them."; exit 1)
+
       - name: Commit and force push to main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/Apple.list
-          git commit -m "Apple"
-          git push origin HEAD:main --    force
+          git commit -m "Update Apple.list"
+          git push origin HEAD:main --force

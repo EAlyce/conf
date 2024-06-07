@@ -25,13 +25,13 @@ jobs:
       - name: Get and merge domains from source files
         run: |
           mkdir -p Rule
-          curl -sL https://ruleset.skk.moe/List/non_ip/ai.conf | grep -v '^#' | grep -v '^$' > Rule/OpenAI.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
-          curl -sL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
-          curl -sL https://raw.githubusercontent.com/Repcz/Tool/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
-          curl -sL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
-          curl -sL https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/ai.conf | grep -v '^#' | grep -v '^$' > Rule/OpenAI.list
+          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://raw.githubusercontent.com/Repcz/Tool/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
+          curl -sSfL https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | grep -v '^#' | grep -v '^$' >> Rule/OpenAI.list
           sort Rule/OpenAI.list | uniq > Rule/OpenAI.list.tmp
           mv Rule/OpenAI.list.tmp Rule/OpenAI.list
           sed -i 's/, /,/g' Rule/OpenAI.list
