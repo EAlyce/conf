@@ -58,9 +58,9 @@ jobs:
           git branch -a
           git status
           
-      - name: Check if there are changes
+      - name: Check for changes
         run: |
-          git diff --exit-code || (echo "There are changes in the working directory. Please commit or discard them."; exit 1)
+          git diff --exit-code || exit 0
 
       - name: Commit and force push to main
         env:
