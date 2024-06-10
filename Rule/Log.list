@@ -1,31 +1,3 @@
-
-
-umami.einverne.info
-chat.einverne.info
-
-remark.einverne.info
-
-chat.einverne.info
-
-js-agent.newrelic.com
-
-bam.nr-data.net
-
-bam.nr-data.net
-
-csm.as.criteo.net
-
-imageproxy.as.criteo.net
-
-bam.nr-data.net
-
-live.rezync.com
-
-bam.nr-data.net
-
-bam.nr-data.net
-
-
 DOMAIN-SUFFIX,01y9hlix3otm171784174821201y9hli.edns.ip-api.com
 DOMAIN-SUFFIX,03201e0e-f1fd-49f8-be71-8580a68a54f1.apac.u.fastly-insights.com
 DOMAIN-SUFFIX,1ka.com
@@ -86,6 +58,7 @@ DOMAIN-SUFFIX,ats-wrapper.privacymanager.io
 DOMAIN-SUFFIX,audrte.com
 DOMAIN-SUFFIX,ayxbk.com
 DOMAIN-SUFFIX,b.logly.co.jp
+DOMAIN-SUFFIX,bam.nr-data.net
 DOMAIN-SUFFIX,betweendigital.com
 DOMAIN-SUFFIX,bidswitch.net
 DOMAIN-SUFFIX,bitderiv.com
@@ -125,6 +98,7 @@ DOMAIN-SUFFIX,cdn.undertone.com
 DOMAIN-SUFFIX,cdnpk.net
 DOMAIN-SUFFIX,ch-trc-events.taboola.com
 DOMAIN-SUFFIX,changyexiaoshuo.com
+DOMAIN-SUFFIX,chat.einverne.info
 DOMAIN-SUFFIX,cinarra.com
 DOMAIN-SUFFIX,cloudflare.mh616.org
 DOMAIN-SUFFIX,co.jp
@@ -146,6 +120,7 @@ DOMAIN-SUFFIX,criteo.com
 DOMAIN-SUFFIX,crwdcntrl.net
 DOMAIN-SUFFIX,cs.gssprt.jp
 DOMAIN-SUFFIX,cs.minutemedia-prebid.com
+DOMAIN-SUFFIX,csm.as.criteo.net
 DOMAIN-SUFFIX,ctnsnet.com
 DOMAIN-SUFFIX,d.amoad.com
 DOMAIN-SUFFIX,d9.flashtalking.com
@@ -222,6 +197,7 @@ DOMAIN-SUFFIX,id5-sync.com
 DOMAIN-SUFFIX,ifjslio.top
 DOMAIN-SUFFIX,ifjslio.top djsaklfjsaklhflasj28.xyz img88.tuky889900.com 
 DOMAIN-SUFFIX,imagedelivery.net
+DOMAIN-SUFFIX,imageproxy.as.criteo.net
 DOMAIN-SUFFIX,images.contentstack.io
 DOMAIN-SUFFIX,img.bobobo6688.top
 DOMAIN-SUFFIX,imgoss1010.top
@@ -236,6 +212,7 @@ DOMAIN-SUFFIX,j.microad.net
 DOMAIN-SUFFIX,j.zucks.net.zimg.jp
 DOMAIN-SUFFIX,jadserve.postrelease.com
 DOMAIN-SUFFIX,jprtb.c.appier.net
+DOMAIN-SUFFIX,js-agent.newrelic.com
 DOMAIN-SUFFIX,jtezxmpb.xyz
 DOMAIN-SUFFIX,k.zucks.net
 DOMAIN-SUFFIX,kapetracking.com
@@ -253,6 +230,7 @@ DOMAIN-SUFFIX,lgr.visilabs.net
 DOMAIN-SUFFIX,liadm.com
 DOMAIN-SUFFIX,lijit.com
 DOMAIN-SUFFIX,live.primis.tech
+DOMAIN-SUFFIX,live.rezync.com
 DOMAIN-SUFFIX,logger.adthrive.com
 DOMAIN-SUFFIX,loopme.me
 DOMAIN-SUFFIX,ltmsphrcl.net
@@ -340,6 +318,7 @@ DOMAIN-SUFFIX,qvdt3feo.com
 DOMAIN-SUFFIX,r.skimresources.com
 DOMAIN-SUFFIX,r2ntkyfozo1717841752652r2ntkyfoz.edns.ip-api.com
 DOMAIN-SUFFIX,redotpay.com
+DOMAIN-SUFFIX,remark.einverne.info
 DOMAIN-SUFFIX,resetdigital.co
 DOMAIN-SUFFIX,revenuecat.com
 DOMAIN-SUFFIX,rkdms.com
@@ -480,6 +459,7 @@ DOMAIN-SUFFIX,tynt.com
 DOMAIN-SUFFIX,u7zhxgez961717841759489u7zhxgez9.edns.ip-api.com
 DOMAIN-SUFFIX,uipglob.semasio.net
 DOMAIN-SUFFIX,um.simpli.fi
+DOMAIN-SUFFIX,umami.einverne.info
 DOMAIN-SUFFIX,uncn.jp
 DOMAIN-SUFFIX,undertone.com
 DOMAIN-SUFFIX,unified.adsafeprotected.com
