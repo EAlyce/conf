@@ -46,5 +46,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git add -A
           git commit -m "Update Apple.list with latest domains"
           git push origin HEAD:main --force
