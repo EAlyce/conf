@@ -33,7 +33,7 @@ jobs:
             curl -sSfL https://ruleset.skk.moe/List/domainset/apple_cdn.conf | grep -v '^#' | grep -v '^$' | sed 's/^/DOMAIN-SUFFIX,/' | sed 's/^\.//';
             curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$';
             curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$';
-          } | sed 's/,\./,/g' | awk -F, '{ if (NF > 2) {print $(NF-1)"."$NF} else {print $0} }' | sort | uniq > Rule/Apple.list
+          } | sed 's/,\./,/g' | awk -F, '{ if (NF > 2) {print $(NF-1)"."$NF} else {print $0} }' | awk -F. '{if(NF>2)print $(NF-2)"."$(NF-1)"."$NF; else print $0}' | sort | uniq > Rule/Apple.list
 
       - name: Configure Git
         run: |
