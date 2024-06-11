@@ -14,30 +14,14 @@ jobs:
 
       - name: Delay for 10 seconds
         run: sleep 10
+        
+- name: Process Log.list
+  run: |
+    sed -i '/^[[:space:]]*$/d' Rule/Log.list
 
-      - name: Remove Empty Lines
-        run: sed -i '/^[[:space:]]*$/d' Rule/Log.list
+    awk -F, '{split($NF, parts, "."); if(length(parts)>2) {print parts[length(parts)-1]"."parts[length(parts)]} else {print $NF}}' | grep -v 'xn--' | sed 's/^/DOMAIN-SUFFIX,/' | sort | uniq >Rule/Log.list
 
-      - name: Display file content after removing empty lines
-        run: cat Rule/Log.list
-
-      - name: Add DOMAIN-SUFFIX if missing
-        run: awk '!/^DOMAIN-SUFFIX,/{print "DOMAIN-SUFFIX," $0; next}1' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
-
-      - name: Display file content after adding DOMAIN-SUFFIX
-        run: cat Rule/Log.list
-
-      - name: Convert third-level domains to second-level domains
-        run: sed -E 's/^([a-z0-9-]+\.)?([a-z0-9-]+\.[a-z]+(\.[a-z]+)?),*$/\2/' Rule/Log.list > temp.list && mv temp.list Rule/Log.list
-
-      - name: Display file content after converting third-level domains to second-level domains
-        run: cat Rule/Log.list
-
-      - name: Deduplicate Log.list
-        run: sort -u -o Rule/Log.list Rule/Log.list
-
-      - name: Display file content after deduplication
-        run: cat Rule/Log.list
+    cat Rule/Log.list
 
       - name: Configure Git
         run: |
