@@ -54,6 +54,8 @@ jobs:
           sort |
           uniq >> Rule/Proxy.list
 
+          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' | sort | uniq >> Rule/Proxy.list
+
       - name: Check and Configure Git
         run: |
           git diff --quiet || echo "Files have changed"
