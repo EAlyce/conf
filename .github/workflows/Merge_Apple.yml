@@ -32,7 +32,7 @@ jobs:
           {
             curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | grep 'DOMAIN-SUFFIX,';
             curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | grep 'DOMAIN-SUFFIX,';
-          } | awk -F, '{split($NF, parts, "."); if(length(parts)>2) {print parts[length(parts)-1]"."parts[length(parts)]} else {print $NF}}' | grep -v 'xn--' | sed 's/^/DOMAIN-SUFFIX,/' | sort | uniq > Rule/Apple.list
+          } | awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' | sort | uniq > Rule/Apple.list
 
       - name: Configure Git
         run: |
