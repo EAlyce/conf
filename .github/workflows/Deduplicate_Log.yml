@@ -18,7 +18,7 @@ jobs:
       - name: Process Log.list
         run: |
           sed -i '/^[[:space:]]*$/d' Rule/Log.list
-          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' | sort | uniq > Rule/Log.list.tmp
+          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {print parts[length(parts)-1]"."parts[length(parts)]} else {print $NF}}' | grep -v 'xn--' | sed 's/^/DOMAIN-SUFFIX,/' | sort | uniq > Rule/Log.list.tmp
 
           mv Rule/Log.list.tmp Rule/Log.list
 
