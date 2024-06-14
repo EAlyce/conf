@@ -17,12 +17,19 @@ jobs:
 
       - name: Process Log.list
         run: |
+          # 删除空行和空格，提取所有二级域名
           sed '/^[[:space:]]*$/d' Rule/Log.list | \
           awk -F, '{split($NF, parts, "."); if (length(parts) > 2) {print parts[length(parts)-1] "." parts[length(parts)];} else {print $NF;}}' | \
-          grep -v 'xn--' | \
-          sed 's/^/DOMAIN-SUFFIX,/' | \
-          sort | \
-          uniq > Rule/Log.list
+          grep -v 'xn--' > Rule/Log.temp.list
+
+          # 每行开头添加规则类型
+          sed -i 's/^/DOMAIN-SUFFIX,/' Rule/Log.temp.list
+
+          # 排序并去重
+          sort Rule/Log.temp.list | uniq > Rule/Log.list
+
+          # 删除临时文件
+          rm Rule/Log.temp.list
 
       - name: Configure Git
         run: |
