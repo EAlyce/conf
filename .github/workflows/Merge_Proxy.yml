@@ -28,41 +28,32 @@ jobs:
               echo "curl is already installed"
           fi
 
-      - name: Get domains from source files and merge
+      - name: Get and process domains
         run: |
-          curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
-          grep -v '^#' |
-          grep -v '^$' |
-          sort |
-          uniq > Rule/Proxy.list
-
-          curl -sSfL https://ruleset.skk.moe/List/non_ip/stream.conf |
-          grep -v '^#' |
-          grep -v '^$' |
-          sort |
-          uniq >> Rule/Proxy.list
-
-          curl -sSfL https://ruleset.skk.moe/List/non_ip/cdn.conf |
-          grep -v '^#' |
-          grep -v '^$' |
-          sort |
-          uniq >> Rule/Proxy.list
-
-          curl -sSfL https://ruleset.skk.moe/List/non_ip/global.conf |
-          grep -v '^#' |
-          grep -v '^$' |
-          sort |
-          uniq >> Rule/Proxy.list
-
-          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' Rule/Proxy.list | sort | uniq > Rule/Proxy_cleaned.list
-
-          mv Rule/Proxy_cleaned.list Rule/Proxy.list
+          for url in \
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" \
+            "https://ruleset.skk.moe/List/non_ip/stream.conf" \
+            "https://ruleset.skk.moe/List/non_ip/cdn.conf" \
+            "https://ruleset.skk.moe/List/non_ip/global.conf"; do
+            curl -sSfL $url
+          done | grep -v '^#' | grep -v '^$' | sort | uniq |
+          awk -F, '{
+              split($NF, parts, ".")
+              if (length(parts) > 2) {
+                  domain = parts[length(parts)-1] "." parts[length(parts)]
+              } else {
+                  domain = $NF
+              }
+              gsub(/[^a-zA-Z0-9.-]/, "", domain)
+              if (domain ~ /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ && domain !~ /xn--/) {
+                  print "DOMAIN-SUFFIX," domain
+              }
+          }' | sort | uniq > Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-          git diff --quiet || echo "Files have changed"
           git status
 
       - name: Force add changes
