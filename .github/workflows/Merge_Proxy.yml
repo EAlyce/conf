@@ -16,7 +16,7 @@ jobs:
 
       - name: Delay for 10 seconds
         run: sleep 10
-        
+
       - name: Ensure curl is installed
         run: |
           if ! command -v curl &> /dev/null
@@ -27,8 +27,8 @@ jobs:
           else
               echo "curl is already installed"
           fi
-          
-      - name: Get domains from source file and merge
+
+      - name: Get domains from source files and merge
         run: |
           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list |
           grep -v '^#' |
@@ -54,17 +54,19 @@ jobs:
           sort |
           uniq >> Rule/Proxy.list
 
-          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' | sort | uniq >> Rule/Proxy.list
+          awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' Rule/Proxy.list | sort | uniq > Rule/Proxy_cleaned.list
+
+          mv Rule/Proxy_cleaned.list Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
-          git diff --quiet || echo "Files have changed"
-          git status
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-          
+          git diff --quiet || echo "Files have changed"
+          git status
+
       - name: Force add changes
-        run: git add -u
+        run: git add Rule/Proxy.list
 
       - name: Commit and force push to main
         env:
