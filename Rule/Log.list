@@ -1,12 +1,3 @@
-bear.app
-discourse-cdn.com
-discourse-cdn.com
-discourse-cdn.com
-discourse-cdn.com
-bear.app
-discourse.org
-bear.app
-
 DOMAIN-SUFFIX,1ka.com
 DOMAIN-SUFFIX,1rx.io
 DOMAIN-SUFFIX,33across.com
@@ -62,6 +53,7 @@ DOMAIN-SUFFIX,astrill.org
 DOMAIN-SUFFIX,audioatlas.com
 DOMAIN-SUFFIX,audrte.com
 DOMAIN-SUFFIX,ayxbk.com
+DOMAIN-SUFFIX,bear.app
 DOMAIN-SUFFIX,betweendigital.com
 DOMAIN-SUFFIX,bidr.io
 DOMAIN-SUFFIX,bidswitch.net
@@ -137,6 +129,8 @@ DOMAIN-SUFFIX,dable.io
 DOMAIN-SUFFIX,datadoghq-browser-agent.com
 DOMAIN-SUFFIX,daumoon.com
 DOMAIN-SUFFIX,deepintent.com
+DOMAIN-SUFFIX,discourse-cdn.com
+DOMAIN-SUFFIX,discourse.org
 DOMAIN-SUFFIX,diyibanzhu444444.com
 DOMAIN-SUFFIX,djsaklfjsaklhflasj28.xyz
 DOMAIN-SUFFIX,djsaklfjsaklhflasj28.xyz 
@@ -412,4 +406,3 @@ DOMAIN-SUFFIX,zemanta.com
 DOMAIN-SUFFIX,zeotap.com
 DOMAIN-SUFFIX,zimg.jp
 DOMAIN-SUFFIX,zucks.net
-
