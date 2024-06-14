@@ -18,11 +18,11 @@ jobs:
       - name: Process Log.list
         run: |
           sed '/^[[:space:]]*$/d' Rule/Log.list | \
-awk -F, '{split($NF, parts, "."); if (length(parts) > 2) {print parts[length(parts)-1] "." parts[length(parts)];} else {print $NF;}}' | \
-grep -v 'xn--' | \
-sed 's/^/DOMAIN-SUFFIX,/' | \
-sort | \
-uniq > Rule/Log.list
+          awk -F, '{split($NF, parts, "."); if (length(parts) > 2) {print parts[length(parts)-1] "." parts[length(parts)];} else {print $NF;}}' | \
+          grep -v 'xn--' | \
+          sed 's/^/DOMAIN-SUFFIX,/' | \
+          sort | \
+          uniq > Rule/Log.list
 
       - name: Configure Git
         run: |
@@ -30,7 +30,6 @@ uniq > Rule/Log.list
           git config --global user.name "github-actions"
 
       - name: Commit and force push to main
-        if: steps.check_changes.outputs.changes == 'changes detected'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
