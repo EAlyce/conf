@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deduplicate_and_remove_empty_lines:
+  deduplicate_and_filter_domains:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,8 +24,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: |
-          python -m pip install requests
+        run: python -m pip install requests
 
       - name: Process Log.list
         run: |
@@ -39,33 +38,31 @@ jobs:
 
       - name: Create filter script
         run: |
-          echo '
-import requests
+          echo "import requests
 
 def get_domain_location(domain):
-    response = requests.get(f"https://ipwhois.app/json/{domain}")
+    response = requests.get(f'https://ipwhois.app/json/{domain}')
     data = response.json()
-    country = data.get("country_code", "Unknown")
+    country = data.get('country_code', 'Unknown')
     return country
 
-with open("Rule/Log.temp.list", "r") as file:
-    domains = [line.strip().split(",")[1] for line in file]
+with open('Rule/Log.temp.list', 'r') as file:
+    domains = [line.strip().split(',')[1] for line in file]
 
 filtered_domains = []
 
 for domain in domains:
     country = get_domain_location(domain)
-    if country not in ["CN"]:
+    if country not in ['CN']:
         filtered_domains.append(domain)
 
-with open("Rule/Log.list", "w") as file:
+with open('Rule/Log.list', 'w') as file:
     for domain in filtered_domains:
-        file.write(f"DOMAIN-SUFFIX,{domain}\\n")
-          ' > filter_domains.py
+        file.write(f'DOMAIN-SUFFIX,{domain}\\n')
+" > filter_domains.py
 
       - name: Run filter script
-        run: |
-          python filter_domains.py
+        run: python filter_domains.py
 
       - name: Configure Git
         run: |
