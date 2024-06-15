@@ -58,8 +58,7 @@ for domain in domains:
 
 with open('Rule/Log.list', 'w') as file:
     for domain in filtered_domains:
-        file.write(f'DOMAIN-SUFFIX,{domain}\\n')
-" > filter_domains.py
+        file.write(f'DOMAIN-SUFFIX,{domain}\\n')" > filter_domains.py
 
       - name: Run filter script
         run: python filter_domains.py
@@ -68,7 +67,6 @@ with open('Rule/Log.list', 'w') as file:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-
 
       - name: Commit and force push to main
         env:
