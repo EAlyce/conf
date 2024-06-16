@@ -32,6 +32,7 @@ jobs:
         run: |
           for url in \
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" \
+             "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" \
             "https://ruleset.skk.moe/List/non_ip/stream.conf" \
             "https://ruleset.skk.moe/List/non_ip/cdn.conf" \
             "https://ruleset.skk.moe/List/non_ip/global.conf"; do
