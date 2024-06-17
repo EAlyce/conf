@@ -1,4 +1,6 @@
 # 自用规则，不对使用者负责，已屏蔽抖音相关域名，可能无法观看抖音
+DOMAIN-KEYWORD,zjurl
+DOMAIN-WILDCARD,*bdurl*
 AND,((DOMAIN-KEYWORD,-ad-), (DOMAIN-SUFFIX,byteimg.com))
 AND,((DOMAIN-KEYWORD,ads), (DOMAIN-KEYWORD,normal), (DOMAIN-SUFFIX,zijieapi.com))
 AND,((DOMAIN-KEYWORD,gecko), (DOMAIN-SUFFIX,zijieapi.com))
