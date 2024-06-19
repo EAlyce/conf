@@ -1,4 +1,4 @@
-DOMAIN-WILDCARD,*zjurl*
-DOMAIN-WILDCARD,*bdurl*
-AND,((DOMAIN-WILDCARD,*zijie*), (DOMAIN-WILDCARD,*ad*))
-DOMAIN-WILDCARD,*snssdk*
+DOMAIN,dig.zjurl.cn
+DOMAIN,dig.bdurl.net
+AND,((DOMAIN-SUFFIX,zijieapi.com), (DOMAIN-KEYWORD,ad))
+DOMAIN,is.snssdk.com
