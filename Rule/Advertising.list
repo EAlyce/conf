@@ -1,3 +1,11 @@
+DEST-PORT,19000
+DOMAIN-SUFFIX,theengagelab.com
+IP-CIDR,114.119.186.57/32
+DOMAIN-SUFFIX,woodpeckerlog.com
+DOMAIN-SUFFIX,adashbc.ut.taobao.com
+DOMAIN-WILDCARD,*contract*
+IP-CIDR,104.18.40.187/32
+DOMAIN-SUFFIX,bitderiv.com
 DOMAIN,ad.zijieapi.com
 DOMAIN,appcloud.zhihu.com
 DOMAIN,appcloud2.in.zhihu.com
