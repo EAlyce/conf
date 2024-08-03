@@ -21,7 +21,7 @@ set_custom_path() {
 }
 optimize_system() {
     echo "开始优化"
-    sudo apt-get clean
+    apt clean && apt autoclean && apt autoremove -y && rm -rf /tmp/* && history -c && history -w && docker system prune -a --volumes -f && dpkg --list | awk '/^ii.*linux-(image|headers)-[0-9]/&&!/'$(uname -r)'/ {print $2}' | xargs apt-get -y purge
     sudo apt-get update
     sudo apt-get install -y python3.11
 
