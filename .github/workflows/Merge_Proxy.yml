@@ -38,18 +38,7 @@ jobs:
             "https://ruleset.skk.moe/List/non_ip/global.conf"; do
             curl -sSfL $url
           done | grep -v '^#' | grep -v '^$' | sort | uniq |
-          awk -F, '{
-              split($NF, parts, ".")
-              if (length(parts) > 2) {
-                  domain = parts[length(parts)-1] "." parts[length(parts)]
-              } else {
-                  domain = $NF
-              }
-              gsub(/[^a-zA-Z0-9.-]/, "", domain)
-              if (domain ~ /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ && domain !~ /xn--/) {
-                  print "DOMAIN-SUFFIX," domain
-              }
-          }' | sort | uniq > Rule/Proxy.list
+          sort | uniq > Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
