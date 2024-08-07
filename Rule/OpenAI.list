@@ -37,6 +37,7 @@ DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
 DOMAIN,chatgpt.livekit.cloud
 DOMAIN,copilot.microsoft.com
+DOMAIN,gateway.ai.cloudflare.com
 DOMAIN,gateway.bingviz.microsoft.net
 DOMAIN,gateway.bingviz.microsoftapp.net
 DOMAIN,gemini.google.com
