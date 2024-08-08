@@ -39,7 +39,8 @@ jobs:
             "https://raw.githubusercontent.com/BlueSkyXN/Comprehensive-Network-Defense/master/IPs/SKY-FUCK-IP.txt"; do
             curl -sSfL $url
           done | grep -v '^#' | grep -v '^$' | sort | uniq |
-          sed 's/^/IP-CIDR,/' > Rule/BanIP.list
+          sed 's/^/IP-CIDR,/' | \
+          awk -F, '{ if ($2 !~ /\/[0-9]+$/) $2=$2"/32"; print $1","$2 }' > Rule/BanIP.list
 
       - name: Check and Configure Git
         run: |
