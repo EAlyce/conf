@@ -28,7 +28,7 @@ jobs:
               echo "curl is already installed"
           fi
 
-      - name: Get and process domains
+      - name: Get and combine IP lists
         run: |
           mkdir -p Rule
           for url in \
@@ -37,12 +37,17 @@ jobs:
             curl -sSfL $url
           done | tr -d '\r' | grep -v '^#' | grep -v '^$' > combined_list.txt
 
-      - name: Validate and process IP addresses
+      - name: Validate IP addresses
         run: |
           mkdir -p Rule
-          awk '{ if ($0 !~ /\/[0-9]+$/) print $0"/32"; else print $0 }' combined_list.txt |
-          sed 's/^/IP-CIDR,/' | \
-          awk -F, '{ if ($2 ~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\/[0-9]{1,2}$/) print $1","$2 }' > Rule/BanIP.list
+          awk '{
+            if ($0 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) print $0"/32";
+            else if ($0 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+$/) print $0;
+          }' combined_list.txt > valid_ips.txt
+
+      - name: Add prefix and ensure format
+        run: |
+          awk '{ if ($0 !~ /\/[0-9]+$/) $0=$0"/32"; print "IP-CIDR,"$0 }' valid_ips.txt > Rule/BanIP.list
 
       - name: Check and Configure Git
         run: |
