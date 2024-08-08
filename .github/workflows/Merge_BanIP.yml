@@ -1,0 +1,54 @@
+name: Merge BanIP
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  deduplicate_and_remove_empty_lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delay for 10 seconds
+        run: sleep 10
+
+      - name: Ensure curl is installed
+        run: |
+          if ! command -v curl &> /dev/null
+          then
+              echo "curl could not be found, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          else
+              echo "curl is already installed"
+          fi
+
+      - name: Get and process domains
+        run: |
+          for url in \
+            "https://raw.githubusercontent.com/BlueSkyXN/Comprehensive-Network-Defense/master/IPs/SKY-BAN-IP.txt" \
+            "https://raw.githubusercontent.com/BlueSkyXN/Comprehensive-Network-Defense/master/IPs/SKY-FUCK-IP.txt"; do
+            curl -sSfL $url
+          done | grep -v '^#' | grep -v '^$' | sort | uniq |
+          sed 's/^/IP-CIDR,/' > Rule/BanIP.list
+
+      - name: Check and Configure Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git status
+
+      - name: Force add changes
+        run: git add Rule/BanIP.list
+
+      - name: Commit and force push to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git commit -m "Auto Update BanIP.list"
+          git push origin HEAD:main --force
