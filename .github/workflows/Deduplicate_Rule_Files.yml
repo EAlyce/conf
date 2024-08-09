@@ -27,7 +27,13 @@ jobs:
         git config --global user.name "Github Action"
         git fetch origin main
         git checkout main
+        
+        # Add changes and check if there are any changes to commit
         git add Rule/*.list
-        git commit -m "Deduplicate Rule Files"
-        git pull origin main --rebase
-        git push origin main
+        if git diff-index --quiet HEAD; then
+          echo "No changes to commit"
+        else
+          git commit -m "Deduplicate Rule Files"
+          git pull origin main --rebase
+          git push origin main
+        fi
