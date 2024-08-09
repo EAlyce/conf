@@ -1,4 +1,4 @@
-name: Merge DERICT
+name: Merge DIRECT
 
 on:
   push:
@@ -30,6 +30,7 @@ jobs:
 
       - name: Get and process China domains
         run: |
+          curl -sSfL https://ruleset.skk.moe/List/non_ip/domestic.conf | 
           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | 
           grep -v '^#' | grep -v '^$' | 
           sort | uniq > Rule/DIRECT.list
@@ -41,11 +42,15 @@ jobs:
           git status
 
       - name: Force add changes
-        run: git add Rule/DIRECT.list
+        run: git add Rule/DIRECT.list || true
 
-      - name: Commit and force push to main
+      - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git commit -m "Auto Update DIRECT.list"
-          git push origin HEAD:main --force
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto Update DIRECT.list"
+            git push origin HEAD:main --force
+          else
+            echo "No changes to commit"
+          fi
