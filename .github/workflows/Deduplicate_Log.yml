@@ -39,10 +39,14 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
 
-      - name: Commit and force push to main
+      - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Log.list
-          git commit -m "Auto Update Log.list"
-          git push origin HEAD:main --force
+          git add Rule/Log.list || true
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto Update Log.list"
+            git push origin HEAD:main --force
+          else
+            echo "No changes to commit"
+          fi
