@@ -1,4 +1,4 @@
-name: Deduplicate Log
+name: Update Log
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deduplicate_and_remove_empty_lines:
+  update_log:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -39,12 +39,12 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
 
-      - name: Commit and push changes if needed
+      - name: Check for changes and commit if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Log.list || true
-          if ! git diff-index --quiet HEAD; then
+          git add Rule/Log.list
+          if ! git diff --cached --quiet; then
             git commit -m "Auto Update Log.list"
             git push origin HEAD:main --force
           else
