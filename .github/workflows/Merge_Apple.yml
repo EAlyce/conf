@@ -31,7 +31,7 @@ jobs:
         run: |
           {
             curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | grep -v '^#' | grep -v '^$' | grep 'DOMAIN-SUFFIX,';
-            curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | grep 'DOMAIN-SUFFIX,';
+            curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | grep -v '^#' | grep -v '^$' | grep 'DOMAIN-SUFFIX,';
           } | awk -F, '{split($NF, parts, "."); if(length(parts)>2) {domain=parts[length(parts)-1]"."parts[length(parts)]} else {domain=$NF}; gsub(/[^a-zA-Z0-9.-]/, "", domain); if (domain !~ /xn--/) print "DOMAIN-SUFFIX,"domain}' | sort | uniq > Rule/Apple.list
 
       - name: Configure Git
@@ -42,9 +42,13 @@ jobs:
       - name: Force add changes
         run: git add Rule/Apple.list || true
 
-      - name: Commit and push changes
+      - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git diff-index --quiet HEAD || git commit -m "Update Apple.list with latest domains"
-          git push origin HEAD:main --force
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Update Apple.list with latest domains"
+            git push origin HEAD:main --force
+          else
+            echo "No changes to commit"
+          fi
