@@ -36,11 +36,19 @@ jobs:
       - name: Create SingBox directory
         run: mkdir -p SingBox
 
+      - name: List files in Rule directory
+        run: ls -l Rule
+
       - name: Convert rules to SingBox format
         run: |
           for file in Rule/*.list; do
+            echo "Processing $file"
             output_file="SingBox/$(basename "$file" .list)_singbox.json"
-            python3 surge2singbox.py "$file" -o "$output_file"
+            if [ -f "$file" ]; then
+              python3 surge2singbox.py "$file" -o "$output_file"
+            else
+              echo "File $file does not exist"
+            fi
           done
 
       - name: Check and Configure Git
