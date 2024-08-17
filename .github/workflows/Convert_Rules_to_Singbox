@@ -1,0 +1,57 @@
+name: Convert_Rules_to_Singbox
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  convert_rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delay for 10 seconds
+        run: sleep 10
+
+      - name: Check if curl is installed
+        run: |
+          if ! command -v curl &> /dev/null; then
+              echo "curl is not installed, installing..."
+              sudo apt-get update
+              sudo apt-get install -y curl
+          fi
+
+      - name: Download surge2singbox.py script
+        run: |
+          curl -o surge2singbox.py https://raw.githubusercontent.com/ryanchen01/sing-box-utils/main/surge2singbox.py
+
+      - name: Convert Rules to Singbox Format
+        run: |
+          mkdir -p SingBox
+          for file in Rule/*; do
+            output_file="SingBox/$(basename "$file" .list)_singbox.json"
+            python3 surge2singbox.py "$file" -o "$output_file"
+          done
+
+      - name: Check and Configure Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          
+      - name: Force add changes
+        run: git add SingBox/* || true
+
+      - name: Commit and push changes if needed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto Update Singbox Rules"
+            git push origin HEAD:main --force
+          else
+            echo "No changes to commit"
+          fi
