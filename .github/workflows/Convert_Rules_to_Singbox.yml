@@ -1,4 +1,4 @@
-name: Convert_Rules_to_Singbox
+name: ConvertRulesToSingBox
 
 on:
   push:
@@ -11,50 +11,258 @@ on:
 jobs:
   convert_rules:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+        name: Checkout Repository
 
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Check if curl is installed
+      - name: Install Python and pip
         run: |
-          if ! command -v curl &> /dev/null; then
-              echo "curl is not installed, installing..."
-              sudo apt-get update
-              sudo apt-get install -y curl
-          fi
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip
 
-      - name: Download surge2singbox.py script
+      - name: Install required Python packages
         run: |
-          curl -o surge2singbox.py https://raw.githubusercontent.com/ryanchen01/sing-box-utils/main/surge2singbox.py
-          chmod +x surge2singbox.py
+          pip3 install regex requests numpy
 
-      - name: Create SingBox directory
-        run: mkdir -p SingBox
-
-      - name: Convert Rules to Singbox Format
+      - name: Convert rules to SingBox format
         run: |
-          for file in Rule/*.list; do
-            output_file="SingBox/$(basename "$file" .list)_singbox.json"
-            python3 surge2singbox.py "$file" -o "$output_file"
-          done
+          # Define the Python script
+          cat <<EOF > surge2singbox.py
+import sys
+import json
+import os
+import requests
+import regex as re
+import argparse
+import numpy as np
 
-      - name: Check and Configure Git
+def get_singbox_domainset(surge_rulset_path, policy):
+    if  surge_rulset_path.startswith('https'):
+        page = requests.get(surge_rulset_path)
+        domainset = page.text.split('\\n')
+    elif os.path.isfile(surge_rulset_path):
+        with open(surge_rulset_path, 'r') as f:
+            domainset = f.readlines()
+    else:
+        if surge_rulset_path.upper() != 'LAN':
+            print('Error: ' + surge_rulset_path + ' is not a file or url')
+        return -1
+    
+    if policy == 'REJECT':
+        policy = 'block'
+    elif policy == 'DIRECT':
+        policy = 'direct'
+    singbox_rules = {}
+    domain = []
+    for line in domainset:
+        if line.startswith('#'):
+            continue
+        line.replace('\'', '')  # remove single quote
+        line.replace('\"', '')  # remove double quote
+        if len(line.strip()) == 0:
+            continue
+        domain.append(line.strip())
+
+    singbox_rules['domain'] = domain
+    singbox_rules['outbound'] = policy
+
+    return singbox_rules
+
+def get_singbox_ruleset(surge_rulset_path, policy):
+    if  surge_rulset_path.startswith('https'):
+        page = requests.get(surge_rulset_path)
+        ruleset = page.text.split('\\n')
+    elif os.path.isfile(surge_rulset_path):
+        with open(surge_rulset_path, 'r') as f:
+            ruleset = f.readlines()
+    else:
+        if surge_rulset_path.upper() != 'LAN':
+            print('Error: ' + surge_rulset_path + ' is not a file or url')
+        return -1
+    
+    if policy == 'REJECT':
+        policy = 'block'
+    elif policy == 'DIRECT':
+        policy = 'direct'
+
+    singbox_rules = {}
+    domain_suffix = []
+    domain_keyword = []
+    domain = []
+    ip_cidr = []
+    process_name = []
+    for line in ruleset:
+        if line.startswith('#'):
+            continue
+        if line.upper().startswith('DOMAIN-SUFFIX'):
+            domain_suffix.append(line.split(',')[1].strip())
+        elif line.upper().startswith('DOMAIN-KEYWORD'):
+            domain_keyword.append(line.split(',')[1].strip())
+        elif line.upper().startswith('DOMAIN'):
+            domain.append(line.split(',')[1].strip())
+        elif line.upper().startswith('IP-CIDR'):
+            ip_cidr.append(line.split(',')[1].strip())
+        elif line.upper().startswith('PROCESS-NAME'):
+            process_name.append(line.split(',')[1].strip())
+    
+    singbox_rules['domain_suffix'] = domain_suffix
+    singbox_rules['domain'] = domain
+    singbox_rules['domain_keyword'] = domain_keyword
+    singbox_rules['ip_cidr'] = ip_cidr
+    singbox_rules['process_name'] = process_name
+    singbox_rules['outbound'] = policy
+
+    return singbox_rules
+
+def get_singbox_rule(line, policy, hasLAN=False):
+    if policy == 'REJECT':
+        policy = 'block'
+    elif policy == 'DIRECT':
+        policy = 'direct'
+    singbox_rules = {}
+    domain_suffix = []
+    domain_keyword = []
+    domain = []
+    ip_cidr = []
+    process_name = []
+    geoip = []
+    
+    if line.upper().startswith('DOMAIN-SUFFIX'):
+        domain_suffix.append(line.split(',')[1].strip())
+        singbox_rules['domain_suffix'] = domain_suffix
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    elif line.upper().startswith('DOMAIN-KEYWORD'):
+        domain_keyword.append(line.split(',')[1].strip())
+        singbox_rules['domain_keyword'] = domain
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    elif line.upper().startswith('DOMAIN'):
+        domain.append(line.split(',')[1].strip())
+        singbox_rules['domain'] = domain
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    elif line.upper().startswith('IP-CIDR'):
+        ip_cidr.append(line.split(',')[1].strip())
+        singbox_rules['ip_cidr'] = ip_cidr
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    elif line.upper().startswith('GEOIP'):
+        geoip.append(line.split(',')[1].strip().lower())
+        if hasLAN:
+            geoip.append('private')
+        singbox_rules['geoip'] = geoip
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    elif line.upper().startswith('PROCESS-NAME'):
+        process_name.append(line.split(',')[1].strip())
+        singbox_rules['process_name'] = process_name
+        singbox_rules['outbound'] = policy
+        return singbox_rules
+    else:
+        return -1
+
+
+def get_singbox_logical(line, policy):
+    singbox_rules = []
+    logical_dict = {}
+    logical_dict['type'] = 'logical'
+    logical_dict['mode'] = line.split(',')[0].strip()
+    rules = line.split(',')[1:-1]
+    for rule in rules:
+        rule = rule.replace('(', '')
+        rule = rule.replace(')', '')
+        if rule.upper().startswith('RULE-SET'):
+            singbox_rule = get_singbox_ruleset(rule.split(',')[1].strip(), rule.split(',')[2].strip())
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+        else:
+            singbox_rule = get_singbox_rule(rule, rule.split(',')[2].strip())
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+    logical_dict['rules'] = singbox_rules
+    logical_dict['outbound'] = policy
+    return logical_dict
+
+def surge2singbox(surge_config_path):
+    singbox_rules = []
+
+    with open(surge_config_path, 'r', encoding='utf-8') as f:
+        surge_config = f.readlines()
+    reg = r'^\\[(.+)\\]$'
+    sections = {}
+    for linenum, line in enumerate(surge_config):
+        if re.match(reg, line):
+            sections[re.match(reg, line).group(1)] = linenum
+    if 'Rule' not in sections:
+        print('Error: Rule section not found')
+        sys.exit(1)
+        
+    if list(sections.keys()).index('Rule') == len(sections.keys()) - 1:
+        surge_config = surge_config[sections['Rule'] + 1:]
+    else:
+        surge_config = surge_config[sections['Rule'] + 1:sections[list(sections.keys())[list(sections.keys()).index('Rule') + 1]]]
+    hasLAN = False
+    for line in surge_config:
+        if line.startswith('#') or len(line.strip()) == 0 or len(line.split(',')) < 2:
+            continue
+        if line.upper().split(',')[1].strip() == 'LAN':
+            hasLAN = True
+            break
+    extras = []
+    for line in surge_config:
+        if line.startswith('#') or len(line.strip()) == 0:
+            continue
+        if line.upper().startswith('RULE-SET'):
+            singbox_rule = get_singbox_ruleset(line.split(',')[1].strip(), line.split(',')[2].strip())
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+                extras.append(line.split(',')[2].strip())
+        elif line.upper().startswith('DOMAIN-SET'):
+            singbox_rule = get_singbox_domainset(line.split(',')[1].strip(), line.split(',')[2].strip())
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+                extras.append(line.split(',')[2].strip())
+        elif line.upper().startswith('AND') or line.upper().startswith('OR'):
+            singbox_rule = get_singbox_logical(line, line.split(',')[2].strip())
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+                extras.append(line.split(',')[2].strip())
+        else:
+            singbox_rule = get_singbox_rule(line, line.split(',')[2].strip(), hasLAN)
+            if singbox_rule != -1:
+                singbox_rules.append(singbox_rule)
+                extras.append(line.split(',')[2].strip())
+    singbox_rules.append({'type': 'domain', 'domain': extras})
+    return singbox_rules
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Usage: python surge2singbox.py <surge_config_path>')
+        sys.exit(1)
+    surge_config_path = sys.argv[1]
+    singbox_rules = surge2singbox(surge_config_path)
+    with open('singbox_rules.json', 'w') as f:
+        json.dump(singbox_rules, f, indent=2)
+EOF
+
+          # Run the Python script
+          python3 surge2singbox.py 'path/to/your/Rule/config'
+
+      - name: Upload SingBox rules
+        uses: actions/upload-artifact@v3
+        with:
+          name: singbox-rules
+          path: singbox_rules.json
+
+      - name: Commit and Push SingBox Rules
         run: |
-          git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
-          
-      - name: Force add changes
-        run: git add SingBox/* || true
-
-      - name: Commit and push changes if needed
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "Auto Update Singbox Rules"
-            git push origin HEAD:main --force
-          else
-            echo "No changes to commit"
-          fi
+          git config --global user.email "github-actions@github.com"
+          git add singbox_rules.json
+          git commit -m "Update SingBox rules"
+          git push
