@@ -28,11 +28,14 @@ jobs:
       - name: Download surge2singbox.py script
         run: |
           curl -o surge2singbox.py https://raw.githubusercontent.com/ryanchen01/sing-box-utils/main/surge2singbox.py
+          chmod +x surge2singbox.py
+
+      - name: Create SingBox directory
+        run: mkdir -p SingBox
 
       - name: Convert Rules to Singbox Format
         run: |
-          mkdir -p SingBox
-          for file in Rule/*; do
+          for file in Rule/*.list; do
             output_file="SingBox/$(basename "$file" .list)_singbox.json"
             python3 surge2singbox.py "$file" -o "$output_file"
           done
