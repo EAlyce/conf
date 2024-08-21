@@ -909,6 +909,7 @@ DOMAIN-SUFFIX,acer-group.com
 DOMAIN-SUFFIX,acer.com
 DOMAIN-SUFFIX,aceros-de-hispania.com
 DOMAIN-SUFFIX,acevpn.com
+DOMAIN-SUFFIX,acg.rip
 DOMAIN-SUFFIX,acg18.me
 DOMAIN-SUFFIX,acgbox.org
 DOMAIN-SUFFIX,acgcf.com
@@ -2883,6 +2884,7 @@ DOMAIN-SUFFIX,bangher.net
 DOMAIN-SUFFIX,bangkokbangers.com
 DOMAIN-SUFFIX,bangkokpost.com
 DOMAIN-SUFFIX,bangkokstreetwhores.com
+DOMAIN-SUFFIX,bangumi.moe
 DOMAIN-SUFFIX,bangyoulater.com
 DOMAIN-SUFFIX,bangyourwife.com
 DOMAIN-SUFFIX,bankmobilevibe.com
@@ -16996,6 +16998,7 @@ DOMAIN-SUFFIX,otto.de
 DOMAIN-SUFFIX,otzo.com
 DOMAIN-SUFFIX,oudoll.com
 DOMAIN-SUFFIX,ouo.io
+DOMAIN-SUFFIX,ouo.si
 DOMAIN-SUFFIX,ouplaw.com
 DOMAIN-SUFFIX,ourdearamy.com
 DOMAIN-SUFFIX,ourhobby.com
@@ -25435,6 +25438,7 @@ DOMAIN-WILDCARD,file?.mikuclub.fun
 DOMAIN-WILDCARD,i?.nhentai.net
 DOMAIN-WILDCARD,ocsp.*.amazontrust.com
 DOMAIN-WILDCARD,proxy-*.dailymotion.com
+DOMAIN-WILDCARD,rr1---??.ouo.si
 DOMAIN-WILDCARD,s3.*.wasabisys.com
 DOMAIN-WILDCARD,static*.tgstat.ru
 DOMAIN-WILDCARD,static-??-cdn.eporner.com
