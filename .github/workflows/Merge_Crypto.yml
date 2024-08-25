@@ -35,9 +35,9 @@ jobs:
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
             curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
-          } | grep -v '^#' | grep -v '^$' | sort | uniq | awk -F, '!seen[$0]++' > Rule/Cleaned_Crypto.list
+          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Cleaned_Crypto.list
 
-      - name: Verify uniqueness of the entries
+      - name: Remove duplicate entries
         run: |
           awk -F, '!seen[$0]++' Rule/Cleaned_Crypto.list > Rule/Final_Crypto.list
 
