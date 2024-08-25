@@ -30,12 +30,12 @@ jobs:
       - name: Get and merge domains from source files
         run: |
           {
-            curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt | grep -v '^#' | grep -v '^$' ;
-            curl -sSfL https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list | grep -v '^#' | grep -v '^$' ;
-            curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list | grep -v '^#' | grep -v '^$' ;
-            curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list | grep -v '^#' | grep -v '^$' ;
-            curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list | grep -v '^#' | grep -v '^$' ;
-          } | sort | uniq > Rule/Crypto.list
+            curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt
+            curl -sSfL https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list
+            curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
+            curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
+            curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
+          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Crypto.list
 
       - name: Configure Git
         run: |
