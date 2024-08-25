@@ -27,7 +27,7 @@ jobs:
               echo "curl is already installed"
           fi
 
-      - name: Get and clean domains from source files
+      - name: Get, clean, and deduplicate domains from source files
         run: |
           {
             curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt
@@ -35,12 +35,8 @@ jobs:
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
             curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
-          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Crypto.list
+          } | grep -v '^#' | grep -v '^$' | sort | uniq | awk -F, '!seen[$0]++' > Rule/Cleaned_Crypto.list
 
-      - name: Remove duplicate entries
-        run: |
-          awk -F, '!seen[$0]++' Rule/Crypto.list > Rule/Cleaned_Crypto.list
-          
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
