@@ -27,7 +27,7 @@ jobs:
               echo "curl is already installed"
           fi
 
-      - name: Get and merge domains from source files
+      - name: Get and clean domains from source files
         run: |
           {
             curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt
