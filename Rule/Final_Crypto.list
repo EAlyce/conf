@@ -1,20 +1,3 @@
-,
-DOMAIN,bybit-exchange.github.io
-DOMAIN,bybit.ada.support
-DOMAIN,deribit.cdn.prismic.io
-DOMAIN,min-api.cryptocompare.com
-DOMAIN,onekey.zendesk.com
-DOMAIN,token-api.metaswap.codefi.network
-DOMAIN,token-api.metaswap.codefi.network
-DOMAIN-KEYWORD,binance
-DOMAIN-KEYWORD,binance
-DOMAIN-KEYWORD,huobi
-DOMAIN-KEYWORD,huobi
-DOMAIN-KEYWORD,metamask
-DOMAIN-KEYWORD,metamask
-DOMAIN-KEYWORD,okx
-DOMAIN-KEYWORD,okx
-DOMAIN-KEYWORD,redotpay
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
@@ -42,6 +25,8 @@ DOMAIN-SUFFIX,avax.network
 DOMAIN-SUFFIX,avax.network
 DOMAIN-SUFFIX,bibox.com
 DOMAIN-SUFFIX,bibox.com
+DOMAIN-SUFFIX,binance
+DOMAIN-SUFFIX,binance
 DOMAIN-SUFFIX,binance.cc
 DOMAIN-SUFFIX,binance.cc
 DOMAIN-SUFFIX,binance.charity
@@ -170,6 +155,8 @@ DOMAIN-SUFFIX,btc.com
 DOMAIN-SUFFIX,btcbox.co.jp
 DOMAIN-SUFFIX,btcbox.co.jp
 DOMAIN-SUFFIX,byapis.com
+DOMAIN-SUFFIX,bybit-exchange.github.io
+DOMAIN-SUFFIX,bybit.ada.support
 DOMAIN-SUFFIX,bybit.com
 DOMAIN-SUFFIX,bybit.com
 DOMAIN-SUFFIX,bycbe.com
@@ -187,7 +174,7 @@ DOMAIN-SUFFIX,chainalysis.com
 DOMAIN-SUFFIX,chainbroker.io
 DOMAIN-SUFFIX,chainbroker.io
 DOMAIN-SUFFIX,chippay.com
-DOMAIN-SUFFIX,chippay.com# name: crypto
+DOMAIN-SUFFIX,chippay.com#
 DOMAIN-SUFFIX,clearpool.finance
 DOMAIN-SUFFIX,coin.dance
 DOMAIN-SUFFIX,coin.dance
@@ -256,6 +243,7 @@ DOMAIN-SUFFIX,defipulse.com
 DOMAIN-SUFFIX,defipulse.com
 DOMAIN-SUFFIX,defirate.com
 DOMAIN-SUFFIX,defirate.com
+DOMAIN-SUFFIX,deribit.cdn.prismic.io
 DOMAIN-SUFFIX,deribit.com
 DOMAIN-SUFFIX,devcon.org
 DOMAIN-SUFFIX,devcon.org
@@ -345,6 +333,8 @@ DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecoview.com
 DOMAIN-SUFFIX,hecoview.com
+DOMAIN-SUFFIX,huobi
+DOMAIN-SUFFIX,huobi
 DOMAIN-SUFFIX,huobi.br.com
 DOMAIN-SUFFIX,huobi.co.ma
 DOMAIN-SUFFIX,huobi.com
@@ -408,9 +398,12 @@ DOMAIN-SUFFIX,mdex.me
 DOMAIN-SUFFIX,mdex.one
 DOMAIN-SUFFIX,mdex.one
 DOMAIN-SUFFIX,metalpha.finance
+DOMAIN-SUFFIX,metamask
+DOMAIN-SUFFIX,metamask
 DOMAIN-SUFFIX,mexc.com
 DOMAIN-SUFFIX,mexc.com
 DOMAIN-SUFFIX,mexcsensors.com
+DOMAIN-SUFFIX,min-api.cryptocompare.com
 DOMAIN-SUFFIX,myetherwallet.com
 DOMAIN-SUFFIX,myetherwallet.com
 DOMAIN-SUFFIX,mytokenapi.com
@@ -430,6 +423,8 @@ DOMAIN-SUFFIX,okex.com
 DOMAIN-SUFFIX,okex.com
 DOMAIN-SUFFIX,oklink.com
 DOMAIN-SUFFIX,oklink.com
+DOMAIN-SUFFIX,okx
+DOMAIN-SUFFIX,okx
 DOMAIN-SUFFIX,okx-dns.com
 DOMAIN-SUFFIX,okx-dns1.com
 DOMAIN-SUFFIX,okx-dns2.com
@@ -437,6 +432,7 @@ DOMAIN-SUFFIX,okx.com
 DOMAIN-SUFFIX,okx.com
 DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onekey.so
+DOMAIN-SUFFIX,onekey.zendesk.com
 DOMAIN-SUFFIX,onekeycn.com
 DOMAIN-SUFFIX,opensea.io
 DOMAIN-SUFFIX,opensea.io
@@ -461,6 +457,7 @@ DOMAIN-SUFFIX,poolin.com
 DOMAIN-SUFFIX,poolin.com
 DOMAIN-SUFFIX,raydium.io
 DOMAIN-SUFFIX,raydium.io
+DOMAIN-SUFFIX,redotpay
 DOMAIN-SUFFIX,ripple.com
 DOMAIN-SUFFIX,saasexch.com
 DOMAIN-SUFFIX,saasexch.io
@@ -482,6 +479,8 @@ DOMAIN-SUFFIX,thegraph.com
 DOMAIN-SUFFIX,thegraph.com
 DOMAIN-SUFFIX,thetie.io
 DOMAIN-SUFFIX,thetie.io
+DOMAIN-SUFFIX,token-api.metaswap.codefi.network
+DOMAIN-SUFFIX,token-api.metaswap.codefi.network
 DOMAIN-SUFFIX,token.im
 DOMAIN-SUFFIX,token.im
 DOMAIN-SUFFIX,tokenpocket.pro
@@ -539,6 +538,12 @@ DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zksync.io
 DOMAIN-SUFFIX,zksync.io
-PROCESS-NAME,binance.exe
-PROCESS-NAME,huobi.exe
-PROCESS-NAME,okx.exe
+DOMAIN-KEYWORD,binance
+DOMAIN-KEYWORD,binance
+DOMAIN-KEYWORD,huobi
+DOMAIN-KEYWORD,huobi
+DOMAIN-KEYWORD,metamask
+DOMAIN-KEYWORD,metamask
+DOMAIN-KEYWORD,okx
+DOMAIN-KEYWORD,okx
+DOMAIN-KEYWORD,redotpay
