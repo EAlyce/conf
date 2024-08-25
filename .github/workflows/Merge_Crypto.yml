@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  process_and_deduplicate_domains:
+  deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
               echo "curl is already installed"
           fi
 
-      - name: Get, clean, and process domains from source files
+      - name: Get, clean, and deduplicate domains from source files
         run: |
           {
             curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt
@@ -35,21 +35,12 @@ jobs:
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
             curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
-          } | grep -v '^#' | grep -v '^$' | sed '/^PROCESS-NAME,/d' > Rule/Combined.list
+          } | sort | uniq | grep -v '^#' | grep -v '^$' > Rule/Final_Crypto.list
 
-      - name: Process domain entries
+      - name: Check if there are changes
         run: |
-          # Separate and process DOMAIN and DOMAIN-KEYWORD entries
-          awk -F, '/^DOMAIN-KEYWORD/ {print $2 > "Rule/Keywords.list"} /^DOMAIN/ {print $2 > "Rule/Domains.list"}' Rule/Combined.list
-
-          # Process DOMAIN entries
-          awk '{print "DOMAIN-SUFFIX," $1}' Rule/Domains.list | sort | uniq > Rule/Processed_Domains.list
-
-          # Process DOMAIN-KEYWORD entries
-          awk '{print "DOMAIN-KEYWORD," $1}' Rule/Keywords.list | sort | uniq > Rule/Processed_Keywords.list
-
-          # Combine both processed lists
-          cat Rule/Processed_Domains.list Rule/Processed_Keywords.list > Rule/Final_Crypto.list
+          git status
+          git diff
 
       - name: Configure Git
         run: |
