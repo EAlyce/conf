@@ -17,17 +17,7 @@ jobs:
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Ensure curl is installed
-        run: |
-          if ! command -v curl &> /dev/null; then
-              echo "curl could not be found, installing..."
-              sudo apt-get update
-              sudo apt-get install -y curl
-          else
-              echo "curl is already installed"
-          fi
-
-      - name: Get, clean, and deduplicate domains from source files
+      - name: Get and clean domains from source files
         run: |
           {
             curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt
@@ -35,7 +25,14 @@ jobs:
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
             curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
-          } | sort | uniq | grep -v '^#' | grep -v '^$' > Rule/Final_Crypto.list
+          } > combined_sources.txt
+
+      - name: Process and deduplicate the combined file
+        run: |
+          cat combined_sources.txt | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Crypto.list
+
+      - name: Remove temporary file
+        run: rm combined_sources.txt
 
       - name: Check if there are changes
         run: |
@@ -51,9 +48,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Final_Crypto.list
+          git add Rule/Crypto.list
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Update Final_Crypto.list with latest domains"
+            git commit -m "Update Crypto.list"
             git push origin HEAD:main
           else
             echo "No changes to commit"
