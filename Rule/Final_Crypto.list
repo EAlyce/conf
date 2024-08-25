@@ -1,4 +1,4 @@
-
+,
 DOMAIN,bybit-exchange.github.io
 DOMAIN,bybit.ada.support
 DOMAIN,deribit.cdn.prismic.io
@@ -187,7 +187,7 @@ DOMAIN-SUFFIX,chainalysis.com
 DOMAIN-SUFFIX,chainbroker.io
 DOMAIN-SUFFIX,chainbroker.io
 DOMAIN-SUFFIX,chippay.com
-DOMAIN-SUFFIX,chippay.com# NAME: Crypto
+DOMAIN-SUFFIX,chippay.com# name: crypto
 DOMAIN-SUFFIX,clearpool.finance
 DOMAIN-SUFFIX,coin.dance
 DOMAIN-SUFFIX,coin.dance
@@ -539,6 +539,6 @@ DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zksync.io
 DOMAIN-SUFFIX,zksync.io
-PROCESS-NAME,Binance.exe
-PROCESS-NAME,Huobi.exe
-PROCESS-NAME,OKX.exe
+PROCESS-NAME,binance.exe
+PROCESS-NAME,huobi.exe
+PROCESS-NAME,okx.exe
