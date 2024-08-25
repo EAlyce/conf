@@ -17,14 +17,19 @@ jobs:
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Get, clean, and strictly deduplicate domains directly into Rule/Crypto.list
+      - name: Get, clean, and deduplicate domains by reversing lines
         run: |
+          # Download and clean the sources
           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
           https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
           https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list \
-          | grep -v '^#' | grep -v '^$' | awk '!seen[$0]++' > Rule/Crypto.list
+          | grep -v '^#' | grep -v '^$' | \
+          # Reverse the lines and process
+          awk '{ print length, $0 }' | sort -nr | awk '{ $1=""; print $0 }' | \
+          # Reverse lines again to get back to original order
+          awk '{ print length, $0 }' | sort -nr | awk '{ $1=""; print $0 }' | uniq > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
