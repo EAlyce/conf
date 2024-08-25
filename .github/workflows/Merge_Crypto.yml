@@ -35,27 +35,26 @@ jobs:
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
             curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
-          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Cleaned_Crypto.list
+          } | grep -v '^#' | grep -v '^$' | sort | uniq | awk -F, '{print $1 "," tolower($2)}' | sort | uniq > Rule/Final_Crypto.list
 
-      - name: Remove duplicate entries
+      - name: Check if there are changes
         run: |
-          awk -F, '!seen[$0]++' Rule/Cleaned_Crypto.list > Rule/Final_Crypto.list
+          git status
+          git diff
 
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
           
-      - name: Force add changes
-        run: git add Rule/Final_Crypto.list || true
-
       - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ! git diff-index --quiet HEAD; then
+          git add Rule/Final_Crypto.list
+          if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Update Final_Crypto.list with latest domains"
-            git push origin HEAD:main --force
+            git push origin HEAD:main
           else
             echo "No changes to commit"
           fi
