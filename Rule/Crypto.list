@@ -101,7 +101,6 @@ DOMAIN-SUFFIX,cex.io
 DOMAIN-SUFFIX,chainalysis.com
 DOMAIN-SUFFIX,chainbroker.io
 DOMAIN-SUFFIX,chippay.com
-DOMAIN-SUFFIX,chippay.com# NAME: Crypto
 DOMAIN-SUFFIX,clearpool.finance
 DOMAIN-SUFFIX,coin.dance
 DOMAIN-SUFFIX,coinalyze.net
@@ -283,6 +282,7 @@ DOMAIN-SUFFIX,tronscan.org
 DOMAIN-SUFFIX,truefi.io
 DOMAIN-SUFFIX,trustwalletapp.com
 DOMAIN-SUFFIX,unisat.io
+DOMAIN-SUFFIX,unisat.io# NAME: Crypto
 DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,vfat.tools
 DOMAIN-SUFFIX,viewbase.com
