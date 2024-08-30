@@ -17,7 +17,7 @@ jobs:
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Download and combine lists from multiple sources
+      - name: Download, clean, and combine lists from multiple sources
         run: |
           # Download and combine lists from multiple sources
           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
@@ -25,42 +25,27 @@ jobs:
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
           https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list \
-          | grep -v '^#' | grep -v '^$' | \
+          | grep -v '#' | grep -v '^$' | \
           # Remove non-printing characters and extra spaces
           tr -d '\r' | tr -d '\t' | tr -s ' ' > Rule/Crypto.list
 
-      - name: Download and integrate lists from LeiyuG/Surge repository
-        run: |
-          # Fetch all list files from LeiyuG/Surge repository's rules directory
+          # Fetch and integrate lists from LeiyuG/Surge repository's rules directory
           curl -s https://api.github.com/repos/LeiyuG/Surge/contents/rules | \
           grep '"download_url"' | \
           cut -d '"' -f 4 | \
           grep '\.list$' | \
           while read -r file; do
-            curl -sSfL "$file" | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
+            curl -sSfL "$file" | grep -v '#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
           done
 
       - name: Clean and preprocess the list
         run: |
-          # Remove lines containing '/' or '*'
-          sed '/[\/\*]/d' Rule/Crypto.list | \
-          # Replace ',.' with ','
-          sed 's/,\.//g' | \
-          # Ensure each line has a ',' between prefix and domain
-          awk -F 'DOMAIN' '{ if (NF > 1) print "DOMAIN," $2; else print $0; }' > Rule/Crypto_with_comma.list
-
-      - name: Fix formatting issues
-        run: |
-          # Replace '-KEYWORD,' with '-KEYWORD,' and remove extra commas
-          sed -e 's/DOMAIN,-KEYWORD,/DOMAIN-KEYWORD,/g' \
-              -e 's/DOMAIN,,/DOMAIN,/g' \
-              -e 's/^\(DOMAIN[^,]*\),\([^,]*\),/\1,\2/' \
-              Rule/Crypto_with_comma.list > Rule/Crypto_fixed.list
+          sed -i -e '/[\/\*]/d' -e '/#/d' Rule/Crypto.list
 
       - name: Final deduplication and sorting
         run: |
           # Remove duplicates and sort the list
-          sort Rule/Crypto_fixed.list | uniq > Rule/Crypto.list
+          sort | uniq > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
