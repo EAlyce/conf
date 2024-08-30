@@ -19,7 +19,7 @@ jobs:
 
       - name: Download and combine lists from multiple sources
         run: |
-          # Download and clean the sources
+          # Download and combine lists from multiple sources
           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
           https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
@@ -27,27 +27,26 @@ jobs:
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list \
           | grep -v '^#' | grep -v '^$' | \
           # Remove non-printing characters and extra spaces
-          tr -d '\r' | tr -d '\t' | tr -s ' ' | \
-          # Sort and deduplicate
-          sort | uniq | sed '/#/d' > Rule/Crypto.list
+          tr -d '\r' | tr -d '\t' | tr -s ' ' > Rule/Crypto.list
 
       - name: Download and integrate lists from LeiyuG/Surge repository
         run: |
           # Fetch all list files from LeiyuG/Surge repository's rules directory
-          for file in $(curl -s https://api.github.com/repos/LeiyuG/Surge/contents/rules | grep '"download_url"' | cut -d '"' -f 4 | grep '\.list$'); do
+          curl -s https://api.github.com/repos/LeiyuG/Surge/contents/rules | \
+          grep '"download_url"' | \
+          cut -d '"' -f 4 | \
+          grep '\.list$' | \
+          while read -r file; do
             curl -sSfL "$file" | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
           done
-          
-      - name: Deduplicate, clean, and remove lines containing '/' or '*'
-        run: |
-          # Remove duplicates, empty lines, and lines containing '/' or '*'
-          sort Rule/Crypto.list | uniq | sed '/#/d' | sed '/[\/\*]/d' > Rule/Crypto_cleaned.list
-          mv Rule/Crypto_cleaned.list Rule/Crypto.list
 
-      - name: Replace ',.' with ','
+      - name: Clean and preprocess the list
         run: |
-          # Replace ',.' with ','
-          sed -i 's/,\.//g' Rule/Crypto.list
+          # Remove lines containing '/' or '*', replace ',.' with ',', and deduplicate
+          sed '/[\/\*]/d' Rule/Crypto.list | sed 's/,\.//g' | sort | uniq > Rule/Crypto_cleaned.list
+          
+          # Replace the cleaned list with the final result
+          mv Rule/Crypto_cleaned.list Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
