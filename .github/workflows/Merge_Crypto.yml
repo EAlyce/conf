@@ -17,54 +17,38 @@ jobs:
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Download and combine lists from multiple sources
+      - name: Get, clean, and deduplicate domains
         run: |
-          # Download and combine lists from multiple sources
+          # Download and clean the sources
           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
           https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
           https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list \
-          | grep -v '#' | grep -v '^$' | \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitfinex.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/FSMOne.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Gate.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kraken.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kucoin.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Nexo.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Pionex.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HongKongBank.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/IBKR.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Trading212.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Vodafone-wificall.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/NigeriaBank.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list \
+          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list \
+          | grep -v '^#' | grep -v '^$' | \
           # Remove non-printing characters and extra spaces
-          tr -d '\r' | tr -d '\t' | tr -s ' ' > Rule/Crypto.list
-
-          # Print the first few lines of the file for debugging
-          echo "Contents of Rule/Crypto.list after initial download and cleaning:"
-          head -n 10 Rule/Crypto.list
-
-      - name: Fetch and integrate lists from LeiyuG/Surge repository's rules directory
-        run: |
-          # Fetch the list of files from LeiyuG/Surge repository
-          curl -s https://api.github.com/repos/LeiyuG/Surge/contents/rules | \
-          grep '"download_url"' | \
-          cut -d '"' -f 4 | \
-          grep '\.list$' | \
-          while read -r file; do
-            echo "Fetching $file"
-            curl -sSfL "$file" | grep -v '#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
-          done
-
-          # Print the first few lines of the file for debugging
-          echo "Contents of Rule/Crypto.list after fetching LeiyuG/Surge lists:"
-          head -n 10 Rule/Crypto.list
-
-      - name: Clean and preprocess the list
-        run: |
-          sed -i -e '/[\/\*]/d' -e '/#/d' Rule/Crypto.list
-
-          # Print the first few lines of the file for debugging
-          echo "Contents of Rule/Crypto.list after cleaning and preprocessing:"
-          head -n 10 Rule/Crypto.list
-
-      - name: Final deduplication and sorting
-        run: |
-          # Remove duplicates and sort the list
-          sort Rule/Crypto.list | uniq > Rule/Crypto.list
-
-          # Print the first few lines of the file for debugging
-          echo "Contents of Rule/Crypto.list after deduplication and sorting:"
-          head -n 10 Rule/Crypto.list
+          tr -d '\r' | tr -d '\t' | tr -s ' ' | \
+          # Sort and deduplicate
+          sort | uniq > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
