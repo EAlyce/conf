@@ -135,6 +135,7 @@ DOMAIN,push-apple.com.akadns.net
 DOMAIN,qualcomm.sc.omtrdc.net
 DOMAIN,s3-ap-southeast-1.amazonaws.com
 DOMAIN,self.events.data.microsoft.com
+DOMAIN,servd-anthropic-website.b-cdn.net
 DOMAIN,staticasiafox.akamaized.net
 DOMAIN,steambroadcast.akamaized.net
 DOMAIN,steamcommunity-a.akamaihd.net
@@ -24051,6 +24052,7 @@ DOMAIN-SUFFIX,x-berry.com
 DOMAIN-SUFFIX,x-caprice.com
 DOMAIN-SUFFIX,x-fetish.org
 DOMAIN-SUFFIX,x-wall.org
+DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,x.co
 DOMAIN-SUFFIX,x.com
 DOMAIN-SUFFIX,x.company
