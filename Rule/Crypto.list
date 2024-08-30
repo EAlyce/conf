@@ -1,9 +1,4 @@
 
-DOMAINdenizbank.com
-DOMAINfastpay.com.tr
-DOMAINisbank.com.tr
-DOMAINiyzipay.com
-DOMAINturgame.com
 DOMAIN,3d.payten.com.tr
 DOMAIN,aacsw.3ds.verifiedbyvisa.com
 DOMAIN,abujaralatsignalr.azurewebsites.net
@@ -163,12 +158,6 @@ DOMAIN-KEYWORD,trading212
 DOMAIN-KEYWORD,vodafoneuk
 DOMAIN-KEYWORD,xcoinsystem
 DOMAIN-KEYWORD,yingwangtech
-DOMAIN-SUFFIXdenizbank.com
-DOMAIN-SUFFIXfastpay.com.tr
-DOMAIN-SUFFIXisbank.com.tr
-DOMAIN-SUFFIXiyzipay.com
-DOMAIN-SUFFIXtrendyol.com
-DOMAIN-SUFFIXturgame.com
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,3d.payten.com.tr
@@ -583,6 +572,7 @@ DOMAIN-SUFFIX,tsb.co.uk
 DOMAIN-SUFFIX,turgame.com
 DOMAIN-SUFFIX,twnodes.com
 DOMAIN-SUFFIX,unisat.io
+DOMAIN-SUFFIX,unisat.io# NAME: Crypto
 DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,uphold.com
 DOMAIN-SUFFIX,vfat.tools
@@ -624,6 +614,17 @@ DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zksync.io
 DOMAIN-SUFFIX,zoho.com
 DOMAIN-SUFFIX,zohopublic.com
+DOMAIN-SUFFIXdenizbank.com
+DOMAIN-SUFFIXfastpay.com.tr
+DOMAIN-SUFFIXisbank.com.tr
+DOMAIN-SUFFIXiyzipay.com
+DOMAIN-SUFFIXtrendyol.com
+DOMAIN-SUFFIXturgame.com
+DOMAINdenizbank.com
+DOMAINfastpay.com.tr
+DOMAINisbank.com.tr
+DOMAINiyzipay.com
+DOMAINturgame.com
 PROCESS-NAME,Binance.exe
 PROCESS-NAME,Huobi.exe
 PROCESS-NAME,OKX.exe
