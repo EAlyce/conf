@@ -38,11 +38,16 @@ jobs:
             curl -sSfL "$file" | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
           done
           
-      - name: Deduplicate and clean the final Crypto.list
+      - name: Deduplicate, clean, and remove lines containing '/' or '*'
         run: |
-          # Remove duplicates and empty lines
-          sort Rule/Crypto.list | uniq | sed '/#/d' > Rule/Crypto_cleaned.list
+          # Remove duplicates, empty lines, and lines containing '/' or '*'
+          sort Rule/Crypto.list | uniq | sed '/#/d' | sed '/[\/\*]/d' > Rule/Crypto_cleaned.list
           mv Rule/Crypto_cleaned.list Rule/Crypto.list
+
+      - name: Replace ',.' with ','
+        run: |
+          # Replace ',.' with ','
+          sed -i 's/,\.//g' Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
