@@ -17,7 +17,7 @@ jobs:
       - name: Delay for 10 seconds
         run: sleep 10
 
-      - name: Get, clean, and deduplicate domains
+      - name: Download and combine lists from multiple sources
         run: |
           # Download and clean the sources
           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
@@ -30,6 +30,19 @@ jobs:
           tr -d '\r' | tr -d '\t' | tr -s ' ' | \
           # Sort and deduplicate
           sort | uniq | sed '/#/d' > Rule/Crypto.list
+
+      - name: Download and integrate lists from LeiyuG/Surge repository
+        run: |
+          # Fetch all list files from LeiyuG/Surge repository's rules directory
+          for file in $(curl -s https://api.github.com/repos/LeiyuG/Surge/contents/rules | grep '"download_url"' | cut -d '"' -f 4 | grep '\.list$'); do
+            curl -sSfL "$file" | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' >> Rule/Crypto.list
+          done
+          
+      - name: Deduplicate and clean the final Crypto.list
+        run: |
+          # Remove duplicates and empty lines
+          sort Rule/Crypto.list | uniq | sed '/#/d' > Rule/Crypto_cleaned.list
+          mv Rule/Crypto_cleaned.list Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
