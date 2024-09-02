@@ -5,7 +5,7 @@ check_root() {
 
 install_tools() {
     echo "Start updating the system..." && sudo apt-get update -y > /dev/null || true && \
-    echo "Start installing software..." && sudo apt-get install -y curl wget mosh ncat netcat-traditional nmap apt-utils apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
+    echo "Start installing software..." && sudo apt-get install -y curl wget ncat netcat-traditional nmap apt-utils apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
     echo "Operation completed"
 }
 
