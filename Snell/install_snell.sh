@@ -102,25 +102,28 @@ setup_environment() {
     export DEBIAN_FRONTEND=noninteractive
     apt-get update > /dev/null || true
     echo "Necessary packages installed."
+    
+# 设置防火墙规则并保存配置
+sudo mkdir -p /etc/iptables
+iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
+iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
+iptables-save > /etc/iptables/rules.v4
+sudo service netfilter-persistent reload > /dev/null || true
+echo "Iptables rules configured and saved."
 
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
-    echo "UDP port range opened."
-    sudo mkdir -p /etc/iptables
-    sudo touch /etc/iptables/rules.v4 > /dev/null || true
-    iptables-save > /etc/iptables/rules.v4
-    service netfilter-persistent reload > /dev/null || true
-    echo "Iptables saved."
+# 更新系统包
+sudo apt-get upgrade -y > /dev/null || true
+echo "System packages updated."
 
-    apt-get upgrade -y > /dev/null || true
-    echo "Packages updated."
+# 设置历史记录大小
+grep -qxF 'export HISTSIZE=10000' ~/.bashrc || echo "export HISTSIZE=10000" >> ~/.bashrc
+source ~/.bashrc
 
-    echo "export HISTSIZE=10000" >> ~/.bashrc
-    source ~/.bashrc
-
-    if [ -f "/proc/sys/net/ipv4/tcp_fastopen" ]; then
-        echo 3 > /proc/sys/net/ipv4/tcp_fastopen > /dev/null || true
-        echo "TCP fast open enabled."
-    fi
+# 禁用 TCP Fast Open
+if [ -f "/proc/sys/net/ipv4/tcp_fastopen" ]; then
+    echo 0 | sudo tee /proc/sys/net/ipv4/tcp_fastopen > /dev/null
+    echo "TCP Fast Open disabled."
+fi
 
     docker system prune -af --volumes > /dev/null || true
     echo "Docker system pruned."
