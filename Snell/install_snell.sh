@@ -214,6 +214,7 @@ listen = 0.0.0.0:$PORT_NUMBER
 psk = $PASSWORD
 tfo = false
 obfs = off
+dns = 8.8.8.8, 1.1.1.1, 2001:4860:4860::8888
 ipv6 = false
 EOF
 
