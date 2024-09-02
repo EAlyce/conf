@@ -5,7 +5,7 @@ check_root() {
 
 install_tools() {
     echo "Start updating the system..." && sudo apt-get update -y > /dev/null || true && \
-    echo "Start installing software..." && sudo apt-get install -y curl wget ncat netcat-traditional nmap apt-utils apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
+    echo "Start installing software..." && sudo apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
     echo "Operation completed"
 }
 
@@ -128,7 +128,7 @@ setup_environment() {
     iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
     echo "SYN packets accepted."
 
-    curl -fsSL https://raw.githubusercontent.com/EAlyce/ToolboxScripts/master/Linux.sh | bash > /dev/null && echo "Network optimization completed"
+    sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p" > /dev/null && echo "Network optimization completed"
 }
 
 select_version() {
