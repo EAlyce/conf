@@ -55,7 +55,7 @@ jobs:
           grep -E '^IP-CIDR|^DOMAIN,|^DOMAIN-SUFFIX|^DOMAIN-KEYWORD' | \
           
           # 检查行中是否含有字符 * 或 /，并在找到这些字符时将其删除，但保留行中其他部分
-          sed '/^IP-CIDR/!s/[\/\*]//g; /^IP-CIDR/s/$/,no-resolve/' | \
+          sed '/^IP-CIDR/s/,no-resolve//g; /^IP-CIDR/s/$/,no-resolve/; /IP-CIDR/!s/[\/\*]//g' | \
 
           # 将以 'DOMAIN,' 开头的行中的 'DOMAIN,' 替换为 'DOMAIN-KEYWORD,'
           sed '/^DOMAIN,/s/^DOMAIN,/DOMAIN-KEYWORD,/; s/DOMAIN-SUFFIX/DOMAIN-KEYWORD/g' | \
