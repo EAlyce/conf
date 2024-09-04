@@ -12,10 +12,10 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4  # 检查是否使用了最新的 checkout action
 
       - name: Delay for 10 seconds
-        run: sleep 10
+        run: sleep 10  # 这个步骤没有问题，但如果没有必要可以移除
 
       - name: Get, clean, and deduplicate domains
         run: |
@@ -56,20 +56,21 @@ jobs:
       - name: Check if there are changes
         run: |
           git status
-          git diff
+          git diff  # 这两个命令检查本地更改，确保脚本正确处理更改
 
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
-          git config --global user.name "github-actions"
-          
+          git config --global user.name "github-actions"  # 配置 Git 用户信息
+
       - name: Commit and push changes if needed
         env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Token 进行身份验证
         run: |
-         git add Rule/Crypto.list
-         if [ -n "$(git status --porcelain)" ]; then
-           git commit -m "Update Crypto.list"
-           git push origin HEAD:main
-         else
-           echo "No changes to commit"
+          git add Rule/Crypto.list
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Update Crypto.list"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
+          fi  # 确保 if 语句正确闭合
