@@ -20,7 +20,8 @@ jobs:
       - name: Get, clean, and deduplicate domains
         run: |
           # 下载并清理数据源
-          curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
+          curl -sSfL \
+          https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
           https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list \
           https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
           https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list \
@@ -45,18 +46,12 @@ jobs:
           https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list \
           https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list | \
           grep -v '^#' | grep -v '^$' | \
-          # 移除不可打印字符和额外空格
           tr -d '\r' | tr -d '\t' | tr -s ' ' | \
-          # 保留以 IP-CIDR 开头的行
           grep -E '^IP-CIDR|^DOMAIN,' | \
-          # 提取域名，去除包含通配符 (*) 和斜杠 (/) 的行
           grep -vE '^DOMAIN,.*/|\*' | \
-          # 为域名添加前缀 "DOMAIN-KEYWORD,"
           sed '/^DOMAIN,/s/^DOMAIN,/DOMAIN-KEYWORD,/' | \
-          # 删除以 PROCESS-NAME 和 USER-AGENT 开头的行
           grep -vE '^(PROCESS-NAME|USER-AGENT)' | \
-          # 排序和去重
-          sort | uniq > Rule/Crypto.list
+          sort -u > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
@@ -74,7 +69,7 @@ jobs:
         run: |
          git add Rule/Crypto.list
          if [ -n "$(git status --porcelain)" ]; then
-         git commit -m "Update Crypto.list"
-         git push origin HEAD:main
+           git commit -m "Update Crypto.list"
+           git push origin HEAD:main
          else
-         echo "No changes to commit"
+           echo "No changes to commit"
