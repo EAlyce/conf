@@ -19,53 +19,32 @@ jobs:
 
       - name: Get, clean, and deduplicate domains
         run: |
-          # 下载并清理数据源
-          curl -sSfL \
-          https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt \
-          https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list \
-          https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list \
-          https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list \
-          https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitfinex.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/FSMOne.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Gate.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kraken.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kucoin.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Nexo.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Pionex.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HongKongBank.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/IBKR.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Trading212.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Vodafone-wificall.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/NigeriaBank.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list \
-          https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list | \
-          # 去除注释行和空行
-          grep -v '^#' | grep -v '^$' | \
-
-          # 删除回车符和制表符，压缩多个空格为一个空格
-          tr -d '\r' | tr -d '\t' | tr -s ' ' | \
-
-          # 筛选出以 'IP-CIDR'、'DOMAIN,'、'DOMAIN-SUFFIX' 或 'DOMAIN-KEYWORD' 开头的行
-          grep -E '^IP-CIDR|^DOMAIN,|^DOMAIN-SUFFIX|^DOMAIN-KEYWORD' | \
-          
-          # 检查行中是否含有字符 * 或 /，并在找到这些字符时将其删除，但保留行中其他部分
-          sed '/^IP-CIDR/s/,no-resolve//g; /^IP-CIDR/s/$/,no-resolve/; /IP-CIDR/!s/[\/\*]//g' | \
-
-          # 将以 'DOMAIN,' 开头的行中的 'DOMAIN,' 替换为 'DOMAIN-KEYWORD,'
-          sed '/^DOMAIN,/s/^DOMAIN,/DOMAIN-KEYWORD,/; s/DOMAIN-SUFFIX/DOMAIN-KEYWORD/g' | \
-
-          # 排除以 'PROCESS-NAME' 或 'USER-AGENT' 开头的行
-          grep -vE '^(PROCESS-NAME|USER-AGENT)' | \
-
-          # 对结果进行排序并去重，将最终结果输出到 'Rule/Crypto.list' 文件中
-          sort -u > Rule/Crypto.list
-
+          {
+           curl -sSfL https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitfinex.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/FSMOne.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Gate.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kraken.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kucoin.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Nexo.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Pionex.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HongKongBank.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/IBKR.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Trading212.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Vodafone-wificall.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/NigeriaBank.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list | awk '{print $0 "\n"}'
+           curl -sSfL https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list | awk '{print $0 "\n"}'
+          } | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' | sed '/^IP-CIDR/s/,no-resolve//g; /^IP-CIDR/s/$/,no-resolve/; /IP-CIDR/!s/[\/\*]//g' | sort | uniq | awk 'NF > 0' > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
