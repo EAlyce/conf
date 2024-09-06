@@ -30,14 +30,13 @@ jobs:
 
       - name: Get and process domains
         run: |
-          for url in \
-            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" \
-            "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" \
-            "https://ruleset.skk.moe/List/non_ip/stream.conf" \
-            "https://ruleset.skk.moe/List/non_ip/cdn.conf" \
-            "https://ruleset.skk.moe/List/non_ip/global.conf"; do
-            curl -sSfL $url
-          done | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Proxy.list
+          {
+           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
+           curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
+           curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
+          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
