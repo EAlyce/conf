@@ -1,27 +1,27 @@
-AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-eastus-),(DOMAIN-SUFFIX,webpubsub.azure.com))
-AND,((DOMAIN-KEYWORD,openaicom-api-),(DOMAIN-SUFFIX,azurefd.net))
-DOMAIN,ai.google.dev
-DOMAIN,aida.googleapis.com
-DOMAIN,aistudio.google.com
-DOMAIN,alkalimakersuite-pa.clients6.google.com
-DOMAIN,api.githubcopilot.com
-DOMAIN,bard.google.com
-DOMAIN,chat.mistral.ai
-DOMAIN,chat.openai.com.cdn.cloudflare.net
-DOMAIN,console.mistral.ai
-DOMAIN,copilot-proxy.githubusercontent.com
-DOMAIN,copilot.microsoft.com
-DOMAIN,gemini.google.com
-DOMAIN,generativelanguage.googleapis.com
-DOMAIN,imagine.meta.com
-DOMAIN,makersuite.google.com
-DOMAIN,o33249.ingest.sentry.io
-DOMAIN,openaiapi-site.azureedge.net
-DOMAIN,openaicom.imgix.net
-DOMAIN,openaicomproductionae4b.blob.core.windows.net
-DOMAIN,production-openaicom-storage.azureedge.net
-DOMAIN,sydney.bing.com
-DOMAIN,www.bing.com
+AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-eastus-), (DOMAIN-SUFFIX, webpubsub.azure.com))
+AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
+DOMAIN, ai.google.dev
+DOMAIN, aida.googleapis.com
+DOMAIN, aistudio.google.com
+DOMAIN, alkalimakersuite-pa.clients6.google.com
+DOMAIN, api.githubcopilot.com
+DOMAIN, bard.google.com
+DOMAIN, chat.mistral.ai
+DOMAIN, chat.openai.com.cdn.cloudflare.net
+DOMAIN, console.mistral.ai
+DOMAIN, copilot-proxy.githubusercontent.com
+DOMAIN, copilot.microsoft.com
+DOMAIN, gemini.google.com
+DOMAIN, generativelanguage.googleapis.com
+DOMAIN, imagine.meta.com
+DOMAIN, makersuite.google.com
+DOMAIN, o33249.ingest.sentry.io
+DOMAIN, openaiapi-site.azureedge.net
+DOMAIN, openaicom.imgix.net
+DOMAIN, openaicomproductionae4b.blob.core.windows.net
+DOMAIN, production-openaicom-storage.azureedge.net
+DOMAIN, sydney.bing.com
+DOMAIN, www.bing.com
 DOMAIN,ai.google.dev
 DOMAIN,aistudio.google.com
 DOMAIN,alkalicore-pa.clients6.google.com
@@ -64,17 +64,17 @@ DOMAIN,www.bing.com
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
-DOMAIN-SUFFIX,anthropic.com
-DOMAIN-SUFFIX,chatgpt.com
-DOMAIN-SUFFIX,claude.ai
-DOMAIN-SUFFIX,grazie.ai
-DOMAIN-SUFFIX,grazie.aws.intellij.net
-DOMAIN-SUFFIX,meta.ai
-DOMAIN-SUFFIX,mistral.ai
-DOMAIN-SUFFIX,oaistatic.com
-DOMAIN-SUFFIX,oaiusercontent.com
-DOMAIN-SUFFIX,openai.com
-DOMAIN-SUFFIX,perplexity.ai
+DOMAIN-SUFFIX, anthropic.com
+DOMAIN-SUFFIX, chatgpt.com
+DOMAIN-SUFFIX, claude.ai
+DOMAIN-SUFFIX, grazie.ai
+DOMAIN-SUFFIX, grazie.aws.intellij.net
+DOMAIN-SUFFIX, meta.ai
+DOMAIN-SUFFIX, mistral.ai
+DOMAIN-SUFFIX, oaistatic.com
+DOMAIN-SUFFIX, oaiusercontent.com
+DOMAIN-SUFFIX, openai.com
+DOMAIN-SUFFIX, perplexity.ai
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
 DOMAIN-SUFFIX,algolia.net
@@ -129,7 +129,7 @@ DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,x.ai
 IP-ASN,14061,no-resolve
 IP-ASN,20473,no-resolve
-IP-CIDR,160.79.104.0/23,no-resolve
+IP-CIDR, 160.79.104.0/23, no-resolve
 IP-CIDR,104.238.150.13/32,no-resolve
 IP-CIDR,129.146.3.78/32,no-resolve
 IP-CIDR,143.110.232.239/32,no-resolve
@@ -144,7 +144,7 @@ IP-CIDR,45.32.12.145/32,no-resolve
 IP-CIDR,45.55.196.68/32,no-resolve
 IP-CIDR,45.76.214.191/32,no-resolve
 IP-CIDR,64.23.132.171/32,no-resolve
-IP-CIDR6,2607:6bc0::/48,no-resolve
+IP-CIDR6, 2607:6bc0::/48, no-resolve
 IP-CIDR6,2001:19f0:7001:1149:5400:4ff:feac:a0b3/128,no-resolve
 IP-CIDR6,2001:19f0:7001:55b3:5400:4ff:feab:ba8f/128,no-resolve
 IP-CIDR6,2001:19f0:7001:8e6:5400:4ff:feab:b953/128,no-resolve
