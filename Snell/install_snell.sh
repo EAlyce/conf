@@ -163,21 +163,33 @@ select_architecture() {
 }
 
 generate_port() {
-    EXCLUDED_PORTS=(5432 5554 5800 5900 6379 8080 9996 1053 5353 8053 9153 9253)
+    ALLOWED_PORTS=(23456 23556)
 
     if ! command -v nc.traditional &> /dev/null; then
         sudo apt-get update
-        sudo apt-get install netcat-traditional
+        sudo apt-get install -y netcat-traditional
     fi
 
-    while true; do
-        PORT_NUMBER=$(shuf -i 5000-60000 -n 1)
+    for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
+        if nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
+            echo "端口 $PORT_NUMBER 已被占用，跳过..."
+        else
+            echo "选定的端口: $PORT_NUMBER"
+            return
+        fi
+    done
 
-        if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER" && [[ ! " ${EXCLUDED_PORTS[@]} " =~ " ${PORT_NUMBER} " ]]; then
+    echo "所有指定端口都被占用，随机选择一个新的可用端口..."
+    while true; do
+        RANDOM_PORT=$(shuf -i 1000-9999 -n 1)
+
+        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
+            echo "选定的随机端口: $RANDOM_PORT"
             break
         fi
     done
 }
+
 
 setup_firewall() {
     sudo iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
@@ -185,7 +197,7 @@ setup_firewall() {
 }
 
 generate_password() {
-    PASSWORD=$(openssl rand -base64 12) || { echo "Error: Unable to generate password"; exit 1; }
+    PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
     echo "Password generated: $PASSWORD"
 }
 
