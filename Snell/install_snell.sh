@@ -5,24 +5,26 @@ check_root() {
 }
 
 clean_lock_files() {
-    echo "Start cleaning the system..."
-    pkill -9 apt dpkg || true
-    rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock || true
-    dpkg --configure -a > /dev/null || true
+
+    pkill -9 apt dpkg
+    rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
+    dpkg --configure -a > /dev/null
     apt-get clean autoclean > /dev/null
     apt-get autoremove -y > /dev/null
-    rm -rf /tmp/* > /dev/null
-    history -c && history -w > /dev/null
+    rm -rf /tmp/*
+    history -c && history -w
     dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null
-    echo "Cleaning completed"
+
 }
+
 
 install_tools() {
     echo "Start updating the system and installing software..."
-    apt-get update -y > /dev/null && \
-    apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common > /dev/null
-    echo "Operation completed"
+    apt-get update -y
+    apt-get install -y curl netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common
+
 }
+
 
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
