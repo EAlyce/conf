@@ -42,17 +42,15 @@ get_public_ip() {
     exit 1
 }
 
-# 获取主机位置
 get_location() {
-    local location_services=("http://ip-api.com/line?fields=city" "ipinfo.io/city")
-    for service in "${location_services[@]}"; do
-        LOCATION=$(curl -s "$service" 2>/dev/null)
-        [ -n "$LOCATION" ] && echo "Host location: $LOCATION" && return
-        sleep 1
-    done
-    echo "Unable to obtain city name."
+    local service="http://ipinfo.io/city"
+    LOCATION=$(curl -s "$service" 2>/dev/null)
+    if [ -n "$LOCATION" ]; then
+        echo "Host location: $LOCATION"
+    else
+        echo "Unable to obtain city name."
+    fi
 }
-
 # 设置环境
 setup_environment() {
     echo "Setting up environment..."
@@ -166,9 +164,9 @@ EOF
 
 print_node() {
     if [ "$choice" == "1" ]; then
-        echo "$public_ip = snell,  $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo "$LOCATION = snell, $public_ip， $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
     elif [ "$choice" == "2" ]; then
-        echo "$public_ip = snell, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo "$LOCATION = snell, $public_ip，$PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
     fi
 }
 
