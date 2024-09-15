@@ -1,7 +1,7 @@
 #!/bin/bash
 
 check_root() {
-    [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
+    [ "$(id -u)" != "0" ] && echo "运行脚本需要root权限" && exit 1
 }
 
 clean_lock_files() {
