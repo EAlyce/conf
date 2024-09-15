@@ -28,12 +28,26 @@ clean_lock_files() {
 
 
 install_tools() {
+    echo "开始更新系统并安装必要的软件包..."
 
-    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
-    apt-get install -y curl netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common
+    # 更新系统并升级所有包
+    apt-get update -y || echo "更新失败"
+    apt-get upgrade -y || echo "升级失败"
+    apt-get dist-upgrade -y || echo "分发升级失败"
+    apt-get full-upgrade -y || echo "完全升级失败"
 
+    # 安装所需的软件包
+    apt-get install -y \
+        curl \
+        netcat-traditional \
+        apt-transport-https \
+        ca-certificates \
+        iptables-persistent \
+        netfilter-persistent \
+        software-properties-common || echo "软件包安装失败"
+
+    echo "更新完成"
 }
-
 
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
