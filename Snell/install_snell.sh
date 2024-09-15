@@ -38,7 +38,6 @@ install_tools() {
 
     # 安装所需的软件包
     apt-get install -y \
-        curl \
         netcat-traditional \
         apt-transport-https \
         ca-certificates \
