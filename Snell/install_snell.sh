@@ -144,16 +144,20 @@ dns = 8.8.8.8,8.8.4.4,208.67.222.222,208.67.220.220
 ipv6 = false
 EOF
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-    echo "节点信息如下\n"
+    echo "节点信息如下"
 }
 
 print_node() {
-    echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+    echo -e "\n\n\n$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER\n\n\n"
 }
+
 
 main() {
     check_root
     clean_lock_files &
+    CLEAN_LOCK_FILES_PID=$!
+    # 等待 clean_lock_files 完成
+    wait $CLEAN_LOCK_FILES_PID
     get_public_ip
     get_location
     install_tools
