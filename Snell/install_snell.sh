@@ -19,7 +19,7 @@ clean_lock_files() {
 
 
 install_tools() {
-    echo "Start updating the system and installing software..."
+
     apt-get update -y
     apt-get install -y curl netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common
 
@@ -51,7 +51,7 @@ get_location() {
 }
 
 setup_environment() {
-    echo "Setting up environment..."
+
     echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq
@@ -116,7 +116,7 @@ setup_firewall() {
 
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
-    echo "Password generated: $PASSWORD"
+
 }
 
 setup_docker() {
