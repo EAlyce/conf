@@ -2,6 +2,7 @@
 
 # 定义设置 PATH 的函数
 set_custom_path() {
+    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
     echo "开始检查 PATH 变量..."
     PATH_CHECK=$(crontab -l | grep -q '^PATH=' && echo "true" || echo "false")
 
@@ -22,7 +23,6 @@ optimize_system() {
     dpkg --list | awk '/^ii.*linux-(image|headers)-[0-9]/&&!/'$(uname -r)'/ {print $2}' | xargs apt-get -y purge
     sudo apt-get update
     sudo apt-get install -y python3.11
-
     sudo dpkg --configure -a
     sudo apt-get install -f
 
@@ -110,9 +110,9 @@ while true; do
     echo "----------------------------"
     echo "      PagerMaid安装选项"
     echo "----------------------------"
-    echo "[1] Linux多用户(推荐)"
+    echo "[1] Linux多用户"
     echo "[2] 官方Linux单用户"
-    echo "[3] Docker多用户"
+    echo "[3] Docker多用户(推荐)"
     echo "[0] 退出"
     echo "----------------------------"
     read -p "输入选项 [ 0 - 3 ]：" choice
