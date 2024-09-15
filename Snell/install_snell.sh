@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 检查是否为 root 用户
+
 check_root() {
     [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
 
-# 清理系统
+
 clean_lock_files() {
     echo "Start cleaning the system..."
     pkill -9 apt dpkg || true
@@ -19,7 +19,7 @@ clean_lock_files() {
     echo "Cleaning completed"
 }
 
-# 安装工具
+
 install_tools() {
     echo "Start updating the system and installing software..."
     apt-get update -y > /dev/null && \
@@ -27,7 +27,7 @@ install_tools() {
     echo "Operation completed"
 }
 
-# 获取公共 IP
+
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
@@ -51,7 +51,7 @@ get_location() {
         echo "Unable to obtain city name."
     fi
 }
-# 设置环境
+
 setup_environment() {
     echo "Setting up environment..."
     echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
@@ -100,10 +100,10 @@ generate_port() {
     command -v nc.traditional &> /dev/null || apt-get install -y netcat-traditional
     for PORT in "${ALLOWED_PORTS[@]}"; do
         if nc.traditional -z 127.0.0.1 "$PORT"; then
-            echo "端口 $PORT 已被占用，跳过..."
+
         else
             PORT_NUMBER="$PORT"
-            echo "选定的端口: $PORT_NUMBER"
+
             setup_firewall "$PORT_NUMBER"
             return
         fi
@@ -111,7 +111,7 @@ generate_port() {
     while true; do
         PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
         if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
-            echo "选定的随机端口: $PORT_NUMBER"
+
             setup_firewall "$PORT_NUMBER"
             break
         fi
@@ -122,16 +122,16 @@ generate_port() {
 setup_firewall() {
     local PORT="$1"
     iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "错误: 无法添加防火墙规则"; exit 1; }
-    echo "已添加防火墙规则，允许端口 $PORT 的流量"
+
 }
 
-# 生成密码
+
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
     echo "Password generated: $PASSWORD"
 }
 
-# 设置 Docker
+
 setup_docker() {
     local NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR/snell-conf" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
@@ -159,14 +159,14 @@ dns = 8.8.8.8,8.8.4.4,208.67.222.222,208.67.220.220
 ipv6 = false
 EOF
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-    echo "Node setup completed. Here is your node information"
+    echo "节点信息如下\n"
 }
 
 print_node() {
     if [ "$choice" == "1" ]; then
-        echo "$LOCATION = snell, $public_ip， $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
     elif [ "$choice" == "2" ]; then
-        echo "$LOCATION = snell, $public_ip，$PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
     fi
 }
 
