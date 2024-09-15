@@ -1,10 +1,8 @@
 #!/bin/bash
 
-
 check_root() {
     [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
-
 
 clean_lock_files() {
     echo "Start cleaning the system..."
@@ -15,10 +13,9 @@ clean_lock_files() {
     apt-get autoremove -y > /dev/null
     rm -rf /tmp/* > /dev/null
     history -c && history -w > /dev/null
-    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs apt-get -y purge > /dev/null
+    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null
     echo "Cleaning completed"
 }
-
 
 install_tools() {
     echo "Start updating the system and installing software..."
@@ -26,7 +23,6 @@ install_tools() {
     apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common > /dev/null
     echo "Operation completed"
 }
-
 
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
@@ -70,7 +66,6 @@ setup_environment() {
     echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p > /dev/null
 }
 
-# 选择 Snell 版本
 select_version() {
     echo "选择 Snell 版本："
     echo "1. Snell v3"
@@ -86,7 +81,6 @@ select_version() {
     esac
 }
 
-# 选择架构
 select_architecture() {
     ARCH="$(uname -m)"
     ARCH_TYPE="linux-amd64.zip"
@@ -94,16 +88,12 @@ select_architecture() {
     SNELL_URL="${BASE_URL}/${SUB_PATH}-${ARCH_TYPE}"
 }
 
-# 生成端口号
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
     command -v nc.traditional &> /dev/null || apt-get install -y netcat-traditional
     for PORT in "${ALLOWED_PORTS[@]}"; do
-        if nc.traditional -z 127.0.0.1 "$PORT"; then
-
-        else
+        if ! nc.traditional -z 127.0.0.1 "$PORT"; then
             PORT_NUMBER="$PORT"
-
             setup_firewall "$PORT_NUMBER"
             return
         fi
@@ -111,26 +101,21 @@ generate_port() {
     while true; do
         PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
         if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
-
             setup_firewall "$PORT_NUMBER"
             break
         fi
     done
 }
 
-# 设置防火墙
 setup_firewall() {
     local PORT="$1"
-    iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "错误: 无法添加防火墙规则"; exit 1; }
-
+    iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
 }
-
 
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
     echo "Password generated: $PASSWORD"
 }
-
 
 setup_docker() {
     local NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
@@ -163,15 +148,9 @@ EOF
 }
 
 print_node() {
-    if [ "$choice" == "1" ]; then
-        echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
-    elif [ "$choice" == "2" ]; then
-        echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
-    fi
+    echo "$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
 }
 
-
-# 主程序
 main() {
     check_root
     clean_lock_files &
@@ -187,5 +166,4 @@ main() {
     print_node
 }
 
-# 开始执行
 main
