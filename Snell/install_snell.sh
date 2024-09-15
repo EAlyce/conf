@@ -32,9 +32,9 @@ install_tools() {
 
     # 更新系统并升级所有包
     apt-get update -y || echo "更新失败"
-    apt-get upgrade -y || echo "升级失败"
-    apt-get dist-upgrade -y || echo "分发升级失败"
-    apt-get full-upgrade -y || echo "完全升级失败"
+    # apt-get upgrade -y || echo "升级失败"
+    # apt-get dist-upgrade -y || echo "分发升级失败"
+    # apt-get full-upgrade -y || echo "完全升级失败"
 
     # 安装所需的软件包
     apt-get install -y \
