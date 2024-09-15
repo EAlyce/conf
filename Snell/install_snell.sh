@@ -20,7 +20,7 @@ clean_lock_files() {
 
 install_tools() {
 
-    apt-get update -y
+    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
     apt-get install -y curl netcat-traditional apt-transport-https ca-certificates iptables-persistent netfilter-persistent software-properties-common
 
 }
