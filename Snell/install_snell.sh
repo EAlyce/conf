@@ -73,7 +73,7 @@ get_location() {
 }
 
 setup_environment() {
-
+    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
     echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq
