@@ -100,20 +100,21 @@ select_architecture() {
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
     command -v nc.traditional &> /dev/null || apt-get install -y netcat-traditional
-    for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
-        if nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
-            echo "端口 $PORT_NUMBER 已被占用，跳过..."
+    for PORT in "${ALLOWED_PORTS[@]}"; do
+        if nc.traditional -z 127.0.0.1 "$PORT"; then
+            echo "端口 $PORT 已被占用，跳过..."
         else
+            PORT_NUMBER="$PORT"
             echo "选定的端口: $PORT_NUMBER"
             setup_firewall "$PORT_NUMBER"
             return
         fi
     done
     while true; do
-        RANDOM_PORT=$(shuf -i 1000-9999 -n 1)
-        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
-            echo "选定的随机端口: $RANDOM_PORT"
-            setup_firewall "$RANDOM_PORT"
+        PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
+        if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
+            echo "选定的随机端口: $PORT_NUMBER"
+            setup_firewall "$PORT_NUMBER"
             break
         fi
     done
