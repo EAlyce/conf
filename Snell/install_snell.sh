@@ -1,8 +1,17 @@
 #!/bin/bash
 
 check_root() {
-    [ "$(id -u)" != "0" ] && echo "运行脚本需要root权限" && exit 1
+    if [ "$(id -u)" != "0" ]; then
+        echo "运行脚本需要root权限"
+        exit 1
+    fi
+
+    if ! command -v apt &> /dev/null; then
+        echo "警告: 脚本仅支持 Debian 或 Ubuntu 系统。"
+        exit 1
+    fi
 }
+
 
 clean_lock_files() {
 
