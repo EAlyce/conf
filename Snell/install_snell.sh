@@ -157,29 +157,21 @@ listen = 0.0.0.0:$PORT_NUMBER
 psk = $PASSWORD
 tfo = false
 obfs = off
-dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
+dns = 8.8.8.8,8.8.4.4,208.67.222.222,208.67.220.220
 ipv6 = false
 EOF
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
     echo "Node setup completed. Here is your node information"
 }
 
-# 输出节点信息
 print_node() {
     if [ "$choice" == "1" ]; then
-        echo
-        echo "  - name: $LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER"
-        echo "    type: snell"
-        echo "    server: $public_ip"
-        echo "    port: $PORT_NUMBER"
-        echo "    cipher: chacha20-ietf-poly1305"
-        echo "    psk: $PASSWORD"
-        echo "    version: $VERSION_NUMBER"
-        echo
-    else
-        echo "Proxy = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER, tfo=false"
+        echo "$public_ip = snell,  $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+    elif [ "$choice" == "2" ]; then
+        echo "$public_ip = snell, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
     fi
 }
+
 
 # 主程序
 main() {
