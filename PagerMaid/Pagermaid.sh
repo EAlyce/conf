@@ -1,48 +1,67 @@
 #!/bin/bash
-# 检测本地系统是否安装Python 3.11+
 install_or_update_python() {
-    # 检测本地系统是否安装Python 3.11+
-    if command -v python3.11 &> /dev/null; then
-        # 如果已安装，则将python3默认使用3.11+
-        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+    # 检测是否已安装 Python 3
+    if command -v python3 &> /dev/null; then
+        INSTALLED_VERSION=$(python3 --version | awk '{print $2}')
+        echo "已安装的 Python 版本: $INSTALLED_VERSION"
+        
+        # 比较当前安装的 Python 版本是否高于 3.10
+        if [[ $(echo "$INSTALLED_VERSION" | awk -F. '{print ($1 * 100 + $2)}') -ge 310 ]]; then
+            echo "已安装的 Python 版本高于 3.10，无需安装或更新。"
+            return
+        else
+            echo "已安装的 Python 版本低于 3.10，正在更新 Python..."
+        fi
     else
-        # 如果未安装，则执行安装Python 3.11的代码
-        install_python() {
-            # 更新系统
-            apt update
-
-            # 安装编译Python所需的依赖项
-            apt install -y build-essential zlib1g-dev libffi-dev libssl-dev libncurses-dev libsqlite3-dev libreadline-dev libbz2-dev liblzma-dev libgdbm-dev libdb5.3-dev libexpat1-dev libmpdec-dev libffi-dev tk-dev
-
-            # 下载Python 3.11源代码
-            wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
-
-            # 解压缩源代码
-            tar -xf Python-3.11.0.tar.xz
-
-            # 进入源代码目录
-            cd Python-3.11.0
-            # 配置并安装Python 3.11
-            ./configure --enable-optimizations
-            make -j $(nproc)
-            make altinstall
-
-            # 清理安装过程中的临时文件
-            cd ..
-            rm -rf Python-3.11.0
-            rm Python-3.11.0.tar.xz
-
-            # 创建软链接以使python3.11命令可用
-            ln -s /usr/local/bin/python3.11 /usr/bin/python3.11
-            alias python=python3.11
-            python --version
-        }
-
-        # 执行安装Python 3.11的函数
-        install_python
+        echo "Python 3 未安装，正在安装最新版本的 Python 3..."
     fi
-}
 
+    # 更新系统
+    sudo apt update
+
+    # 安装编译 Python 所需的依赖项
+    sudo apt install -y build-essential zlib1g-dev libffi-dev libssl-dev \
+    libncurses-dev libsqlite3-dev libreadline-dev libbz2-dev liblzma-dev \
+    libgdbm-dev libdb5.3-dev libexpat1-dev libmpdec-dev tk-dev wget
+
+    # 获取最新版本的 Python 3
+    PYTHON_VERSION=$(wget -qO- https://www.python.org/ftp/python/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort -V | tail -n 1)
+    
+    # 比较最新版本是否高于 3.10
+    if [[ $(echo "$PYTHON_VERSION" | awk -F. '{print ($1 * 100 + $2)}') -lt 310 ]]; then
+        echo "最新的 Python 版本 ($PYTHON_VERSION) 低于 3.10，无需安装。"
+        return
+    fi
+
+    echo "正在安装 Python $PYTHON_VERSION..."
+
+    # 下载 Python 源代码
+    wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz
+
+    # 解压缩源代码
+    tar -xf Python-${PYTHON_VERSION}.tar.xz
+
+    # 进入源代码目录
+    cd Python-${PYTHON_VERSION}
+
+    # 配置并安装 Python
+    ./configure --enable-optimizations
+    make -j $(nproc)
+    sudo make altinstall
+
+    # 清理安装过程中的临时文件
+    cd ..
+    rm -rf Python-${PYTHON_VERSION} Python-${PYTHON_VERSION}.tar.xz
+
+    # 创建软链接以确保 python3 命令可用
+    sudo ln -sf /usr/local/bin/python3.${PYTHON_VERSION%.*} /usr/bin/python3
+
+    # 输出 Python 版本以验证安装
+    python3 --version
+
+    # 设置默认 python3 版本为最新版本
+    sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_VERSION%.*} 1
+}
 
 configure() {
     echo "生成配置文件中 . . ."
@@ -77,7 +96,8 @@ TEXT
 start_installation() {
     install_or_update_python
     sudo apt-get update && sudo apt-get install -y python3-venv
-	# 进入目录
+
+    # 进入目录
     cd /var/lib
 
     # 删除旧文件夹
@@ -92,38 +112,42 @@ start_installation() {
 
     # 进入新目录
     cd /var/lib/pagermaid
-    # 创建 Python 3.11 虚拟环境并输出信息到/dev/null
-python3.11 -m venv venv > /dev/null
 
-# 激活虚拟环境
-source venv/bin/activate
+    # 创建 Python 虚拟环境并输出信息到/dev/null
+    ${PYTHON_VERSION} -m venv venv > /dev/null
 
-# 清除pip缓存
-python3.11 -m pip cache purge
+    # 激活虚拟环境
+    source venv/bin/activate
 
-# 升级pip
-python3.11 -m pip install --upgrade pip
+    # 清除pip缓存
+    ${PYTHON_VERSION} -m pip cache purge
 
-# 强制重新安装 coloredlogs
-python3.11 -m pip install --force-reinstall coloredlogs emoji
+    # 升级pip
+    ${PYTHON_VERSION} -m pip install --upgrade pip
 
-# 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
-python3.11 -m pip install --force-reinstall -r requirements.txt > /dev/null || true
+    # 强制重新安装 coloredlogs
+    ${PYTHON_VERSION} -m pip install --force-reinstall coloredlogs emoji
 
-# 创建目录
-mkdir -p /var/lib/pagermaid/data
+    # 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
+    ${PYTHON_VERSION} -m pip install --force-reinstall -r requirements.txt > /dev/null || true
 
-# 运行 configure（假设这是一个可执行文件）
-configure
+    # 创建目录
+    mkdir -p /var/lib/pagermaid/data
 
-# 运行 pagermaid
-python3.11 -m pagermaid
+    # 运行 configure（假设这是一个可执行文件）
+    configure
+
+    # 运行 pagermaid
+    ${PYTHON_VERSION} -m pagermaid
 
     systemctl_reload
+
     # 离开虚拟环境
     deactivate
+
     echo "PagerMaid部署完成"
 }
+
 
 cleanup() {
     if [ ! -x "/var/lib/pagermaid" ]; then
