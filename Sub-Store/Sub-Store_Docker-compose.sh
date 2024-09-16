@@ -82,7 +82,7 @@ EOF
     docker-compose up -d || { echo "Error: Unable to start Docker container" >&2; exit 1; }
     echo "您的Sub-Store信息如下"
     echo -e "\n后端地址：$public_ip:3001\n"
-    echo -e "\nAPI：$public_ip:3001/$secret_key\n"
+    echo -e "\nAPI：http://$public_ip:3001/$secret_key\n"
 }
 
 main() {
