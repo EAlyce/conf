@@ -1,4 +1,5 @@
 #!/bin/bash
+
 install_or_update_python() {
     # 检测是否已安装 Python 3
     if command -v python3 &> /dev/null; then
@@ -56,11 +57,11 @@ install_or_update_python() {
     # 创建软链接以确保 python3 命令可用
     sudo ln -sf /usr/local/bin/python3.${PYTHON_VERSION%.*} /usr/bin/python3
 
-    # 输出 Python 版本以验证安装
-    python3 --version
-
     # 设置默认 python3 版本为最新版本
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_VERSION%.*} 1
+
+    # 输出 Python 版本以验证安装
+    python3 --version
 }
 
 configure() {
@@ -91,8 +92,9 @@ systemctl_reload() {
 TEXT
     sudo systemctl daemon-reload >>/dev/null 2>&1
     sudo systemctl start pagermaid >>/dev/null 2>&1
-    sudo systemctl enable --now pagermaid >>/dev/null 2>&1
+    sudo systemctl enable pagermaid >>/dev/null 2>&1
 }
+
 start_installation() {
     install_or_update_python
     sudo apt-get update && sudo apt-get install -y python3-venv
@@ -114,22 +116,22 @@ start_installation() {
     cd /var/lib/pagermaid
 
     # 创建 Python 虚拟环境并输出信息到/dev/null
-    ${PYTHON_VERSION} -m venv venv > /dev/null
+    python3 -m venv venv > /dev/null
 
     # 激活虚拟环境
     source venv/bin/activate
 
     # 清除pip缓存
-    ${PYTHON_VERSION} -m pip cache purge
+    python -m pip cache purge
 
     # 升级pip
-    ${PYTHON_VERSION} -m pip install --upgrade pip
+    python -m pip install --upgrade pip
 
     # 强制重新安装 coloredlogs
-    ${PYTHON_VERSION} -m pip install --force-reinstall coloredlogs emoji
+    python -m pip install --force-reinstall coloredlogs emoji
 
     # 强制重新安装 requirements.txt 中的依赖项并输出信息到/dev/null
-    ${PYTHON_VERSION} -m pip install --force-reinstall -r requirements.txt > /dev/null || true
+    python -m pip install --force-reinstall -r requirements.txt > /dev/null || true
 
     # 创建目录
     mkdir -p /var/lib/pagermaid/data
@@ -138,7 +140,7 @@ start_installation() {
     configure
 
     # 运行 pagermaid
-    ${PYTHON_VERSION} -m pagermaid
+    python -m pagermaid
 
     systemctl_reload
 
@@ -148,21 +150,20 @@ start_installation() {
     echo "PagerMaid部署完成"
 }
 
-
 cleanup() {
-    if [ ! -x "/var/lib/pagermaid" ]; then
+    if [ ! -d "/var/lib/pagermaid" ]; then
         echo "目录不存在不需要卸载。"
     else
         echo "正在关闭 PagerMaid . . ."
-        if ! systemctl disable pagermaid >>/dev/null 2>&1; then
+        if ! sudo systemctl disable pagermaid >>/dev/null 2>&1; then
             echo "错误：无法关闭 PagerMaid。" 1>&2
             exit 1
         fi
-        systemctl stop pagermaid >>/dev/null 2>&1
+        sudo systemctl stop pagermaid >>/dev/null 2>&1
         echo "正在删除 PagerMaid 文件 . . ."
         
-        rm -rf /etc/systemd/system/pagermaid.service >>/dev/null 2>&1
-        rm -rf /var/lib/pagermaid >>/dev/null 2>&1
+        sudo rm -rf /etc/systemd/system/pagermaid.service >>/dev/null 2>&1
+        sudo rm -rf /var/lib/pagermaid >>/dev/null 2>&1
 
         echo "卸载完成 . . ."
     fi
@@ -185,7 +186,7 @@ shon_online() {
     1) start_installation ;;
     2) cleanup ;;
     3) exit ;;
-    *) echo "Wrong input!" ;;
+    *) echo "输入错误！" ;;
     esac
 }
 
