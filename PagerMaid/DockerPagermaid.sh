@@ -1,37 +1,30 @@
 #!/usr/bin/env bash
 
-docker_check(){
-# 如果系统版本是 Debian 12，则重新添加 Docker 存储库，使用新的 signed-by 选项来指定验证存储库的 GPG 公钥
-if [ "$(lsb_release -cs)" = "bookworm" ]; then
-    # 重新下载 Docker GPG 公钥并保存到 /usr/share/keyrings/docker-archive-keyring.gpg
-sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+docker_check() {
+    # Check if system is Debian 12 (bookworm) and update Docker repository if needed
+    if [ "$(lsb_release -cs)" = "bookworm" ]; then
+        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    fi
 
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-fi
+    # Update package lists and install Docker and Docker Compose
+    sudo apt update
+    sudo apt install -y docker.io docker-compose
 
-# 更新 apt 存储库
-sudo apt update
-sudo apt-get update && sudo apt-get install --only-upgrade docker-ce && sudo rm -rf /sys/fs/cgroup/systemd && sudo mkdir /sys/fs/cgroup/systemd && sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
-sudo apt update && sudo apt install docker.io docker-compose
-sudo apt update && sudo apt install python3-pip && sudo pip3 install docker-compose==1.29.2
-# 如果未安装，则使用包管理器安装 Docker
+    # Check Docker installation
+    if command -v docker &> /dev/null; then
+        echo "Docker is installed"
+        sudo systemctl enable --now docker
+    else
+        echo "Docker installation failed"
+    fi
 
-if ! command -v docker &> /dev/null; then
-    sudo apt install -y docker-ce docker-ce-cli containerd.io
-    # 启用 Docker 服务
-    sudo systemctl enable --now docker
-    echo "Docker 已安装并启动成功"
-else
-    echo "Docker 已经安装"
-fi
-
-# 安装 Docker Compose
-if ! command -v docker-compose &> /dev/null; then
-    sudo apt install -y docker-compose
-    echo "Docker Compose 已安装成功"
-else
-    echo "Docker Compose 已经安装"
-fi
+    # Check Docker Compose installation
+    if docker-compose --version &> /dev/null; then
+        echo "Docker Compose is installed"
+    else
+        echo "Docker Compose installation failed"
+    fi
 }
 start_docker () {
     echo "正在启动 Docker 容器 . . ."
@@ -50,23 +43,35 @@ start_docker () {
     echo
 }
 
-data_persistence () {
-    echo "数据持久化可以在升级或重新部署容器时保留配置文件和插件。现在开始进行数据持久化操作 ..."
+data_persistence() {
+    echo "开始数据持久化操作..."
     data_path="/root/$container_name"
-    if [ ! -d "$data_path" ]; then
-        mkdir -p "$data_path"
-        echo "已创建目录 $data_path"
-    fi
-    if docker inspect "$container_name" &>/dev/null; then
-        docker cp "$container_name":/pagermaid/workdir "$data_path"
-        docker stop "$container_name" &>/dev/null
-        docker rm "$container_name" &>/dev/null
-        docker run -dit -v "$data_path"/workdir:/pagermaid/workdir --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
-        echo
-        echo "数据持久化操作完成。"
-        echo
-    else
+    mkdir -p "$data_path"
+
+    if ! docker inspect "$container_name" &>/dev/null; then
         echo "不存在名为 $container_name 的容器，退出。"
+        return 1
+    fi
+
+    docker cp "$container_name":/pagermaid/workdir "$data_path"
+    docker stop "$container_name" &>/dev/null
+    docker rm "$container_name" &>/dev/null
+    docker run -dit -v "$data_path"/workdir:/pagermaid/workdir --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro
+
+    # 检查并安装 cron
+    if ! command -v crontab &> /dev/null; then
+        echo "正在安装 cron..."
+        sudo apt-get update && sudo apt-get install -y cron
+        sudo systemctl enable --now cron
+    fi
+
+    if command -v crontab &> /dev/null; then
+        cron_job="43 * * * * docker restart $container_name"
+        (crontab -l 2>/dev/null; echo "$cron_job") | sort - | uniq - | crontab -
+        echo "数据持久化完成。已添加 cron 任务，每小时 43 分重启 $container_name 容器。"
+    else
+        echo "cron 安装失败，无法添加定时重启任务。"
+        return 1
     fi
 }
 
@@ -78,35 +83,31 @@ start_installation() {
     exit
 }
 
-build_docker () {
-    container_name="PagerMaid-"$(openssl rand -hex 5)
-    while docker inspect "$container_name" &>/dev/null; do
-        container_name="PagerMaid-"$(openssl rand -hex 5)
+build_docker() {
+    local prefix="PagerMaid-"
+    container_name=""
+    while [ -z "$container_name" ] || docker inspect "$container_name" &>/dev/null; do
+        container_name="${prefix}$(openssl rand -hex 5)"
     done
     echo "生成的容器名称为 $container_name"
-    echo "正在拉取 Docker 镜像 . . ."
+    echo "正在拉取 Docker 镜像 ..."
     docker pull teampgm/pagermaid_pyro
 }
 
 cleanup() {
-    printf "请输入 PagerMaid 容器的名称："
-    read -r container_name <&1
-    if [[ -z $container_name ]]; then
-        echo "容器名称不能为空!"
-        return
+    read -rp "请输入 PagerMaid 容器的名称：" container_name
+    [ -z "$container_name" ] && { echo "容器名称不能为空!"; return 1; }
+
+    if ! docker inspect "$container_name" &>/dev/null; then 
+        echo "不存在名为 $container_name 的容器，退出。"
+        return 1
     fi
-    echo "开始删除 Docker 镜像 . . ."
-    if docker inspect "$container_name" &>/dev/null; then 
-        echo "开始删除名为 $container_name 的容器..."
-        docker rm -f "$container_name" &>/dev/null
-        if [ -d "/root/$container_name" ]; then
-            echo "开始删除 /root/$container_name 文件夹..."
-            rm -rf "/root/$container_name"
-        fi
-        shon_online
-    else 
-        echo "不存在名为 $container_name 的容器，退出。"; 
-    fi
+
+    echo "正在删除名为 $container_name 的容器和相关资源..."
+    docker rm -f "$container_name" &>/dev/null
+    rm -rf "/root/$container_name" 2>/dev/null
+
+    shon_online
 }
 
 shon_online() {
