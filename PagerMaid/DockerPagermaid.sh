@@ -1,31 +1,47 @@
 #!/usr/bin/env bash
 
 docker_check() {
-    # Check if system is Debian 12 (bookworm) and update Docker repository if needed
-    if [ "$(lsb_release -cs)" = "bookworm" ]; then
-        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    fi
+    # 检查是否已安装 Docker
+    if ! command -v docker &> /dev/null; then
+        echo "Docker 未安装。正在安装 Docker..."
 
-    # Update package lists and install Docker and Docker Compose
-    sudo apt update
-    sudo apt install -y docker.io docker-compose
+        # 更新包列表并安装 Docker
+        sudo apt update
+        sudo apt install -y docker.io
 
-    # Check Docker installation
-    if command -v docker &> /dev/null; then
-        echo "Docker is installed"
+        # 启用并启动 Docker 服务
         sudo systemctl enable --now docker
+
+        # 验证 Docker 安装
+        if command -v docker &> /dev/null; then
+            echo "Docker 安装成功。"
+        else
+            echo "Docker 安装失败。"
+            return 1
+        fi
     else
-        echo "Docker installation failed"
+        echo "Docker 已经安装。"
     fi
 
-    # Check Docker Compose installation
-    if docker-compose --version &> /dev/null; then
-        echo "Docker Compose is installed"
+    # 检查是否已安装 Docker Compose
+    if ! command -v docker-compose &> /dev/null; then
+        echo "Docker Compose 未安装。正在安装 Docker Compose..."
+
+        # 安装 Docker Compose
+        sudo apt install -y docker-compose
+
+        # 验证 Docker Compose 安装
+        if command -v docker-compose &> /dev/null; then
+            echo "Docker Compose 安装成功。"
+        else
+            echo "Docker Compose 安装失败。"
+            return 1
+        fi
     else
-        echo "Docker Compose installation failed"
+        echo "Docker Compose 已经安装。"
     fi
 }
+
 start_docker () {
     echo "正在启动 Docker 容器 . . ."
     docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
