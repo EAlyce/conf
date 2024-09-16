@@ -1,45 +1,40 @@
 #!/bin/bash
 
-set_custom_path() {
-    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
-    if ! crontab -l | grep -q '^PATH='; then
-        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+system_setup() {
+    # 设置 DNS 和时区，隐藏输出
+    echo "设置 DNS 和时区..."
+    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+    sudo timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1
+
+    # 设置 PATH
+    if ! crontab -l 2>/dev/null | grep -q '^PATH='; then
+        export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         echo "PATH 设置成功。"
     else
         echo "PATH 已存在。"
     fi
-}
-optimize_system() {
-    apt clean && apt autoclean && apt autoremove -y
-    rm -rf /tmp/* && history -c && history -w
-    docker system prune -a --volumes -f
-    dpkg --list | awk '/^ii.*linux-(image|headers)-[0-9]/&&!/'$(uname -r)'/ {print $2}' | xargs apt-get -y purge
-    sudo apt-get update
-    sudo apt-get install -y python3.11 aptitude libmagick++-dev
-    sudo dpkg --configure -a
-    sudo apt-get install -f
-    command -v sudo &> /dev/null || apt-get install -y sudo
+
+    # 系统清理
+    echo "正在清理系统..."
+    sudo apt clean > /dev/null 2>&1
+    sudo apt autoclean > /dev/null 2>&1
+    sudo apt autoremove -y > /dev/null 2>&1
+    sudo rm -rf /tmp/* > /dev/null 2>&1
+    sudo docker system prune -a --volumes -f > /dev/null 2>&1
+
+    # 更新软件包和安装所需软件
+    echo "正在更新软件包..."
+    sudo apt-get update > /dev/null 2>&1
+    sudo apt-get install -y curl wget git sudo > /dev/null 2>&1
+
+    # 更新 DNS 配置和内核参数
+    echo "更新 DNS 配置和内核参数..."
+    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1\nnet.ipv4.ip_forward=1\nnet.ipv6.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf > /dev/null
+    sudo sysctl -p > /dev/null 2>&1
+
+    echo "系统设置完成。"
 }
 
-kill_process() {
-    sudo pkill -9 apt dpkg || true
-}
-
-remove_locks() {
-    sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
-}
-
-configure_packages() {
-    sudo dpkg --configure -a
-}
-
-update_dns() {
-    apt-get update
-    apt-get install -y curl wget git sudo
-    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1\nnet.ipv4.ip_forward=1\nnet.ipv6.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
-    sudo sysctl -p
-}
 
 install_pagermaid() {
     local install_type="$1"
@@ -74,12 +69,7 @@ else
     echo "确认以 root 权限运行."
 fi
 
-set_custom_path
-optimize_system
-kill_process
-remove_locks
-configure_packages
-update_dns
+system_setup
 
 while true; do
     clear
