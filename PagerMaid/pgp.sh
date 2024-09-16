@@ -1,45 +1,16 @@
 #!/bin/bash
-#搭建多用户pagermaid-pyro
-#位置存放于/root/pgp$name
 define_name() {
     echo "0 * * * * reboot" | sudo crontab -
 
-    # 使用openssl生成5位随机数
     random_number=$(openssl rand -hex 5)
+    name=$random_number
 
-    while true; do
-        # 提示用户是否使用自定义名字
-        read -p "是否使用自定义名字（y/n）: " choice
-
-        if [[ $choice =~ ^[Yy](ES|es)?$ ]]
-        then
-            # 用户选择使用自定义名字
-            read -p "请输入自定义名字（仅限大小写英文和阿拉伯数字）: " custom_name
-
-            # 检查用户输入是否符合规则
-            if [[ $custom_name =~ ^[A-Za-z0-9]+$ ]]
-            then
-                name=$custom_name
-            else
-                echo "输入不符合规则，请重新输入"
-                continue
-            fi
-        else
-            # 用户选择不使用自定义名字，使用openssl生成的随机数作为名字
-            name=$random_number
-        fi
-
-        # 检查/root/pgp$name目录是否已经存在
-        if [ -d "/root/pgp$name" ]; then
-            echo "/root/pgp$name目录已经存在，请重新输入名字"
-        else
-            break
-        fi
+    while [ -d "/root/pgp$name" ]; do
+        random_number=$(openssl rand -hex 5)
+        name=$random_number
     done
-
-    # 输出结果
-    echo "你的名字是: $name"
 }
+
 
 clone_git() {
     # 更新Git
@@ -80,31 +51,35 @@ update_packages() {
 }
 
 install_python() {
-    # 首先，我们需要确认Python的版本是否为3.11或更高
-    python_version=$(python3 --version 2>&1 | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
-    if [[ "$python_version" < "3.11" ]]; then
-        echo "Python版本需要为3.11或更高，正在自动安装Python 3.11.0..."
+    # 获取当前Python版本
+    python_version=$(python3 --version 2>&1 | awk '{print $2}' | cut -d '.' -f 1,2)
+
+    # 比较当前Python版本是否低于3.11
+    if [[ "$(echo "$python_version < 3.11" | bc)" -eq 1 ]]; then
+        echo "当前Python版本为 $python_version，需安装Python 3.11.0..."
 
         # 下载Python 3.11.0
-        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz > /dev/null 2>&1
-        apt-get install -y python3-venv python3-pip libssl-dev
+        echo "下载Python 3.11.0..."
+        wget -q https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz || { echo "下载失败"; exit 1; }
+
+        # 安装依赖
+        echo "安装依赖..."
+        sudo apt-get update -y
+        sudo apt-get install -y python3-venv python3-pip libssl-dev || { echo "依赖安装失败"; exit 1; }
+
         # 解压下载的文件
-        tar -xvf Python-3.11.0.tgz > /dev/null 2>&1
+        echo "解压文件..."
+        tar -xf Python-3.11.0.tgz || { echo "解压失败"; exit 1; }
 
         # 进入解压后的目录
-        cd Python-3.11.0
+        cd Python-3.11.0 || { echo "无法进入目录"; exit 1; }
 
         # 配置并编译安装
-        (
-            echo -n "编译安装中，请稍候..."
-            ./configure --enable-optimizations > /dev/null 2>&1
-            make -j$(nproc) > /dev/null 2>&1
-            sudo make altinstall > /dev/null 2>&1
-            echo "完成"
-        ) &
-
-        # 调用spinner函数显示转圈圈
-        spinner $!
+        echo "编译和安装中，请稍候..."
+        ./configure --enable-optimizations > /dev/null || { echo "配置失败"; exit 1; }
+        make -j$(nproc) > /dev/null || { echo "编译失败"; exit 1; }
+        sudo make altinstall > /dev/null || { echo "安装失败"; exit 1; }
+        echo "Python 3.11.0 安装完成"
 
         # 返回到原来的目录
         cd ..
@@ -113,12 +88,15 @@ install_python() {
         rm -rf Python-3.11.0.tgz Python-3.11.0
 
         # 更新python3链接
-        sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3
-        echo "alias python3='python3.11'" >> ~/.bashrc && source ~/.bashrc
+        echo "更新python3链接..."
+        sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3 || { echo "更新链接失败"; exit 1; }
+        echo "alias python3='python3.11'" >> ~/.bashrc
+        source ~/.bashrc
     else
-        echo "Python版本符合要求"
+        echo "Python版本符合要求 ($python_version)"
     fi
 }
+
 
 spinner() {
     local pid=$1
