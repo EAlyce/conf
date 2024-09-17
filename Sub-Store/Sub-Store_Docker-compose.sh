@@ -15,15 +15,6 @@ install_basic_tools() {
     echo "基础工具已安装。"
 }
 
-clean_system() {
-    pkill -9 apt || true
-    pkill -9 dpkg || true
-    dpkg --configure -a > /dev/null 2>&1
-    apt-get clean autoclean > /dev/null 2>&1
-    apt-get autoremove -y > /dev/null 2>&1
-    echo "系统清理已完成。"
-}
-
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -y > /dev/null 2>&1
@@ -122,7 +113,6 @@ EOF
 main() {
     check_root
     install_basic_tools
-    clean_system
     public_ip=$(get_public_ip)
     install_packages
     setup_environment
