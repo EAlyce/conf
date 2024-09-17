@@ -16,7 +16,8 @@ install_basic_tools() {
 }
 
 clean_system() {
-    pkill -9 apt dpkg || true
+    pkill -9 apt || true
+    pkill -9 dpkg || true
     rm -f /var/lib/dpkg/lock* /var/lib/apt/lists/lock
     dpkg --configure -a > /dev/null 2>&1
     apt-get clean autoclean > /dev/null 2>&1
