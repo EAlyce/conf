@@ -1,4 +1,5 @@
 #!/bin/bash
+
 check_root() {
     if [ "$(id -u)" != "0" ]; then
         echo "运行脚本需要 root 权限" >&2
@@ -7,7 +8,6 @@ check_root() {
 }
 
 install_basic_tools() {
-    # 更新包列表并安装基础工具
     apt-get update -y
     apt-get install -y curl gnupg lsb-release iptables net-tools netfilter-persistent software-properties-common
     echo "基础工具已安装。"
@@ -24,22 +24,11 @@ clean_system() {
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
 
-    # 安装基础软件包
+    # 更新并安装基础软件包
     apt-get update -y
     apt-get install -y curl gnupg lsb-release
 
-    # 删除旧的 Docker GPG 密钥（如果存在）
-    if [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
-        rm /usr/share/keyrings/docker-archive-keyring.gpg
-    fi
-
-    # 添加 Docker 的 GPG 密钥到新的密钥管理方式
-    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-    # 添加 Docker 的 APT 源
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-    # 更新 APT 包列表并安装 Docker
+    # 安装 Docker
     apt-get update -y
     apt-get install -y docker-ce docker-ce-cli containerd.io
 
@@ -109,20 +98,21 @@ EOF
     # 更新系统包并安装 cron
     apt-get update -y && apt-get install -y cron
 
-  # 定义 cron 任务
+    # 定义 cron 任务
     cron_job="0 5 * * * docker-compose pull && docker-compose up -d"
 
-# 获取现有的 cron 任务
+    # 获取现有的 cron 任务
     existing_cron_jobs=$(crontab -l 2>/dev/null)
 
-# 检查是否已有相同的 cron 任务
-if ! echo "$existing_cron_jobs" | grep -Fq "$cron_job"; then
-    # 如果没有相同的任务，则添加新任务
-    (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
-    echo "Cron job added."
-else
-    echo "Cron job already exists."
-fi
+    # 检查是否已有相同的 cron 任务
+    if ! echo "$existing_cron_jobs" | grep -Fq "$cron_job"; then
+        # 如果没有相同的任务，则添加新任务
+        (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
+        echo "Cron job added."
+    else
+        echo "Cron job already exists."
+    fi
+
     # 显示当前的 cron 任务以确认添加成功
     crontab -l
 
