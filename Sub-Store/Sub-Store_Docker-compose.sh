@@ -93,7 +93,6 @@ setup_environment() {
 setup_docker() {
     local secret_key=$(openssl rand -hex 16)
     cat <<EOF > docker-compose.yml
-version: '3'
 services:
   sub-store:
     image: xream/sub-store
