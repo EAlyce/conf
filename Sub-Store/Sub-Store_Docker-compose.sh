@@ -110,8 +110,8 @@ EOF
     # 启动 Docker 容器并检查是否成功
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
     echo "您的Sub-Store信息如下"
-    echo -e "\n后端地址：$public_ip:3001\n"
-    echo -e "\nAPI：http://$public_ip:3001/$secret_key\n"
+    echo -e "\nSub-Store面板：$public_ip:3001\n"
+    echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
 }
 
 main() {
