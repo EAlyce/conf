@@ -29,8 +29,19 @@ clean_system() {
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
 
+    # 安装基础软件包
+    apt-get update -y
+    apt-get install -y curl gnupg
+
+    # 添加 Docker 的 GPG 密钥
+    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+    # 添加 Docker 的 APT 源
+    echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
     # 安装 Docker
-    curl -fsSL https://get.docker.com | sh
+    apt-get update -y
+    apt-get install -y docker-ce docker-ce-cli containerd.io
 
     # 安装 Docker Compose（如果需要）
     if ! command -v docker-compose &> /dev/null; then
