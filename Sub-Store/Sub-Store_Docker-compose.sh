@@ -18,13 +18,9 @@ install_basic_tools() {
 clean_system() {
     pkill -9 apt || true
     pkill -9 dpkg || true
-    rm -f /var/lib/dpkg/lock* /var/lib/apt/lists/lock
     dpkg --configure -a > /dev/null 2>&1
     apt-get clean autoclean > /dev/null 2>&1
     apt-get autoremove -y > /dev/null 2>&1
-    rm -rf /tmp/*
-    history -c && history -w
-    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null 2>&1 || true
     echo "系统清理已完成。"
 }
 
