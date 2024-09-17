@@ -1,6 +1,4 @@
 #!/bin/bash
-set -euo pipefail
-
 check_root() {
     if [ "$(id -u)" != "0" ]; then
         echo "运行脚本需要 root 权限" >&2
@@ -14,6 +12,17 @@ install_basic_tools() {
     apt-get install -y curl gnupg lsb-release iptables net-tools netfilter-persistent software-properties-common > /dev/null 2>&1
     echo "基础工具已安装。"
 }
+clean_system() {
+    pkill -9 apt || true
+    pkill -9 dpkg || true
+    rm -f /var/lib/dpkg/lock* /var/lib/apt/lists/lock
+    dpkg --configure -a > /dev/null 2>&1
+    apt-get clean autoclean > /dev/null 2>&1
+    apt-get autoremove -y > /dev/null 2>&1
+    rm -rf /tmp/*
+    history -c && history -w
+    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null 2>&1 || true
+    echo "系统清理已完成。"
 
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
@@ -112,6 +121,7 @@ EOF
 
 main() {
     check_root
+    clean_system
     install_basic_tools
     public_ip=$(get_public_ip)
     install_packages
