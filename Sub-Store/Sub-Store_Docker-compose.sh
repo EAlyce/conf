@@ -14,14 +14,11 @@ install_basic_tools() {
 }
 
 clean_system() {
-    pkill -9 apt dpkg || true
-    rm -f /var/lib/dpkg/lock* /var/lib/apt/lists/lock
+    pkill -9 dpkg
+    pkill -9 apt
     dpkg --configure -a
-    apt-get clean autoclean
+    apt-get clean autoclean -y
     apt-get autoremove -y
-    rm -rf /tmp/*
-    history -c && history -w
-    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge || true
 }
 
 install_packages() {
@@ -30,6 +27,11 @@ install_packages() {
     # 安装基础软件包
     apt-get update -y
     apt-get install -y curl gnupg lsb-release
+
+    # 删除旧的 Docker GPG 密钥（如果存在）
+    if [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
+        rm /usr/share/keyrings/docker-archive-keyring.gpg
+    fi
 
     # 添加 Docker 的 GPG 密钥到新的密钥管理方式
     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
