@@ -96,7 +96,6 @@ setup_environment() {
 setup_docker() {
     local secret_key=$(openssl rand -hex 16)
     cat <<EOF > docker-compose.yml
-version: '3'
 services:
   sub-store:
     image: xream/sub-store
@@ -114,9 +113,20 @@ EOF
     # 更新系统包并安装 cron
     apt-get update -y && apt-get install -y cron
 
-    # 添加 cron 任务：每天凌晨5点更新 Docker 镜像并重启容器
-    (crontab -l 2>/dev/null; echo "0 5 * * * docker-compose pull && docker-compose up -d || { echo 'Error: Unable to restart Docker containers' >&2; }") | crontab -
+  # 定义 cron 任务
+    cron_job="0 5 * * * docker-compose pull && docker-compose up -d"
 
+# 获取现有的 cron 任务
+    existing_cron_jobs=$(crontab -l 2>/dev/null)
+
+# 检查是否已有相同的 cron 任务
+if ! echo "$existing_cron_jobs" | grep -Fq "$cron_job"; then
+    # 如果没有相同的任务，则添加新任务
+    (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
+    echo "Cron job added."
+else
+    echo "Cron job already exists."
+fi
     # 显示当前的 cron 任务以确认添加成功
     crontab -l
 
