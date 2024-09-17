@@ -31,15 +31,15 @@ install_packages() {
 
     # 安装基础软件包
     apt-get update -y
-    apt-get install -y curl gnupg
+    apt-get install -y curl gnupg lsb-release
 
-    # 添加 Docker 的 GPG 密钥
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+    # 添加 Docker 的 GPG 密钥到新的密钥管理方式
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
     # 添加 Docker 的 APT 源
-    echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-    # 安装 Docker
+    # 更新 APT 包列表并安装 Docker
     apt-get update -y
     apt-get install -y docker-ce docker-ce-cli containerd.io
 
