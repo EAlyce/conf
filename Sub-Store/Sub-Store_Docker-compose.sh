@@ -22,28 +22,21 @@ clean_system() {
 }
 
 install_packages() {
-    export DEBIAN_FRONTEND=noninteractive
-
-    # 更新并安装基础软件包
     apt-get update -y
     apt-get install -y curl gnupg lsb-release
 
-    # 安装 Docker
     apt-get update -y
     apt-get install -y docker-ce docker-ce-cli containerd.io
 
-    # 安装 Docker Compose（如果需要）
     if ! command -v docker-compose &> /dev/null; then
         LATEST_COMPOSE_VERSION=$(curl -sS https://api.github.com/repos/docker/compose/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
-        curl -sSL "https://github.com/docker/compose/releases/download/${LATEST_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        curl -fsSL "https://github.com/docker/compose/releases/download/${LATEST_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
     fi
 
-    # 启动并使 Docker 开机自启
     systemctl enable docker
     systemctl start docker
 
-    # 输出 Docker 和 Docker Compose 版本
     echo "Docker version:"
     docker --version
     echo "Docker Compose version:"
