@@ -125,16 +125,11 @@ EOF
 main() {
     check_root
     install_basic_tools
-    echo "基础工具安装完成。"
     clean_system
-    echo "系统清理完成。"
     public_ip=$(get_public_ip)
     install_packages
-    echo "Docker 和 Docker Compose 安装完成。"
     setup_environment
-    echo "环境设置完成。"
     setup_docker
-    echo "Docker 环境已设置完毕。"
 }
 
 main
