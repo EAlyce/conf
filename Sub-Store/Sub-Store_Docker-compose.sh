@@ -26,10 +26,6 @@ clean_system() {
     dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge || true
 }
 
-#!/bin/bash
-
-set -e
-
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
 
