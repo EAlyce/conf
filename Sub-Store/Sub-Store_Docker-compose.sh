@@ -37,9 +37,7 @@ install_packages() {
     systemctl enable docker
     systemctl start docker
 
-    echo "Docker version:"
     docker --version
-    echo "Docker Compose version:"
     docker-compose --version
 }
 
