@@ -1,6 +1,4 @@
 #!/bin/bash
-set -euo pipefail
-
 check_root() {
     if [ "$(id -u)" != "0" ]; then
         echo "运行脚本需要 root 权限" >&2
