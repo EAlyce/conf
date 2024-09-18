@@ -99,8 +99,7 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_POLL_INTERVAL=3600
       - WATCHTOWER_NOTIFICATION_URL=telegram://7263415842:AAG39tVwzxyiarORYfYvD0lIMYK6ePs7lac@telegram?chats=-7263415842
-      - WATCHTOWER_NOTIFICATION_TITLE_TAG:Sub-Store Update
-      - #WATCHTOWER_DISABLE_CONTAINERS=a b
+      - WATCHTOWER_NOTIFICATION_TITLE_TAG=Sub-Store Update
 EOF
 
     # 启动 Docker 容器并检查是否成功
@@ -109,7 +108,7 @@ EOF
     echo "您的 Sub-Store 信息如下"
     echo -e "\nSub-Store面板：http://$public_ip:3001\n"
     echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
-}
+}r
 
 main() {
     check_root
