@@ -65,7 +65,6 @@ setup_environment() {
     
     iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
     iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
-    iptables-save > /etc/iptables/rules.v4
     netfilter-persistent reload
     
     echo 0 > /proc/sys/net/ipv4/tcp_fastopen
