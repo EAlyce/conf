@@ -99,7 +99,7 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_POLL_INTERVAL=3600
-      - WATCHTOWER_NOTIFICATION_URL=telegram://7263415842:AAG39tVwzxyiarORYfYvD0lIMYK6ePs7lac@telegram?chats=-7263415842
+      - WATCHTOWER_NOTIFICATION_URL=telegram://7263415842:AAG39tVwzxyiarORYfYvD0lIMYK6ePs7lac@telegram?chats=--1002093012095
       - WATCHTOWER_NOTIFICATION_TITLE_TAG=Sub-Store Update
 EOF
 
