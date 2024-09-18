@@ -14,13 +14,16 @@ install_basic_tools() {
 }
 
 clean_system() {
-    pkill -9 dpkg
-    pkill -9 apt
-    dpkg --configure -a
-    apt-get clean autoclean -y
-    apt-get autoremove -y
-}
+    for proc in dpkg apt apt-get; do
+        pids=$(ps -ef | grep $proc | grep -v grep | awk '{print $2}')
+        [ -n "$pids" ] && sudo kill -9 $pids 2>/dev/null || true
+    done
 
+    sudo dpkg --configure -a
+    sudo apt-get clean -y
+    sudo apt-get autoclean -y
+    sudo apt-get autoremove -y
+}
 install_packages() {
     apt-get update -y
     apt-get install -y curl gnupg lsb-release
