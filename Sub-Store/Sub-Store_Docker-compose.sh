@@ -98,12 +98,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=3600
-      - WATCHTOWER_NOTIFICATION_URL=telegram://7263415842:AAG39tVwzxyiarORYfYvD0lIMYK6ePs7lac@telegram?chats=--1002093012095
-      - WATCHTOWER_NOTIFICATION_TITLE_TAG=Sub-Store Update
+      - WATCHTOWER_POLL_INTERVAL=300
 EOF
 
-    # 启动 Docker 容器并检查是否成功
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
 
     echo "您的 Sub-Store 信息如下"
