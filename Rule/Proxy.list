@@ -25477,8 +25477,13 @@ DOMAIN-WILDCARD,cdn?-thumbs.pornhost.com
 DOMAIN-WILDCARD,cdn?.mikuclub.fun
 DOMAIN-WILDCARD,cdns.*.gigya.com
 DOMAIN-WILDCARD,ffzy-online?.com
+DOMAIN-WILDCARD,ffzy-play?.com
 DOMAIN-WILDCARD,file?.mikuclub.fun
+DOMAIN-WILDCARD,fsvod?.com
 DOMAIN-WILDCARD,i?.nhentai.net
+DOMAIN-WILDCARD,kuaikan-cdn?.com
+DOMAIN-WILDCARD,lz-cdn?.com
+DOMAIN-WILDCARD,lz-cdn??.com
 DOMAIN-WILDCARD,ocsp.*.amazontrust.com
 DOMAIN-WILDCARD,proxy-*.dailymotion.com
 DOMAIN-WILDCARD,rr1---??.ouo.si
