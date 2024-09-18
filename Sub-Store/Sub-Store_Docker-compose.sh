@@ -87,33 +87,27 @@ services:
       - "3001:3001"
     volumes:
       - /root/sub-store-data:/opt/app/data
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=3600
+      - WATCHTOWER_NOTIFICATION_URL=telegram://7263415842:AAG39tVwzxyiarORYfYvD0lIMYK6ePs7lac@telegram?chats=-7263415842
+      - WATCHTOWER_NOTIFICATION_TITLE_TAG:Sub-Store Update
+      - #WATCHTOWER_DISABLE_CONTAINERS=a b
 EOF
-
-    # 更新系统包并安装 cron
-    apt-get update -y && apt-get install -y cron
-
-    # 定义 cron 任务
-    cron_job="0 5 * * * docker-compose pull && docker-compose up -d"
-
-    # 获取现有的 cron 任务
-    existing_cron_jobs=$(crontab -l 2>/dev/null)
-
-    # 检查是否已有相同的 cron 任务
-    if ! echo "$existing_cron_jobs" | grep -Fq "$cron_job"; then
-        # 如果没有相同的任务，则添加新任务
-        (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
-        echo "Cron job added."
-    else
-        echo "Cron job already exists."
-    fi
-
-    # 显示当前的 cron 任务以确认添加成功
-    crontab -l
 
     # 启动 Docker 容器并检查是否成功
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
-    echo "您的Sub-Store信息如下"
-    echo -e "\nSub-Store面板：$public_ip:3001\n"
+
+    echo "您的 Sub-Store 信息如下"
+    echo -e "\nSub-Store面板：http://$public_ip:3001\n"
     echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
 }
 
