@@ -28,13 +28,13 @@ jobs:
       - name: Get and merge domains from source files
         run: |
           {
-           curl -sSfL https://ruleset.skk.moe/List/non_ip/ai.conf | awk '{print $0 "\n"}'
-           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | awk '{print $0 "\n"}'
-           curl -sSfL https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list | awk '{print $0 "\n"}'
-           curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list | awk '{print $0 "\n"}'
-           curl -sSfL https://raw.githubusercontent.com/Repcz/Tool/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list | awk '{print $0 "\n"}'
-           curl -sSfL https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list | awk '{print $0 "\n"}'
-           curl -sSfL https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | awk '{print $0 "\n"}'
+           curl -sSfL "https://ruleset.skk.moe/List/non_ip/ai.conf" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Loon/Rule/AI.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/Repcz/Tool/974e9a365c00bb30b00ee8054968047ea6072caa/Surge/Rules/AI.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | awk" '{print $0 "\n"}'
           } | grep -v '^#' | sort | uniq | awk 'NF > 0' > Rule/OpenAI.list
 
       - name: Check and Configure Git
