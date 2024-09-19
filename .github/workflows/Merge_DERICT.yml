@@ -32,6 +32,7 @@ jobs:
         run: |
           {
             curl -sSfL https://ruleset.skk.moe/List/non_ip/domestic.conf | awk '{print $0 "\n"}'
+            curl -sSfL https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ChinaDomain.list | awk '{print $0 "\n"}'
             curl -sSfL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_All.list | awk '{print $0 "\n"}'
             curl -sSfL https://raw.githubusercontent.com/menaknak/adns_depend/5d02499ef1216702ae4a99d14057f2e5defe6485/input/%E9%87%8D%E7%82%B9%E5%9F%9F%E5%90%8D14860_20231230.txt | sed 's/^/DOMAIN-SUFFIX,/' | awk '{print $0 "\n"}'
             curl -sSfL https://github.com/Lucius-Pan/confStore/raw/main/Extra-Direct.conf | sed 's/,DIRECT$//' | awk '{print $0 "\n"}'
