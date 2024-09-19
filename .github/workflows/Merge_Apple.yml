@@ -32,6 +32,7 @@ jobs:
           {
             curl -sSfL https://github.com/SukkaW/Surge/raw/master/Source/ip/apple_services.conf | awk '{print $0 "\n"}'
             curl -sSfL https://ruleset.skk.moe/List/non_ip/apple_services.conf | awk '{print $0 "\n"}'
+            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list" | awk '{print $0 "\n"}'
             curl -sSfL https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list | awk '{print $0 "\n"}'
           } | grep -v '^#' | sort | uniq | awk 'NF > 0' > Rule/Apple.list
 
