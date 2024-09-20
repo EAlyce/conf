@@ -74,10 +74,11 @@ setup_environment() {
 
 setup_docker() {
     local secret_key=$(openssl rand -hex 16)
+
     cat <<EOF > docker-compose.yml
 services:
   sub-store:
-    image: xream/sub-store
+    image: debian:12
     container_name: sub-store
     restart: always
     environment:
@@ -87,6 +88,13 @@ services:
       - "3001:3001"
     volumes:
       - /root/sub-store-data:/opt/app/data
+    command: |
+      bash -c "
+      apt-get update &&
+      apt-get install -y curl openssl &&
+      docker pull xream/sub-store &&
+      docker run xream/sub-store
+      "
 
   watchtower:
     image: containrrr/watchtower
@@ -97,9 +105,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=300
+      - WATCHTOWER_POLL_INTERVAL=3600
 EOF
 
+    # 启动 docker-compose
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
 
     echo "您的 Sub-Store 信息如下"
