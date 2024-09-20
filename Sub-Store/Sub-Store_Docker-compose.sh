@@ -73,7 +73,14 @@ setup_environment() {
 }
 
 setup_docker() {
-    local secret_key=$(openssl rand -hex 16)
+    read -p "请输入自定义密钥（或直接回车生成随机密钥）: " user_input
+    if [ -z "$user_input" ]; then
+        local secret_key=$(openssl rand -hex 16)
+        echo "未输入自定义密钥，已生成随机密钥: $secret_key"
+    else
+        local secret_key=$user_input
+        echo "使用自定义密钥: $secret_key"
+    fi
 
     cat <<EOF > docker-compose.yml
 services:
