@@ -5,6 +5,21 @@ check_root() {
     [ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
 }
 
+# 检查命令是否存在
+command_exists() {
+    command -v "$1" &> /dev/null
+}
+
+# 检测并安装缺失的软件
+install_if_not_exists() {
+    if ! command_exists "$1"; then
+        echo "未检测到 $1，正在安装..."
+        apt-get update -y
+        apt-get install -y "$2"
+    else
+        echo "$1 已安装。"
+    fi
+}
 # 停止所有进程锁
 stop_process_locks() {
     echo "停止所有进程锁..."
@@ -47,6 +62,12 @@ install_docker() {
     if ! command_exists docker || ! docker compose version &>/dev/null; then
         echo "安装Docker及Compose..."
         apt install -y apt-transport-https ca-certificates curl software-properties-common gnupg
+        
+        # 检查文件是否存在
+        if [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
+            rm /usr/share/keyrings/docker-archive-keyring.gpg
+        fi
+        
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
         apt update
@@ -54,6 +75,7 @@ install_docker() {
         systemctl enable --now docker
     fi
 }
+
 
 # 清理系统和Docker镜像
 clean_system_and_docker() {
