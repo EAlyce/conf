@@ -35,22 +35,21 @@ install_if_not_exists locales
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
 
-# Check available keymaps
-available_keymaps=$(localectl list-keymaps)
-if echo "$available_keymaps" | grep -q "^us$"; then
-    localectl set-keymap us
+# Try to set keymap to 'us', if it fails, just skip it
+if command_exists localectl; then
+    echo "Attempting to set keymap to 'us'..."
+    localectl set-keymap us || echo "Failed to set keymap. Skipping this step."
 else
-    echo "Keymap 'us' is not available. Available keymaps:"
-    echo "$available_keymaps"
-    read -p "Please enter an available keymap: " chosen_keymap
-    localectl set-keymap "$chosen_keymap"
+    echo "localectl not found. Skipping keymap setting."
 fi
 
 install_if_not_exists tzdata
-timedatectl set-timezone Asia/Shanghai
+timedatectl set-timezone Asia/Shanghai || echo "Failed to set timezone. Please set it manually."
 
 # Display current time settings
 timedatectl status
+
+# The rest of the script remains the same...
 
 # Configure DNS
 echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
