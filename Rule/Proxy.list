@@ -31180,7 +31180,10 @@ DOMAIN-WILDCARD,s3.*.wasabisys.com
 DOMAIN-WILDCARD,static*.tgstat.ru
 DOMAIN-WILDCARD,static-??-cdn.eporner.com
 DOMAIN-WILDCARD,t?.nhentai.net
+DOMAIN-WILDCARD,video-thumbnail2.fc2.com
+DOMAIN-WILDCARD,video-thumbnail2.liaoningmovie.net
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
+DOMAIN-WILDCARD,video?-thumbnail?.liaoningmovie.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com
 IP-CIDR,1.201.0.0/24
 IP-CIDR,1.201.0.0/24,no-resolve
