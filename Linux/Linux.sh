@@ -44,7 +44,6 @@ timedatectl status
 echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
 install_if_not_exists systemd-resolved
 sed -i '/^#DNS=/a DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
 
 # Update all packages
 echo "Updating all packages..."
