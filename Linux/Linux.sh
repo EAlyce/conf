@@ -43,15 +43,14 @@ install_common_software() {
     apt install -y curl wget git vim htop net-tools zip unzip jq
 }
 
-# 安装Docker和Docker Compose
 install_docker() {
     if ! command_exists docker || ! docker compose version &>/dev/null; then
         echo "安装Docker及Compose..."
         apt install -y apt-transport-https ca-certificates curl software-properties-common gnupg
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg -o /dev/null
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
         apt update
-        apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin -o Dpkg::Options::="--force-overwrite"
         systemctl enable --now docker
     fi
 }
