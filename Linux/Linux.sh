@@ -40,10 +40,21 @@ timedatectl set-timezone Asia/Shanghai || echo "Failed to set timezone. Please s
 # Display current time settings
 timedatectl status
 
-# Configure DNS
 echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
-install_if_not_exists systemd-resolved
-sed -i '/^#DNS=/a DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
+
+# 确保 systemd-resolved 服务已安装并启动
+systemctl enable systemd-resolved
+systemctl start systemd-resolved
+
+# 自动配置 DNS
+sed -i '/^#DNS=/c DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
+
+# 重启 systemd-resolved 服务以应用更改
+systemctl restart systemd-resolved
+
+# 确认配置是否生效
+systemd-resolve --status | grep "DNS Servers"
+
 
 # Update all packages
 echo "Updating all packages..."
