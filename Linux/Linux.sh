@@ -30,24 +30,82 @@ apt update && apt full-upgrade -y
 echo "Installing common software..."
 apt install -y curl wget git vim htop net-tools zip unaip jq
 
-# 安装Docker和Docker Compose
-echo "Installing Docker and Docker Compose..."
-apt install -y apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-apt update
-apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+#!/bin/bash
 
-# 启用Docker服务
-systemctl start docker
-systemctl enable docker
+# 检查Docker是否已安装
+if command -v docker &> /dev/null && docker --version &> /dev/null
+then
+    echo "Docker is already installed"
+    docker_installed=true
+else
+    docker_installed=false
+fi
+
+# 检查Docker Compose是否已安装
+if command -v docker-compose &> /dev/null || (command -v docker &> /dev/null && docker compose version &> /dev/null)
+then
+    echo "Docker Compose is already installed"
+    compose_installed=true
+else
+    compose_installed=false
+fi
+
+# 如果Docker和Docker Compose都已安装，则跳过安装步骤
+if [ "$docker_installed" = true ] && [ "$compose_installed" = true ]
+then
+    echo "Both Docker and Docker Compose are already installed. Skipping installation."
+else
+    # 安装Docker和Docker Compose
+    echo "Installing Docker and/or Docker Compose..."
+    apt install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt update
+    apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+    # 检查Docker是否安装成功
+    if ! command -v docker &> /dev/null
+    then
+        echo "Docker installation failed"
+        exit 1
+    fi
+
+    # 检查Docker Compose是否安装成功
+    if ! command -v docker compose &> /dev/null
+    then
+        echo "Docker Compose installation failed"
+        exit 1
+    fi
+
+    # 启用Docker服务
+    systemctl start docker
+    systemctl enable docker
+
+    # 检查Docker服务是否正在运行
+    if ! systemctl is-active --quiet docker
+    then
+        echo "Docker service is not running"
+        exit 1
+    fi
+
+    echo "Docker and Docker Compose installation completed successfully"
+fi
 
 # 清理垃圾包括Docker镜像
 echo "Cleaning system and removing unused Docker images..."
 apt autoremove -y
 docker system prune -a -f
 
-# 开放端口（示例：开放80和443端口）
+# 检查Docker是否能正常运行
+if ! docker run hello-world
+then
+    echo "Docker is not functioning correctly"
+    exit 1
+fi
+
+echo "Script completed. Docker and Docker Compose are ready to use."
+
+# 开放端口
 iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
