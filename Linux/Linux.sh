@@ -36,17 +36,14 @@ install_if_not_exists tzdata
 timedatectl set-timezone Asia/Shanghai || echo "设置时区失败，请手动设置。"
 timedatectl status
 
-# 配置DNS
-echo "配置DNS到 8.8.8.8 和 8.8.4.4..."
-systemctl enable systemd-resolved
-systemctl start systemd-resolved
-sed -i '/^#DNS=/c DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
-systemd-resolve --status | grep "DNS Servers"
+# 配置DNS为8.8.8.8和8.8.4.4
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+
 
 # 更新系统
 echo "更新系统..."
-apt update && apt full-upgrade -y
+apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
 
 # 安装常用软件
 echo "安装常用软件..."
