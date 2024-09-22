@@ -1,155 +1,110 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status.
+# 立即终止遇到的任何错误
 set -e
 
-# Function to check if a command exists
+# 检查命令是否存在
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Function to install a package if it's not already installed
+# 安装缺失的包
 install_if_not_exists() {
     if ! command_exists "$1"; then
-        echo "Installing $1..."
+        echo "安装 $1..."
         apt install -y "$1"
     else
-        echo "$1 is already installed."
+        echo "$1 已安装."
     fi
 }
 
-# Check if running as root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root. Please run as root or use sudo."
-    exit 1
-fi
+# 检查是否为 root 用户
+[ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
 
-# Stop all process locks
-echo "Stopping all process locks..."
+# 停止所有进程锁
+echo "停止所有进程锁..."
 install_if_not_exists psmisc
 killall -9 lockfile || true
 
-echo "Setting system language and timezone..."
+# 设置系统语言和时区
+echo "设置系统语言和时区..."
 install_if_not_exists locales
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
 
 install_if_not_exists tzdata
-timedatectl set-timezone Asia/Shanghai || echo "Failed to set timezone. Please set it manually."
-
-# Display current time settings
+timedatectl set-timezone Asia/Shanghai || echo "设置时区失败，请手动设置。"
 timedatectl status
 
-echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
-
-# 确保 systemd-resolved 服务已安装并启动
+# 配置DNS
+echo "配置DNS到 8.8.8.8 和 8.8.4.4..."
 systemctl enable systemd-resolved
 systemctl start systemd-resolved
-
-# 自动配置 DNS
 sed -i '/^#DNS=/c DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
-
-# 重启 systemd-resolved 服务以应用更改
 systemctl restart systemd-resolved
-
-# 确认配置是否生效
 systemd-resolve --status | grep "DNS Servers"
 
-
-# Update all packages
-echo "Updating all packages..."
+# 更新系统
+echo "更新系统..."
 apt update && apt full-upgrade -y
 
-# Install common software
-echo "Installing common software..."
+# 安装常用软件
+echo "安装常用软件..."
 apt install -y curl wget git vim htop net-tools zip unzip jq
 
-# Docker and Docker Compose installation
-if command_exists docker && (command_exists docker-compose || docker compose version &>/dev/null); then
-    echo "Both Docker and Docker Compose are already installed. Skipping installation."
-else
-    echo "Installing Docker and/or Docker Compose..."
-    install_if_not_exists apt-transport-https
-    install_if_not_exists ca-certificates
-    install_if_not_exists curl
-    install_if_not_exists software-properties-common
-    install_if_not_exists gnupg
+# 安装Docker和Docker Compose
+if ! command_exists docker || ! docker compose version &>/dev/null; then
+    echo "安装Docker及Compose..."
+    apt install -y apt-transport-https ca-certificates curl software-properties-common gnupg
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt update
     apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-    systemctl start docker
-    systemctl enable docker
-
-    if ! systemctl is-active --quiet docker; then
-        echo "Docker service is not running"
-        exit 1
-    fi
-
-    echo "Docker and Docker Compose installation completed successfully"
+    systemctl enable --now docker
 fi
 
-# Clean up system and Docker images
-echo "Cleaning system and removing unused Docker images..."
+# 清理系统和Docker镜像
+echo "清理系统和Docker镜像..."
 apt autoremove -y
 docker system prune -a -f
 
-# Check if Docker is functioning correctly
-if ! docker run hello-world; then
-    echo "Docker is not functioning correctly"
-    exit 1
-fi
+# 验证Docker是否正常运行
+docker run hello-world || { echo "Docker 运行异常"; exit 1; }
 
-# Open ports
+# 开放端口
 install_if_not_exists iptables
 iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -F
 
-# Set MTU to 1500 for all interfaces
-interfaces=$(ls /sys/class/net | grep -v lo)
-for iface in $interfaces; do
-    echo "Setting MTU=1500 for interface: $iface"
+# 设置网络接口MTU为1500
+for iface in $(ls /sys/class/net | grep -v lo); do
+    echo "设置接口 $iface 的MTU为1500"
     ip link set dev "$iface" mtu 1500
-    if grep -q "$iface" /etc/network/interfaces; then
-        sed -i "/iface $iface inet/c\iface $iface inet dhcp\n    mtu 1500" /etc/network/interfaces
-    else
-        echo -e "auto $iface\niface $iface inet dhcp\n    mtu 1500" | tee -a /etc/network/interfaces
-    fi
 done
-
 systemctl restart networking
 
-# Install Python3 and pip3
-echo "Installing Python3 and pip3..."
+# 安装Python3和pip3
+echo "安装Python3和pip3..."
 apt install -y python3 python3-pip
 
-# Network optimization
-echo "Optimizing network settings..."
+# 网络优化
+echo "网络优化设置..."
 install_if_not_exists procps
 sysctl -w net.ipv4.ip_forward=1
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-
 modprobe tcp_bbr
-echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
-echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-
-sysctl -w net.ipv4.tcp_ecn=1
-echo "net.ipv4.tcp_ecn=1" >> /etc/sysctl.conf
-
+echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.ip_forward=1\nnet.ipv4.tcp_ecn=1" >> /etc/sysctl.conf
 sysctl -p
 
-# Disable swap
-echo "Disabling swap..."
+# 禁用swap
+echo "禁用swap..."
 swapoff -a
 sed -i '/ swap / s/^/#/' /etc/fstab
 
-# Process optimization
-echo "Optimizing process limits..."
+# 进程优化
+echo "进程优化..."
 echo "* soft nproc 65535" >> /etc/security/limits.conf
 echo "* hard nproc 65535" >> /etc/security/limits.conf
 
-echo "System optimization completed!"
+echo "系统优化完成！"
