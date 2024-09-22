@@ -1,160 +1,109 @@
 #!/bin/bash
 
-function rename_nproc_conf() {
-  [ -e /etc/security/limits.d/*nproc.conf ] && rename nproc.conf nproc.conf_bk /etc/security/limits.d/*nproc.conf
-}
+# 检测是否为root用户
+if [ "$(id -u)" -ne 0 ]; then
+    echo "This script must be run as root. Please run as root or use sudo."
+    exit 1
+fi
 
-function update_common_session() {
-  local common_session="/etc/pam.d/common-session"
-  if [ -f "$common_session" ] && ! grep -q 'session required pam_limits.so' "$common_session"; then
-    echo "session required pam_limits.so" >> "$common_session"
-  fi
-}
+# 停止所有进程锁
+echo "Stopping all process locks..."
+killall -9 lockfile
 
-function update_limits_conf() {
-  cat <<EOF > /etc/security/limits.conf
-# End of file
-*     soft   nofile    1048576
-*     hard   nofile    1048576
-*     soft   nproc     1048576
-*     hard   nproc     1048576
-*     soft   core      1048576
-*     hard   core      1048576
-*     hard   memlock   unlimited
-*     soft   memlock   unlimited
-root  soft   nofile    1048576
-root  hard   nofile    1048576
-root  soft   nproc     1048576
-root  hard   nproc     1048576
-root  soft   core      1048576
-root  hard   core      1048576
-root  hard   memlock   unlimited
-root  soft   memlock   unlimited
-EOF
-}
+# 设置语言，编码默认为国际通用
+echo "Setting system language and encoding to UTF-8..."
+localectl set-locale LANG=en_US.UTF-8
+localectl set-keymap us
+timedatectl set-timezone Asia/Shanghai && timedatectl status
 
-function remove_unneeded_parameters() {
-  local unneeded_parameters=(
-    fs.file-max
-    fs.inotify.max_user_instances
-    net.core.somaxconn
-    net.core.netdev_max_backlog
-    net.core.rmem_max
-    net.core.wmem_max
-    net.ipv4.udp_rmem_min
-    net.ipv4.udp_wmem_min
-    net.ipv4.tcp_rmem
-    net.ipv4.tcp_wmem
-    net.ipv4.tcp_mem
-    net.ipv4.udp_mem
-    net.ipv4.tcp_syncookies
-    net.ipv4.tcp_fin_timeout
-    net.ipv4.tcp_tw_reuse
-    net.ipv4.ip_local_port_range
-    net.ipv4.tcp_max_syn_backlog
-    net.ipv4.tcp_max_tw_buckets
-    net.ipv4.route.gc_timeout
-    net.ipv4.tcp_syn_retries
-    net.ipv4.tcp_synack_retries
-    net.ipv4.tcp_timestamps
-    net.ipv4.tcp_max_orphans
-    net.ipv4.tcp_no_metrics_save
-    net.ipv4.tcp_ecn
-    net.ipv4.tcp_frto
-    net.ipv4.tcp_mtu_probing
-    net.ipv4.tcp_rfc1337
-    net.ipv4.tcp_sack
-    net.ipv4.tcp_fack
-    net.ipv4.tcp_window_scaling
-    net.ipv4.tcp_adv_win_scale
-    net.ipv4.tcp_moderate_rcvbuf
-    net.ipv4.tcp_keepalive_time
-    net.ipv4.tcp_notsent_lowat
-    net.ipv4.conf.all.route_localnet
-    net.ipv4.ip_forward
-    net.ipv4.conf.all.forwarding
-    net.ipv4.conf.default.forwarding
-    net.core.default_qdisc
-    net.ipv4.tcp_congestion_control
-  )
-  sed -i '/^\('$(IFS='|'; echo "${unneeded_parameters[*]}")'\)\s*=/d' /etc/sysctl.conf
-}
+# 配置DNS
+echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
+sed -i '/^#DNS=/a DNS=8.8.8.8 8.8.4.4' /etc/systemd/resolved.conf
+systemctl restart systemd-resolved
 
-function add_new_parameters() {
-  cat <<EOF >> /etc/sysctl.conf
-fs.file-max = 1048576
-fs.inotify.max_user_instances = 8192
-net.core.somaxconn = 32768
-net.core.netdev_max_backlog = 32768
-net.core.rmem_max = 33554432
-net.core.wmem_max = 33554432
-net.ipv4.udp_rmem_min = 16384
-net.ipv4.udp_wmem_min = 16384
-net.ipv4.tcp_rmem = 4096 87380 33554432
-net.ipv4.tcp_wmem = 4096 16384 33554432
-net.ipv4.tcp_mem = 786432 1048576 26777216
-net.ipv4.udp_mem = 65536 131072 262144
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_fin_timeout = 30
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.ip_local_port_range = 1024 65000
-net.ipv4.tcp_max_syn_backlog = 16384
-net.ipv4.tcp_max_tw_buckets = 6000
-net.ipv4.route.gc_timeout = 100
-net.ipv4.tcp_syn_retries = 1
-net.ipv4.tcp_synack_retries = 1
-net.ipv4.tcp_timestamps = 0
-net.ipv4.tcp_max_orphans = 131072
-net.ipv4.tcp_no_metrics_save = 1
-net.ipv4.tcp_ecn = 1
-net.ipv4.tcp_frto = 0
-net.ipv4.tcp_mtu_probing = 0
-net.ipv4.tcp_rfc1337 = 0
-net.ipv4.tcp_sack = 1
-net.ipv4.tcp_fack = 1
-net.ipv4.tcp_window_scaling = 1
-net.ipv4.tcp_adv_win_scale = 1
-net.ipv4.tcp_moderate_rcvbuf = 1
-net.ipv4.tcp_keepalive_time = 600
-net.ipv4.tcp_notsent_lowat = 16384
-net.ipv4.conf.all.route_localnet = 1
-net.ipv4.ip_forward = 0
-net.ipv4.conf.all.forwarding = 0
-net.ipv4.conf.default.forwarding = 0
-net.core.default_qdisc = fq_codel
-net.ipv4.tcp_congestion_control = bbr
+# 更新所有包
+echo "Updating all packages..."
+apt update && apt full-upgrade -y
 
-# SSR 对于会出现突发空闲的长周期 TLS 连接有很大影响，所以关闭
-net.ipv4.tcp_slow_start_after_idle = 0
 
-#设置为1，当检测到 ICMP 黑洞时启用
-net.ipv4.tcp_mtu_probing = 1
+# 安装常用软件
+echo "Installing common software..."
+apt install -y curl wget git vim htop net-tools zip unaip jq
 
-#Socket缓存配置
-net.ipv4.tcp_rmem = 8192 262144 536870912
-net.ipv4.tcp_wmem = 4096 16384 536870912
+# 安装Docker和Docker Compose
+echo "Installing Docker and Docker Compose..."
+apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt update
+apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-#TCP窗口大小，接收缓冲区可用buffer
-net.ipv4.tcp_adv_win_scale = -2
+# 启用Docker服务
+systemctl start docker
+systemctl enable docker
 
-#限制写入队列中未发送字节的大小
-net.ipv4.tcp_notsent_lowat = 131072
+# 清理垃圾包括Docker镜像
+echo "Cleaning system and removing unused Docker images..."
+apt autoremove -y
+docker system prune -a -f
 
-#关闭IPv6
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-EOF
-}
+# 开放端口（示例：开放80和443端口）
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -F
+# 自动检测网络接口
+interfaces=$(ls /sys/class/net | grep -v lo)
 
-function reload_sysctl_settings() {
-  /sbin/sysctl -p
-}
+# 设置 MTU 为 1500 并永久生效
+for iface in $interfaces; do
+    echo "Setting MTU=1500 for interface: $iface"
+    ip link set dev "$iface" mtu 1500
 
-# 调用函数
-rename_nproc_conf
-update_common_session
-update_limits_conf
-remove_unneeded_parameters
-add_new_parameters
-reload_sysctl_settings
+    # 为 Debian/Ubuntu 系统永久生效，修改 /etc/network/interfaces
+    if grep -q "$iface" /etc/network/interfaces; then
+        sed -i "/iface $iface inet/c\iface $iface inet dhcp\n    mtu 1500" /etc/network/interfaces
+    else
+        echo -e "auto $iface\niface $iface inet dhcp\n    mtu 1500" | tee -a /etc/network/interfaces
+    fi
+done
+
+# 重启网络服务以使更改生效
+systemctl restart networking
+
+echo "MTU for all network interfaces set to 1500."
+
+# 安装Python3和pip3
+echo "Installing Python3 and pip3..."
+apt install -y python3 python3-pip
+
+# 网络优化：开启转发、BBR、ECN，关闭虚拟内存，进程优化
+echo "Optimizing network settings..."
+
+# 开启IP转发
+sysctl -w net.ipv4.ip_forward=1
+bash -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
+
+# 开启BBR
+modprobe tcp_bbr
+bash -c 'echo "tcp_bbr" >> /etc/modules-load.d/modules.conf'
+bash -c 'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf'
+bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
+sysctl -p
+
+# 开启ECN
+sysctl -w net.ipv4.tcp_ecn=1
+bash -c 'echo "net.ipv4.tcp_ecn=1" >> /etc/sysctl.conf'
+
+# 关闭虚拟内存
+echo "Disabling swap..."
+swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
+
+# 进程优化（限制最大进程数）
+echo "Optimizing process limits..."
+bash -c 'echo "* soft nproc 65535" >> /etc/security/limits.conf'
+bash -c 'echo "* hard nproc 65535" >> /etc/security/limits.conf'
+
+# 完成
+echo "System optimization completed!"
