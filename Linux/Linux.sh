@@ -29,27 +29,16 @@ echo "Stopping all process locks..."
 install_if_not_exists psmisc
 killall -9 lockfile || true
 
-# Set language, keyboard layout, and timezone
-echo "Setting system language, keyboard layout, and timezone..."
+echo "Setting system language and timezone..."
 install_if_not_exists locales
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
-
-# Try to set keymap to 'us', if it fails, just skip it
-if command_exists localectl; then
-    echo "Attempting to set keymap to 'us'..."
-    localectl set-keymap us || echo "Failed to set keymap. Skipping this step."
-else
-    echo "localectl not found. Skipping keymap setting."
-fi
 
 install_if_not_exists tzdata
 timedatectl set-timezone Asia/Shanghai || echo "Failed to set timezone. Please set it manually."
 
 # Display current time settings
 timedatectl status
-
-# The rest of the script remains the same...
 
 # Configure DNS
 echo "Configuring DNS to 8.8.8.8 and 8.8.4.4..."
