@@ -1,23 +1,5 @@
 #!/bin/bash
 
-# 立即终止遇到的任何错误
-set -e
-
-# 检查命令是否存在
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# 安装缺失的包
-install_if_not_exists() {
-    if ! command_exists "$1"; then
-        echo "安装 $1..."
-        apt install -y "$1"
-    else
-        echo "$1 已安装."
-    fi
-}
-
 # 检查是否为 root 用户
 check_root() {
     [ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
