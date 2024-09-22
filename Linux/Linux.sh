@@ -140,7 +140,7 @@ optimize_network() {
     install_if_not_exists procps
     sysctl -w net.ipv4.ip_forward=1
     modprobe tcp_bbr
-    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.ip_forward=1\nnet.ipv4.tcp_ecn=1" >> /etc/sysctl.conf
+    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.ip_forward=1\nnet.ipv4.tcp_ecn=1\nnet.ipv4.tcp_fastopen=0" >> /etc/sysctl.conf
     sysctl -p
 }
 
