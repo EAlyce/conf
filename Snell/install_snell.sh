@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 system_setup() {
     echo "开始设置系统环境..."
     
