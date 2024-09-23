@@ -5,7 +5,6 @@ log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
 
-# 函数：设置系统环境
 system_setup() {
     echo "开始设置系统环境..."
     
@@ -24,16 +23,25 @@ system_setup() {
     animate &
     ANIMATE_PID=$!
 
-    # 静默执行实际的设置命令
-    if ! bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" > /dev/null 2>&1; then
-        kill $ANIMATE_PID
-        echo -e "\r\033[K错误：系统环境设置失败"
-        return 1
-    fi
+    # 执行实际的设置命令并捕获输出
+    OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
+    EXIT_CODE=$?
 
     # 停止动画
     kill $ANIMATE_PID
-    echo -e "\r\033[K系统环境设置成功"
+    wait $ANIMATE_PID 2>/dev/null
+
+    # 清除动画行
+    echo -e "\r\033[K"
+
+    if [ $EXIT_CODE -ne 0 ]; then
+        echo "错误：系统环境设置失败"
+        echo "错误信息："
+        echo "$OUTPUT"
+        return 1
+    else
+        echo "系统环境设置成功"
+    fi
 }
 
 # 函数：安装 PagerMaid
