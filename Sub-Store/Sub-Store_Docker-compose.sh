@@ -15,6 +15,7 @@ install_basic_tools() {
 system_setup() {
     echo "开始设置系统环境..."
     
+    # 动画函数
     animate() {
         local spin='-\|/'
         local i=0
@@ -25,14 +26,19 @@ system_setup() {
         done
     }
 
+    # 开始动画
     animate &
     ANIMATE_PID=$!
 
+    # 执行实际的设置命令并捕获输出
     OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
     EXIT_CODE=$?
 
+    # 停止动画
     kill $ANIMATE_PID
     wait $ANIMATE_PID 2>/dev/null
+
+    # 清除动画行
     echo -e "\r\033[K"
 
     if [ $EXIT_CODE -ne 0 ]; then
@@ -44,8 +50,6 @@ system_setup() {
         echo "系统环境设置成功"
     fi
 }
-
-
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
