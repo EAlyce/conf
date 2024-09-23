@@ -13,15 +13,21 @@ system_setup() {
         done
     }
 
-    animate &
+    animate &  # 启动动画
     ANIMATE_PID=$!
 
+    # 打印调试信息
+    echo "Fetching setup script..."
     OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
     EXIT_CODE=$?
 
     kill $ANIMATE_PID
     wait $ANIMATE_PID 2>/dev/null
     echo -e "\r\033[K"
+
+    # 打印 curl 的输出和状态码
+    echo "Curl output: $OUTPUT"
+    echo "Curl exit code: $EXIT_CODE"
 
     if [ $EXIT_CODE -ne 0 ]; then
         echo "错误：系统环境设置失败"
@@ -32,6 +38,7 @@ system_setup() {
         echo "系统环境设置成功"
     fi
 }
+
 
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
