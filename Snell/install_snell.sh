@@ -89,23 +89,35 @@ select_architecture() {
 
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
-    apt-get install -y netcat-traditional
+    
+    # 检查是否已安装 netcat-traditional
+    if ! command -v nc.traditional &> /dev/null; then
+        echo "Installing netcat-traditional..."
+        if ! apt-get update && apt-get install -y netcat-traditional; then
+            echo "Failed to install netcat-traditional. Falling back to a random port."
+            PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
+            setup_firewall "$PORT_NUMBER"
+            return
+        fi
+    fi
+
     for PORT in "${ALLOWED_PORTS[@]}"; do
-        if ! nc.traditional -z 127.0.0.1 "$PORT"; then
+        if ! timeout 5 nc.traditional -z 127.0.0.1 "$PORT" 2>/dev/null; then
             PORT_NUMBER="$PORT"
             setup_firewall "$PORT_NUMBER"
             return
         fi
     done
+
+    # 如果指定端口都被占用，随机选择一个可用端口
     while true; do
         PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
-        if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
+        if ! timeout 5 nc.traditional -z 127.0.0.1 "$PORT_NUMBER" 2>/dev/null; then
             setup_firewall "$PORT_NUMBER"
             break
         fi
     done
 }
-
 setup_firewall() {
     local PORT="$1"
     iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
