@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 check_root() {
@@ -12,44 +13,39 @@ install_basic_tools() {
     apt-get install -y curl gnupg lsb-release iptables net-tools netfilter-persistent software-properties-common
     echo "基础工具已安装。"
 }
-system_setup() {
-    echo "开始设置系统环境..."
-    
-    # 动画函数
-    animate() {
-        local spin='-\|/'
-        local i=0
-        while true; do
-            i=$(( (i+1) % 4 ))
-            printf "\r[%c] 正在设置..." "${spin:$i:1}"
-            sleep 0.1
-        done
-    }
 
-    # 开始动画
-    animate &
-    ANIMATE_PID=$!
+clean_system() {
+    for proc in dpkg apt apt-get; do
+        pids=$(ps -ef | grep $proc | grep -v grep | awk '{print $2}')
+        [ -n "$pids" ] && sudo kill -9 $pids 2>/dev/null || true
+    done
 
-    # 执行实际的设置命令并捕获输出
-    OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
-    EXIT_CODE=$?
-
-    # 停止动画
-    kill $ANIMATE_PID
-    wait $ANIMATE_PID 2>/dev/null
-
-    # 清除动画行
-    echo -e "\r\033[K"
-
-    if [ $EXIT_CODE -ne 0 ]; then
-        echo "错误：系统环境设置失败"
-        echo "错误信息："
-        echo "$OUTPUT"
-        return 1
-    else
-        echo "系统环境设置成功"
-    fi
+    sudo dpkg --configure -a
+    sudo apt-get clean -y
+    sudo apt-get autoclean -y
+    sudo apt-get autoremove -y
 }
+
+install_packages() {
+    apt-get update -y
+    apt-get install -y curl gnupg lsb-release
+
+    apt-get update -y
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    if ! command -v docker-compose &> /dev/null; then
+        LATEST_COMPOSE_VERSION=$(curl -sS https://api.github.com/repos/docker/compose/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+        curl -fsSL "https://github.com/docker/compose/releases/download/${LATEST_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    fi
+
+    systemctl enable docker
+    systemctl start docker
+
+    docker --version
+    docker-compose --version
+}
+
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
@@ -64,6 +60,18 @@ get_public_ip() {
     exit 1
 }
 
+setup_environment() {
+    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
+    echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
+    
+    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
+    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
+    netfilter-persistent reload
+    
+    echo 0 > /proc/sys/net/ipv4/tcp_fastopen
+    docker system prune -af --volumes
+    echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p > /dev/null
+}
 
 setup_docker() {
     read -p "请输入自定义密钥（或直接回车生成随机密钥）: " user_input
@@ -98,7 +106,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=86400
+      - WATCHTOWER_POLL_INTERVAL=3600
 EOF
 
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
@@ -111,8 +119,10 @@ EOF
 main() {
     check_root
     install_basic_tools
-    system_setup
+    clean_system
     public_ip=$(get_public_ip)
+    install_packages
+    setup_environment
     setup_docker
 }
 
