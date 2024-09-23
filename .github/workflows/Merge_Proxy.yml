@@ -42,7 +42,7 @@ jobs:
          } | cat - | grep -v '^#' | grep -v '^$' | \
          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
          awk -F',' '{
-          if ($1 == "DOMAIN-SUFFIX") {
+          if ($1 == "DOMAIN-SUFFIX,") {
             split($2, parts, ".");
             if (length(parts) > 2) {
               $2 = parts[length(parts)-1] "." parts[length(parts)];
