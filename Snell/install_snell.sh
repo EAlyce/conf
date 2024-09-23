@@ -1,19 +1,27 @@
 #!/bin/bash
 
+# 检查依赖工具是否安装
+check_dependencies() {
+    command -v curl >/dev/null 2>&1 || { echo "curl 未安装，请安装后重试"; exit 1; }
+    command -v nc.traditional >/dev/null 2>&1 || { echo "nc.traditional 未安装，请安装后重试"; exit 1; }
+    command -v docker-compose >/dev/null 2>&1 || { echo "docker-compose 未安装，请安装后重试"; exit 1; }
+}
+
+# 动画函数
+animate() {
+    local spin='-\|/'
+    local i=0
+    while true; do
+        i=$(( (i+1) % 4 ))
+        printf "\r[%c] 正在设置..." "${spin:$i:1}"
+        sleep 0.1
+    done
+}
+
+# 系统设置
 system_setup() {
     echo "开始设置系统环境..."
     
-    # 动画函数
-    animate() {
-        local spin='-\|/'
-        local i=0
-        while true; do
-            i=$(( (i+1) % 4 ))
-            printf "\r[%c] 正在设置..." "${spin:$i:1}"
-            sleep 0.1
-        done
-    }
-
     # 开始动画
     animate &
     ANIMATE_PID=$!
@@ -23,8 +31,10 @@ system_setup() {
     EXIT_CODE=$?
 
     # 停止动画
-    kill $ANIMATE_PID
-    wait $ANIMATE_PID 2>/dev/null
+    if kill -0 $ANIMATE_PID >/dev/null 2>&1; then
+        kill $ANIMATE_PID
+        wait $ANIMATE_PID 2>/dev/null
+    fi
 
     # 清除动画行
     echo -e "\r\033[K"
@@ -39,6 +49,7 @@ system_setup() {
     fi
 }
 
+# 获取公网IP
 get_public_ip() {
     local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
@@ -53,6 +64,7 @@ get_public_ip() {
     exit 1
 }
 
+# 获取地理位置
 get_location() {
     local service="http://ipinfo.io/city"
     LOCATION=$(curl -s "$service" 2>/dev/null)
@@ -63,6 +75,7 @@ get_location() {
     fi
 }
 
+# 选择版本
 select_version() {
     echo "选择 Snell 版本："
     echo "1. Snell v3"
@@ -78,6 +91,7 @@ select_version() {
     esac
 }
 
+# 选择架构
 select_architecture() {
     ARCH="$(uname -m)"
     ARCH_TYPE="linux-amd64.zip"
@@ -85,6 +99,7 @@ select_architecture() {
     SNELL_URL="${BASE_URL}/${SUB_PATH}-${ARCH_TYPE}"
 }
 
+# 生成端口
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
     apt-get install -y netcat-traditional
@@ -104,15 +119,18 @@ generate_port() {
     done
 }
 
+# 设置防火墙
 setup_firewall() {
     local PORT="$1"
     iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
 }
 
+# 生成密码
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
 }
 
+# 设置 Docker
 setup_docker() {
     local NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR/snell-conf" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
@@ -143,16 +161,19 @@ EOF
     echo "节点信息如下"
 }
 
+# 打印节点信息
 print_node() {
     echo -e "\n\n\n$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER\n\n\n"
 }
 
+# 主函数
 main() {
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root" 
         exit 1
     fi
     
+    check_dependencies
     system_setup
     get_public_ip
     get_location
