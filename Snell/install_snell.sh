@@ -107,7 +107,7 @@ setup_docker() {
     cat <<EOF > docker-compose.yml
 services:
   snell:
-    image: ghcr.io/skyxim/snell:latest
+    image: accors/snell:latest
     container_name: Snell$PORT_NUMBER
     restart: always
     network_mode: host
