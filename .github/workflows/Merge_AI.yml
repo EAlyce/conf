@@ -63,7 +63,7 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | sed 's/ //g' | sort | uniq > Rule/OpenAI.list
+          }' | sort | uniq > Rule/OpenAI.list
 
       - name: Check and Configure Git
         run: |
