@@ -87,7 +87,7 @@ jobs:
          # 打印所有不符合过滤条件的行
          print;
          }
-         ' Rule/Proxy.list | tee Rule/Proxy.list
+         ' Rule/Proxy.list > temp && mv temp Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
