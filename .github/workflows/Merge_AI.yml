@@ -38,7 +38,32 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/Repcz/Tool/6409f27cb9d5bb9a42e9703280b50c6229950998/Clash/Rules/Cloudflare.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | awk" '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cloudflare/Cloudflare.list" | awk '{print $0 "\n"}'
-          } | grep -v '^#' | sort | uniq | awk 'NF > 0' > Rule/OpenAI.list
+          } | cat - | grep -v '^#' | grep -v '^$' | \
+          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
+          awk -F',' '{
+          if ($1 == "DOMAIN-SUFFIX,") {
+            split($2, parts, ".");
+            if (length(parts) > 2) {
+              $2 = parts[length(parts)-1] "." parts[length(parts)];
+            }
+          }
+          print $0;
+          }' | \
+          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
+          awk '{
+          if ($0 ~ /^DOMAIN-SUFFIX,/) {
+          domain = $0;
+          sub(/^DOMAIN-SUFFIX,/, "", domain);          # 去掉前缀 DOMAIN-SUFFIX,
+          n = split(domain, parts, ".");               # 分割域名
+          if (n > 2) {
+             print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; # 只打印二级域名
+          } else {
+            print $0;                                # 保留不符合条件的域名
+          }
+          } else {
+          print $0;                                    # 保留非 DOMAIN-SUFFIX 行
+          }
+          }' | sort | uniq > Rule/OpenAI.list
 
       - name: Check and Configure Git
         run: |
