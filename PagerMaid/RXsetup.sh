@@ -7,12 +7,33 @@ log() {
 
 # 函数：设置系统环境
 system_setup() {
-    log "开始设置系统环境..."
-    if ! bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"; then
-        log "错误：系统环境设置失败"
+    echo "开始设置系统环境..."
+    
+    # 动画函数
+    animate() {
+        local spin='-\|/'
+        local i=0
+        while true; do
+            i=$(( (i+1) % 4 ))
+            printf "\r[%c] 正在设置..." "${spin:$i:1}"
+            sleep 0.1
+        done
+    }
+
+    # 开始动画
+    animate &
+    ANIMATE_PID=$!
+
+    # 静默执行实际的设置命令
+    if ! bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" > /dev/null 2>&1; then
+        kill $ANIMATE_PID
+        echo -e "\r\033[K错误：系统环境设置失败"
         return 1
     fi
-    log "系统环境设置成功"
+
+    # 停止动画
+    kill $ANIMATE_PID
+    echo -e "\r\033[K系统环境设置成功"
 }
 
 # 函数：安装 PagerMaid
