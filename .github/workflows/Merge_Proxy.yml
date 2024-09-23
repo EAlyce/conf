@@ -64,7 +64,7 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | sed 's/ //g' | sort | uniq > Rule/Proxy.list
+          }' | sort | uniq > Rule/Proxy.list
 
 
       - name: Check and Configure Git
