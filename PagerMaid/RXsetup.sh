@@ -3,9 +3,20 @@
 # 函数：设置系统环境
 system_setup() {
     echo "设置 DNS 和时区..."
-    # 使用 resolvconf 设置 DNS
-    echo "nameserver 8.8.8.8" > /etc/resolvconf/resolv.conf.d/head
-    resolvconf -u
+    # 检查 resolv.conf 是否为符号链接
+    if [ -L "/etc/resolv.conf" ]; then
+        # 如果是符号链接，可能是由 systemd-resolved 管理
+        if systemctl is-active systemd-resolved >/dev/null 2>&1; then
+            echo "nameserver 8.8.8.8" | tee /etc/systemd/resolved.conf >/dev/null
+            systemctl restart systemd-resolved
+        else
+            # 如果不是 systemd-resolved，直接修改 resolv.conf
+            echo "nameserver 8.8.8.8" > /etc/resolv.conf
+        fi
+    else
+        # 如果不是符号链接，直接修改
+        echo "nameserver 8.8.8.8" > /etc/resolv.conf
+    fi
 
     timedatectl set-timezone Asia/Shanghai
 
