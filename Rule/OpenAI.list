@@ -1,17 +1,7 @@
-AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-eastus-), (DOMAIN-SUFFIX, webpubsub.azure.com))
-AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
+AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-eastus-),(DOMAIN-SUFFIX,webpubsub.azure.com))
+AND,((DOMAIN-KEYWORD,openaicom-api-),(DOMAIN-SUFFIX,azurefd.net))
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom-api
-DOMAIN-SUFFIX, anthropic.com
-DOMAIN-SUFFIX, chatgpt.com
-DOMAIN-SUFFIX, claude.ai
-DOMAIN-SUFFIX, grazie.ai
-DOMAIN-SUFFIX, meta.ai
-DOMAIN-SUFFIX, mistral.ai
-DOMAIN-SUFFIX, oaistatic.com
-DOMAIN-SUFFIX, oaiusercontent.com
-DOMAIN-SUFFIX, openai.com
-DOMAIN-SUFFIX, perplexity.ai
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,anthropic.com
@@ -73,6 +63,7 @@ DOMAIN-SUFFIX,githubusercontent.com
 DOMAIN-SUFFIX,google.com
 DOMAIN-SUFFIX,google.dev
 DOMAIN-SUFFIX,googleapis.com
+DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,imgix.net
 DOMAIN-SUFFIX,intellij.net
@@ -125,7 +116,6 @@ IP-ASN,20473
 IP-ASN,209242
 IP-ASN,394536
 IP-ASN,395747
-IP-CIDR, 160.79.104.0/23, no-resolve
 IP-CIDR,103.21.244.0/22
 IP-CIDR,103.22.200.0/22
 IP-CIDR,103.31.4.0/22
@@ -140,6 +130,7 @@ IP-CIDR,141.101.64.0/18
 IP-CIDR,143.110.232.239/32
 IP-CIDR,143.198.200.27/32
 IP-CIDR,159.89.204.203/32
+IP-CIDR,160.79.104.0/23,no-resolve
 IP-CIDR,162.158.0.0/15
 IP-CIDR,164.92.115.213/32
 IP-CIDR,164.92.71.155/32
