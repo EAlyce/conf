@@ -1,51 +1,42 @@
 #!/bin/bash
 
-check_root() {
-    if [ "$(id -u)" != "0" ]; then
-        echo "运行脚本需要root权限"
-        exit 1
+system_setup() {
+    echo "开始设置系统环境..."
+    
+    # 动画函数
+    animate() {
+        local spin='-\|/'
+        local i=0
+        while true; do
+            i=$(( (i+1) % 4 ))
+            printf "\r[%c] 正在设置..." "${spin:$i:1}"
+            sleep 0.1
+        done
+    }
+
+    # 开始动画
+    animate &
+    ANIMATE_PID=$!
+
+    # 执行实际的设置命令并捕获输出
+    OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
+    EXIT_CODE=$?
+
+    # 停止动画
+    kill $ANIMATE_PID
+    wait $ANIMATE_PID 2>/dev/null
+
+    # 清除动画行
+    echo -e "\r\033[K"
+
+    if [ $EXIT_CODE -ne 0 ]; then
+        echo "错误：系统环境设置失败"
+        echo "错误信息："
+        echo "$OUTPUT"
+        return 1
+    else
+        echo "系统环境设置成功"
     fi
-
-    if ! command -v apt &> /dev/null; then
-        echo "警告: 脚本仅支持 Debian 或 Ubuntu 系统。"
-        exit 1
-    fi
-}
-
-
-clean_lock_files() {
-
-    pkill -9 apt dpkg
-    rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
-    dpkg --configure -a > /dev/null
-    apt-get clean autoclean > /dev/null
-    apt-get autoremove -y > /dev/null
-    rm -rf /tmp/*
-    history -c && history -w
-    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null
-
-}
-
-
-install_tools() {
-    echo "开始更新系统并安装必要的软件包..."
-
-    # 更新系统并升级所有包
-    apt-get update -y || echo "更新失败"
-    # apt-get upgrade -y || echo "升级失败"
-    # apt-get dist-upgrade -y || echo "分发升级失败"
-    # apt-get full-upgrade -y || echo "完全升级失败"
-
-    # 安装所需的软件包
-    apt-get install -y \
-        netcat-traditional \
-        apt-transport-https \
-        ca-certificates \
-        iptables-persistent \
-        netfilter-persistent \
-        software-properties-common || echo "软件包安装失败"
-
-    echo "更新完成"
 }
 
 get_public_ip() {
@@ -72,24 +63,6 @@ get_location() {
     fi
 }
 
-setup_environment() {
-    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
-    echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
-    export DEBIAN_FRONTEND=noninteractive
-    apt-get update -qq
-    if ! command -v docker &> /dev/null; then
-        curl -fsSL https://get.docker.com | sh
-        systemctl enable --now docker
-    fi
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
-    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
-    iptables-save > /etc/iptables/rules.v4
-    netfilter-persistent reload
-    echo 0 > /proc/sys/net/ipv4/tcp_fastopen
-    docker system prune -af --volumes
-    echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p > /dev/null
-}
-
 select_version() {
     echo "选择 Snell 版本："
     echo "1. Snell v3"
@@ -99,7 +72,7 @@ select_version() {
     choice="${choice:-2}"
     case $choice in
         0) echo "Exit script"; exit 0 ;;
-        1) BASE_URL="https://github.com/EAlyce/conf/tree/main/Snell/source"; SUB_PATH="v3.0.1/snell-server-v3.0.1"; VERSION_NUMBER="3" ;;
+        1) BASE_URL="https://github.com/EAlyce/conf/raw/main/Snell/source"; SUB_PATH="v3.0.1/snell-server-v3.0.1"; VERSION_NUMBER="3" ;;
         2) BASE_URL="https://dl.nssurge.com/snell"; SUB_PATH="snell-server-v4.1.0"; VERSION_NUMBER="4" ;;
         *) echo "Invalid selection"; exit 1 ;;
     esac
@@ -114,7 +87,7 @@ select_architecture() {
 
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
-    command -v nc.traditional &> /dev/null || apt-get install -y netcat-traditional
+    apt-get install -y netcat-traditional
     for PORT in "${ALLOWED_PORTS[@]}"; do
         if ! nc.traditional -z 127.0.0.1 "$PORT"; then
             PORT_NUMBER="$PORT"
@@ -138,7 +111,6 @@ setup_firewall() {
 
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
-
 }
 
 setup_docker() {
@@ -148,7 +120,7 @@ setup_docker() {
     cat <<EOF > docker-compose.yml
 services:
   snell:
-    image: accors/snell:latest
+    image: ghcr.io/skyxim/snell:latest
     container_name: Snell$PORT_NUMBER
     restart: always
     network_mode: host
@@ -175,17 +147,15 @@ print_node() {
     echo -e "\n\n\n$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER\n\n\n"
 }
 
-
 main() {
-    check_root
-    clean_lock_files &
-    CLEAN_LOCK_FILES_PID=$!
-    # 等待 clean_lock_files 完成
-    wait $CLEAN_LOCK_FILES_PID
+    if [[ $EUID -ne 0 ]]; then
+        echo "This script must be run as root" 
+        exit 1
+    fi
+    
+    system_setup
     get_public_ip
     get_location
-    install_tools
-    setup_environment
     select_version
     select_architecture
     generate_port
