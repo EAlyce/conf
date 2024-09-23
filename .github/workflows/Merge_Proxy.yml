@@ -39,7 +39,7 @@ jobs:
             curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
-          } | cat - | grep -v '^#' | grep -v '^$' | \
+          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | \
           sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
           awk -F',' '{
           if ($1 == "DOMAIN-SUFFIX,") {
