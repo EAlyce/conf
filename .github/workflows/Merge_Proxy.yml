@@ -30,16 +30,27 @@ jobs:
 
       - name: Get and process domains
         run: |
-          {
-           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
-           curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
-          } | grep -v '^#' | grep -v '^$' | sort | uniq > Rule/Proxy.list
+         {
+         curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
+         } | cat - | grep -v '^#' | grep -v '^$' | \
+         sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
+         awk -F',' '{
+          if ($1 == "DOMAIN-SUFFIX") {
+            split($2, parts, ".");
+            if (length(parts) > 2) {
+              $2 = parts[length(parts)-1] "." parts[length(parts)];
+            }
+          }
+          print $0;
+         }' | \
+         sort | uniq > Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
