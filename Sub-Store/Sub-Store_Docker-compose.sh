@@ -105,7 +105,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=3600
+      - WATCHTOWER_POLL_INTERVAL=86400
 EOF
 
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
