@@ -1,106 +1,151 @@
-
 #!/bin/bash
-
 check_root() {
-    if [ "$(id -u)" != "0" ]; then
-        echo "运行脚本需要root权限"
-        exit 1
-    fi
-
-    if ! command -v apt &> /dev/null; then
-        echo "警告: 脚本仅支持 Debian 或 Ubuntu 系统。"
-        exit 1
-    fi
+    [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
-
-
-clean_lock_files() {
-
-    pkill -9 apt dpkg
-    rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock
-    dpkg --configure -a > /dev/null
-    apt-get clean autoclean > /dev/null
-    apt-get autoremove -y > /dev/null
-    rm -rf /tmp/*
-    history -c && history -w
-    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v "$(uname -r)" | xargs apt-get -y purge > /dev/null
-
-}
-
 
 install_tools() {
-    echo "开始更新系统并安装必要的软件包..."
+    echo "Start updating the system..." && sudo apt-get update -y > /dev/null || true && \
+    echo "Start installing software..." && sudo apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
+    echo "Operation completed"
+}
 
-    # 更新系统并升级所有包
-    apt-get update -y || echo "更新失败"
-    # apt-get upgrade -y || echo "升级失败"
-    # apt-get dist-upgrade -y || echo "分发升级失败"
-    # apt-get full-upgrade -y || echo "完全升级失败"
+clean_lock_files() {
+echo "Start cleaning the system..."
 
-    # 安装所需的软件包
-    apt-get install -y \
-        netcat-traditional \
-        apt-transport-https \
-        ca-certificates \
-        iptables-persistent \
-        netfilter-persistent \
-        software-properties-common || echo "软件包安装失败"
+# Kill apt and dpkg processes if they are running
+sudo pkill -9 apt || true
+sudo pkill -9 dpkg || true
 
-    echo "更新完成"
+# Remove lock files
+sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
+
+# Configure dpkg
+sudo dpkg --configure -a > /dev/null || true
+
+# Clean apt cache
+sudo apt-get clean > /dev/null
+
+# Autoclean apt
+sudo apt-get autoclean > /dev/null
+
+# Autoremove unused packages
+sudo apt-get autoremove -y > /dev/null
+
+# Remove temporary files
+sudo rm -rf /tmp/* > /dev/null
+
+# Clear command history
+history -c > /dev/null
+history -w > /dev/null
+
+# Purge old linux-image and linux-headers packages
+dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs sudo apt-get -y purge > /dev/null
+
+echo "Cleaning completed"
+
+}
+
+install_docker_and_compose() {
+    # 检测 Docker 是否已安装
+    if ! command -v docker &> /dev/null; then
+        # 安装 Docker 和 Docker Compose
+        echo "Installing Docker and Docker Compose..."
+        sudo apt-get update > /dev/null 2>&1
+        sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common > /dev/null 2>&1
+        curl -fsSL https://get.docker.com | sudo bash > /dev/null 2>&1
+        sudo apt-get update > /dev/null 2>&1
+        sudo apt-get install -y docker-compose > /dev/null 2>&1
+        echo "Docker installation completed"
+    else
+        echo "Docker and Docker Compose are already installed"
+    fi
 }
 
 get_public_ip() {
-    local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    public_ip=""
     for service in "${ip_services[@]}"; do
-        public_ip=$(curl -s "$service" 2>/dev/null)
-        if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Local IP: $public_ip"
-            return
+        if public_ip=$(curl -s "$service" 2>/dev/null); then
+            if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "Local IP: $public_ip"
+                break
+            else
+                echo "$service returned an invalid IP address: $public_ip"
+            fi
+        else
+            echo "$service Unable to connect or slow response"
         fi
         sleep 1
     done
-    echo "Unable to obtain public IP address from all services."
-    exit 1
+    [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "All services are unable to obtain public IP addresses"; exit 1; }
 }
 
 get_location() {
-    local service="http://ipinfo.io/city"
-    LOCATION=$(curl -s "$service" 2>/dev/null)
-    if [ -n "$LOCATION" ]; then
-        echo "Host location: $LOCATION"
-    else
-        echo "Unable to obtain city name."
-    fi
+    location_services=("http://ip-api.com/line?fields=city" "ipinfo.io/city" "https://ip-api.io/json | jq -r .city")
+    for service in "${location_services[@]}"; do
+        LOCATION=$(curl -s "$service" 2>/dev/null)
+        if [ -n "$LOCATION" ]; then
+            echo "Host location: $LOCATION"
+            break
+        else
+            echo "Unable to obtain city name from $service."
+            continue
+        fi
+    done
+    [ -n "$LOCATION" ] || echo "Unable to obtain city name."
 }
 
 setup_environment() {
-    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
-    echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
+    echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
+    echo "DNS servers updated successfully."
+
     export DEBIAN_FRONTEND=noninteractive
-    apt-get update -qq
-    if ! command -v docker &> /dev/null; then
-        curl -fsSL https://get.docker.com | sh
-        systemctl enable --now docker
-    fi
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
-    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
-    iptables-save > /etc/iptables/rules.v4
-    netfilter-persistent reload
-    echo 0 > /proc/sys/net/ipv4/tcp_fastopen
-    docker system prune -af --volumes
-    echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p > /dev/null
+    apt-get update > /dev/null || true
+    echo "Necessary packages installed."
+    
+# 设置防火墙规则并保存配置
+sudo mkdir -p /etc/iptables
+iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
+iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
+iptables-save > /etc/iptables/rules.v4
+sudo service netfilter-persistent reload > /dev/null || true
+echo "Iptables rules configured and saved."
+
+# 更新系统包
+sudo apt-get upgrade -y > /dev/null || true
+echo "System packages updated."
+
+# 设置历史记录大小
+grep -qxF 'export HISTSIZE=10000' ~/.bashrc || echo "export HISTSIZE=10000" >> ~/.bashrc
+source ~/.bashrc
+
+# 禁用 TCP Fast Open
+if [ -f "/proc/sys/net/ipv4/tcp_fastopen" ]; then
+    echo 0 | sudo tee /proc/sys/net/ipv4/tcp_fastopen > /dev/null
+    echo "TCP Fast Open disabled."
+fi
+
+    docker system prune -af --volumes > /dev/null || true
+    echo "Docker system pruned."
+
+    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
+    echo "SYN packets accepted."
+
+    sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p" > /dev/null && echo "Network optimization completed"
 }
 
 select_version() {
-    echo "选择 Snell 版本："
-    echo "1. Snell v3"
-    echo "2. Snell v4 Surge 专属"
+    echo "Please select the version of Snell："
+    echo "1. v3 "
+    echo "2. v4 Exclusive to Surge"
     echo "0. Exit script"
-    read -p "回车默认选择2: " choice
+    read -p "Enter selection (press Enter for default 2): " choice
+
     choice="${choice:-2}"
+
     case $choice in
         0) echo "Exit script"; exit 0 ;;
-        1) BASE_URL="https://github.com/EAlyce/conf/tree/main/Snell/source"; SUB_PATH="v3.0.1/snell-server-v3.0.1"; VERSION_NUMBER="3" ;;
+        1) BASE_URL="https://github.com/xOS/Others/raw/master/snell"; SUB_PATH="v3.0.1/snell-server-v3.0.1"; VERSION_NUMBER="3" ;;
         2) BASE_URL="https://dl.nssurge.com/snell"; SUB_PATH="snell-server-v4.1.0"; VERSION_NUMBER="4" ;;
         *) echo "Invalid selection"; exit 1 ;;
     esac
@@ -109,43 +154,59 @@ select_version() {
 select_architecture() {
     ARCH="$(uname -m)"
     ARCH_TYPE="linux-amd64.zip"
-    [ "$ARCH" == "aarch64" ] && ARCH_TYPE="linux-aarch64.zip"
+
+    if [ "$ARCH" == "aarch64" ]; then
+        ARCH_TYPE="linux-aarch64.zip"
+    fi
+
     SNELL_URL="${BASE_URL}/${SUB_PATH}-${ARCH_TYPE}"
 }
 
 generate_port() {
-    local ALLOWED_PORTS=(23456 23556)
-    command -v nc.traditional &> /dev/null || apt-get install -y netcat-traditional
-    for PORT in "${ALLOWED_PORTS[@]}"; do
-        if ! nc.traditional -z 127.0.0.1 "$PORT"; then
-            PORT_NUMBER="$PORT"
-            setup_firewall "$PORT_NUMBER"
+    ALLOWED_PORTS=(23456 23556)
+
+    if ! command -v nc.traditional &> /dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y netcat-traditional
+    fi
+
+    for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
+        if nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
+            echo "端口 $PORT_NUMBER 已被占用，跳过..."
+        else
+            echo "选定的端口: $PORT_NUMBER"
             return
         fi
     done
+
+    echo "所有指定端口都被占用，随机选择一个新的可用端口..."
     while true; do
-        PORT_NUMBER=$(shuf -i 1000-9999 -n 1)
-        if ! nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
-            setup_firewall "$PORT_NUMBER"
+        RANDOM_PORT=$(shuf -i 1000-9999 -n 1)
+
+        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
+            echo "选定的随机端口: $RANDOM_PORT"
             break
         fi
     done
 }
 
+
 setup_firewall() {
-    local PORT="$1"
-    iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
+    sudo iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
+    echo "Firewall rule added, allowing port $PORT_NUMBER's traffic"
 }
 
 generate_password() {
     PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
-
+    echo "Password generated: $PASSWORD"
 }
 
 setup_docker() {
-    local NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
-    mkdir -p "$NODE_DIR/snell-conf" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
+    NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
+
+    mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
     cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
+
     cat <<EOF > docker-compose.yml
 services:
   snell:
@@ -159,37 +220,59 @@ services:
     volumes:
       - ./snell-conf/snell.conf:/etc/snell-server.conf
 EOF
+
+    mkdir -p ./snell-conf || { echo "Error: Unable to create directory $NODE_DIR/snell-conf"; exit 1; }
     cat <<EOF > ./snell-conf/snell.conf
 [snell-server]
 listen = 0.0.0.0:$PORT_NUMBER
 psk = $PASSWORD
 tfo = false
 obfs = off
-dns = 8.8.8.8,8.8.4.4,208.67.222.222,208.67.220.220
+dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
 ipv6 = false
 EOF
+
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-    echo "节点信息如下"
+
+    echo "Node setup completed. Here is your node information"
 }
 
 print_node() {
-    echo -e "\n\n\n$LOCATION $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER\n\n\n"
+    if [ "$choice" == "1" ]; then
+        echo
+        echo
+        echo "  - name: $LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER"
+        echo "    type: snell"
+        echo "    server: $public_ip"
+        echo "    port: $PORT_NUMBER"
+        echo "    psk: $PASSWORD"
+        echo "    version: $VERSION_NUMBER"
+        echo "    udp: true"
+        echo
+        echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo
+        echo
+    elif [ "$choice" == "2" ]; then
+        echo
+        echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+        echo
+    fi
 }
 
-
-main() {
+main(){
     check_root
-    clean_lock_files &
-    CLEAN_LOCK_FILES_PID=$!
-    # 等待 clean_lock_files 完成
-    wait $CLEAN_LOCK_FILES_PID
+    sudo apt-get autoremove -y > /dev/null
+    apt-get install sudo > /dev/null
+    select_version
+    clean_lock_files
+    install_tools
+    install_docker_and_compose
     get_public_ip
     get_location
-    install_tools
     setup_environment
-    select_version
     select_architecture
     generate_port
+    setup_firewall
     generate_password
     setup_docker
     print_node
