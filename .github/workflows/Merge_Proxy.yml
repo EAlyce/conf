@@ -30,70 +30,63 @@ jobs:
 
       - name: Get and process domains
         run: |
-         {
-         curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
-         curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
-         curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
-         curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
-         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
-         curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
-         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
-         curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
-         } | cat - | grep -v '^#' | grep -v '^$' | \
-         sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
-         awk -F',' '{
-          if ($1 == "DOMAIN-SUFFIX,") {
-            split($2, parts, ".");
-            if (length(parts) > 2) {
-              $2 = parts[length(parts)-1] "." parts[length(parts)];
+          {
+            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
+            curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
+            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
+            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
+          } | grep -v '^#' | grep -v '^$' | \
+          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
+          awk -F',' '{
+            if ($1 == "DOMAIN-SUFFIX,") {
+              split($2, parts, ".");
+              if (length(parts) > 2) {
+                $2 = parts[length(parts)-1] "." parts[length(parts)];
+              }
             }
-          }
-          print $0;
-         }' | \
-         sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
-         awk '{
-         if ($0 ~ /^DOMAIN-SUFFIX,/) {
-         domain = $0;
-         sub(/^DOMAIN-SUFFIX,/, "", domain);          # 去掉前缀 DOMAIN-SUFFIX,
-         n = split(domain, parts, ".");               # 分割域名
-         if (n > 2) {
-            print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; # 只打印二级域名
-         } else {
-            print $0;                                # 保留不符合条件的域名
-         }
-         } else {
-         print $0;                                    # 保留非 DOMAIN-SUFFIX 行
-         }
-         }' | awk -F, '
+            print $0;
+          }' | \
+          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
+          awk '{
+            if ($0 ~ /^DOMAIN-SUFFIX,/) {
+              domain = $0;
+              sub(/^DOMAIN-SUFFIX,/, "", domain);
+              n = split(domain, parts, ".");
+              if (n > 2) {
+                print "DOMAIN-SUFFIX," parts[n-1] "." parts[n];
+              } else {
+                print $0;
+              }
+            } else {
+              print $0;
+            }
+          }' | awk -F, '
           BEGIN {
-            # 创建一个数组存储 DOMAIN-KEYWORD 的关键词
             keyword_count = 0;
             output = "";
-         }
-         /^DOMAIN-KEYWORD,/ {
-            # 将 DOMAIN-KEYWORD 的关键词添加到数组中
+          }
+          /^DOMAIN-KEYWORD,/ {
             keywords[keyword_count++] = $2;
-            output = output $0 "\n";  # 保留该行
-            next;
-         }
-         /^DOMAIN-SUFFIX,/ {
-            # 检查 DOMAIN-SUFFIX 是否包含任意一个 DOMAIN-KEYWORD
-            for (i = 0; i < keyword_count; i++) {
-                if (index($2, keywords[i]) > 0) {
-                    # 如果 DOMAIN-SUFFIX 包含 DOMAIN-KEYWORD，则跳过此行
-                    next;
-                }
-            }
-         }
-         {
-            # 保存不符合过滤条件的行
             output = output $0 "\n";
-         }
-         END {
-            # 打印整个输出，重定向到文件
+            next;
+          }
+          /^DOMAIN-SUFFIX,/ {
+            for (i = 0; i < keyword_count; i++) {
+              if (index($2, keywords[i]) > 0) {
+                next;
+              }
+            }
+          }
+          {
+            output = output $0 "\n";
+          }
+                    END {
             printf "%s", output > "Rule/Proxy.list";
-         }
-        ' Rule/Proxy.list
+          }
 
       - name: Check and Configure Git
         run: |
