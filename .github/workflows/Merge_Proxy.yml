@@ -50,7 +50,7 @@ jobs:
           }
           print $0;
          }' | \
-         sort | uniq > Rule/Proxy.list
+         sed 's/,no-resolve//g' | sort | uniq > Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
