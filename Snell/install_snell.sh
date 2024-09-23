@@ -3,6 +3,7 @@
 system_setup() {
     echo "开始设置系统环境..."
     
+    # 动画函数
     animate() {
         local spin='-\|/'
         local i=0
@@ -13,21 +14,20 @@ system_setup() {
         done
     }
 
-    animate &  # 启动动画
+    # 开始动画
+    animate &
     ANIMATE_PID=$!
 
-    # 打印调试信息
-    echo "Fetching setup script..."
+    # 执行实际的设置命令并捕获输出
     OUTPUT=$(bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)" 2>&1)
     EXIT_CODE=$?
 
+    # 停止动画
     kill $ANIMATE_PID
     wait $ANIMATE_PID 2>/dev/null
-    echo -e "\r\033[K"
 
-    # 打印 curl 的输出和状态码
-    echo "Curl output: $OUTPUT"
-    echo "Curl exit code: $EXIT_CODE"
+    # 清除动画行
+    echo -e "\r\033[K"
 
     if [ $EXIT_CODE -ne 0 ]; then
         echo "错误：系统环境设置失败"
@@ -38,6 +38,7 @@ system_setup() {
         echo "系统环境设置成功"
     fi
 }
+
 
 
 get_public_ip() {
