@@ -69,7 +69,7 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' | sort | uniq | awk 'NF > 0' > Rule/Crypto.list
+          }' | grep -v '^#' | grep -v '^$' | tr -d '\r' | tr -d '\t' | tr -s ' ' | sed '/^IP-CIDR/s/,no-resolve//g; /^IP-CIDR/s/$/,no-resolve/; /IP-CIDR/!s/[\/\*]//g' | sort | uniq | awk 'NF > 0' > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
