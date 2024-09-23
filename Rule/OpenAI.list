@@ -1,65 +1,11 @@
 AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-eastus-), (DOMAIN-SUFFIX, webpubsub.azure.com))
 AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
-DOMAIN, ai.google.dev
-DOMAIN, aida.googleapis.com
-DOMAIN, aistudio.google.com
-DOMAIN, alkalimakersuite-pa.clients6.google.com
-DOMAIN, api.githubcopilot.com
-DOMAIN, bard.google.com
-DOMAIN, chat.mistral.ai
-DOMAIN, chat.openai.com.cdn.cloudflare.net
-DOMAIN, console.mistral.ai
-DOMAIN, copilot-proxy.githubusercontent.com
-DOMAIN, copilot.microsoft.com
-DOMAIN, gemini.google.com
-DOMAIN, generativelanguage.googleapis.com
-DOMAIN, imagine.meta.com
-DOMAIN, makersuite.google.com
-DOMAIN, o33249.ingest.sentry.io
-DOMAIN, openaiapi-site.azureedge.net
-DOMAIN, openaicom.imgix.net
-DOMAIN, openaicomproductionae4b.blob.core.windows.net
-DOMAIN, production-openaicom-storage.azureedge.net
-DOMAIN, sydney.bing.com
-DOMAIN, www.bing.com
-DOMAIN,ai.google.dev
-DOMAIN,alkalicore-pa.clients6.google.com
-DOMAIN,alkalimakersuite-pa.clients6.google.com
-DOMAIN,api.msn.com
-DOMAIN,api.statsig.com
-DOMAIN,assets.msn.com
-DOMAIN,browser-intake-datadoghq.com
-DOMAIN,cdn.openai.com
-DOMAIN,chat.openai.com
-DOMAIN,chat.openai.com.cdn.cloudflare.net
-DOMAIN,copilot.microsoft.com
-DOMAIN,gateway.ai.cloudflare.com
-DOMAIN,gateway.bingviz.microsoft.net
-DOMAIN,gateway.bingviz.microsoftapp.net
-DOMAIN,gemini.google.com
-DOMAIN,in.appcenter.ms
-DOMAIN,ios.chat.openai.com
-DOMAIN,location.microsoft.com
-DOMAIN,o33249.ingest.sentry.io
-DOMAIN,odc.officeapps.live.com
-DOMAIN,openai-api.arkoselabs.com
-DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
-DOMAIN,openaicomproductionae4b.blob.core.windows.net
-DOMAIN,production-openaicom-storage.azureedge.net
-DOMAIN,r.bing.com
-DOMAIN,self.events.data.microsoft.com
-DOMAIN,services.bingapis.com
-DOMAIN,static.cloudflareinsights.com
-DOMAIN,sydney.bing.com
-DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
-DOMAIN,www.bing.com
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-SUFFIX, anthropic.com
 DOMAIN-SUFFIX, chatgpt.com
 DOMAIN-SUFFIX, claude.ai
 DOMAIN-SUFFIX, grazie.ai
-DOMAIN-SUFFIX, grazie.aws.intellij.net
 DOMAIN-SUFFIX, meta.ai
 DOMAIN-SUFFIX, mistral.ai
 DOMAIN-SUFFIX, oaistatic.com
@@ -67,16 +13,17 @@ DOMAIN-SUFFIX, oaiusercontent.com
 DOMAIN-SUFFIX, openai.com
 DOMAIN-SUFFIX, perplexity.ai
 DOMAIN-SUFFIX,ai.com
-DOMAIN-SUFFIX,aistudio.google.com
 DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,anthropic.com
-DOMAIN-SUFFIX,api.microsoftapp.net
-DOMAIN-SUFFIX,api.statsig.com
+DOMAIN-SUFFIX,appcenter.ms
 DOMAIN-SUFFIX,argotunnel.com
+DOMAIN-SUFFIX,arkoselabs.com
 DOMAIN-SUFFIX,auth0.com
-DOMAIN-SUFFIX,bard.google.com
-DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io
-DOMAIN-SUFFIX,cdn.cloudflare.net
+DOMAIN-SUFFIX,azureedge.net
+DOMAIN-SUFFIX,azurefd.net
+DOMAIN-SUFFIX,bing.com
+DOMAIN-SUFFIX,bingapis.com
+DOMAIN-SUFFIX,browser-intake-datadoghq.com
 DOMAIN-SUFFIX,cf-ipfs.com
 DOMAIN-SUFFIX,cf-ns.com
 DOMAIN-SUFFIX,cf-ns.net
@@ -86,11 +33,8 @@ DOMAIN-SUFFIX,cftest5.cn
 DOMAIN-SUFFIX,cftest6.cn
 DOMAIN-SUFFIX,cftest7.com
 DOMAIN-SUFFIX,cftest8.com
-DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,chatgpt.com
-DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,claude.ai
-DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,clipdrop.co
 DOMAIN-SUFFIX,cloudflare-cn.com
 DOMAIN-SUFFIX,cloudflare-dns.com
@@ -121,98 +65,94 @@ DOMAIN-SUFFIX,cloudflarewarp.com
 DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,dify.ai
-DOMAIN-SUFFIX,edgeservices.bing.com
-DOMAIN-SUFFIX,events.statsigapi.net
 DOMAIN-SUFFIX,every1dns.net
 DOMAIN-SUFFIX,featuregates.org
-DOMAIN-SUFFIX,geller-pa.googleapis.com
-DOMAIN-SUFFIX,gemini.google.com
 DOMAIN-SUFFIX,generativeai.google
-DOMAIN-SUFFIX,generativelanguage.googleapis.com
-DOMAIN-SUFFIX,host.livekit.cloud
+DOMAIN-SUFFIX,githubcopilot.com
+DOMAIN-SUFFIX,githubusercontent.com
+DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,google.dev
+DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,imgix.net
+DOMAIN-SUFFIX,intellij.net
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
 DOMAIN-SUFFIX,jasper.ai
 DOMAIN-SUFFIX,launchdarkly.com
-DOMAIN-SUFFIX,makersuite.google.com
+DOMAIN-SUFFIX,live.com
+DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,meta.ai
+DOMAIN-SUFFIX,meta.com
+DOMAIN-SUFFIX,microsoft-falcon.io
+DOMAIN-SUFFIX,microsoft.com
+DOMAIN-SUFFIX,microsoft.net
+DOMAIN-SUFFIX,microsoftapp.net
+DOMAIN-SUFFIX,mistral.ai
+DOMAIN-SUFFIX,msn.com
 DOMAIN-SUFFIX,notebooklm.google
-DOMAIN-SUFFIX,notebooklm.google.com
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,observeit.net
-DOMAIN-SUFFIX,one.one.one
+DOMAIN-SUFFIX,one.one
 DOMAIN-SUFFIX,openai.com
-DOMAIN-SUFFIX,openaiapi-site.azureedge.net
-DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX,openart.ai
 DOMAIN-SUFFIX,pacloudflare.com
 DOMAIN-SUFFIX,pages.dev
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,poe.com
-DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
 DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,sentry.io
+DOMAIN-SUFFIX,skk.moe
+DOMAIN-SUFFIX,statsig.com
+DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,trycloudflare.com
-DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,videodelivery.net
 DOMAIN-SUFFIX,warp.plus
+DOMAIN-SUFFIX,windows.net
 DOMAIN-SUFFIX,workers.dev
 DOMAIN-SUFFIX,x.ai
 IP-ASN,132892
 IP-ASN,13335
 IP-ASN,133877
 IP-ASN,139242
-IP-ASN,14061,no-resolve
+IP-ASN,14061
 IP-ASN,14789
 IP-ASN,202623
 IP-ASN,203898
-IP-ASN,20473,no-resolve
+IP-ASN,20473
 IP-ASN,209242
 IP-ASN,394536
 IP-ASN,395747
 IP-CIDR, 160.79.104.0/23, no-resolve
-IP-CIDR,103.21.244.0/22,no-resolve
-IP-CIDR,103.22.200.0/22,no-resolve
-IP-CIDR,103.31.4.0/22,no-resolve
-IP-CIDR,104.16.0.0/12,no-resolve
-IP-CIDR,104.16.0.0/13,no-resolve
-IP-CIDR,104.238.150.13/32,no-resolve
-IP-CIDR,104.24.0.0/14,no-resolve
-IP-CIDR,108.162.192.0/18,no-resolve
-IP-CIDR,129.146.3.78/32,no-resolve
-IP-CIDR,131.0.72.0/22,no-resolve
-IP-CIDR,141.101.64.0/18,no-resolve
-IP-CIDR,143.110.232.239/32,no-resolve
-IP-CIDR,143.198.200.27/32,no-resolve
-IP-CIDR,159.89.204.203/32,no-resolve
-IP-CIDR,162.158.0.0/15,no-resolve
-IP-CIDR,164.92.115.213/32,no-resolve
-IP-CIDR,164.92.71.155/32,no-resolve
-IP-CIDR,172.64.0.0/13,no-resolve
-IP-CIDR,173.245.48.0/20,no-resolve
-IP-CIDR,188.114.96.0/20,no-resolve
-IP-CIDR,190.93.240.0/20,no-resolve
-IP-CIDR,197.234.240.0/22,no-resolve
-IP-CIDR,198.13.38.242/32,no-resolve
-IP-CIDR,198.41.128.0/17,no-resolve
-IP-CIDR,207.148.108.93/32,no-resolve
-IP-CIDR,24.199.123.28/32,no-resolve
-IP-CIDR,45.32.12.145/32,no-resolve
-IP-CIDR,45.55.196.68/32,no-resolve
-IP-CIDR,45.76.214.191/32,no-resolve
-IP-CIDR,64.23.132.171/32,no-resolve
-IP-CIDR6, 2607:6bc0::/48, no-resolve
-IP-CIDR6,2001:19f0:7001:1149:5400:4ff:feac:a0b3/128,no-resolve
-IP-CIDR6,2001:19f0:7001:55b3:5400:4ff:feab:ba8f/128,no-resolve
-IP-CIDR6,2001:19f0:7001:8e6:5400:4ff:feab:b953/128,no-resolve
-IP-CIDR6,2400:cb00::/32,no-resolve
-IP-CIDR6,2401:c080:1000:47c5:5400:4ff:feab:f724/128,no-resolve
-IP-CIDR6,2405:8100::/32,no-resolve
-IP-CIDR6,2405:b500::/32,no-resolve
-IP-CIDR6,2606:4700::/32,no-resolve
-IP-CIDR6,2803:f800::/32,no-resolve
-IP-CIDR6,2a06:98c0::/29,no-resolve
-IP-CIDR6,2c0f:f248::/32,no-resolve
+IP-CIDR,103.21.244.0/22
+IP-CIDR,103.22.200.0/22
+IP-CIDR,103.31.4.0/22
+IP-CIDR,104.16.0.0/12
+IP-CIDR,104.16.0.0/13
+IP-CIDR,104.238.150.13/32
+IP-CIDR,104.24.0.0/14
+IP-CIDR,108.162.192.0/18
+IP-CIDR,129.146.3.78/32
+IP-CIDR,131.0.72.0/22
+IP-CIDR,141.101.64.0/18
+IP-CIDR,143.110.232.239/32
+IP-CIDR,143.198.200.27/32
+IP-CIDR,159.89.204.203/32
+IP-CIDR,162.158.0.0/15
+IP-CIDR,164.92.115.213/32
+IP-CIDR,164.92.71.155/32
+IP-CIDR,172.64.0.0/13
+IP-CIDR,173.245.48.0/20
+IP-CIDR,188.114.96.0/20
+IP-CIDR,190.93.240.0/20
+IP-CIDR,197.234.240.0/22
+IP-CIDR,198.13.38.242/32
+IP-CIDR,198.41.128.0/17
+IP-CIDR,207.148.108.93/32
+IP-CIDR,24.199.123.28/32
+IP-CIDR,45.32.12.145/32
+IP-CIDR,45.55.196.68/32
+IP-CIDR,45.76.214.191/32
+IP-CIDR,64.23.132.171/32
