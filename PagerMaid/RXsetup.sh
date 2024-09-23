@@ -1,41 +1,43 @@
 #!/bin/bash
 
+# 函数：设置系统环境
 system_setup() {
-    # 设置 DNS 和时区，隐藏输出
     echo "设置 DNS 和时区..."
-    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
-    sudo timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1
+    echo "nameserver 8.8.8.8" > /etc/resolv.conf
+    timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1
 
     # 设置 PATH
-    if ! crontab -l 2>/dev/null | grep -q '^PATH='; then
+    crontab -l 2>/dev/null | grep -q '^PATH=' || {
         export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         echo "PATH 设置成功。"
-    else
-        echo "PATH 已存在。"
-    fi
+    }
 
     # 系统清理
     echo "正在清理系统..."
-    sudo apt clean > /dev/null 2>&1
-    sudo apt autoclean > /dev/null 2>&1
-    sudo apt autoremove -y > /dev/null 2>&1
-    sudo rm -rf /tmp/* > /dev/null 2>&1
-    sudo docker system prune -a --volumes -f > /dev/null 2>&1
+    apt clean -y > /dev/null 2>&1
+    apt autoclean -y > /dev/null 2>&1
+    apt autoremove -y > /dev/null 2>&1
+    docker system prune -a --volumes -f > /dev/null 2>&1
 
     # 更新软件包和安装所需软件
     echo "正在更新软件包..."
-    sudo apt-get update > /dev/null 2>&1
-    sudo apt-get install -y curl wget git sudo > /dev/null 2>&1
+    apt-get update -y > /dev/null 2>&1
+    apt-get install -y curl wget git sudo > /dev/null 2>&1
 
     # 更新 DNS 配置和内核参数
     echo "更新 DNS 配置和内核参数..."
-    echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.tcp_ecn=1\nnet.ipv4.ip_forward=1\nnet.ipv6.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf > /dev/null
-    sudo sysctl -p > /dev/null 2>&1
-
+    cat <<EOF >> /etc/sysctl.conf
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+net.ipv4.tcp_ecn=1
+net.ipv4.ip_forward=1
+net.ipv6.conf.all.forwarding=1
+EOF
+    sysctl -p > /dev/null 2>&1
     echo "系统设置完成。"
 }
 
-
+# 函数：安装 PagerMaid
 install_pagermaid() {
     local install_type="$1"
     local installer_url
@@ -48,29 +50,23 @@ install_pagermaid() {
     esac
 
     cd /var/lib || exit 1
-    sudo find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \; > /dev/null 2>&1
+    find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \; > /dev/null 2>&1
 
     echo "开始下载 Installer..."
-    curl -O "$installer_url" > /dev/null 2>&1 && echo "Installer 下载成功." || { echo "下载 Installer 失败"; exit 1; }
+    curl -O "$installer_url" > /dev/null 2>&1 || { echo "下载失败"; exit 1; }
 
-    echo "开始更改权限..."
-    chmod +x "$(basename "$installer_url")" > /dev/null 2>&1 && echo "权限更改成功." || { echo "更改权限失败"; exit 1; }
-
-    echo "开始执行 Installer..."
-    "./$(basename "$installer_url")"
+    echo "开始更改权限并执行 Installer..."
+    chmod +x "$(basename "$installer_url")" && "./$(basename "$installer_url")" || { echo "执行失败"; exit 1; }
 }
 
-# 主脚本执行流程
-echo "检查root权限"
-if [[ $EUID -ne 0 ]]; then 
-    echo "错误：本脚本需要 root 权限执行。" 1>&2
-    exit 1
-else
-    echo "确认以 root 权限运行."
-fi
+# 检查 root 权限
+[[ $EUID -ne 0 ]] && { echo "错误：本脚本需要 root 权限执行。" >&2; exit 1; }
+echo "确认以 root 权限运行."
 
+# 调用系统设置函数
 system_setup
 
+# 主循环菜单
 while true; do
     clear
     echo "----------------------------"
@@ -91,5 +87,5 @@ while true; do
         *) echo "错误输入，请重新选择!" ;;
     esac
 
-    read -p "按任意键返回菜单 " 
+    read -p "按任意键返回菜单 "
 done
