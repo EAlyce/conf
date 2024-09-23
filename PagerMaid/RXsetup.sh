@@ -2,64 +2,10 @@
 
 # 函数：设置系统环境
 system_setup() {
-    echo "设置 DNS 和时区..."
-    # 检查 resolv.conf 是否为符号链接
-    if [ -L "/etc/resolv.conf" ]; then
-        # 如果是符号链接，可能是由 systemd-resolved 管理
-        if systemctl is-active systemd-resolved >/dev/null 2>&1; then
-            echo "nameserver 8.8.8.8" | tee /etc/systemd/resolved.conf >/dev/null
-            systemctl restart systemd-resolved
-        else
-            # 如果不是 systemd-resolved，直接修改 resolv.conf
-            echo "nameserver 8.8.8.8" > /etc/resolv.conf
-        fi
-    else
-        # 如果不是符号链接，直接修改
-        echo "nameserver 8.8.8.8" > /etc/resolv.conf
-    fi
+     bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"
 
-    timedatectl set-timezone Asia/Shanghai
-
-    # 设置 PATH
-    if ! grep -q '^export PATH=' /etc/profile; then
-        echo 'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH' >> /etc/profile
-        echo "PATH 设置成功。"
-    fi
-
-    # 系统清理
-    echo "正在清理系统..."
-    apt update && apt upgrade -y
-    apt clean -y
-    apt autoclean -y
-    apt autoremove -y
-    if command -v docker &> /dev/null; then
-        docker system prune -a --volumes -f
-    fi
-
-    # 更新软件包和安装所需软件
-    echo "正在更新软件包..."
-    apt-get update -y
-    apt-get install -y curl wget git
-
-    # 更新 DNS 配置和内核参数
-    echo "更新 DNS 配置和内核参数..."
-    declare -A sysctl_params=(
-        ["net.core.default_qdisc"]="fq"
-        ["net.ipv4.tcp_congestion_control"]="bbr"
-        ["net.ipv4.tcp_ecn"]="1"
-        ["net.ipv4.ip_forward"]="1"
-        ["net.ipv6.conf.all.forwarding"]="1"
     )
 
-    for key in "${!sysctl_params[@]}"; do
-        if ! grep -q "^$key" /etc/sysctl.conf; then
-            echo "$key=${sysctl_params[$key]}" >> /etc/sysctl.conf
-        fi
-    done
-    sysctl -p
-
-    echo "系统设置完成。"
-}
 
 # 函数：安装 PagerMaid
 install_pagermaid() {
