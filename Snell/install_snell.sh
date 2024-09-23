@@ -1,8 +1,8 @@
-
 #!/bin/bash
 
+# 系统设置
 system_setup() {
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"
 }
 
 # 获取公网IP
@@ -11,7 +11,7 @@ get_public_ip() {
     for service in "${ip_services[@]}"; do
         public_ip=$(curl -s "$service" 2>/dev/null)
         if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Local IP: $public_ip"
+            echo "Public IP: $public_ip"
             return
         fi
         sleep 1
@@ -58,7 +58,10 @@ select_architecture() {
 # 生成端口
 generate_port() {
     local ALLOWED_PORTS=(23456 23556)
-    apt-get install -y netcat-traditional
+    if ! command -v nc.traditional &>/dev/null; then
+        apt-get install -y netcat-traditional
+    fi
+
     for PORT in "${ALLOWED_PORTS[@]}"; do
         if ! nc.traditional -z 127.0.0.1 "$PORT"; then
             PORT_NUMBER="$PORT"
@@ -88,6 +91,16 @@ generate_password() {
 
 # 设置 Docker
 setup_docker() {
+    if ! command -v docker &>/dev/null; then
+        echo "Docker is not installed, please install Docker first."
+        exit 1
+    fi
+
+    if ! command -v docker-compose &>/dev/null; then
+        echo "Docker Compose is not installed, please install Docker Compose first."
+        exit 1
+    fi
+
     local NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR/snell-conf" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
     cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
@@ -124,7 +137,6 @@ print_node() {
 
 # 主函数
 main() {
-    
     system_setup
     get_public_ip
     get_location
