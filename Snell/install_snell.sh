@@ -124,10 +124,6 @@ print_node() {
 
 # 主函数
 main() {
-    if [[ $EUID -ne 0 ]]; then
-        echo "This script must be run as root" 
-        exit 1
-    fi
     
     system_setup
     get_public_ip
