@@ -39,54 +39,40 @@ jobs:
             curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
-          } | grep -v '^#' | grep -v '^$' | \
-          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
-          awk -F',' '{
+          } | grep -v '^#' | grep -v '^$' | sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/; s/,no-resolve//g' | \
+              awk -F',' '
+          {
             if ($1 == "DOMAIN-SUFFIX,") {
-              split($2, parts, ".");
-              if (length(parts) > 2) {
-                $2 = parts[length(parts)-1] "." parts[length(parts)];
-              }
-            }
-            print $0;
-          }' | \
-          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
-          awk '{
-            if ($0 ~ /^DOMAIN-SUFFIX,/) {
-              domain = $0;
-              sub(/^DOMAIN-SUFFIX,/, "", domain);
-              n = split(domain, parts, ".");
-              if (n > 2) {
-                print "DOMAIN-SUFFIX," parts[n-1] "." parts[n];
-              } else {
-                print $0;
-              }
-            } else {
-              print $0;
-            }
-          }' | awk -F, '
-          BEGIN {
-            keyword_count = 0;
-            output = "";
+            split($2, parts, ".");
+            if (length(parts) > 2) {
+            $2 = parts[length(parts)-1] "." parts[length(parts)];
           }
-          /^DOMAIN-KEYWORD,/ {
+          }
+            if ($0 ~ /^DOMAIN-SUFFIX,/ && $0 !~ /^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT/) {
+            domain = $0;
+            sub(/^DOMAIN-SUFFIX,/, "", domain);
+            n = split(domain, parts, ".");
+            if (n > 2) {
+            print "DOMAIN-SUFFIX," parts[n-1] "." parts[n];
+            } else {
+            print $0;
+            }
+            } else if ($0 ~ /^DOMAIN-KEYWORD,/) {
             keywords[keyword_count++] = $2;
             output = output $0 "\n";
-            next;
-          }
-          /^DOMAIN-SUFFIX,/ {
+            } else {
             for (i = 0; i < keyword_count; i++) {
-              if (index($2, keywords[i]) > 0) {
+            if (index($2, keywords[i]) > 0) {
                 next;
-              }
             }
-          }
-          {
+            }
             output = output $0 "\n";
-          }
-                    END {
-            printf "%s", output > "Rule/Proxy.list";
-          }
+           }
+           }
+          END {
+          printf "%s", output > "Rule/Proxy.list";
+           }'
+
 
       - name: Check and Configure Git
         run: |
