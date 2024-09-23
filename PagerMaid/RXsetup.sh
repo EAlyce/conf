@@ -1,50 +1,78 @@
 #!/bin/bash
 
+# 日志函数
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
+
 # 函数：设置系统环境
 system_setup() {
-     bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"
-
-    )
-
+    log "开始设置系统环境..."
+    if ! bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"; then
+        log "错误：系统环境设置失败"
+        return 1
+    fi
+    log "系统环境设置成功"
+}
 
 # 函数：安装 PagerMaid
 install_pagermaid() {
     local install_type="$1"
     local installer_url
+    local original_dir=$(pwd)
+
     case "$install_type" in
         "Linuxpgp") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/pgp.sh" ;;
         "Linux") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh" ;;
         "Docker") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/DockerPagermaid.sh" ;;
-        *) echo "错误的安装类型。"; return 1 ;;
+        *) log "错误：无效的安装类型 '$install_type'"; return 1 ;;
     esac
 
-    cd /var/lib || { echo "无法切换到 /var/lib 目录"; return 1; }
-    find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
+    log "开始安装 PagerMaid ($install_type)..."
 
-    echo "开始下载 Installer..."
-    if ! curl -O "$installer_url"; then
-        echo "下载失败"
+    # 切换到目标目录
+    if ! cd /var/lib; then
+        log "错误：无法切换到 /var/lib 目录"
         return 1
     fi
 
-    echo "开始更改权限并执行 Installer..."
+    # 删除旧的安装文件
+    log "清理旧的安装文件..."
+    find /var/lib/ -type f -name "Pagermaid.sh*" -delete
+
+    # 下载并执行 Installer
+    log "下载 Installer..."
+    if ! curl -O "$installer_url"; then
+        log "错误：下载失败"
+        cd "$original_dir"
+        return 1
+    fi
+
+    log "设置执行权限并运行 Installer..."
     chmod +x "$(basename "$installer_url")"
     if ! "./$(basename "$installer_url")"; then
-        echo "执行失败"
+        log "错误：执行失败"
+        cd "$original_dir"
         return 1
     fi
+
+    log "PagerMaid ($install_type) 安装完成"
+    cd "$original_dir"
 }
 
 # 检查 root 权限
 if [[ $EUID -ne 0 ]]; then
-    echo "错误：本脚本需要 root 权限执行。" >&2
+    log "错误：本脚本需要 root 权限执行。"
     exit 1
 fi
 
-echo "确认以 root 权限运行."
+log "确认以 root 权限运行."
 
 # 调用系统设置函数
-system_setup
+if ! system_setup; then
+    log "错误：系统设置失败，退出安装。"
+    exit 1
+fi
 
 # 主循环菜单
 while true; do
@@ -55,17 +83,34 @@ while true; do
     echo "[1] Linux多用户"
     echo "[2] 官方Linux单用户"
     echo "[3] Docker多用户(推荐)"
+    echo "[4] 卸载 PagerMaid"
     echo "[0] 退出"
     echo "----------------------------"
-    read -p "输入选项 [ 0 - 3 ]：" choice
+    read -p "输入选项 [ 0 - 4 ]：" choice
     
     case $choice in
         1) install_pagermaid "Linuxpgp" ;;
         2) install_pagermaid "Linux" ;;
         3) install_pagermaid "Docker" ;;
-        0) echo "退出"; exit ;;
-        *) echo "错误输入，请重新选择!" ;;
+        4) 
+            log "卸载功能尚未实现。请手动卸载或参考 PagerMaid 文档。"
+            read -p "按 Enter 键继续..."
+            ;;
+        0) 
+            log "退出安装程序"
+            exit 0 
+            ;;
+        *) 
+            log "错误：无效的选项 '$choice'"
+            read -p "按 Enter 键继续..."
+            ;;
     esac
 
-    read -p "按任意键返回菜单 "
+    if [[ $choice =~ ^[123]$ ]]; then
+        read -p "安装已完成。按 Enter 键返回主菜单，或输入 'q' 退出：" exit_choice
+        if [[ $exit_choice == "q" ]]; then
+            log "用户选择退出"
+            exit 0
+        fi
+    fi
 done
