@@ -3,37 +3,50 @@
 # 函数：设置系统环境
 system_setup() {
     echo "设置 DNS 和时区..."
-    echo "nameserver 8.8.8.8" > /etc/resolv.conf
-    timedatectl set-timezone Asia/Shanghai > /dev/null 2>&1
+    # 使用 resolvconf 设置 DNS
+    echo "nameserver 8.8.8.8" > /etc/resolvconf/resolv.conf.d/head
+    resolvconf -u
+
+    timedatectl set-timezone Asia/Shanghai
 
     # 设置 PATH
-    crontab -l 2>/dev/null | grep -q '^PATH=' || {
-        export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    if ! grep -q '^export PATH=' /etc/profile; then
+        echo 'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH' >> /etc/profile
         echo "PATH 设置成功。"
-    }
+    fi
 
     # 系统清理
     echo "正在清理系统..."
-    apt clean -y > /dev/null 2>&1
-    apt autoclean -y > /dev/null 2>&1
-    apt autoremove -y > /dev/null 2>&1
-    docker system prune -a --volumes -f > /dev/null 2>&1
+    apt update && apt upgrade -y
+    apt clean -y
+    apt autoclean -y
+    apt autoremove -y
+    if command -v docker &> /dev/null; then
+        docker system prune -a --volumes -f
+    fi
 
     # 更新软件包和安装所需软件
     echo "正在更新软件包..."
-    apt-get update -y > /dev/null 2>&1
-    apt-get install -y curl wget git sudo > /dev/null 2>&1
+    apt-get update -y
+    apt-get install -y curl wget git
 
     # 更新 DNS 配置和内核参数
     echo "更新 DNS 配置和内核参数..."
-    cat <<EOF >> /etc/sysctl.conf
-net.core.default_qdisc=fq
-net.ipv4.tcp_congestion_control=bbr
-net.ipv4.tcp_ecn=1
-net.ipv4.ip_forward=1
-net.ipv6.conf.all.forwarding=1
-EOF
-    sysctl -p > /dev/null 2>&1
+    declare -A sysctl_params=(
+        ["net.core.default_qdisc"]="fq"
+        ["net.ipv4.tcp_congestion_control"]="bbr"
+        ["net.ipv4.tcp_ecn"]="1"
+        ["net.ipv4.ip_forward"]="1"
+        ["net.ipv6.conf.all.forwarding"]="1"
+    )
+
+    for key in "${!sysctl_params[@]}"; do
+        if ! grep -q "^$key" /etc/sysctl.conf; then
+            echo "$key=${sysctl_params[$key]}" >> /etc/sysctl.conf
+        fi
+    done
+    sysctl -p
+
     echo "系统设置完成。"
 }
 
@@ -41,26 +54,36 @@ EOF
 install_pagermaid() {
     local install_type="$1"
     local installer_url
-
     case "$install_type" in
         "Linuxpgp") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/pgp.sh" ;;
         "Linux") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/Pagermaid.sh" ;;
         "Docker") installer_url="https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/DockerPagermaid.sh" ;;
-        *) echo "错误的安装类型。"; exit 1 ;;
+        *) echo "错误的安装类型。"; return 1 ;;
     esac
 
-    cd /var/lib || exit 1
-    find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \; > /dev/null 2>&1
+    cd /var/lib || { echo "无法切换到 /var/lib 目录"; return 1; }
+    find /var/lib/ -type f -name "Pagermaid.sh*" -exec rm -f {} \;
 
     echo "开始下载 Installer..."
-    curl -O "$installer_url" > /dev/null 2>&1 || { echo "下载失败"; exit 1; }
+    if ! curl -O "$installer_url"; then
+        echo "下载失败"
+        return 1
+    fi
 
     echo "开始更改权限并执行 Installer..."
-    chmod +x "$(basename "$installer_url")" && "./$(basename "$installer_url")" || { echo "执行失败"; exit 1; }
+    chmod +x "$(basename "$installer_url")"
+    if ! "./$(basename "$installer_url")"; then
+        echo "执行失败"
+        return 1
+    fi
 }
 
 # 检查 root 权限
-[[ $EUID -ne 0 ]] && { echo "错误：本脚本需要 root 权限执行。" >&2; exit 1; }
+if [[ $EUID -ne 0 ]]; then
+    echo "错误：本脚本需要 root 权限执行。" >&2
+    exit 1
+fi
+
 echo "确认以 root 权限运行."
 
 # 调用系统设置函数
