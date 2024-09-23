@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# 检查依赖工具是否安装
-check_dependencies() {
-    command -v curl >/dev/null 2>&1 || { echo "curl 未安装，请安装后重试"; exit 1; }
-    command -v nc.traditional >/dev/null 2>&1 || { echo "nc.traditional 未安装，请安装后重试"; exit 1; }
-    command -v docker-compose >/dev/null 2>&1 || { echo "docker-compose 未安装，请安装后重试"; exit 1; }
-}
-
 # 动画函数
 animate() {
     local spin='-\|/'
@@ -173,7 +166,6 @@ main() {
         exit 1
     fi
     
-    check_dependencies
     system_setup
     get_public_ip
     get_location
