@@ -64,8 +64,30 @@ jobs:
          } else {
          print $0;                                    # 保留非 DOMAIN-SUFFIX 行
          }
-         }' | sort | uniq > Rule/Proxy.list
-
+         }' | awk -F, '
+         BEGIN {
+         # 创建一个数组存储 DOMAIN-KEYWORD 的关键词
+         keyword_count = 0;
+         }
+         /^DOMAIN-KEYWORD,/ {
+         # 提取 DOMAIN-KEYWORD 的关键词
+         keywords[keyword_count++] = $2;
+         next;
+         }
+         /^DOMAIN-SUFFIX,/ {
+          # 检查 DOMAIN-SUFFIX 是否包含任意一个 DOMAIN-KEYWORD
+         for (i = 0; i < keyword_count; i++) {
+         if (index($2, keywords[i]) > 0) {
+            # 如果 DOMAIN-SUFFIX 包含 DOMAIN-KEYWORD，则跳过此行
+            next;
+         }
+         }
+         }
+         {
+         # 打印所有不符合过滤条件的行
+         print;
+         }
+         ' Rule/Proxy.list | tee Rule/Proxy.list
 
       - name: Check and Configure Git
         run: |
