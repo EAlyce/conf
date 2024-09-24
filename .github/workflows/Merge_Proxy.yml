@@ -29,47 +29,51 @@ jobs:
           fi
 
       - name: Get and process domains
-        run: |
-          {
-            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
-            curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
-            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
-            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | \
-          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
-          awk -F',' '{
-          if ($1 == "DOMAIN-SUFFIX,") {
-            split($2, parts, ".");
-            if (length(parts) > 2) {
-              $2 = parts[length(parts)-1] "." parts[length(parts)];
-            }
-          }
-          print $0;
-          }' | \
-          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
-          awk '{
-          if ($0 ~ /^DOMAIN-SUFFIX,/) {
-          domain = $0;
-          sub(/^DOMAIN-SUFFIX,/, "", domain);          # 去掉前缀 DOMAIN-SUFFIX,
-          n = split(domain, parts, ".");               # 分割域名
-          if (n > 2) {
-             print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; # 只打印二级域名
-          } else {
-            print $0;                                # 保留不符合条件的域名
-          }
-          } else {
-          print $0;                                    # 保留非 DOMAIN-SUFFIX 行
-          }
-          }' | curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list | sort -u > ./direct.list.tmp
-               sort -u Rule/Proxy.list > ./proxy.list.tmp
-               grep -vxFf ./direct.list.tmp ./proxy.list.tmp > Rule/Proxy.list
+        run: | 
+         {
+         curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global_All.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/stream.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/cdn.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyLite.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://ruleset.skk.moe/List/non_ip/global.conf" | awk '{print $0 "\n"}'
+         curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/ProxyMedia.list" | awk '{print $0 "\n"}'
+         curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
+         } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | \
+         sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' > /tmp/filtered_list.txt
 
-               # 清理临时文件
-               rm ./direct.list.tmp ./proxy.list.tmp
+         awk -F',' '{
+         if ($1 == "DOMAIN-SUFFIX,") {
+         split($2, parts, ".");
+         if (length(parts) > 2) {
+         $2 = parts[length(parts)-1] "." parts[length(parts)];
+         }
+         }
+         print $0;
+         }' /tmp/filtered_list.txt | \
+         sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
+         awk '{
+         if ($0 ~ /^DOMAIN-SUFFIX,/) {
+         domain = $0;
+         sub(/^DOMAIN-SUFFIX,/, "", domain);  
+         n = split(domain, parts, ".");
+         if (n > 2) {
+         print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; 
+         } else {
+          print $0;  
+         }
+         } else {
+          print $0;  
+          }
+         }' > /tmp/final_list.txt
+
+          curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list | sort -u > ./direct.list.tmp
+          sort -u Rule/Proxy.list > ./proxy.list.tmp
+          grep -vxFf ./direct.list.tmp ./proxy.list.tmp > Rule/Proxy.list
+
+          # 清理临时文件
+          rm ./direct.list.tmp ./proxy.list.tmp /tmp/filtered_list.txt /tmp/final_list.txt
+
 
       - name: Check and Configure Git
         run: |
