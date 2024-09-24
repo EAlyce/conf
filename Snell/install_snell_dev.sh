@@ -83,7 +83,7 @@ setup_docker() {
     cat <<EOF > docker-compose.yml
 services:
   snell:
-    image: vocrx/snell-server:latest
+    image: azurelane/snell-server:latest
     container_name: snell$PORT_NUMBER
     restart: always
     network_mode: host
