@@ -14,17 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Delay for 10 seconds
-        run: sleep 10
-
-      - name: Check if curl is installed
-        run: |
-          if ! command -v curl &> /dev/null; then
-              echo "curl is not installed, installing..."
-              sudo apt-get update
-              sudo apt-get install -y curl
-          fi
-
       - name: Get and merge domains from source files
         run: |
           {
