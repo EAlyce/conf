@@ -81,7 +81,6 @@ setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR" && cd "$NODE_DIR" || { echo "Error: Unable to create/access $NODE_DIR"; exit 1; }
     cat <<EOF > docker-compose.yml
-version: '3'
 services:
   snell:
     image: vocrx/snell-server:latest
