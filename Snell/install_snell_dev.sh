@@ -203,38 +203,36 @@ generate_password() {
 
 setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
-
-    mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
-    cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
-
+    mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; return 1; }
+    cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; return 1; }
     cat <<EOF > docker-compose.yml
+version: '3'
 services:
   snell:
-    image: azurelane/snell:latest
-    container_name: Snell$PORT_NUMBER
+    image: vocrx/snell-server:latest
+    container_name: snell$PORT_NUMBER
     restart: always
     network_mode: host
-    privileged: true
     environment:
+      - PORT=$PORT_NUMBER
+      - PSK=$PASSWORD
+      - IPV6=false
+      - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
+      - VERSION=v4.1.1
       - SNELL_URL=$SNELL_URL
     volumes:
-      - ./snell-conf/snell.conf:/etc/snell-server.conf
+      - ./snell-conf:/etc/snell-server.conf
 EOF
-
-    mkdir -p ./snell-conf || { echo "Error: Unable to create directory $NODE_DIR/snell-conf"; exit 1; }
+    mkdir -p ./snell-conf || { echo "Error: Unable to create directory $NODE_DIR/snell-conf"; return 1; }
     cat <<EOF > ./snell-conf/snell.conf
 [snell-server]
-listen = 0.0.0.0:$PORT_NUMBER
-psk = $PASSWORD
 tfo = false
 obfs = off
-dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
-ipv6 = false
 EOF
-
-    docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-
-    echo "Node setup completed. Here is your node information"
+    docker-compose up -d || { echo "Error: Unable to start Docker container"; return 1; }
+    echo "Node setup completed. Here is your node information:"
+    echo "Port: $PORT_NUMBER"
+    echo "Password: $PASSWORD"
 }
 
 print_node() {
