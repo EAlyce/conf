@@ -105,6 +105,19 @@ services:
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4,208.67.222.222,208.67.220.220
     platform: $PLATFORM
+
+    volumes:
+      - ./snell-conf/snell.conf:/etc/snell-server.conf
+EOF
+    mkdir -p ./snell-conf || { echo "Error: Unable to create directory $NODE_DIR/snell-conf"; exit 1; }
+    cat <<EOF > ./snell-conf/snell.conf
+[snell-server]
+listen = 0.0.0.0:$PORT_NUMBER
+psk = $PASSWORD
+tfo = false
+obfs = off
+dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
+ipv6 = false
 EOF
     
     docker-compose up -d
