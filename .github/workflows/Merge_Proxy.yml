@@ -64,7 +64,12 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | sort Rule/Proxy.list | uniq | grep -vFf <(curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list) > Rule/Proxy.list.new && mv Rule/Proxy.list.new Rule/Proxy.list
+          }' | set -e
+         sort -u Rule/Proxy.list > Rule/Proxy.sorted.list
+         curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list | sort -u > Rule/DIRECT.sorted.list
+         comm -23 Rule/Proxy.sorted.list Rule/DIRECT.sorted.list > Rule/Proxy.filtered.list
+         mv Rule/Proxy.filtered.list Rule/Proxy.list
+         rm Rule/Proxy.sorted.list Rule/DIRECT.sorted.list
 
         
       - name: Check and Configure Git
