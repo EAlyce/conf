@@ -108,10 +108,13 @@ services:
       - PORT=$PORT_NUMBER
       - PSK=$PASSWORD
       - IPV6=false
-      - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
+      - DNS=8.8.8.8,8.8.4.4
       - VERSION=v4.1.1
 EOF
     docker-compose up -d
+    docker run --rm vocrx/snell-server:latest --version
+    exit 1
+
 }
 
 print_node() {
