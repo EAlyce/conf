@@ -64,9 +64,9 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | cat <(sort Rule/Proxy.list | uniq | grep -vxFf <(curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list)) > Rule/Proxy.list
+          }' | sort Rule/Proxy.list | uniq | grep -vFf <(curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list) > Rule/Proxy.list.new && mv Rule/Proxy.list.new Rule/Proxy.list
 
-
+        
       - name: Check and Configure Git
         run: |
           git config --global user.email "actions@github.com"
