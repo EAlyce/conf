@@ -109,14 +109,14 @@ services:
       - PSK=$PASSWORD
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220
-      - VERSION=v$VERSION_NUMBER
+      - VERSION=v4.1.1
 EOF
     docker-compose up -d
 }
 
 print_node() {
     echo
-    echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=$VERSION_NUMBER"
+    echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=4"
 }
 
 main() {
