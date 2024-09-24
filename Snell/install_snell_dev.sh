@@ -5,10 +5,8 @@ check_root() {
 }
 
 install_tools() {
-
     apt-get update -y > /dev/null
     apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null
-
 }
 
 install_docker() {
@@ -79,7 +77,7 @@ setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR" && cd "$NODE_DIR" || { echo "Error: Unable to create/access $NODE_DIR"; exit 1; }
     
-    # 自动检测平台
+    # Auto-detect platform
     PLATFORM=$(uname -m)
     case $PLATFORM in
         x86_64)
@@ -118,7 +116,6 @@ EOF
     docker-compose up -d
 }
 
-
 print_node() {
     echo
     echo "$LOCATION Snell $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=4"
@@ -127,13 +124,10 @@ print_node() {
 main() {
     check_root
     install_tools
-    
     install_docker
     get_public_ip
     get_location
     setup_environment
-    
-    
     generate_port
     setup_firewall
     generate_password
