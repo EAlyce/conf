@@ -48,22 +48,6 @@ get_location() {
 
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
-    export DEBIAN_FRONTEND=noninteractive
-    mkdir -p /etc/iptables
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
-    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
-    iptables-save > /etc/iptables/rules.v4
-    service netfilter-persistent reload
-    apt-get upgrade -y > /dev/null
-    echo "export HISTSIZE=10000" >> ~/.bashrc
-    source ~/.bashrc
-}
-
-
-
-select_architecture() {
-    ARCH_TYPE=$(uname -m | grep -q "aarch64" && echo "linux-aarch64.zip" || echo "linux-amd64.zip")
-    SNELL_URL="${BASE_URL}/${SUB_PATH}-${ARCH_TYPE}"
 }
 
 generate_port() {
@@ -129,7 +113,7 @@ main() {
     get_location
     setup_environment
     
-    select_architecture
+    
     generate_port
     setup_firewall
     generate_password
