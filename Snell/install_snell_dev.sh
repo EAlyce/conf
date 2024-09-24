@@ -112,8 +112,6 @@ services:
       - VERSION=v4.1.1
 EOF
     docker-compose up -d
-    docker run --rm vocrx/snell-server:latest --version
-    exit 1
 
 }
 
