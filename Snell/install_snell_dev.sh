@@ -5,10 +5,10 @@ check_root() {
 }
 
 install_tools() {
-    echo "Updating system and installing tools..."
+
     apt-get update -y > /dev/null
     apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null
-    echo "Tools installation completed"
+
 }
 
 
@@ -25,7 +25,7 @@ install_docker() {
 }
 
 get_public_ip() {
-    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    ip_services=("ifconfig.me" "ipinfo.io/ip")
     for service in "${ip_services[@]}"; do
         if public_ip=$(curl -s "$service" 2>/dev/null) && [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Public IP: $public_ip"
@@ -36,7 +36,7 @@ get_public_ip() {
 }
 
 get_location() {
-    location_services=("http://ip-api.com/line?fields=city" "ipinfo.io/city")
+    location_services=("ipinfo.io/city")
     for service in "${location_services[@]}"; do
         if LOCATION=$(curl -s "$service" 2>/dev/null) && [ -n "$LOCATION" ]; then
             echo "Host location: $LOCATION"
