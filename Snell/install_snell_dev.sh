@@ -5,18 +5,10 @@ check_root() {
 }
 
 install_tools() {
-    apt-get update -y > /dev/null
 
-    # 仅安装必要的工具
-    tools=(curl wget netcat-traditional iptables)
-    for tool in "${tools[@]}"; do
-        if ! command -v "$tool" &> /dev/null; then
-            echo "$tool is not installed. Installing..."
-            apt-get install -y "$tool" > /dev/null
-        else
-            echo "$tool is already installed."
-        fi
-    done
+    apt-get update -y > /dev/null
+    apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null
+
 }
 
 install_docker() {
@@ -52,6 +44,10 @@ get_location() {
     echo "Unable to obtain location"
 }
 
+setup_environment() {
+    echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
+}
+
 generate_port() {
     ALLOWED_PORTS=(23456 23556)
     for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
@@ -83,13 +79,25 @@ setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR" && cd "$NODE_DIR" || { echo "Error: Unable to create/access $NODE_DIR"; exit 1; }
     
+    # 自动检测平台
     PLATFORM=$(uname -m)
     case $PLATFORM in
-        x86_64) PLATFORM="linux/amd64" ;;
-        i386) PLATFORM="linux/i386" ;;
-        aarch64) PLATFORM="linux/arm64" ;;
-        armv7l) PLATFORM="linux/arm/v7" ;;
-        *) echo "Unsupported architecture: $PLATFORM"; exit 1 ;;
+        x86_64)
+            PLATFORM="linux/amd64"
+            ;;
+        i386)
+            PLATFORM="linux/i386"
+            ;;
+        aarch64)
+            PLATFORM="linux/arm64"
+            ;;
+        armv7l)
+            PLATFORM="linux/arm/v7"
+            ;;
+        *)
+            echo "Unsupported architecture: $PLATFORM"
+            exit 1
+            ;;
     esac
     
     cat <<EOF > docker-compose.yml
@@ -104,12 +112,12 @@ services:
       - PSK=$PASSWORD
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4
-      - VERSION=v4.1.1
     platform: $PLATFORM
 EOF
     
     docker-compose up -d
 }
+
 
 print_node() {
     echo
@@ -119,9 +127,13 @@ print_node() {
 main() {
     check_root
     install_tools
+    
     install_docker
     get_public_ip
     get_location
+    setup_environment
+    
+    
     generate_port
     setup_firewall
     generate_password
