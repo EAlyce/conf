@@ -31,13 +31,6 @@ sudo apt-get autoclean > /dev/null
 # Autoremove unused packages
 sudo apt-get autoremove -y > /dev/null
 
-# Remove temporary files
-sudo rm -rf /tmp/* > /dev/null
-
-# Clear command history
-history -c > /dev/null
-history -w > /dev/null
-
 # Purge old linux-image and linux-headers packages
 dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs sudo apt-get -y purge > /dev/null
 
@@ -98,40 +91,10 @@ get_location() {
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
     echo "DNS servers updated successfully."
-
-    export DEBIAN_FRONTEND=noninteractive
-    apt-get update > /dev/null || true
-    echo "Necessary packages installed."
-    
-# 设置防火墙规则并保存配置
-sudo mkdir -p /etc/iptables
-iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
-iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
-iptables-save > /etc/iptables/rules.v4
-sudo service netfilter-persistent reload > /dev/null || true
-echo "Iptables rules configured and saved."
-
-# 更新系统包
-sudo apt-get upgrade -y > /dev/null || true
-echo "System packages updated."
-
 # 设置历史记录大小
 grep -qxF 'export HISTSIZE=10000' ~/.bashrc || echo "export HISTSIZE=10000" >> ~/.bashrc
 source ~/.bashrc
 
-# 禁用 TCP Fast Open
-if [ -f "/proc/sys/net/ipv4/tcp_fastopen" ]; then
-    echo 0 | sudo tee /proc/sys/net/ipv4/tcp_fastopen > /dev/null
-    echo "TCP Fast Open disabled."
-fi
-
-    docker system prune -af --volumes > /dev/null || true
-    echo "Docker system pruned."
-
-    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT > /dev/null || true
-    echo "SYN packets accepted."
-
-    sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p" > /dev/null && echo "Network optimization completed"
 }
 
 select_version() {
