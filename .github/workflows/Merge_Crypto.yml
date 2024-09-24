@@ -12,10 +12,7 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # 检查是否使用了最新的 checkout action
-
-      - name: Delay for 10 seconds
-        run: sleep 10  # 这个步骤没有问题，但如果没有必要可以移除
+      - uses: actions/checkout@v4  
 
       - name: Get, clean, and deduplicate domains
         run: |
