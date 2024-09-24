@@ -126,19 +126,16 @@ select_architecture() {
 }
 
 generate_port() {
-    # 检查 netcat 是否安装
-    if ! command -v nc.traditional &> /dev/null; then
-        apt-get update
-        apt-get install -y netcat-traditional
-    fi
-
-    # 随机选择一个新的可用端口
-    echo "随机选择一个新的可用端口..."
     while true; do
         RANDOM_PORT=$(shuf -i 10000-20000 -n 1)
 
+        # 检查端口是否被占用
         if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
             echo "选定的随机端口: $RANDOM_PORT"
+
+            # 添加 iptables 规则开放端口
+            iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
+            echo "端口 $RANDOM_PORT 已开放"
             break
         fi
     done
