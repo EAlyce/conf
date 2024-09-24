@@ -126,25 +126,16 @@ select_architecture() {
 }
 
 generate_port() {
-    ALLOWED_PORTS=(23456 23556)
-
+    # 检查 netcat 是否安装
     if ! command -v nc.traditional &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y netcat-traditional
+        apt-get update
+        apt-get install -y netcat-traditional
     fi
 
-    for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
-        if nc.traditional -z 127.0.0.1 "$PORT_NUMBER"; then
-            echo "端口 $PORT_NUMBER 已被占用，跳过..."
-        else
-            echo "选定的端口: $PORT_NUMBER"
-            return
-        fi
-    done
-
-    echo "所有指定端口都被占用，随机选择一个新的可用端口..."
+    # 随机选择一个新的可用端口
+    echo "随机选择一个新的可用端口..."
     while true; do
-        RANDOM_PORT=$(shuf -i 1000-9999 -n 1)
+        RANDOM_PORT=$(shuf -i 10000-20000 -n 1)
 
         if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
             echo "选定的随机端口: $RANDOM_PORT"
@@ -152,7 +143,6 @@ generate_port() {
         fi
     done
 }
-
 
 setup_firewall() {
     sudo iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
