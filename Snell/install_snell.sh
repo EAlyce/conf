@@ -1,41 +1,41 @@
 #!/bin/bash
+
 check_root() {
     [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
 
 install_tools() {
-    echo "Start updating the system..." && sudo apt-get update -y > /dev/null || true && \
-    echo "Start installing software..." && sudo apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
+    echo "Start updating the system..." && apt-get update -y > /dev/null || true && \
+    echo "Start installing software..." && apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true && \
     echo "Operation completed"
 }
 
 clean_lock_files() {
-echo "Start cleaning the system..."
+    echo "Start cleaning the system..."
 
-# Kill apt and dpkg processes if they are running
-sudo pkill -9 apt || true
-sudo pkill -9 dpkg || true
+    # Kill apt and dpkg processes if they are running
+    pkill -9 apt || true
+    pkill -9 dpkg || true
 
-# Remove lock files
-sudo rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
+    # Remove lock files
+    rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
 
-# Configure dpkg
-sudo dpkg --configure -a > /dev/null || true
+    # Configure dpkg
+    dpkg --configure -a > /dev/null || true
 
-# Clean apt cache
-sudo apt-get clean > /dev/null
+    # Clean apt cache
+    apt-get clean > /dev/null
 
-# Autoclean apt
-sudo apt-get autoclean > /dev/null
+    # Autoclean apt
+    apt-get autoclean > /dev/null
 
-# Autoremove unused packages
-sudo apt-get autoremove -y > /dev/null
+    # Autoremove unused packages
+    apt-get autoremove -y > /dev/null
 
-# Purge old linux-image and linux-headers packages
-dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs sudo apt-get -y purge > /dev/null
+    # Purge old linux-image and linux-headers packages
+    dpkg --list | awk '/^ii/{print $2}' | grep -E 'linux-(image|headers)-[0-9]' | grep -v $(uname -r) | xargs apt-get -y purge > /dev/null
 
-echo "Cleaning completed"
-
+    echo "Cleaning completed"
 }
 
 install_docker_and_compose() {
@@ -43,11 +43,11 @@ install_docker_and_compose() {
     if ! command -v docker &> /dev/null; then
         # 安装 Docker 和 Docker Compose
         echo "Installing Docker and Docker Compose..."
-        sudo apt-get update > /dev/null 2>&1
-        sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common > /dev/null 2>&1
-        curl -fsSL https://get.docker.com | sudo bash > /dev/null 2>&1
-        sudo apt-get update > /dev/null 2>&1
-        sudo apt-get install -y docker-compose > /dev/null 2>&1
+        apt-get update > /dev/null 2>&1
+        apt-get install -y apt-transport-https ca-certificates curl software-properties-common > /dev/null 2>&1
+        curl -fsSL https://get.docker.com | bash > /dev/null 2>&1
+        apt-get update > /dev/null 2>&1
+        apt-get install -y docker-compose > /dev/null 2>&1
         echo "Docker installation completed"
     else
         echo "Docker and Docker Compose are already installed"
@@ -91,10 +91,9 @@ get_location() {
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
     echo "DNS servers updated successfully."
-# 设置历史记录大小
-grep -qxF 'export HISTSIZE=10000' ~/.bashrc || echo "export HISTSIZE=10000" >> ~/.bashrc
-source ~/.bashrc
-
+    # 设置历史记录大小
+    grep -qxF 'export HISTSIZE=10000' ~/.bashrc || echo "export HISTSIZE=10000" >> ~/.bashrc
+    source ~/.bashrc
 }
 
 select_version() {
@@ -131,18 +130,19 @@ generate_port() {
 
         # 检查端口是否被占用
         if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
-            echo "选定的随机端口: $RANDOM_PORT"
+            PORT_NUMBER="$RANDOM_PORT"  # 设置 PORT_NUMBER
+            echo "选定的随机端口: $PORT_NUMBER"
 
             # 添加 iptables 规则开放端口
-            iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
-            echo "端口 $RANDOM_PORT 已开放"
+            iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT
+            echo "端口 $PORT_NUMBER 已开放"
             break
         fi
     done
 }
 
 setup_firewall() {
-    sudo iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
+    iptables -A INPUT -p tcp --dport "$PORT_NUMBER" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
     echo "Firewall rule added, allowing port $PORT_NUMBER's traffic"
 }
 
@@ -211,8 +211,8 @@ print_node() {
 
 main(){
     check_root
-    sudo apt-get autoremove -y > /dev/null
-    apt-get install sudo > /dev/null
+    apt-get autoremove -y > /dev/null
+    apt-get install -y sudo > /dev/null
     select_version
     clean_lock_files
     install_tools
