@@ -64,9 +64,13 @@ jobs:
           } else {
           print $0;                                    # 保留非 DOMAIN-SUFFIX 行
           }
-          }' | grep -vxFf <(curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list | sort -u) <(sort -u Rule/Proxy.list) > Rule/Proxy.list
+          }' | curl -s https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/DIRECT.list | sort -u > ./direct.list.tmp
+               sort -u Rule/Proxy.list > ./proxy.list.tmp
+               grep -vxFf ./direct.list.tmp ./proxy.list.tmp > Rule/Proxy.list
 
-        
+               # 清理临时文件
+               rm ./direct.list.tmp ./proxy.list.tmp
+
       - name: Check and Configure Git
         run: |
           git config --global user.email "actions@github.com"
