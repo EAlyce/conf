@@ -41,6 +41,17 @@ get_public_ip() {
     echo "Unable to obtain public IP address" && exit 1
 }
 
+get_location() {
+    location_services=("ipinfo.io/city")
+    for service in "${location_services[@]}"; do
+        if LOCATION=$(curl -s "$service" 2>/dev/null) && [ -n "$LOCATION" ]; then
+            echo "Host location: $LOCATION"
+            return
+        fi
+    done
+    echo "Unable to obtain location"
+}
+
 generate_port() {
     ALLOWED_PORTS=(23456 23556)
     for PORT_NUMBER in "${ALLOWED_PORTS[@]}"; do
@@ -102,7 +113,7 @@ EOF
 
 print_node() {
     echo
-    echo "Snell running on $public_ip:$PORT_NUMBER with PSK=$PASSWORD"
+    echo "$LOCATION Snell $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=4"
 }
 
 main() {
@@ -110,6 +121,7 @@ main() {
     install_tools
     install_docker
     get_public_ip
+    get_location
     generate_port
     setup_firewall
     generate_password
