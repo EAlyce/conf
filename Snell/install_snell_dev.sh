@@ -101,7 +101,7 @@ EOF
 
 print_node() {
     echo
-    echo "$LOCATION Snell v$VERSION_NUMBER $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=4"
+    echo "$LOCATION Snell $PORT_NUMBER = snell, $public_ip, $PORT_NUMBER, psk=$PASSWORD, version=4"
 }
 
 main() {
