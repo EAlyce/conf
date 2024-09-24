@@ -5,9 +5,13 @@ check_root() {
 }
 
 install_tools() {
+
     apt-get update -y > /dev/null
     apt-get install -y curl wget netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null
+
 }
+
+
 
 install_docker() {
     if ! command -v docker &> /dev/null; then
@@ -76,32 +80,10 @@ generate_password() {
 setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$PORT_NUMBER"
     mkdir -p "$NODE_DIR" && cd "$NODE_DIR" || { echo "Error: Unable to create/access $NODE_DIR"; exit 1; }
-    
-    # Auto-detect platform
-    PLATFORM=$(uname -m)
-    case $PLATFORM in
-        x86_64)
-            PLATFORM="linux/amd64"
-            ;;
-        i386)
-            PLATFORM="linux/i386"
-            ;;
-        aarch64)
-            PLATFORM="linux/arm64"
-            ;;
-        armv7l)
-            PLATFORM="linux/arm/v7"
-            ;;
-        *)
-            echo "Unsupported architecture: $PLATFORM"
-            exit 1
-            ;;
-    esac
-    
     cat <<EOF > docker-compose.yml
 services:
   snell:
-    image: azurelane/snell:latest
+    image: vocrx/snell-server:latest
     container_name: snell$PORT_NUMBER
     restart: always
     network_mode: host
@@ -110,10 +92,10 @@ services:
       - PSK=$PASSWORD
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4
-    platform: $PLATFORM
+      - VERSION=v4.1.1
 EOF
-    
     docker-compose up -d
+
 }
 
 print_node() {
@@ -124,10 +106,13 @@ print_node() {
 main() {
     check_root
     install_tools
+    
     install_docker
     get_public_ip
     get_location
     setup_environment
+    
+    
     generate_port
     setup_firewall
     generate_password
