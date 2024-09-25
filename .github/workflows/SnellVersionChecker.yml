@@ -1,12 +1,9 @@
-name: Snell Version Checker and Updater
+name: Daily Snell Version Checker and Updater
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # 每天午夜运行
+  workflow_dispatch:  # 保留手动触发选项
 
 jobs:
   check_and_update_snell:
@@ -24,7 +21,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: 检测下载
+      - name: 检测下载并补全文件
         run: |
           import requests
           from bs4 import BeautifulSoup
@@ -49,19 +46,35 @@ jobs:
 
           if not os.path.exists(version_dir):
               os.makedirs(version_dir)
-              
-              architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
-              for arch in architectures:
-                  filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
-                  url = f'https://dl.nssurge.com/snell/{filename}'
-                  path = os.path.join(version_dir, filename)
-                  if not os.path.exists(path):
-                      download_file(url, path)
-                      print(f'Downloaded {filename}')
-                  else:
-                      print(f'{filename} already exists')
+              print(f'Created new directory: {version_dir}')
+          
+          architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
+          for arch in architectures:
+              filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
+              url = f'https://dl.nssurge.com/snell/{filename}'
+              path = os.path.join(version_dir, filename)
+              if not os.path.exists(path):
+                  download_file(url, path)
+                  print(f'Downloaded {filename}')
+              else:
+                  print(f'{filename} already exists')
+
+          # 检查文件夹是否完整，如果不完整则补全
+          files_in_dir = os.listdir(version_dir)
+          expected_files = [f'snell-server-v{latest_version}-linux-{arch}.zip' for arch in architectures]
+          missing_files = set(expected_files) - set(files_in_dir)
+
+          if missing_files:
+              print(f'Found missing files: {missing_files}')
+              for missing_file in missing_files:
+                  url = f'https://dl.nssurge.com/snell/{missing_file}'
+                  path = os.path.join(version_dir, missing_file)
+                  download_file(url, path)
+                  print(f'Downloaded missing file: {missing_file}')
           else:
-              print(f'Version {latest_version} already exists')
+              print('All files are present and up to date.')
+
+        shell: python
 
       - name: Check and Configure Git
         run: |
@@ -76,8 +89,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ! git diff-index --quiet HEAD; then
-            git commit -m "Auto Update Snell"
-            git push origin HEAD:main --force
+            git commit -m "Auto Update Snell: Complete missing files"
+            git push origin HEAD:main
           else
             echo "No changes to commit"
           fi
