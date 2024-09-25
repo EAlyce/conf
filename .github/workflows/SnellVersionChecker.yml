@@ -1,0 +1,83 @@
+name: Snell Version Checker and Updater
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check_and_update_snell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: 检测下载
+        run: |
+          import requests
+          from bs4 import BeautifulSoup
+          import re
+          import os
+
+          def get_latest_version():
+              url = "https://manual.nssurge.com/others/snell.html"
+              response = requests.get(url)
+              soup = BeautifulSoup(response.text, 'html.parser')
+              links = soup.find_all('a', href=re.compile(r'snell-server-v[\d\.]+'))
+              versions = set(re.search(r'v([\d\.]+)', link['href']).group(1) for link in links)
+              return max(versions, key=lambda v: list(map(int, v.split('.'))))
+
+          def download_file(url, path):
+              response = requests.get(url)
+              with open(path, 'wb') as f:
+                  f.write(response.content)
+
+          latest_version = get_latest_version()
+          version_dir = f'Snell/source/v{latest_version}'
+
+          if not os.path.exists(version_dir):
+              os.makedirs(version_dir)
+              
+              architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
+              for arch in architectures:
+                  filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
+                  url = f'https://dl.nssurge.com/snell/{filename}'
+                  path = os.path.join(version_dir, filename)
+                  if not os.path.exists(path):
+                      download_file(url, path)
+                      print(f'Downloaded {filename}')
+                  else:
+                      print(f'{filename} already exists')
+          else:
+              print(f'Version {latest_version} already exists')
+
+      - name: Check and Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+      - name: Force add changes
+        run: git add Snell/source || true
+
+      - name: Commit and push changes if needed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto Update Snell"
+            git push origin HEAD:main --force
+          else
+            echo "No changes to commit"
+          fi
