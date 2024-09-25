@@ -137,7 +137,7 @@ EOF
     docker logs Snell$RANDOM_PORT
     echo
     
-    echo "Snell node setup completed at $NODE_DIR."
+    echo "Snell 节点信息："
 }
 
 
