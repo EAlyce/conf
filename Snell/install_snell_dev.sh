@@ -125,19 +125,7 @@ EOF
     # 获取并输出当前使用的镜像名称
     IMAGE_NAME=$(docker-compose config | grep 'image:' | awk '{print $2}')
     echo "image: $IMAGE_NAME"
-    
-    # 拉取镜像（如果尚未拉取）
-    docker pull $IMAGE_NAME
 
-    # 在临时容器中运行命令以获取 Snell 版本
-    SNELL_VERSION=$(docker run --rm $IMAGE_NAME /usr/bin/snell-server -v 2>&1 | grep -oP 'snell-server v\K[0-9.]+')
-    
-    # 输出 Snell 版本信息
-    if [ -n "$SNELL_VERSION" ]; then
-        echo "Snell version: 镜像使用Snell$SNELL_VERSION构建"
-    else
-        echo "Unable to determine Snell version"
-    fi
 }
 
 print_node() {
