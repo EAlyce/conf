@@ -121,11 +121,6 @@ EOF
     mkdir -p ./data
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
     echo "Snell node setup completed."
-    
-    # 获取并输出当前使用的镜像名称
-    IMAGE_NAME=$(docker-compose config | grep 'image:' | awk '{print $2}')
-    echo "image: $IMAGE_NAME"
-
 }
 
 print_node() {
