@@ -112,11 +112,15 @@ EOF
     mkdir -p ./data
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
     echo "Snell node setup completed."
+    
+    # 输出当前使用的镜像名称
+    IMAGE_NAME=$(docker-compose config | grep 'image:' | awk '{print $2}')
+    echo "image: $IMAGE_NAME"
 }
 
 print_node() {
     echo
-    echo "$LOCATION Snell v$VERSION_NUMBER $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=$VERSION_NUMBER"
+    echo "$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4"
     echo
 }
 
