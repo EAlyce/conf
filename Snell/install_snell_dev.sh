@@ -88,16 +88,16 @@ generate_password() {
 
 setup_docker() {
 
-    # Set directory and port variables
+    # 生成唯一的Snell节点目录
     NODE_DIR="/root/snelldocker/Snell$RANDOM_PORT"
     
-    # Create the directory for Snell node configuration
+    # 创建节点目录
     mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
 
-    # Change to the newly created directory
+    # 切换到该目录
     cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
 
-    # Generate the Docker Compose file
+    # 生成 Docker Compose 文件
     cat <<EOF > docker-compose.yml
 services:
   snell:
@@ -112,13 +112,13 @@ services:
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,9.9.9.9
     volumes:
-      - ./snell-conf:/etc/snell-server
-      - ./data:/var/lib/snell
+      - $NODE_DIR/snell-conf:/etc/snell-server
+      - $NODE_DIR/data:/var/lib/snell
 EOF
 
-    # Create the snell configuration directory and file
-    mkdir -p ./snell-conf
-    cat <<EOF > ./snell-conf/snell.conf
+    # 创建 snell-conf 目录并生成配置文件
+    mkdir -p "$NODE_DIR/snell-conf"
+    cat <<EOF > "$NODE_DIR/snell-conf/snell.conf"
 [snell-server]
 listen = 0.0.0.0:$RANDOM_PORT
 psk = $PASSWORD
@@ -128,14 +128,15 @@ dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,
 ipv6 = false
 EOF
 
-    # Create the data directory
-    mkdir -p ./data
+    # 创建 data 目录
+    mkdir -p "$NODE_DIR/data"
 
-    # Start the Snell container using Docker Compose
+    # 使用 Docker Compose 启动 Snell 容器
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
 
     echo "Snell node setup completed at $NODE_DIR."
 }
+
 
 print_node() {
     echo
