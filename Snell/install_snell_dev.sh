@@ -131,7 +131,12 @@ EOF
 
     # 使用 Docker Compose 启动 Snell 容器
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-
+    echo
+    echo "Snell 日志："
+    echo
+    docker logs Snell$RANDOM_PORT
+    echo
+    
     echo "Snell node setup completed at $NODE_DIR."
 }
 
