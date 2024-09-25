@@ -47,7 +47,9 @@ jobs:
           if not os.path.exists(version_dir):
               os.makedirs(version_dir)
               print(f'Created new directory: {version_dir}')
-          
+          else:
+              print(f'Directory already exists: {version_dir}')
+
           architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
           for arch in architectures:
               filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
@@ -59,21 +61,7 @@ jobs:
               else:
                   print(f'{filename} already exists')
 
-          # 检查文件夹是否完整，如果不完整则补全
-          files_in_dir = os.listdir(version_dir)
-          expected_files = [f'snell-server-v{latest_version}-linux-{arch}.zip' for arch in architectures]
-          missing_files = set(expected_files) - set(files_in_dir)
-
-          if missing_files:
-              print(f'Found missing files: {missing_files}')
-              for missing_file in missing_files:
-                  url = f'https://dl.nssurge.com/snell/{missing_file}'
-                  path = os.path.join(version_dir, missing_file)
-                  download_file(url, path)
-                  print(f'Downloaded missing file: {missing_file}')
-          else:
-              print('All files are present and up to date.')
-
+          print(f'Finished processing version {latest_version}')
         shell: python
 
       - name: Check and Configure Git
@@ -89,7 +77,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ! git diff-index --quiet HEAD; then
-            git commit -m "Auto Update Snell: Complete missing files"
+            git commit -m "Auto Update Snell"
             git push origin HEAD:main
           else
             echo "No changes to commit"
