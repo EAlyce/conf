@@ -44,12 +44,21 @@ get_public_ip() {
         public_ip=$(curl -s "$service")
         if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Public IP: $public_ip"
+            
+            # 获取地理位置信息
+            LOCATION=$(curl -s ipinfo.io/city)
+            if [ -n "$LOCATION" ]; then
+                echo "Host location: $LOCATION"
+            else
+                echo "Unable to obtain location from ipinfo.io."
+            fi
             return
         fi
     done
     echo "Unable to obtain public IP."
     exit 1
 }
+
 
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
