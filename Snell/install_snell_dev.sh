@@ -103,7 +103,6 @@ services:
       - PSK=$PASSWORD
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,9.9.9.9
-      - VERSION=$4.1.1
     volumes:
       - ./snell-conf:/etc/snell-server
       - ./data:/var/lib/snell
