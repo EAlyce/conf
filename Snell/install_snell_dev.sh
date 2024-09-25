@@ -87,8 +87,6 @@ generate_password() {
 }
 
 setup_docker() {
-
-    # 生成唯一的Snell节点目录
     NODE_DIR="/root/snelldocker/Snell$RANDOM_PORT"
     
     # 创建节点目录
@@ -104,7 +102,7 @@ services:
     image: azurelane/snell:latest
     container_name: Snell$RANDOM_PORT
     restart: always
-    network_mode: host
+    network_mode: host  # 使用 host 网络模式
     privileged: true
     environment:
       - PORT=$RANDOM_PORT
@@ -112,7 +110,7 @@ services:
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,9.9.9.9
     volumes:
-      - $NODE_DIR/snell-conf:/etc/snell-server
+      - $NODE_DIR/snell-conf:/etc/snell  # 确保挂载到 /etc/snell
       - $NODE_DIR/data:/var/lib/snell
 EOF
 
