@@ -132,9 +132,8 @@ EOF
     # 使用 Docker Compose 启动 Snell 容器
     docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
     echo
-    echo "Snell 日志："
+    echo "Snell 查看日志请输入：docker logs Snell$RANDOM_PORT"
     echo
-    docker logs Snell$RANDOM_PORT
     echo
     
     echo "Snell 节点信息："
