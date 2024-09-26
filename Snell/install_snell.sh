@@ -88,7 +88,28 @@ generate_password() {
 
 setup_docker() {
     NODE_DIR="/root/snelldocker/Snell$RANDOM_PORT"
-    
+
+    # 自动识别平台架构
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64)
+            PLATFORM="linux/amd64"
+            ;;
+        aarch64)
+            PLATFORM="linux/arm64"
+            ;;
+        armv7l)
+            PLATFORM="linux/arm/v7"
+            ;;
+        i386)
+            PLATFORM="linux/386"
+            ;;
+        *)
+            echo "Error: Unsupported architecture: $ARCH"
+            exit 1
+            ;;
+    esac
+
     # 创建节点目录
     mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
 
@@ -104,6 +125,7 @@ services:
     restart: always
     network_mode: host  # 使用 host 网络模式
     privileged: true
+    platform: $PLATFORM  # 动态设置平台
     environment:
       - PORT=$RANDOM_PORT
       - PSK=$PASSWORD
@@ -138,7 +160,6 @@ EOF
     
     echo "Snell 节点信息："
 }
-
 
 print_node() {
     echo
