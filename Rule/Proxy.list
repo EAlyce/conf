@@ -4471,6 +4471,7 @@ DOMAIN-SUFFIX,cbsimg.net
 DOMAIN-SUFFIX,cbsinteractive.com
 DOMAIN-SUFFIX,cbsistatic.com
 DOMAIN-SUFFIX,cbsivideo.com
+DOMAIN-SUFFIX,cbslocal.com
 DOMAIN-SUFFIX,cbsnews.com
 DOMAIN-SUFFIX,cbspressexpress.com
 DOMAIN-SUFFIX,cbssports.com
@@ -21819,6 +21820,7 @@ DOMAIN-SUFFIX,wdfiles.com
 DOMAIN-SUFFIX,weareebay.com
 DOMAIN-SUFFIX,wearehairy.com
 DOMAIN-SUFFIX,wearn.com
+DOMAIN-SUFFIX,weather.com
 DOMAIN-SUFFIX,weav.xyz
 DOMAIN-SUFFIX,web-instagram.net
 DOMAIN-SUFFIX,web.app
