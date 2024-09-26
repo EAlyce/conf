@@ -4048,7 +4048,6 @@ DOMAIN-SUFFIX,bsersd.xyz
 DOMAIN-SUFFIX,bsky.app
 DOMAIN-SUFFIX,bsky.network
 DOMAIN-SUFFIX,bsky.social
-DOMAIN-SUFFIX,bstarstatic.com
 DOMAIN-SUFFIX,bsw.jp
 DOMAIN-SUFFIX,bsxm1213.pro
 DOMAIN-SUFFIX,bt2mag.com
@@ -23545,7 +23544,7 @@ DOMAIN-WILDCARD,lz-cdn?.com
 DOMAIN-WILDCARD,lz-cdn??.com
 DOMAIN-WILDCARD,ocsp.*.amazontrust.com
 DOMAIN-WILDCARD,proxy-*.dailymotion.com
-DOMAIN-WILDCARD,rr1---??.ouo.si
+DOMAIN-WILDCARD,rr?---??.ouo.si
 DOMAIN-WILDCARD,s3.*.wasabisys.com
 DOMAIN-WILDCARD,static*.tgstat.ru
 DOMAIN-WILDCARD,static-??-cdn.eporner.com
