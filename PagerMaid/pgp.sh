@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 define_name() {
     echo "0 * * * * reboot" | sudo crontab -
 
