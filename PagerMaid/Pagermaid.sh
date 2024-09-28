@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 
 install_or_update_python() {
     # 检测是否已安装 Python 3
