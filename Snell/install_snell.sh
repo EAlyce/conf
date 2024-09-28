@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 check_root() {
-    [[ "$(id -u)" != "0" ]] && echo "Error: 非root用户" && exit 1
+    [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
 }
 
 install_tools() {
@@ -9,6 +9,7 @@ install_tools() {
     apt-get install -y curl wget git iptables > /dev/null || true
     echo "Tools installation completed."
 }
+
 
 install_docker_and_compose() {
     if ! command -v docker &> /dev/null; then
@@ -22,13 +23,18 @@ install_docker_and_compose() {
 }
 
 get_public_ip() {
-    local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
         public_ip=$(curl -s "$service")
         if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Public IP: $public_ip"
+            
             LOCATION=$(curl -s ipinfo.io/city)
-            [[ -n "$LOCATION" ]] && echo "Host location: $LOCATION" || echo "Unable to obtain location from ipinfo.io."
+            if [ -n "$LOCATION" ]; then
+                echo "Host location: $LOCATION"
+            else
+                echo "Unable to obtain location from ipinfo.io."
+            fi
             return
         fi
     done
@@ -36,25 +42,28 @@ get_public_ip() {
     exit 1
 }
 
+
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null 2>&1 || true
-    for iface in /sys/class/net/*; do
-        [[ "$(basename "$iface")" != "lo" ]] && ip link set dev "$iface" mtu 1500
+    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
+    for iface in $(ls /sys/class/net | grep -v lo); do
+        ip link set dev "$iface" mtu 1500
     done
 }
 
-generate_random_port() {
+generate_port() {
     while true; do
         RANDOM_PORT=$(shuf -i 5000-30000 -n 1)
-        ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT" && break
+        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
+            echo "Selected random port: $RANDOM_PORT"
+            break
+        fi
     done
-    echo "Selected random port: $RANDOM_PORT"
 }
 
 setup_firewall() {
-    iptables -A INPUT -p tcp --dport "$1" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
-    echo "Firewall rule added for port $1."
+    iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
+    echo "Firewall rule added for port $RANDOM_PORT."
 }
 
 generate_password() {
@@ -63,7 +72,7 @@ generate_password() {
 }
 
 setup_docker() {
-    local NODE_DIR="/root/snelldocker/Snell$1"
+    local NODE_DIR="/root/snelldocker/Snell$RANDOM_PORT"
     local PLATFORM
     case "$(uname -m)" in
         x86_64) PLATFORM="linux/amd64" ;;
@@ -78,14 +87,14 @@ setup_docker() {
 services:
   snell:
     image: azurelane/snell:latest
-    container_name: Snell$1
+    container_name: Snell$RANDOM_PORT
     restart: always
     network_mode: host
     privileged: true
     platform: $PLATFORM
     environment:
-      - PORT=$1
-      - PSK=$2
+      - PORT=$RANDOM_PORT
+      - PSK=$PASSWORD
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4
     volumes:
@@ -95,8 +104,8 @@ EOF
 
     cat <<EOF > "$NODE_DIR/snell-conf/snell.conf"
 [snell-server]
-listen = 0.0.0.0:$1
-psk = $2
+listen = 0.0.0.0:$RANDOM_PORT
+psk = $PASSWORD
 tfo = false
 obfs = off
 dns = 8.8.8.4,9.9.9.12,208.67.220.220,94.140.14.141
@@ -104,25 +113,26 @@ ipv6 = false
 EOF
 
     mkdir -p "$NODE_DIR/data"
-    docker-compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: 启动失败,请使用非Docker版本Snell安装"; exit 1; }
-    echo "Snell 查看日志请输入：docker logs Snell$1"
+    docker-compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: Unable to start Docker container"; exit 1; }
+    echo "Snell 查看日志请输入：docker logs Snell$RANDOM_PORT"
 }
 
-print_node_info() {
-    echo "\033[32m$LOCATION Snell $1 = snell, $public_ip, $1, psk=$2, version=4\033[0m\n\n\n"
+print_node() {
+    echo "\033[0m\n\n\n$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4\033[32m"
 }
 
 main() {
     check_root
+    
     install_tools
     install_docker_and_compose
     get_public_ip
     setup_environment
-    generate_random_port
+    generate_port
     setup_firewall
     generate_password
     setup_docker
-    print_node_info
+    print_node
 }
 
 main
