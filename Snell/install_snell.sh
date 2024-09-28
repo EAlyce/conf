@@ -1,29 +1,13 @@
 #!/usr/bin/env bash
 
 check_root() {
-    [ "$(id -u)" != "0" ] && echo "Error: You must be root to run this script" && exit 1
+    [[ "$(id -u)" != "0" ]] && echo "Error: You must be root to run this script" && exit 1
 }
 
 install_tools() {
     apt-get update -y > /dev/null || true
-    apt-get install -y curl wget git netcat-traditional apt-transport-https ca-certificates iptables netfilter-persistent software-properties-common > /dev/null || true
+    apt-get install -y curl wget git iptables > /dev/null || true
     echo "Tools installation completed."
-}
-
-clean_system() {
-    echo "Cleaning the system..."
-
-    # 终止相关进程并删除锁文件
-    pkill -9 apt || true
-    pkill -9 dpkg || true
-    rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
-
-    # 重新配置 dpkg 并清理缓存
-    dpkg --configure -a > /dev/null || true
-    apt-get clean > /dev/null
-    apt-get autoclean > /dev/null
-    apt-get autoremove -y > /dev/null
-    { echo -e "net.ipv4.tcp_fastopen = 0\net.core.default_qdisc = fq\nnet.ipv4.tcp_congestion_control = bbr\nnet.ipv4.tcp_ecn = 1\nvm.swappiness = 0" >> /etc/sysctl.conf && sysctl -p; } > /dev/null 2>&1 && echo "设置已完成"
 }
 
 install_docker_and_compose() {
@@ -38,19 +22,13 @@ install_docker_and_compose() {
 }
 
 get_public_ip() {
-    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
         public_ip=$(curl -s "$service")
         if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Public IP: $public_ip"
-            
-            # 获取地理位置信息
             LOCATION=$(curl -s ipinfo.io/city)
-            if [ -n "$LOCATION" ]; then
-                echo "Host location: $LOCATION"
-            else
-                echo "Unable to obtain location from ipinfo.io."
-            fi
+            [[ -n "$LOCATION" ]] && echo "Host location: $LOCATION" || echo "Unable to obtain location from ipinfo.io."
             return
         fi
     done
@@ -58,128 +36,93 @@ get_public_ip() {
     exit 1
 }
 
-
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
-    for iface in $(ls /sys/class/net | grep -v lo); do
-        ip link set dev "$iface" mtu 1500
+    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null 2>&1 || true
+    for iface in /sys/class/net/*; do
+        [[ "$(basename "$iface")" != "lo" ]] && ip link set dev "$iface" mtu 1500
     done
 }
 
-generate_port() {
+generate_random_port() {
     while true; do
         RANDOM_PORT=$(shuf -i 5000-30000 -n 1)
-        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
-            echo "Selected random port: $RANDOM_PORT"
-            break
-        fi
+        ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT" && break
     done
+    echo "Selected random port: $RANDOM_PORT"
 }
 
 setup_firewall() {
-    iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
-    echo "Firewall rule added for port $RANDOM_PORT."
+    iptables -A INPUT -p tcp --dport "$1" -j ACCEPT || { echo "Error: Unable to add firewall rule"; exit 1; }
+    echo "Firewall rule added for port $1."
 }
 
 generate_password() {
-    PASSWORD=$(openssl rand -base64 18) || { echo "Error: Unable to generate password"; exit 1; }
+    PASSWORD=$(openssl rand -base64 32) || { echo "Error: Unable to generate password"; exit 1; }
     echo "Password generated: $PASSWORD"
 }
 
 setup_docker() {
-    NODE_DIR="/root/snelldocker/Snell$RANDOM_PORT"
-
-    # 自动识别平台架构
-    ARCH=$(uname -m)
-    case "$ARCH" in
-        x86_64)
-            PLATFORM="linux/amd64"
-            ;;
-        aarch64)
-            PLATFORM="linux/arm64"
-            ;;
-        armv7l)
-            PLATFORM="linux/arm/v7"
-            ;;
-        i386)
-            PLATFORM="linux/386"
-            ;;
-        *)
-            echo "Error: Unsupported architecture: $ARCH"
-            exit 1
-            ;;
+    local NODE_DIR="/root/snelldocker/Snell$1"
+    local PLATFORM
+    case "$(uname -m)" in
+        x86_64) PLATFORM="linux/amd64" ;;
+        aarch64) PLATFORM="linux/arm64" ;;
+        armv7l) PLATFORM="linux/arm/v7" ;;
+        i386) PLATFORM="linux/386" ;;
+        *) echo "Error: Unsupported architecture: $(uname -m)"; exit 1 ;;
     esac
 
-    # 创建节点目录
-    mkdir -p "$NODE_DIR" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
-
-    # 切换到该目录
-    cd "$NODE_DIR" || { echo "Error: Unable to change directory to $NODE_DIR"; exit 1; }
-
-    # 生成 Docker Compose 文件
-    cat <<EOF > docker-compose.yml
+    mkdir -p "$NODE_DIR/snell-conf" || { echo "Error: Unable to create directory $NODE_DIR"; exit 1; }
+    cat <<EOF > "$NODE_DIR/docker-compose.yml"
 services:
   snell:
     image: azurelane/snell:latest
-    container_name: Snell$RANDOM_PORT
+    container_name: Snell$1
     restart: always
-    network_mode: host  # 使用 host 网络模式
+    network_mode: host
     privileged: true
-    platform: $PLATFORM  # 动态设置平台
+    platform: $PLATFORM
     environment:
-      - PORT=$RANDOM_PORT
-      - PSK=$PASSWORD
+      - PORT=$1
+      - PSK=$2
       - IPV6=false
       - DNS=8.8.8.8,8.8.4.4
     volumes:
-      - $NODE_DIR/snell-conf:/etc/snell  # 确保挂载到 /etc/snell
+      - $NODE_DIR/snell-conf:/etc/snell
       - $NODE_DIR/data:/var/lib/snell
 EOF
 
-    # 创建 snell-conf 目录并生成配置文件
-    mkdir -p "$NODE_DIR/snell-conf"
     cat <<EOF > "$NODE_DIR/snell-conf/snell.conf"
 [snell-server]
-listen = 0.0.0.0:$RANDOM_PORT
-psk = $PASSWORD
+listen = 0.0.0.0:$1
+psk = $2
 tfo = false
 obfs = off
-dns = 8.8.4.4,9.9.9.12,208.67.220.220,94.140.14.141
+dns = 8.8.8.4,9.9.9.12,208.67.220.220,94.140.14.141
 ipv6 = false
 EOF
 
-    # 创建 data 目录
     mkdir -p "$NODE_DIR/data"
-
-    # 使用 Docker Compose 启动 Snell 容器
-    docker-compose up -d || { echo "Error: Unable to start Docker container"; exit 1; }
-    echo
-    echo "Snell 查看日志请输入：docker logs Snell$RANDOM_PORT"
-    echo
-    echo
-    
-    echo "Snell 节点信息："
+    docker-compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: 启动失败,请使用非Docker版本Snell安装"; exit 1; }
+    echo "Snell 查看日志请输入：docker logs Snell$1"
 }
 
-print_node() {
-    echo
-    echo "$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4"
-    echo
+print_node_info() {
+    echo "\033[32m$LOCATION Snell $1 = snell, $public_ip, $1, psk=$2, version=4\033[0m\n\n\n"
 }
 
 main() {
     check_root
-    clean_system
     install_tools
     install_docker_and_compose
     get_public_ip
     setup_environment
-    generate_port
+    generate_random_port
     setup_firewall
     generate_password
     setup_docker
-    print_node
+    print_node_info
 }
 
 main
