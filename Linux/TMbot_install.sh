@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # 检测是否安装了Docker
 if ! command -v docker &> /dev/null; then
