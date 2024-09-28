@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # 定义设置 PATH 的函数
 set_custom_path() {
