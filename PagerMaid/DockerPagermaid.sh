@@ -1,44 +1,13 @@
 #!/usr/bin/env bash
 
 docker_check() {
-    # 检查是否已安装 Docker
     if ! command -v docker &> /dev/null; then
-        echo "Docker 未安装。正在安装 Docker..."
-
-        # 更新包列表并安装 Docker
-        sudo apt update
-        sudo apt install -y docker.io
-
-        # 启用并启动 Docker 服务
-        sudo systemctl enable --now docker
-
-        # 验证 Docker 安装
-        if command -v docker &> /dev/null; then
-            echo "Docker 安装成功。"
-        else
-            echo "Docker 安装失败。"
-            return 1
-        fi
+        echo "Installing Docker and Docker Compose..."
+        curl -fsSL https://get.docker.com | bash > /dev/null 2>&1
+        apt-get install -y docker-compose > /dev/null
+        echo "Docker and Docker Compose installation completed."
     else
-        echo "Docker 已经安装。"
-    fi
-
-    # 检查是否已安装 Docker Compose
-    if ! command -v docker-compose &> /dev/null; then
-        echo "Docker Compose 未安装。正在安装 Docker Compose..."
-
-        # 安装 Docker Compose
-        sudo apt install -y docker-compose
-
-        # 验证 Docker Compose 安装
-        if command -v docker-compose &> /dev/null; then
-            echo "Docker Compose 安装成功。"
-        else
-            echo "Docker Compose 安装失败。"
-            return 1
-        fi
-    else
-        echo "Docker Compose 已经安装。"
+        echo "Docker and Docker Compose are already installed."
     fi
 }
 
