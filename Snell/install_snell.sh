@@ -121,7 +121,10 @@ EOF
 }
 
 print_node() {
-    echo "\n\n\n$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4\n\n\n"
+    echo 
+    echo "$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4"
+    echo 
+    echo 
 }
 
 main() {
