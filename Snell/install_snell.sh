@@ -23,7 +23,7 @@ clean_system() {
     apt-get clean > /dev/null
     apt-get autoclean > /dev/null
     apt-get autoremove -y > /dev/null
-    { echo -e "net.core.default_qdisc = fq\nnet.ipv4.tcp_congestion_control = bbr\nnet.ipv4.tcp_ecn = 1\nvm.swappiness = 0" >> /etc/sysctl.conf && sysctl -p; } > /dev/null 2>&1 && echo "设置已完成"
+    { echo -e "net.ipv4.tcp_fastopen = 0\net.core.default_qdisc = fq\nnet.ipv4.tcp_congestion_control = bbr\nnet.ipv4.tcp_ecn = 1\nvm.swappiness = 0" >> /etc/sysctl.conf && sysctl -p; } > /dev/null 2>&1 && echo "设置已完成"
 }
 
 install_docker_and_compose() {
