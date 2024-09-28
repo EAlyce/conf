@@ -130,7 +130,7 @@ services:
       - PORT=$RANDOM_PORT
       - PSK=$PASSWORD
       - IPV6=false
-      - DNS=8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,9.9.9.9
+      - DNS=8.8.8.8,8.8.4.4
     volumes:
       - $NODE_DIR/snell-conf:/etc/snell  # 确保挂载到 /etc/snell
       - $NODE_DIR/data:/var/lib/snell
@@ -144,7 +144,7 @@ listen = 0.0.0.0:$RANDOM_PORT
 psk = $PASSWORD
 tfo = false
 obfs = off
-dns = 8.8.8.8,8.8.4.4,94.140.14.140,94.140.14.141,208.67.222.222,208.67.220.220,9.9.9.9
+dns = 8.8.4.4,9.9.9.12,208.67.220.220,94.140.14.141
 ipv6 = false
 EOF
 
