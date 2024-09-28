@@ -10,22 +10,7 @@ install_tools() {
     echo "Tools installation completed."
 }
 
-clean_system() {
-    echo "Cleaning the system..."
 
-    # 终止相关进程并删除锁文件
-    pkill -9 apt || true
-    pkill -9 dpkg || true
-    rm -f /var/{lib/dpkg/{lock,lock-frontend},lib/apt/lists/lock} || true
-
-    # 重新配置 dpkg 并清理缓存
-    dpkg --configure -a > /dev/null || true
-    apt-get clean > /dev/null
-    apt-get autoclean > /dev/null
-    apt-get autoremove -y > /dev/null
-
-    echo "System cleaning completed."
-}
 
 install_docker_and_compose() {
     if ! command -v docker &> /dev/null; then
@@ -148,7 +133,7 @@ print_node() {
 
 main() {
     check_root
-    clean_system
+    
     install_tools
     install_docker_and_compose
     get_public_ip
