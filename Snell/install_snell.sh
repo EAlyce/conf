@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 check_root() {
-    [[ "$(id -u)" != "0" ]] && echo "Error: You must be root to run this script" && exit 1
+    [[ "$(id -u)" != "0" ]] && echo "Error: 非root用户" && exit 1
 }
 
 install_tools() {
