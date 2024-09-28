@@ -115,7 +115,9 @@ EOF
 
     mkdir -p "$NODE_DIR/data"
     docker-compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: Unable to start Docker container"; exit 1; }
+    echo 
     echo "Snell 查看日志请输入：docker logs Snell$RANDOM_PORT"
+    echo 
 }
 
 print_node() {
