@@ -63,7 +63,9 @@ get_public_ip() {
 setup_environment() {
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
     iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
-    echo "Environment setup completed."
+    for iface in $(ls /sys/class/net | grep -v lo); do
+        ip link set dev "$iface" mtu 1500
+    done
 }
 
 generate_port() {
