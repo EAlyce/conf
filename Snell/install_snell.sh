@@ -44,6 +44,9 @@ get_public_ip() {
 
 
 setup_environment() {
+    sudo locale-gen en_US.UTF-8
+    sudo update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
     echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" > /etc/resolv.conf
     { echo -e "net.ipv4.tcp_fastopen = 0\nnet.core.default_qdisc = fq\nnet.ipv4.tcp_congestion_control = bbr\nnet.ipv4.tcp_ecn = 1\nvm.swappiness = 0" >> /etc/sysctl.conf && sysctl -p; } > /dev/null 2>&1 && echo "设置已完成"
     iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null || true
