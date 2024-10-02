@@ -1,5 +1,5 @@
 
-#!/bin/bash
+#!/usr/bin/env bash
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
@@ -8,42 +8,15 @@ check_root() {
     fi
 }
 
-install_basic_tools() {
-    apt-get update -y
-    apt-get install -y curl gnupg lsb-release iptables net-tools netfilter-persistent software-properties-common
-    echo "基础工具已安装。"
-}
-
-clean_system() {
-    for proc in dpkg apt apt-get; do
-        pids=$(ps -ef | grep $proc | grep -v grep | awk '{print $2}')
-        [ -n "$pids" ] && sudo kill -9 $pids 2>/dev/null || true
-    done
-
-    sudo dpkg --configure -a
-    sudo apt-get clean -y
-    sudo apt-get autoclean -y
-    sudo apt-get autoremove -y
-}
-
 install_packages() {
-    apt-get update -y
-    apt-get install -y curl gnupg lsb-release
-
-    apt-get update -y
-    apt-get install -y docker-ce docker-ce-cli containerd.io
-
-    if ! command -v docker-compose &> /dev/null; then
-        LATEST_COMPOSE_VERSION=$(curl -sS https://api.github.com/repos/docker/compose/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
-        curl -fsSL "https://github.com/docker/compose/releases/download/${LATEST_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
+    if ! command -v docker &> /dev/null; then
+        echo "Installing Docker and Docker Compose..."
+        curl -fsSL https://get.docker.com | bash > /dev/null 2>&1
+        apt-get install -y docker-compose > /dev/null
+        echo "Docker and Docker Compose installation completed."
+    else
+        echo "Docker and Docker Compose are already installed."
     fi
-
-    systemctl enable docker
-    systemctl start docker
-
-    docker --version
-    docker-compose --version
 }
 
 get_public_ip() {
@@ -58,19 +31,6 @@ get_public_ip() {
     done
     echo "无法获取公共 IP 地址。" >&2
     exit 1
-}
-
-setup_environment() {
-    sudo locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && sudo timedatectl set-timezone Asia/Shanghai
-    echo -e 'nameserver 8.8.4.4\nnameserver 8.8.8.8' > /etc/resolv.conf
-    
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT
-    iptables -A INPUT -p tcp --tcp-flags SYN SYN -j ACCEPT
-    netfilter-persistent reload
-    
-    echo 0 > /proc/sys/net/ipv4/tcp_fastopen
-    docker system prune -af --volumes
-    echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf && sysctl -p > /dev/null
 }
 
 setup_docker() {
@@ -118,11 +78,8 @@ EOF
 
 main() {
     check_root
-    install_basic_tools
-    clean_system
     public_ip=$(get_public_ip)
     install_packages
-    setup_environment
     setup_docker
 }
 
