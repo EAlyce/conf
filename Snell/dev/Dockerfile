@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:latest
 
 ARG TARGETPLATFORM
 ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
