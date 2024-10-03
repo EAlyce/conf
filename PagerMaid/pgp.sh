@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 clone_git() {
+    apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y
     # 更新Git
-    sudo apt install --upgrade git -y > /dev/null 2>&1 || { echo "Git更新失败，脚本终止。"; exit 1; }
+    apt install --upgrade git -y > /dev/null 2>&1 || { echo "Git更新失败，脚本终止。"; exit 1; }
     echo "Git更新成功"
 
     # 拉取git文件到/root目录
@@ -183,11 +184,11 @@ cd /root/pgp$name || { echo "错误：无法进入目录 /root/pgp$name"; return
 
 # 替换systemd服务文件中的pgp$name
 echo "替换systemd服务文件中的pgp$name..."
-sudo sed -i "s/pgp\$name/pgp$name/g" /etc/systemd/system/pgp$name.service
+sed -i "s/pgp\$name/pgp$name/g" /etc/systemd/system/pgp$name.service
 
 # 重新加载systemd守护进程
 echo "重新加载systemd守护进程..."
-if sudo systemctl daemon-reload; then
+if systemctl daemon-reload; then
     echo "systemd守护进程重新加载成功."
 else
     echo "错误：无法重新加载systemd守护进程"
@@ -196,7 +197,7 @@ fi
 
 # 启动PagerMaid服务
 echo "启动PagerMaid服务..."
-if sudo systemctl start pgp$name; then
+if systemctl start pgp$name; then
     echo "PagerMaid服务启动成功."
 else
     echo "错误：无法启动PagerMaid服务"
@@ -206,7 +207,7 @@ fi
 
 # 设置PagerMaid服务开机自启
 echo "设置PagerMaid服务开机自启..."
-if sudo systemctl enable --now pgp$name; then
+if systemctl enable --now pgp$name; then
     echo "PagerMaid服务设置开机自启成功."
 else
     echo "错误：无法设置PagerMaid服务开机自启"
@@ -215,7 +216,7 @@ fi
 
 # 重新启动PagerMaid服务
 echo "重新启动PagerMaid服务..."
-if sudo systemctl restart pgp$name; then
+if systemctl restart pgp$name; then
     echo "PagerMaid服务重新启动成功."
 else
     echo "错误：无法重新启动PagerMaid服务"
@@ -276,7 +277,7 @@ uninstall() {
         1)
             echo "正在删除全部..."
             for dir in "${dirs[@]}"; do
-                sudo rm -rf /root/$dir
+                rm -rf /root/$dir
             done
             echo "卸载完成"
             ;;
@@ -284,7 +285,7 @@ uninstall() {
             read -p "请输入你想要删除的目录的序号： " index
             if [[ "$index" =~ ^[0-9]+$ ]] && [ "$index" -gt 0 ] && [ "$index" -le "${#dirs[@]}" ]; then
                 echo "正在删除 ${dirs[$((index-1))]}..."
-                sudo rm -rf /root/${dirs[$((index-1))]}
+                rm -rf /root/${dirs[$((index-1))]}
                 echo "卸载完成"
             else
                 echo "错误：无效的序号"
