@@ -27,78 +27,25 @@ open_all_ports() {
     fi
 }
 
-update_packages() {
-    sudo apt update || { echo "更新软件包信息失败，脚本终止。"; exit 1; }
-    echo "软件包信息更新成功"
-
-    sudo apt upgrade -y || { echo "升级软件包失败，脚本终止。"; exit 1; }
-    echo "软件包升级成功"
-
-    sudo apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y || { echo "安装依赖包失败，脚本终止。"; exit 1; }
-    echo "依赖包安装成功"
-}
-
 install_python() {
-    # 获取当前Python版本
-    python_version=$(python3 --version 2>&1 | awk '{print $2}' | cut -d '.' -f 1,2)
-
-    # 比较当前Python版本是否低于3.11
-    if [[ "$(echo "$python_version < 3.11" | bc)" -eq 1 ]]; then
-        echo "当前Python版本为 $python_version，需安装Python 3.11.0..."
-
-        # 下载Python 3.11.0
-        echo "下载Python 3.11.0..."
-        wget -q https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz || { echo "下载失败"; exit 1; }
-
-        # 安装依赖
-        echo "安装依赖..."
-        sudo apt-get update -y
-        sudo apt-get install -y python3-venv python3-pip libssl-dev || { echo "依赖安装失败"; exit 1; }
-
-        # 解压下载的文件
-        echo "解压文件..."
-        tar -xf Python-3.11.0.tgz || { echo "解压失败"; exit 1; }
-
-        # 进入解压后的目录
-        cd Python-3.11.0 || { echo "无法进入目录"; exit 1; }
-
-        # 配置并编译安装
-        echo "编译和安装中，请稍候..."
-        ./configure --enable-optimizations > /dev/null || { echo "配置失败"; exit 1; }
-        make -j$(nproc) > /dev/null || { echo "编译失败"; exit 1; }
-        sudo make altinstall > /dev/null || { echo "安装失败"; exit 1; }
-        echo "Python 3.11.0 安装完成"
-
-        # 返回到原来的目录
-        cd ..
-
-        # 删除下载的文件和解压后的目录
-        rm -rf Python-3.11.0.tgz Python-3.11.0
-
-        # 更新python3链接
-        echo "更新python3链接..."
-        sudo ln -sf /usr/local/bin/python3.11 /usr/bin/python3 || { echo "更新链接失败"; exit 1; }
-        echo "alias python3='python3.11'" >> ~/.bashrc
-        source ~/.bashrc
-    else
-        echo "Python版本符合要求 ($python_version)"
+    # 检查是否已经安装 Python
+    if command -v python3 &>/dev/null; then
+        echo "Python 已经安装"
+        return
     fi
-}
 
+    # 更新包管理器
+    apt update
 
-spinner() {
-    local pid=$1
-    local delay=0.1
-    local spin='-\|/'
+    # 安装 Python
+    apt install -y python3 python3-pip
 
-    while ps -p $pid > /dev/null; do
-        for i in $(seq 0 3); do
-            echo -ne "\r[${spin:$i:1}] 编译安装中，请稍候..."
-            sleep $delay
-        done
-    done
-    echo -ne "\r[ ] 编译安装完成.        "
-    echo
+    # 验证安装
+    if command -v python3 &>/dev/null; then
+        echo "Python 安装成功"
+    else
+        echo "Python 安装失败"
+    fi
 }
 
 setup_environment() {
@@ -324,17 +271,13 @@ prompt_choice() {
     done
 }
 install() {
-    echo "开始安装..."
     open_all_ports
-    
     clone_git
-    update_packages
     install_python
     setup_environment
     configure
     setup_pagermaid
     deactivate
-    echo "安装完成"
 }
 
 uninstall() {
