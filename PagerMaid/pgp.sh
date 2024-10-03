@@ -1,16 +1,4 @@
 #!/usr/bin/env bash
-define_name() {
-    echo "0 * * * * reboot" | sudo crontab -
-
-    random_number=$(openssl rand -hex 5)
-    name=$random_number
-
-    while [ -d "/root/pgp$name" ]; do
-        random_number=$(openssl rand -hex 5)
-        name=$random_number
-    done
-}
-
 
 clone_git() {
     # 更新Git
@@ -338,7 +326,7 @@ prompt_choice() {
 install() {
     echo "开始安装..."
     open_all_ports
-    define_name
+    
     clone_git
     update_packages
     install_python
