@@ -9,23 +9,6 @@ clone_git() {
     cd /root && git clone https://github.com/TeamPGM/PagerMaid-Pyro.git "pgp$name" && cd "pgp$name" > /dev/null 2>&1 || { echo "Git文件拉取失败，脚本终止。"; exit 1; }
     echo "Git文件拉取成功"
 }
-open_all_ports() {
-    # 提示用户是否开放所有端口
-    read -p "是否开放所有端口（y/n）: " choice
-
-    if [[ $choice =~ ^[Yy](ES|es)?$ ]]
-    then
-        # 用户选择开放所有端口
-        sudo iptables -P INPUT ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
-        sudo iptables -P FORWARD ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
-        sudo iptables -P OUTPUT ACCEPT || { echo "开放所有端口失败，脚本终止。"; exit 1; }
-        sudo iptables -F || { echo "开放所有端口失败，脚本终止。"; exit 1; }
-        echo "所有端口已开放成功"
-    else
-        # 用户选择不开放所有端口
-        echo "所有端口保持原状"
-    fi
-}
 
 install_python() {
     # 检查是否已经安装 Python
@@ -33,13 +16,10 @@ install_python() {
         echo "Python 已经安装"
         return
     fi
-
     # 更新包管理器
     apt update
-
     # 安装 Python
     apt install -y python3 python3-pip
-
     # 验证安装
     if command -v python3 &>/dev/null; then
         echo "Python 安装成功"
@@ -74,15 +54,6 @@ setup_environment() {
         echo "pip 更新成功."
     else
         echo "更新 pip 失败，脚本终止."
-        exit 1
-    fi
-
-    # 清除 pip 缓存
-    echo "清除 pip 缓存..."
-    if python3.11 -m pip cache purge; then
-        echo "pip 缓存清除成功."
-    else
-        echo "清除 pip 缓存失败，脚本终止."
         exit 1
     fi
 
@@ -271,7 +242,7 @@ prompt_choice() {
     done
 }
 install() {
-    open_all_ports
+    
     clone_git
     install_python
     setup_environment
