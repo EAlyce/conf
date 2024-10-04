@@ -17,43 +17,56 @@ jobs:
       - name: Get, clean, and deduplicate domains
         run: |
           {
-           curl -sSfL "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitfinex.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/FSMOne.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Gate.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kraken.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kucoin.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Nexo.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Pionex.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HongKongBank.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/IBKR.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Trading212.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Vodafone-wificall.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/NigeriaBank.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list" | awk '{print $0 "\n"}'
-          } | sed 's/ //g; /^#/d; /^$/d; s/^DOMAIN,/DOMAIN-SUFFIX,/; s/,no-resolve//g' | \
-              cat - | \
-              awk -F',' '
-              $1 == "DOMAIN-SUFFIX" {
-              split($2, parts, ".");
-              if (length(parts) > 2) {
-              $2 = parts[length(parts)-1] "." parts[length(parts)];
-              }
-              }
-              !/^(IP-CIDR6|URL-REGEX|PROCESS-NAME|USER-AGENT)/ {print}
-              ' | \
-              sed -E 's/(DOMAIN-SUFFIX,[^,]*)(\/\*|\*\.)/\1/g' | \
-              sort -u> Rule/Crypto.list
+            curl -sSfL "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/RedotPay.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitfinex.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/FSMOne.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Gate.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kraken.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Kucoin.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Nexo.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Pionex.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HongKongBank.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/IBKR.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Trading212.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Vodafone-wificall.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/NigeriaBank.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list" | awk '{print $0 "\n"}'
+          } | awk -F',' '
+            # 删除空行和注释
+            NF && !/^#/ {
+                # 去掉多余的空格
+                gsub(/ /, "");
+                
+                # 处理 DOMAIN 和去掉 no-resolve
+                gsub(/,no-resolve/, "");
+                if ($1 == "DOMAIN") {
+                    $1 = "DOMAIN-SUFFIX";
+                }
+                
+                # 处理 DOMAIN-SUFFIX 的部分
+                if ($1 == "DOMAIN-SUFFIX") {
+                    split($2, parts, ".");
+                    if (length(parts) > 2) {
+                        $2 = parts[length(parts)-1] "." parts[length(parts)];
+                    }
+                }
+
+                # 过滤不需要的类型
+                if (!/^(IP-CIDR6|URL-REGEX|PROCESS-NAME|USER-AGENT)/) {
+                    print
+                }
+            }
+          ' | sort -u > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
@@ -67,12 +80,12 @@ jobs:
 
       - name: Commit and push changes if needed
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Token 进行身份验证
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/Crypto.list
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Update Crypto.list"
-            git push --force origin HEAD:main  # 强制推送
+            git push --force origin HEAD:main
           else
             echo "No changes to commit"
           fi
