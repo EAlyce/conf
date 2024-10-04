@@ -38,21 +38,7 @@ jobs:
           }
           print $0;
           }' | \
-          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
-          awk '{
-          if ($0 ~ /^DOMAIN-SUFFIX,/) {
-          domain = $0;
-          sub(/^DOMAIN-SUFFIX,/, "", domain);          # 去掉前缀 DOMAIN-SUFFIX,
-          n = split(domain, parts, ".");               # 分割域名
-          if (n > 2) {
-             print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; # 只打印二级域名
-          } else {
-            print $0;                                # 保留不符合条件的域名
-          }
-          } else {
-          print $0;                                    # 保留非 DOMAIN-SUFFIX 行
-          }
-          }' | sort | uniq > Rule/OpenAI.list
+          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' |sort | uniq > Rule/OpenAI.list
 
       - name: Check and Configure Git
         run: |
