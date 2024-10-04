@@ -58,7 +58,7 @@ jobs:
       - name: Check if there are changes
         run: |
           git status
-          git diff  # 这两个命令检查本地更改，确保脚本正确处理更改
+          git diff
 
       - name: Configure Git
         run: |
@@ -72,7 +72,7 @@ jobs:
           git add Rule/Crypto.list
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Update Crypto.list"
-            git push origin HEAD:main
+            git push --force origin HEAD:main  # 强制推送
           else
             echo "No changes to commit"
-          fi  # 确保 if 语句正确闭合
+          fi
