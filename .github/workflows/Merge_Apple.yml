@@ -21,26 +21,32 @@ jobs:
             curl -sSfL "https://ruleset.skk.moe/List/non_ip/apple_services.conf" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list" | awk '{print $0 "\n"}'
-          } | awk -F',' '
-            # 删除空行和注释
-            NF && !/^#/ {
-                # 去掉多余的空格
-                gsub(/ /, "");
-                
-                # 处理 DOMAIN 和去掉 no-resolve
-                gsub(/,no-resolve/, "");
-                
-                # 将单独的 DOMAIN 改为 DOMAIN-SUFFIX
-                if ($1 == "DOMAIN") {
-                    $1 = "DOMAIN-SUFFIX";
-                }
-                
-                # 过滤不需要的类型
-                if (!/^(IP-CIDR6|URL-REGEX|PROCESS-NAME|USER-AGENT)/) {
-                    print $1 "," $2
-                }
+          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | \
+          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
+          awk -F',' '{
+          if ($1 == "DOMAIN-SUFFIX,") {
+            split($2, parts, ".");
+            if (length(parts) > 2) {
+              $2 = parts[length(parts)-1] "." parts[length(parts)];
             }
-          ' | sort -u > Rule/Apple.list
+          }
+          print $0;
+          }' | \
+          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | \
+          awk '{
+          if ($0 ~ /^DOMAIN-SUFFIX,/) {
+          domain = $0;
+          sub(/^DOMAIN-SUFFIX,/, "", domain);          # 去掉前缀 DOMAIN-SUFFIX,
+          n = split(domain, parts, ".");               # 分割域名
+          if (n > 2) {
+             print "DOMAIN-SUFFIX," parts[n-1] "." parts[n]; # 只打印二级域名
+          } else {
+            print $0;                                # 保留不符合条件的域名
+          }
+          } else {
+          print $0;                                    # 保留非 DOMAIN-SUFFIX 行
+          }
+          }' | sort | uniq > Rule/Apple.list
 
       - name: Configure Git
         run: |
