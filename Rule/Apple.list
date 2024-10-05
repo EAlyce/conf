@@ -1,3 +1,14 @@
+DOMAIN,appldnld.apple.com.edgesuite.net
+DOMAIN,apple-events.akamaized.net
+DOMAIN,apple.comscoreresearch.com
+DOMAIN,appleworldwidedeveloper.hb-api.omtrdc.net
+DOMAIN,appleworldwidedeveloper.sc.omtrdc.net
+DOMAIN,beatselectronicsllc.tt.omtrdc.net
+DOMAIN,e16991.b.akamaiedge.net
+DOMAIN,icons.axm-usercontent-apple.com
+DOMAIN,lookup-api.apple.com.edgekey.net
+DOMAIN,p-events-delivery.akamaized.net
+DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 DOMAIN-KEYWORD,apple-support.akadns.net
 DOMAIN-KEYWORD,apple.com.akadns.net
 DOMAIN-KEYWORD,apple.com.edgekey.net
@@ -74,7 +85,6 @@ DOMAIN-SUFFIX,appl-e.com
 DOMAIN-SUFFIX,appl.com
 DOMAIN-SUFFIX,appl4e.com
 DOMAIN-SUFFIX,appla.com
-DOMAIN-SUFFIX,appldnld.apple.com.edgesuite.net
 DOMAIN-SUFFIX,apple-appstore.cn
 DOMAIN-SUFFIX,apple-cloudkit.com
 DOMAIN-SUFFIX,apple-darwin.com
@@ -85,7 +95,6 @@ DOMAIN-SUFFIX,apple-dns.com
 DOMAIN-SUFFIX,apple-dns.com.cn
 DOMAIN-SUFFIX,apple-dns.net
 DOMAIN-SUFFIX,apple-enews.com
-DOMAIN-SUFFIX,apple-events.akamaized.net
 DOMAIN-SUFFIX,apple-expo.com
 DOMAIN-SUFFIX,apple-expo.eu
 DOMAIN-SUFFIX,apple-hk.com
@@ -401,8 +410,6 @@ DOMAIN-SUFFIX,applewatchedition.com
 DOMAIN-SUFFIX,applewatchseries3.net
 DOMAIN-SUFFIX,applewatchsport.com
 DOMAIN-SUFFIX,appleweb.net
-DOMAIN-SUFFIX,appleworldwidedeveloper.hb-api.omtrdc.net
-DOMAIN-SUFFIX,appleworldwidedeveloper.sc.omtrdc.net
 DOMAIN-SUFFIX,applexpo.net
 DOMAIN-SUFFIX,applezh.com
 DOMAIN-SUFFIX,applf.com
@@ -637,7 +644,6 @@ DOMAIN-SUFFIX,beatsdreus.com
 DOMAIN-SUFFIX,beatsearbudsheadphoness.com
 DOMAIN-SUFFIX,beatselectronic.net
 DOMAIN-SUFFIX,beatselectronics.com
-DOMAIN-SUFFIX,beatselectronicsllc.tt.omtrdc.net
 DOMAIN-SUFFIX,beatsep.cn
 DOMAIN-SUFFIX,beatsep.com
 DOMAIN-SUFFIX,beatsep.net
@@ -923,7 +929,6 @@ DOMAIN-SUFFIX,dvdstudiopro.info
 DOMAIN-SUFFIX,dvdstudiopro.net
 DOMAIN-SUFFIX,dvdstudiopro.org
 DOMAIN-SUFFIX,dvdstudiopro.us
-DOMAIN-SUFFIX,e16991.b.akamaiedge.net
 DOMAIN-SUFFIX,earphonescheapest.com
 DOMAIN-SUFFIX,earpod.net
 DOMAIN-SUFFIX,ebookforipad.com
@@ -1049,7 +1054,6 @@ DOMAIN-SUFFIX,icloudos.net
 DOMAIN-SUFFIX,icloudpay.net
 DOMAIN-SUFFIX,icloudsecure.net
 DOMAIN-SUFFIX,icloudsetup.com
-DOMAIN-SUFFIX,icons.axm-usercontent-apple.com
 DOMAIN-SUFFIX,ids-apple.com
 DOMAIN-SUFFIX,idvd.eu
 DOMAIN-SUFFIX,igoshopping.net
@@ -1248,7 +1252,6 @@ DOMAIN-SUFFIX,livephotos.cn
 DOMAIN-SUFFIX,livephotos.com.cn
 DOMAIN-SUFFIX,livephotos.tv
 DOMAIN-SUFFIX,lojaiphone.com.br
-DOMAIN-SUFFIX,lookup-api.apple.com.edgekey.net
 DOMAIN-SUFFIX,lovebeatsdr.com
 DOMAIN-SUFFIX,lovemarca.com
 DOMAIN-SUFFIX,ls.apple.com.edgesuite.net
@@ -1418,7 +1421,6 @@ DOMAIN-SUFFIX,onsaletrend.com
 DOMAIN-SUFFIX,organicfruitapps.com
 DOMAIN-SUFFIX,outletbeatsshop.com
 DOMAIN-SUFFIX,overapple.com
-DOMAIN-SUFFIX,p-events-delivery.akamaized.net
 DOMAIN-SUFFIX,pascherbeatsmonster.com
 DOMAIN-SUFFIX,paulsimon-music.com
 DOMAIN-SUFFIX,perfectkickz.net
@@ -1506,7 +1508,6 @@ DOMAIN-SUFFIX,thebeatsbydre.net
 DOMAIN-SUFFIX,thebeatsheadphonesale.com
 DOMAIN-SUFFIX,theuab.net
 DOMAIN-SUFFIX,thinkdifferent.us
-DOMAIN-SUFFIX,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 DOMAIN-SUFFIX,topbeatsbydrdreoutlet.com
 DOMAIN-SUFFIX,topbeatsdealer.com
 DOMAIN-SUFFIX,topbeatsforsale.com
