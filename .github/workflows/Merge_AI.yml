@@ -37,8 +37,8 @@ jobs:
                 gsub(/,no-resolve/, "");
                 
                 # 将单独的 DOMAIN 改为 DOMAIN-SUFFIX
-                if ($1 == "DOMAIN") {
-                    $1 = "DOMAIN-SUFFIX";
+                if ($1 == "DOMAIN,") {
+                    $1 = "DOMAIN-SUFFIX,";
                 }
                 
                 # 过滤不需要的类型
