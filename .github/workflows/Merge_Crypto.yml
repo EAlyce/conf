@@ -41,18 +41,7 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bitget.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Coinbase.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list" | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | \
-          sed -E 's/^DOMAIN,([^,]+)$/DOMAIN-SUFFIX,\1/' | \
-          awk -F',' '{
-          if ($1 == "DOMAIN-SUFFIX,") {
-            split($2, parts, ".");
-            if (length(parts) > 2) {
-              $2 = parts[length(parts)-1] "." parts[length(parts)];
-            }
-          }
-          print $0;
-          }' | \
-          sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | grep -v '^#' | sort | uniq > Rule/Crypto.list
+          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | grep -v '^#' | sort | uniq > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
