@@ -30,64 +30,11 @@ install_python() {
 }
 
 setup_environment() {
-    # 安装虚拟环境和pip所需的依赖
-    echo "安装虚拟环境和pip依赖..."
-    if apt-get install -y python3-venv python3-pip libssl-dev > /dev/null; then
-        echo "虚拟环境和pip依赖安装成功."
-    else
-        echo "安装虚拟环境和pip依赖失败，脚本终止."
-        exit 1
-    fi
-
-    # 创建并进入虚拟环境
-    echo "正在设置虚拟环境..."
-    if python3.11 -m venv venv > /dev/null; then
-        source venv/bin/activate
-        echo "虚拟环境设置成功."
-    else
-        echo "设置虚拟环境失败，脚本终止."
-        exit 1
-    fi
-
-    # 更新 pip
-    echo "正在更新 pip..."
-    if python3.11 -m pip install --upgrade pip > /dev/null; then
-        echo "pip 更新成功."
-    else
-        echo "更新 pip 失败，脚本终止."
-        exit 1
-    fi
-
-    # 尝试安装 coloredlogs，轮流使用 pip、python、python3
-    echo "尝试安装 coloredlogs..."
-    installation_success=false
-
-    if pip install coloredlogs > /dev/null 2>&1; then
-        installation_success=true
-    elif python -m pip install coloredlogs > /dev/null 2>&1; then
-        installation_success=true
-    elif python3 -m pip install coloredlogs emoji > /dev/null 2>&1; then
-        installation_success=true
-    fi
-
-    if [ "$installation_success" = true ]; then
-        echo "coloredlogs 安装成功."
-    else
-        echo "安装 coloredlogs 失败，脚本终止."
-        exit 1
-    fi
-
-    # 切换到目录并安装依赖
-    cd /root/pgp$name
-    echo "安装依赖..."
-    if python3.11 -m pip install --force-reinstall -r requirements.txt > /dev/null; then
-        echo "依赖安装成功."
-    else
-        echo "安装依赖失败，脚本终止."
-        exit 1
-    fi
-
-    echo "环境设置完成."
+python3 -m pip install --upgrade pip
+python3 -m pip install --break-system-packages coloredlogs
+cd /root/pgp$name
+python3 -m pip install --break-system-packages -r requirements.txt
+pip install pydantic==1.10.9
 }
 
 
