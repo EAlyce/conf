@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+name=$(shuf -i 10-99 -n 1)
 clone_git() {
     apt install python3-pip python3-venv imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev tesseract-ocr tesseract-ocr-all -y
     # 更新Git
