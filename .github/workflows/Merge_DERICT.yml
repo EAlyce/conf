@@ -22,8 +22,8 @@ jobs:
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/Extra-Direct.conf" | sed 's/,DIRECT$//' | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/QQ-conf-IP-CIDR.conf" | sed 's/,DIRECT$//' | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" | sed 's/,DIRECT$//' | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g; s/[^.]+\.(.*\..*)/\1/' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq | sed 's/^DOMAIN-SUFFIX,//' | sed 's/DOMAIN-SUFFIX,/DOMAIN-SUFFIX,/' > Rule/DIRECT.list
-          
+          } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/; s/[^.]+\.(.*\..*)/\1/' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sed '/^DOMAIN-SUFFIX,/!s/^/DOMAIN-SUFFIX,/' | sort | uniq > Rule/DIRECT.list
+
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
