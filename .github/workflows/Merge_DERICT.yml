@@ -21,6 +21,7 @@ jobs:
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/QQ-conf-IP-CIDR.conf" | sed 's/,DIRECT$//'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" | sed 's/,DIRECT$//'
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | \
+          sed G | \
           awk -F, '{
             if ($1 == "IP-CIDR") {
               print $0;
