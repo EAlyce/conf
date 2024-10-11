@@ -23,9 +23,14 @@ jobs:
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" | sed 's/,DIRECT$//'
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | \
           sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/' | \
-          sed -E 's/^([^,]+)(,[^,]*)?$/\1,/' | \
-          sed -E '/^IP-CIDR/d' | \
-          awk -F, '{split($2,a,"."); if(length(a)>2) print $1","a[length(a)-1]"."a[length(a)]; else print $0}' | \
+          awk -F, '{
+            split($2, a, ".");
+            if (length(a) > 2) {
+              print "DOMAIN-SUFFIX," a[length(a)-1] "." a[length(a)];
+            } else {
+              print $0;
+            }
+          }' | \
           sort | uniq > Rule/DIRECT.list
 
       - name: Check and Configure Git
