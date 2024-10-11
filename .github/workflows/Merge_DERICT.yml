@@ -17,7 +17,7 @@ jobs:
       - name: Get and process China domains
         run: |
           {
-            curl -sSfL "https://github.com/Blankwonder/surge-list/raw/refs/heads/master/cn.list" |  awk '{print $0 "\n"}'|  sed 's/,DIRECT$//'
+            curl -sSfL "https://github.com/Blankwonder/surge-list/raw/refs/heads/master/cn.list" |  awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/QQ-conf-IP-CIDR.conf" |  awk '{print $0 "\n"}' | sed 's/,DIRECT$//'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" |  awk '{print $0 "\n"}' | sed 's/,DIRECT$//'
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | \
