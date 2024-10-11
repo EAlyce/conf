@@ -22,11 +22,16 @@ jobs:
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/QQ-conf-IP-CIDR.conf" | sed 's/,DIRECT$//'
             curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" | sed 's/,DIRECT$//'
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | \
-          sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/' | \
           awk -F, '{
-            split($2, a, ".");
-            if (length(a) > 2) {
-              print "DOMAIN-SUFFIX," a[length(a)-1] "." a[length(a)];
+            if ($1 == "IP-CIDR") {
+              print $0;
+            } else if ($1 == "DOMAIN" || $1 == "DOMAIN-SUFFIX") {
+              split($2, a, ".");
+              if (length(a) > 2) {
+                print "DOMAIN-SUFFIX," a[length(a)-1] "." a[length(a)];
+              } else {
+                print "DOMAIN-SUFFIX," $2;
+              }
             } else {
               print $0;
             }
