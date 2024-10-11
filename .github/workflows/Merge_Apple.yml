@@ -20,7 +20,7 @@ jobs:
             curl -sSfL "https://github.com/SukkaW/Surge/raw/master/Source/ip/apple_services.conf" | awk '{print $0 "\n"}'
             curl -sSfL "https://ruleset.skk.moe/List/non_ip/apple_services.conf" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://raw.githubusercontent.com/EAlyce/ios_rule_script/master/rule/Surge/Apple/Apple_All.list" | awk '{print $0 "\n"}'
+            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list" | awk '{print $0 "\n"}'
           } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Apple.list
 
       - name: Configure Git
