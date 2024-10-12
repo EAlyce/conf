@@ -12,6 +12,7 @@ docker_check() {
 }
 
 start_docker () {
+    apt-get update && apt-get install -y apparmor apparmor-utils
     echo "正在启动 Docker 容器 . . ."
     docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
     echo
