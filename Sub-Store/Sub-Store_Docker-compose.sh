@@ -52,7 +52,7 @@ services:
       - /root/sub-store-data:/opt/app/data
 EOF
 
-    docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
+    docker compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
 
     apt-get update && apt-get install -y cron
     systemctl enable cron && systemctl start cron
