@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 check_root() {
@@ -35,13 +34,8 @@ get_public_ip() {
 
 setup_docker() {
     read -p "请输入自定义密钥（或直接回车生成随机密钥）: " user_input
-    if [ -z "$user_input" ]; then
-        local secret_key=$(openssl rand -hex 16)
-        echo "未输入自定义密钥，已生成随机密钥: $secret_key"
-    else
-        local secret_key=$user_input
-        echo "使用自定义密钥: $secret_key"
-    fi
+    local secret_key=${user_input:-$(openssl rand -hex 16)}
+    echo "使用密钥: $secret_key"
 
     cat <<EOF > docker-compose.yml
 services:
@@ -59,13 +53,15 @@ services:
 EOF
 
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
+
     apt-get update && apt-get install -y cron
-    systemctl enable cron
-    systemctl start cron
+    systemctl enable cron && systemctl start cron
+
     local cron_job="0 * * * * cd $(pwd) && docker-compose pull && docker-compose up -d"
     (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
+
     echo "您的 Sub-Store 信息如下"
-    echo -e "\nSub-Store面板：http://$public_ip:3001\n"
+    echo -e "\nSub-Store面板：http://$public_ip:3001"
     echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
 }
 
