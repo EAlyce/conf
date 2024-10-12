@@ -59,18 +59,11 @@ services:
 EOF
 
     docker-compose up -d || { echo "Error: Unable to start Docker containers" >&2; exit 1; }
-    local cron_job="0 * * * * cd $(pwd) && docker-compose pull && docker-compose up -d"
-  if ! command -v crontab &> /dev/null; then
     apt-get update && apt-get install -y cron
     systemctl enable cron
     systemctl start cron
-  fi
-  local current_cron=$(crontab -l 2>/dev/null)
-  if echo "$current_cron" | grep -q "$cron_job"; then
-  else
+    local cron_job="0 * * * * cd $(pwd) && docker-compose pull && docker-compose up -d"
     (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
-  fi
-
     echo "您的 Sub-Store 信息如下"
     echo -e "\nSub-Store面板：http://$public_ip:3001\n"
     echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
