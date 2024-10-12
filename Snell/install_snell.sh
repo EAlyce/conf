@@ -9,50 +9,14 @@ install_tools() {
     apt-get install -y curl wget git iptables > /dev/null || true
     echo "Tools installation completed."
 }
-
-
 install_docker_and_compose() {
     if ! command -v docker &> /dev/null; then
-        echo "Installing Docker..."
-        # Remove any old versions
-        for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do
-            sudo apt-get remove $pkg
-        done
-
-        # Add Docker's official GPG key
-        sudo apt-get update
-        sudo apt-get install -y ca-certificates curl gnupg
-        sudo install -m 0755 -d /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-        sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-        # Add the repository to Apt sources
-        echo \
-          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-        # Install Docker
-        sudo apt-get update
-        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-        # Start and enable Docker service
-        sudo systemctl start docker
-        sudo systemctl enable docker
-
-        echo "Docker installation completed."
+        echo "Installing Docker and Docker Compose..."
+        curl -fsSL https://get.docker.com | bash > /dev/null 2>&1
+        apt-get install -y docker-compose > /dev/null
+        echo "Docker and Docker Compose installation completed."
     else
-        echo "Docker is already installed."
-    fi
-
-    # Install Docker Compose
-    if ! command -v docker-compose &> /dev/null; then
-        echo "Installing Docker Compose..."
-        sudo curl -L "https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        echo "Docker Compose installation completed."
-    else
-        echo "Docker Compose is already installed."
+        echo "Docker and Docker Compose are already installed."
     fi
 }
 get_public_ip() {
@@ -150,7 +114,7 @@ ipv6 = false
 EOF
 
     mkdir -p "$NODE_DIR/data"
-    docker-compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: Unable to start Docker container"; exit 1; }
+    docker compose -f "$NODE_DIR/docker-compose.yml" up -d || { echo "Error: Unable to start Docker container"; exit 1; }
     echo 
     echo "Snell 查看日志请输入：docker logs Snell$RANDOM_PORT"
     echo 
