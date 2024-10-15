@@ -134,11 +134,6 @@ listen: :$RANDOM_PORT
 auth:
   type: password
   password: $PASSWORD
-masquerade: 
-  type: proxy
-  proxy:
-    url: https://www.baidu.com 
-    rewriteHost: true" > hysteria.yaml
 EOF
 
     docker compose -f "$NODE_DIR/docker-compose.yml" up -d
