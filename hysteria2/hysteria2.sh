@@ -113,7 +113,7 @@ auth:
 masquerade:
   type: proxy
   proxy:
-    url: https://wew.bing.com 
+    url: https://www.bing.com 
     rewriteHost: true
 port-hopping: 23557-63555
 port-hopping-interval: 30
