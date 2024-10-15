@@ -131,6 +131,9 @@ EOF
     # 创建 hysteria.yaml
     cat <<EOF > "$NODE_DIR/hysteria.yaml"
 listen: :$RANDOM_PORT
+tls:
+  cert: $NODE_DIR/acme/cert.crt
+  key: $NODE_DIR/acme/private.key
 auth:
   type: password
   password: $PASSWORD
