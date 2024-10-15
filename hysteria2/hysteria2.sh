@@ -131,17 +131,14 @@ EOF
     # 创建 hysteria.yaml
     cat <<EOF > "$NODE_DIR/hysteria.yaml"
 listen: :$RANDOM_PORT
-tls:
-  cert: /acme/cert.crt
-  key: /acme/private.key
 auth:
   type: password
   password: $PASSWORD
-masquerade:
+masquerade: 
   type: proxy
   proxy:
-    url: https://www.bing.com
-    rewriteHost: true
+    url: https://www.baidu.com 
+    rewriteHost: true" > hysteria.yaml
 EOF
 
     docker compose -f "$NODE_DIR/docker-compose.yml" up -d
