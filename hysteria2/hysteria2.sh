@@ -115,8 +115,35 @@ install_hysteria() {
     generate_port
     generate_password
     setup_firewall
+# Set the node directory
+NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
 
-    cat << EOF > ./hysteria.yaml
+# Create the directory
+mkdir -p "$NODE_DIR"
+
+# 创建必要的目录和文件
+mkdir -p "$NODE_DIR/acme"
+touch "$NODE_DIR/acme/cert.crt"
+touch "$NODE_DIR/acme/private.key"
+
+# 创建 docker-compose.yml
+cat <<EOF > "$NODE_DIR/docker-compose.yml"
+services:
+  hysteria:
+    image: tobyxdd/hysteria
+    container_name: hysteria$RANDOM_PORT
+    restart: always
+    network_mode: "host"
+    volumes:
+      - $NODE_DIR/acme:/acme
+      - $NODE_DIR/hysteria.yaml:/etc/hysteria.yaml
+    command: ["server", "-c", "/etc/hysteria.yaml"]
+volumes:
+  acme:
+EOF
+
+# 创建 hysteria.yaml
+cat << EOF > "$NODE_DIR/hysteria.yaml"
 listen: :$RANDOM_PORT
 tls:
   cert: /acme/cert.crt
@@ -127,26 +154,11 @@ auth:
 masquerade:
   type: proxy
   proxy:
-    url: https://wew.bing.com
+    url: https://www.bing.com
     rewriteHost: true
 EOF
 
-    cat << EOF > ./docker-compose.yml
-services:
-  hysteria:
-    image: tobyxdd/hysteria
-    container_name: hysteria
-    restart: always
-    network_mode: "host"
-    volumes:
-      - ./acme:/acme
-      - ./hysteria.yaml:/etc/hysteria.yaml
-    command: ["server", "-c", "/etc/hysteria.yaml"]
-volumes:
-  acme:
-EOF
-
-    docker compose up -d
+   docker compose -f "$NODE_DIR/docker-compose.yml" up -d
 
     if [ "$(docker ps -q -f name=hysteria)" ]; then
         echo "Hysteria 2 container started successfully."
