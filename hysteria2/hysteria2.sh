@@ -74,14 +74,6 @@ generate_password() {
     echo "Generated password: $PASSWORD"
 }
 
-generate_cert() {
-    cert_path="./acme/cert.crt"
-    key_path="./acme/private.key"
-    mkdir -p ./acme
-    openssl ecparam -genkey -name prime256v1 -out "$key_path"
-    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=wew.bing.com"
-    chmod 777 "$cert_path" "$key_path"
-}
 
 generate_port() {
     RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
@@ -105,29 +97,24 @@ setup_firewall() {
 }
 
 install_hysteria() {
-    check_root
-    install_tools
-    install_docker_and_compose
-    get_public_ip
-    setup_environment
+    # Set the node directory
+    NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
 
-    generate_cert
-    generate_port
-    generate_password
-    setup_firewall
-# Set the node directory
-NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
+    # Create the directory
+    mkdir -p "$NODE_DIR"
 
-# Create the directory
-mkdir -p "$NODE_DIR"
+    # 创建必要的目录和文件
+    mkdir -p "$NODE_DIR/acme"
+    touch "$NODE_DIR/acme/cert.crt"
+    touch "$NODE_DIR/acme/private.key"
+    cert_path="$NODE_DIR/acme/cert.crt"
+    key_path="$NODE_DIR/acme/private.key"
+    openssl ecparam -genkey -name prime256v1 -out "$key_path"
+    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=wew.bing.com"
+    chmod 777 "$cert_path" "$key_path"
 
-# 创建必要的目录和文件
-mkdir -p "$NODE_DIR/acme"
-touch "$NODE_DIR/acme/cert.crt"
-touch "$NODE_DIR/acme/private.key"
-
-# 创建 docker-compose.yml
-cat <<EOF > "$NODE_DIR/docker-compose.yml"
+    # 创建 docker-compose.yml
+    cat <<EOF > "$NODE_DIR/docker-compose.yml"
 services:
   hysteria:
     image: tobyxdd/hysteria
@@ -142,8 +129,8 @@ volumes:
   acme:
 EOF
 
-# 创建 hysteria.yaml
-cat << EOF > "$NODE_DIR/hysteria.yaml"
+    # 创建 hysteria.yaml
+    cat <<EOF > "$NODE_DIR/hysteria.yaml"
 listen: :$RANDOM_PORT
 tls:
   cert: /acme/cert.crt
@@ -158,14 +145,7 @@ masquerade:
     rewriteHost: true
 EOF
 
-   docker compose -f "$NODE_DIR/docker-compose.yml" up -d
-
-    if [ "$(docker ps -q -f name=hysteria)" ]; then
-        echo "Hysteria 2 container started successfully."
-    else
-        echo "Hysteria 2 container failed to start."
-        exit 1
-    fi
+    docker compose -f "$NODE_DIR/docker-compose.yml" up -d
 
     LOCATION=${LOCATION:-"Unknown"}
 node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
@@ -175,4 +155,18 @@ echo
 
 }
 
-install_hysteria
+install_hysteria() {
+
+    check_root
+    install_tools
+    install_docker_and_compose
+    get_public_ip
+    setup_environment
+    generate_port
+    generate_password
+    setup_firewall
+    install_hysteria
+}
+
+main
+
