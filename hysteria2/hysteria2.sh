@@ -7,7 +7,7 @@ check_root() {
     fi
 }
 
-# Install necessary tools
+
 install_tools() {
     echo "Updating package list and installing tools..."
     apt-get update -y > /dev/null
