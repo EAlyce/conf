@@ -90,8 +90,8 @@ setup_firewall() {
     for PORT in 23556 63556; do
         iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT
     done
-
-    iptables -t nat -A PREROUTING -i eth0 -p udp -m multiport --dport 23556,63556 -j DNAT --to-destination :$RANDOM_PORT
+    
+    iptables -t nat -A PREROUTING -i eth0 -p udp --dport 23556:63556 -j DNAT --to-destination :$RANDOM_PORT
 
     echo "防火墙设置完成."
 }
