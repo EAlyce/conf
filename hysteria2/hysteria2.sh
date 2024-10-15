@@ -132,11 +132,10 @@ auth:
 masquerade:                     # 下面的可以不需要
   type: proxy
   proxy:
-    url: https://www.baidu.com  # 伪装网站
+    url: https://bing.com/
     rewriteHost: true
 EOL
 
-# Step 6: 设置端口跳跃规则
 echo "设置端口跳跃规则..."
 iptables -t nat -A PREROUTING -i eth0 -p udp --dport $min_port:$max_port -j DNAT --to-destination :$port
 
@@ -147,7 +146,6 @@ docker compose up -d
 # Step 8: 打印容器日志
 docker logs hysteria
 
-# Step 9: 打印 Clash 配置
 echo "Clash 配置:
 - name: hysteria
   type: hysteria
@@ -155,5 +153,5 @@ echo "Clash 配置:
   port: $port
   ports: $min_port-$max_port/$port
   password: $password
-  up: 100         # 这两项建议用 speedtest.cn 测速的值来填
+  up: 100      
   down: 1000"
