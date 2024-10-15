@@ -92,19 +92,17 @@ generate_port() {
 }
 
 setup_firewall() {
-    RANDOM_PORT=$((RANDOM % (63555 - 23555 + 1) + 23555))
-    
-    # 开放单个随机端口
+    RANDOM_PORT=$((RANDOM % (63556 - 23556 + 1) + 23556))
     iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
-    echo "Random port $RANDOM_PORT added."
 
-    # 快速开放端口范围 23555-63555
-    iptables -A INPUT -p tcp --dport 23555:63555 -j ACCEPT
-    echo "Port range 23555-63555 added."
-    
-    echo "Firewall setup complete."
+    for PORT in 23556 63556; do
+        iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT
+    done
+
+    iptables -t nat -A PREROUTING -i eth0 -p udp -m multiport --dport 23556,63556 -j DNAT --to-destination :$RANDOM_PORT
+
+    echo "防火墙设置完成."
 }
-
 
 install_hysteria() {
     check_root
