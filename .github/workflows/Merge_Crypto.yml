@@ -12,7 +12,7 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@latest
+      - uses: actions/checkout@v4
 
       - name: Get, clean, and deduplicate domains
         run: |
