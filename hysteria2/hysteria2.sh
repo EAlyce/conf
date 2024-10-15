@@ -7,7 +7,6 @@ check_root() {
     fi
 }
 
-
 install_tools() {
     echo "Updating package list and installing tools..."
     apt-get update -y > /dev/null
@@ -19,7 +18,6 @@ install_tools() {
     echo "Tools installation completed."
 }
 
-# Install Docker and Docker Compose (new version)
 install_docker_and_compose() {
     if ! command -v docker &> /dev/null; then
         echo "Installing Docker..."
@@ -31,7 +29,6 @@ install_docker_and_compose() {
     fi
 }
 
-# Get the public IP address and location
 get_public_ip() {
     ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
@@ -47,7 +44,6 @@ get_public_ip() {
     exit 1
 }
 
-# Set up system environment and network configurations
 setup_environment() {
     locale-gen en_US.UTF-8
     update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
@@ -67,7 +63,6 @@ setup_environment() {
     done
 }
 
-# Generate a random password
 generate_password() {
     PASSWORD=$(openssl rand -base64 32)
     echo "Generated password: $PASSWORD"
@@ -79,40 +74,56 @@ generate_port() {
     while ss -tunlp | grep -w udp | grep -q "$RANDOM_PORT"; do
         RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
     done
-    echo "Assigned port: $RANDOM_PORT"
+    echo "$RANDOM_PORT" 
 }
 
 setup_firewall() {
-    RANDOM_PORT=$((RANDOM % (63556 - 23556 + 1) + 23556))
+
     iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
 
     for PORT in 23556 63556; do
         iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT
     done
-    
-    iptables -t nat -A PREROUTING -i eth0 -p udp --dport 23556:63556 -j DNAT --to-destination :$RANDOM_PORT
 
-    echo "防火墙设置完成."
+    iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
+    iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+    iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
 }
-
 install_hysteria() {
-    # Set the node directory
     NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
-
-    # Create the directory
-    mkdir -p "$NODE_DIR"
-
-    # 创建必要的目录和文件
     mkdir -p "$NODE_DIR/acme"
-    touch "$NODE_DIR/acme/cert.crt"
-    touch "$NODE_DIR/acme/private.key"
     cert_path="$NODE_DIR/acme/cert.crt"
     key_path="$NODE_DIR/acme/private.key"
     openssl ecparam -genkey -name prime256v1 -out "$key_path"
     openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=wew.bing.com"
-    chmod 777 "$cert_path" "$key_path"
+    chmod 600 "$key_path" 
+    chmod 644 "$cert_path"
+    cat << EOF > "$NODE_DIR/hysteria.yaml"
+listen: :$RANDOM_PORT
 
-    # 创建 docker-compose.yml
+tls:
+  cert: /acme/cert.crt
+  key: /acme/private.key
+
+quic:
+  initStreamReceiveWindow: 16777216
+  maxStreamReceiveWindow: 16777216
+  initConnReceiveWindow: 33554432
+  maxConnReceiveWindow: 33554432
+
+auth:
+  type: password
+  password: $PASSWORD
+
+masquerade:
+  type: proxy
+  proxy:
+    url: https://wew.bing.com 
+    rewriteHost: true
+port-hopping: 23557-63555
+port-hopping-interval: 30
+EOF
+
     cat <<EOF > "$NODE_DIR/docker-compose.yml"
 services:
   hysteria:
@@ -128,26 +139,17 @@ volumes:
   acme:
 EOF
 
-    # 创建 hysteria.yaml
-    cat <<EOF > "$NODE_DIR/hysteria.yaml"
-listen: :$RANDOM_PORT
-tls:
-  cert: $NODE_DIR/acme/cert.crt
-  key: $NODE_DIR/acme/private.key
-auth:
-  type: password
-  password: $PASSWORD
-EOF
-
     docker compose -f "$NODE_DIR/docker-compose.yml" up -d
 
-    LOCATION=${LOCATION:-"Unknown"}
-node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
-echo 
-echo "$node_info"
-echo 
+    docker logs "hysteria$RANDOM_PORT" || echo "Hysteria failed to start."
 
+    LOCATION=${LOCATION:-"Unknown"}
+    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
+    echo 
+    echo "$node_info"
+    echo 
 }
+
 
 main() {
 
@@ -163,4 +165,3 @@ main() {
 }
 
 main
-
