@@ -92,14 +92,8 @@ generate_port() {
 }
 
 setup_firewall() {
-    RANDOM_PORT=$((RANDOM % (63555 - 23555 + 1) + 23555))
     iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
-    echo "Firewall rule added for random port $RANDOM_PORT."
-
-    for port in {23555..63555}; do
-        iptables -A INPUT -p tcp --dport "$port" -j ACCEPT
-        echo "Firewall rule added for port $port."
-    done
+    echo "Firewall rule added for port $RANDOM_PORT."
 }
 
 install_hysteria() {
