@@ -91,8 +91,10 @@ setup_firewall() {
     done
     
     # 允许端口跳跃范围
-iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
-iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+
+    iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
+    iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+    iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
 
     echo "防火墙设置完成."
 }
