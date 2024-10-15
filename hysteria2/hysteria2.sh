@@ -148,7 +148,7 @@ EOF
     fi
 
     LOCATION=${LOCATION:-"Unknown"}
-node_info="$LOCATION $RANDOM_PORT = $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
+node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
 echo "$node_info"
 
 }
