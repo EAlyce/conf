@@ -157,7 +157,7 @@ echo
 
 }
 
-install_hysteria() {
+main() {
 
     check_root
     install_tools
