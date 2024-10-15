@@ -68,7 +68,6 @@ generate_password() {
     echo "Generated password: $PASSWORD"
 }
 
-
 generate_port() {
     RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
     while ss -tunlp | grep -w udp | grep -q "$RANDOM_PORT"; do
@@ -78,17 +77,13 @@ generate_port() {
 }
 
 setup_firewall() {
-
-    iptables -A INPUT -p tcp --dport "$RANDOM_PORT" -j ACCEPT
-
-    for PORT in 23556 63556; do
-        iptables -A INPUT -p tcp --dport "$PORT" -j ACCEPT
-    done
+ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
 
     iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
     iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
     iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
 }
+
 install_hysteria() {
     NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
     mkdir -p "$NODE_DIR/acme"
@@ -140,8 +135,7 @@ volumes:
 EOF
 
     docker compose -f "$NODE_DIR/docker-compose.yml" up -d
-
-    docker logs "hysteria$RANDOM_PORT" || echo "Hysteria failed to start."
+    docker logs hysteria$RANDOM_PORT || echo "Hysteria failed to start."
 
     LOCATION=${LOCATION:-"Unknown"}
     node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
@@ -150,9 +144,7 @@ EOF
     echo 
 }
 
-
 main() {
-
     check_root
     install_tools
     install_docker_and_compose
