@@ -90,7 +90,7 @@ install_hysteria() {
     cert_path="$NODE_DIR/acme/cert.crt"
     key_path="$NODE_DIR/acme/private.key"
     openssl ecparam -genkey -name prime256v1 -out "$key_path"
-    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=wew.bing.com"
+    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=gateway.icloud.com"
     chmod 600 "$key_path" 
     chmod 644 "$cert_path"
     cat << EOF > "$NODE_DIR/hysteria.yaml"
@@ -113,7 +113,7 @@ auth:
 masquerade:
   type: proxy
   proxy:
-    url: https://www.bing.com 
+    url: https://gateway.icloud.com
     rewriteHost: true
 port-hopping: 23557-63555
 port-hopping-interval: 30
@@ -138,7 +138,7 @@ EOF
     docker logs hysteria$RANDOM_PORT || echo "Hysteria failed to start."
 
     LOCATION=${LOCATION:-"Unknown"}
-    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
+    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=gateway.icloud.com, port-hopping=23557-63555, port-hopping-interval=30"
     echo 
     echo "$node_info"
     echo 
