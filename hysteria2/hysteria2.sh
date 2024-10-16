@@ -8,6 +8,7 @@ check_root() {
 }
 
 install_tools() {
+    date -d "@$(curl -s https://1.1.1.1/cdn-cgi/trace | grep -oP '(?<=ts=)\d+\.\d+' | cut -d '.' -f 1)"
     echo "Updating package list and installing tools..."
     apt-get update -y > /dev/null
     for tool in curl wget git iptables; do
@@ -56,8 +57,6 @@ setup_environment() {
         echo "vm.swappiness = 0"
     } >> "$sysctl_conf" && sysctl -p > /dev/null 2>&1
     echo "System configuration completed."
-
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null
     for iface in $(ls /sys/class/net | grep -v lo); do
         ip link set dev "$iface" mtu 1500
     done
