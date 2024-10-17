@@ -59,7 +59,7 @@ EOF
 
     local cron_job="0 * * * * cd $(pwd) && docker-compose pull && docker-compose up -d"
     (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
-
+    crontab -l | grep -v '^#' | sed '/^\s*$/d' | sort | uniq | crontab -
     echo "您的 Sub-Store 信息如下"
     echo -e "\nSub-Store面板：http://$public_ip:3001"
     echo -e "\n后端地址：http://$public_ip:3001/$secret_key\n"
