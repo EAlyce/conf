@@ -23,11 +23,5 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # 允许已建立的连接
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-# 保存规则
-iptables-save > /etc/iptables/rules.v4
-
-# 重启 Docker
-systemctl restart docker
-
 # 查看当前规则
 iptables -L -n -v
