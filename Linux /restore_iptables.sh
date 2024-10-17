@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # 清空现有规则
 iptables -F
 iptables -X
