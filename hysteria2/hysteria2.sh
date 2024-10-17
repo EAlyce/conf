@@ -79,6 +79,26 @@ setup_firewall() {
    # ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
    # iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
    # iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+       # 检查是否存在正在运行的 Docker 容器
+    if [ -z "$(docker ps -q)" ]; then
+        echo "未检测到运行中的 Docker 容器，正在清理未使用的 Docker 相关 iptables 规则..."
+
+        # 清空 DOCKER 链和 DOCKER-USER 链
+        iptables -F DOCKER
+        iptables -F DOCKER-USER
+        iptables -F DOCKER-ISOLATION-STAGE-1
+        iptables -F DOCKER-ISOLATION-STAGE-2
+
+        # 删除 DOCKER 链（如果存在）
+        iptables -X DOCKER
+        iptables -X DOCKER-USER
+        iptables -X DOCKER-ISOLATION-STAGE-1
+        iptables -X DOCKER-ISOLATION-STAGE-2
+
+        echo "清理完毕，不再使用的 Docker 相关 iptables 规则已删除。"
+    else
+        echo "检测到正在运行的 Docker 容器，未清理任何规则。"
+    fi
    # 1. 清空 INPUT 链的所有规则
     iptables -F INPUT
    # 2. 设置 INPUT 链的默认策略为 ACCEPT
