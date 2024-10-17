@@ -67,43 +67,16 @@ generate_password() {
     echo "Generated password: $PASSWORD"
 }
 
-generate_port() {
-    RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
-    while ss -tunlp | grep -w udp | grep -q "$RANDOM_PORT"; do
-        RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
-    done
-    echo "$RANDOM_PORT" 
-}
+
 
 setup_firewall() {
-   # ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
-   # iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
-   # iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
-       # 检查是否存在正在运行的 Docker 容器
-    if [ -z "$(docker ps -q)" ]; then
-        echo "未检测到运行中的 Docker 容器，正在清理未使用的 Docker 相关 iptables 规则..."
+RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
+while ss -tunlp | grep -w udp | grep -q "$RANDOM_PORT"; do
+    RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
+done
 
-        # 清空 DOCKER 链和 DOCKER-USER 链
-        iptables -F DOCKER
-        iptables -F DOCKER-USER
-        iptables -F DOCKER-ISOLATION-STAGE-1
-        iptables -F DOCKER-ISOLATION-STAGE-2
+echo "使用的随机端口: $RANDOM_PORT"
 
-        # 删除 DOCKER 链（如果存在）
-        iptables -X DOCKER
-        iptables -X DOCKER-USER
-        iptables -X DOCKER-ISOLATION-STAGE-1
-        iptables -X DOCKER-ISOLATION-STAGE-2
-
-        echo "清理完毕，不再使用的 Docker 相关 iptables 规则已删除。"
-    else
-        echo "检测到正在运行的 Docker 容器，未清理任何规则。"
-    fi
-   # 1. 清空 INPUT 链的所有规则
-    iptables -F INPUT
-   # 2. 设置 INPUT 链的默认策略为 ACCEPT
-    iptables -P INPUT ACCEPT
-    iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
 }
 
 install_hysteria() {
@@ -112,7 +85,7 @@ install_hysteria() {
     cert_path="$NODE_DIR/acme/cert.crt"
     key_path="$NODE_DIR/acme/private.key"
     openssl ecparam -genkey -name prime256v1 -out "$key_path"
-    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=gateway.icloud.com"
+    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=www.bing.com"
     chmod 600 "$key_path" 
     chmod 644 "$cert_path"
     cat << EOF > "$NODE_DIR/hysteria.yaml"
@@ -135,7 +108,7 @@ auth:
 masquerade:
   type: proxy
   proxy:
-    url: https://gateway.icloud.com
+    url: https://www.bing.com
     rewriteHost: true
 port-hopping: 23557-63555
 port-hopping-interval: 30
@@ -158,9 +131,9 @@ EOF
 
     docker compose -f "$NODE_DIR/docker-compose.yml" up -d
     docker logs hysteria$RANDOM_PORT || echo "Hysteria failed to start."
-
+    # port-hopping=23557-63555, port-hopping-interval=30"
     LOCATION=${LOCATION:-"Unknown"}
-    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=gateway.icloud.com, port-hopping=23557-63555, port-hopping-interval=30"
+    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=www.bing.com"
     echo 
     echo "$node_info"
     echo 
@@ -172,7 +145,7 @@ main() {
     install_docker_and_compose
     get_public_ip
     setup_environment
-    generate_port
+    
     generate_password
     setup_firewall
     install_hysteria
