@@ -76,10 +76,13 @@ generate_port() {
 }
 
 setup_firewall() {
-# ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
-
-    iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
-    iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+   # ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
+   # iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
+   # iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
+   # 1. 清空 INPUT 链的所有规则
+    iptables -F INPUT
+   # 2. 设置 INPUT 链的默认策略为 ACCEPT
+    iptables -P INPUT ACCEPT
     iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
 }
 
