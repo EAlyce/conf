@@ -77,11 +77,16 @@ generate_port() {
 }
 
 setup_firewall() {
-ufw disable; iptables -F; iptables -t nat -F; iptables -t mangle -F; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; systemctl stop firewalld; systemctl disable firewalld
+set_port_range() {
+    local firstport=20000
+    local endport=50000
 
-    iptables -A INPUT -p tcp --dport 23557:63555 -j ACCEPT
-    iptables -A INPUT -p udp --dport 23557:63555 -j ACCEPT
-    iptables -t nat -A PREROUTING -p udp --dport 23557:63555 -j DNAT --to-destination :$RANDOM_PORT
+    # 添加iptables规则
+    iptables -t nat -A PREROUTING -p udp --dport $firstport:$endport -j DNAT --to-destination :$RANDOM_PORT
+    ip6tables -t nat -A PREROUTING -p udp --dport $firstport:$endport -j DNAT --to-destination :$RANDOM_PORT
+    netfilter-persistent save >/dev/null 2>&1
+}
+
 }
 
 install_hysteria() {
