@@ -1,0 +1,8 @@
+#!name=Google China Redirection
+#!desc=Redirect requests from google.cn to google.com
+
+[URL Rewrite]
+^https?://(www.)?(g|google)\.cn https://www.google.com 307
+
+[MITM]
+hostname = %APPEND% g.cn,www.g.cn,google.cn,www.google.cn
