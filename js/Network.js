@@ -1,4 +1,3 @@
-// @timestamp thenkey 2024-01-31 13:54:57
 let e = "globe.asia.australia";
 let s = true, o = 1000, c = 3000, a = {};
 
@@ -133,5 +132,7 @@ async function m(e, t) {
         }
     }
     
+    // 传递最终结果给 $done()
     a = {title: l + y, content: "" + w + p};
-})().catch((e) => console.log(e.message)).finally(() => $done(a));
+    $done(a);
+})().catch((e) => console.log(e.message));
