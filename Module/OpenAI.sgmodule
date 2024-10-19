@@ -1,0 +1,8 @@
+#!name=GPT
+#!desc=GPT
+
+
+[Panel]
+AI= script-name=AI,update-interval=-1
+[Script]
+AI = type=generic,timeout=6,script-path=https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/js/gpt.js
