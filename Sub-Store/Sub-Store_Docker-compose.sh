@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/iptables.sh)
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/Linux.sh)"
 check_root() {
     if [ "$(id -u)" != "0" ]; then
         echo "运行脚本需要 root 权限" >&2
