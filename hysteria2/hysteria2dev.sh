@@ -1,109 +1,123 @@
 #!/usr/bin/env bash
 
-check_root() {
-    if [[ "$(id -u)" -ne 0 ]]; then
-        echo "Error: You must be root to run this script."
-        exit 1
-    fi
-}
+set -e  # 出现错误时立即退出
 
-install_tools() {
-    echo "Updating package list and installing tools..."
-    apt-get update -y > /dev/null
-    for tool in curl wget git iptables; do
-        if ! command -v "$tool" &> /dev/null; then
-            apt-get install -y "$tool" > /dev/null
+# 检查并安装依赖
+check_dependencies() {
+    local dependencies=("curl" "wget" "openssl" "iptables" "netfilter-persistent")
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &>/dev/null; then
+            echo "$dep 未安装，正在安装..."
+            apt-get update && apt -y install "$dep" || { echo "安装 $dep 失败"; exit 1; }
         fi
     done
-    echo "Tools installation completed."
 }
 
-install_docker_and_compose() {
-    if ! command -v docker &> /dev/null; then
-        echo "Installing Docker..."
-        curl -fsSL https://get.docker.com | bash > /dev/null 2>&1
-        apt-get install -y docker-compose-plugin > /dev/null
-        echo "Docker and Docker Compose installed."
-    else
-        echo "Docker and Docker Compose are already installed."
-    fi
-}
-
+# 获取公共 IP 和位置
 get_public_ip() {
-    ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
+    local ip_services=("ifconfig.me" "ipinfo.io/ip" "icanhazip.com" "ipecho.net/plain" "ident.me")
     for service in "${ip_services[@]}"; do
-        public_ip=$(curl -s --max-time 3 "$service")
+        public_ip=$(curl -s --max-time 3 "$service" || { echo "获取公共 IP 失败"; return 1; })
         if [[ "$public_ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Public IP: $public_ip"
-            LOCATION=$(curl -s --max-time 3 ipinfo.io/city)
-            [ -n "$LOCATION" ] && echo "Host location: $LOCATION" || echo "Unable to obtain location."
+            echo "公共 IP: $public_ip"
+            # 尝试获取位置
+            location=$(curl -s --max-time 3 "ipinfo.io/$public_ip" | jq -r '.city + ", " + .region + ", " + .country' || echo "无法获取位置")
+            echo "主机位置: ${location:-'未知'}"
+            return 0
+        fi
+    done
+    echo "无法获取公共 IP."
+    return 1
+}
+
+
+# 生成 SSL 证书和密钥
+generate_cert() {
+    local cert_path="$1"
+    local key_path="$2"
+    openssl ecparam -genkey -name prime256v1 -out "$key_path"
+    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=$3"
+    chmod 600 "$cert_path" "$key_path"
+    echo "证书已生成: $cert_path"
+    echo "密钥已生成: $key_path"
+}
+
+# 随机选择一个未被占用的端口
+get_random_port() {
+    local port
+    while true; do
+        port=$(shuf -i 40000-50000 -n 1)
+        if ! ss -tunlp | grep -w udp | grep -q ":$port"; then
+            echo "$port"
             return
         fi
     done
-    echo "Unable to obtain public IP."
-    exit 1
 }
 
-setup_environment() {
-    locale-gen en_US.UTF-8
-    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
-    sysctl_conf="/etc/sysctl.conf"
-    {
-        echo "net.ipv4.tcp_fastopen = 0"
-        echo "net.core.default_qdisc = fq"
-        echo "net.ipv4.tcp_congestion_control = bbr"
-        echo "net.ipv4.tcp_ecn = 1"
-        echo "vm.swappiness = 0"
-    } >> "$sysctl_conf" && sysctl -p > /dev/null 2>&1
-    echo "System configuration completed."
-
-    iptables -A INPUT -p udp --dport 60000:61000 -j ACCEPT > /dev/null
-    for iface in $(ls /sys/class/net | grep -v lo); do
-        ip link set dev "$iface" mtu 1500
-    done
-}
-
-generate_password() {
-    PASSWORD=$(openssl rand -base64 32)
-    echo "Generated password: $PASSWORD"
-}
-
-generate_port() {
-    RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
-    while ss -tunlp | grep -w udp | grep -q "$RANDOM_PORT"; do
-        RANDOM_PORT=$(shuf -i 10000-65535 -n 1)
-    done
-    echo "$RANDOM_PORT" 
-}
-
-setup_firewall() {
-set_port_range() {
-    local firstport=20000
+# 配置端口跳转
+setup_port_forwarding() {
+    local firstport=40000
     local endport=50000
+    local target_port="$1"
 
-    # 添加iptables规则
-    iptables -t nat -A PREROUTING -p udp --dport $firstport:$endport -j DNAT --to-destination :$RANDOM_PORT
-    ip6tables -t nat -A PREROUTING -p udp --dport $firstport:$endport -j DNAT --to-destination :$RANDOM_PORT
+    echo "配置端口跳转从 $firstport 到 $endport，目标端口 $target_port"
+
+    # 清空现有规则
+    bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/iptables.sh)
+
+    # 添加新的 DNAT 规则
+    iptables -t nat -A PREROUTING -p udp --dport "$firstport:$endport" -j DNAT --to-destination :"$target_port"
+    ip6tables -t nat -A PREROUTING -p udp --dport "$firstport:$endport" -j DNAT --to-destination :"$target_port"
+
+    # 检查是否添加成功
+    if iptables -t nat -L -n | grep -q "DNAT.*$target_port"; then
+        echo "端口跳转配置成功。"
+    else
+        echo "配置端口跳转失败。"
+        return 1
+    fi
+
+    # 保存规则
     netfilter-persistent save >/dev/null 2>&1
 }
 
+# 生成随机密码
+generate_random_password() {
+    openssl rand -hex 8
 }
 
+# 显示配置
+show_configuration() {
+    local location="$1"
+    local port="$2"
+    local public_ip="$3"
+    local password="$4"
+    local proxy_site="$5"
+
+    echo "$location $port = hysteria2, $public_ip, $port, password=$password, ecn=true, skip-cert-verify=true, sni=$proxy_site, port-hopping=40000-50000, port-hopping-interval=30"
+}
+
+# Hysteria 安装
 install_hysteria() {
-    NODE_DIR="/root/hysteria2/hysteria$RANDOM_PORT"
-    mkdir -p "$NODE_DIR/acme"
-    cert_path="$NODE_DIR/acme/cert.crt"
-    key_path="$NODE_DIR/acme/private.key"
-    openssl ecparam -genkey -name prime256v1 -out "$key_path"
-    openssl req -new -x509 -days 36500 -key "$key_path" -out "$cert_path" -subj "/CN=wew.bing.com"
-    chmod 600 "$key_path" 
-    chmod 644 "$cert_path"
-    cat << EOF > "$NODE_DIR/hysteria.yaml"
-listen: :$RANDOM_PORT
+    wget -N https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/install_server.sh
+    bash install_server.sh
+
+    # 检查安装是否成功
+    if [[ -f "/usr/local/bin/hysteria" ]]; then
+        echo "Hysteria 2 安装成功！"
+    else
+        echo "Hysteria 2 安装失败！"
+        exit 1
+    fi
+
+    mkdir -p /etc/hysteria
+
+    cat << EOF > /etc/hysteria/config.yaml
+listen: :$1
 
 tls:
-  cert: /acme/cert.crt
-  key: /acme/private.key
+  cert: /etc/hysteria/cert.crt
+  key: /etc/hysteria/private.key
 
 quic:
   initStreamReceiveWindow: 16777216
@@ -113,52 +127,92 @@ quic:
 
 auth:
   type: password
-  password: $PASSWORD
+  password: $2
 
 masquerade:
   type: proxy
   proxy:
-    url: https://wew.bing.com 
+    url: https://$3
     rewriteHost: true
-port-hopping: 23557-63555
-port-hopping-interval: 30
 EOF
 
-    cat <<EOF > "$NODE_DIR/docker-compose.yml"
-services:
-  hysteria:
-    image: tobyxdd/hysteria
-    container_name: hysteria$RANDOM_PORT
-    restart: always
-    network_mode: "host"
-    volumes:
-      - $NODE_DIR/acme:/acme
-      - $NODE_DIR/hysteria.yaml:/etc/hysteria.yaml
-    command: ["server", "-c", "/etc/hysteria.yaml"]
-volumes:
-  acme:
-EOF
-
-    docker compose -f "$NODE_DIR/docker-compose.yml" up -d
-    docker logs hysteria$RANDOM_PORT || echo "Hysteria failed to start."
-
-    LOCATION=${LOCATION:-"Unknown"}
-    node_info="$LOCATION $RANDOM_PORT = hysteria2, $public_ip, $RANDOM_PORT, password=$PASSWORD, ecn=true, skip-cert-verify=true, sni=wew.bing.com, port-hopping=23557-63555, port-hopping-interval=30"
-    echo 
-    echo "$node_info"
-    echo 
+    # 启动服务
+    systemctl daemon-reload
+    systemctl enable hysteria-server
+    systemctl start hysteria-server
 }
 
-main() {
-    check_root
-    install_tools
-    install_docker_and_compose
-    get_public_ip
-    setup_environment
-    generate_port
-    generate_password
-    setup_firewall
-    install_hysteria
+# 卸载 Hysteria 服务
+uninstall_hysteria() {
+    systemctl stop hysteria-server.service >/dev/null 2>&1
+    systemctl disable hysteria-server.service >/dev/null 2>&1
+    rm -f /lib/systemd/system/hysteria-server.service /lib/systemd/system/hysteria-server@.service
+    rm -rf /usr/local/bin/hysteria /etc/hysteria /root/hy /root/hysteria.sh
+    iptables -t nat -F PREROUTING >/dev/null 2>&1
+    netfilter-persistent save >/dev/null 2>&1
+
+    echo "Hysteria 2 已彻底卸载完成！"
 }
 
-main
+# 更新 Hysteria 内核
+update_core() {
+    wget -N https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/install_server.sh
+    bash install_server.sh
+    rm -f install_server.sh
+}
+
+# 菜单交互
+menu() {
+    local first_run=true  # 添加标志来跟踪是否是第一次运行
+    while true; do
+        clear
+        echo "Hysteria 2 管理脚本"
+        echo "--------------------"
+        echo "1. 安装 Hysteria 2"
+        echo "2. 卸载 Hysteria 2"
+        echo "3. 显示 Hysteria 2 配置文件"
+        echo "4. 更新 Hysteria 2 内核"
+        echo "0. 退出脚本"
+        echo "--------------------"
+
+        if $first_run; then
+            read -rp "请输入选项 [0-4]: " menuInput
+            first_run=false  # 第一次输入后将标志设为 false
+        else
+            read -rp "请输入选项 [0-4]: " menuInput
+        fi
+
+        # 处理用户输入
+        case "$menuInput" in
+            1 )
+                local port
+                port=$(get_random_port)
+                get_public_ip
+                local password
+                password=$(generate_random_password)
+                generate_cert "/etc/hysteria/cert.crt" "/etc/hysteria/private.key" "www.bing.com"
+                setup_port_forwarding "$port"
+                install_hysteria "$port" "$password" "www.bing.com"
+                show_configuration "$LOCATION" "$port" "$public_ip" "$password" "www.bing.com"
+                break ;;  # 安装后自动退出
+            2 )
+                uninstall_hysteria
+                read -p "按回车键返回...";;  # 卸载后返回菜单
+            3 )
+                show_configuration "$LOCATION" "$port" "$public_ip" "$PASSWORD" "www.bing.com"
+                read -p "按回车键继续...";;  # 显示配置文件
+            4 )
+                update_core
+                read -p "按回车键返回...";;  # 更新后返回菜单
+            0 )
+                exit 0 ;;
+            * )
+                echo "无效选项，请重新输入。"
+                sleep 2 ;;
+        esac
+    done
+}
+
+check_dependencies
+get_public_ip  # 在菜单之前获取公共 IP
+menu
