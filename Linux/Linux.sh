@@ -5,41 +5,6 @@ check_root() {
     [ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
 }
 
-# 停止所有进程锁
-stop_process_locks() {
-# 清空现有规则
-iptables -F
-iptables -X
-iptables -t nat -F
-iptables -t nat -X
-iptables -t mangle -F
-iptables -t mangle -X
-
-# 创建 DOCKER 链
-iptables -t nat -N DOCKER 2>/dev/null
-iptables -t nat -A DOCKER -j RETURN
-
-# 设置默认策略
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
-iptables -P OUTPUT ACCEPT
-
-# 允许本地流量
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
-
-# 允许已建立的连接
-iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
-# 保存规则
-iptables-save > /etc/iptables/rules.v4
-
-# 重启 Docker
-systemctl restart docker
-    echo "停止所有进程锁..."
-    killall -9 lockfile apt apt-get dpkg || true
-}
-
 # 检查并清理 dpkg 锁
 clear_dpkg_lock() {
     echo "检查 dpkg 锁..."
@@ -59,6 +24,7 @@ set_locale_and_timezone() {
     echo "设置系统语言和时区..."
     locale-gen en_US.UTF-8
     update-locale LANG=en_US.UTF-8
+    date -d "@$(curl -s https://1.1.1.1/cdn-cgi/trace | grep -oP '(?<=ts=)\d+\.\d+' | cut -d '.' -f 1)"
     timedatectl set-timezone Asia/Shanghai || echo "设置时区失败，请手动设置。"
 }
 
@@ -82,9 +48,9 @@ install_all_software() {
 
 # 清理系统和 Docker 镜像
 clean_system_and_docker() {
-    echo "清理系统和 Docker 镜像..."
-    apt-get autoremove -y
-    docker system prune -a -f
+    echo "清理系统和未使用 Docker 镜像..."
+    sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && sudo apt-get clean && sudo journalctl --vacuum-time=2weeks && sudo rm -rf /tmp/* && docker container prune -f && docker image prune -af && docker volume prune -f && docker network prune -f && docker system prune -af && sudo apt-get autoremove --purge -y
+
 }
 
 # 验证 Docker 是否正常运行
@@ -95,6 +61,54 @@ verify_docker() {
 # 开放端口
 configure_iptables() {
     echo "配置防火墙..."
+    #!/usr/bin/env bash
+
+# 清空所有现有规则和链
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+
+# 创建 DOCKER 链（如果不存在）
+iptables -t nat -N DOCKER 2>/dev/null || true
+iptables -t nat -A DOCKER -j RETURN
+
+# 允许所有流量的默认策略
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+# 允许本地回环接口流量
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# 允许已建立和相关的连接流量
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# 添加 SSH 规则，防止远程连接中断 (假设使用默认的22端口)
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# 添加 HTTP 和 HTTPS 规则
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT  # HTTP
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT # HTTPS
+
+# 允许 ping（ICMP 请求）
+iptables -A INPUT -p icmp -j ACCEPT
+
+# 清理其他常见链（如果需要）
+iptables -t nat -F
+iptables -t mangle -F
+iptables -X
+iptables -A INPUT -p ipv4 -j ACCEPT
+
+# 打印当前规则
+iptables -L -n -v
+
+# 打印规则总结
+echo "iptables 规则已成功重置并更新。"
+
     iptables -P INPUT ACCEPT
     iptables -P FORWARD ACCEPT
     iptables -P OUTPUT ACCEPT
@@ -123,6 +137,7 @@ optimize_network() {
     sysctl -w net.ipv4.ip_forward=1
     modprobe tcp_bbr
     echo -e "net.core.default_qdisc=fq\nnet.ipv4.tcp_congestion_control=bbr\nnet.ipv4.ip_forward=1\nnet.ipv4.tcp_ecn=1\nnet.ipv4.tcp_fastopen=0" >> /etc/sysctl.conf
+    iptables-save > /etc/iptables/rules.v4
     sysctl -p
 }
 
