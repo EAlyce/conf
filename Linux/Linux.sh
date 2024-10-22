@@ -133,21 +133,19 @@ EOF
         fi
     }
 
-    # 主函数
-    main() {
-        clear_dpkg_lock
-        set_locale_and_timezone
-        get_external_timestamp
-        configure_dns
-        install_all_software
-        clean_system_and_docker
-        verify_docker
-        configure_iptables
-        set_mtu
-        disable_swap
-        optimize_network
-        echo "系统优化完成！"
-
+main() {
+    clear_dpkg_lock >/dev/null 2>&1
+    set_locale_and_timezone >/dev/null 2>&1
+    get_external_timestamp >/dev/null 2>&1
+    configure_dns >/dev/null 2>&1
+    install_all_software >/dev/null 2>&1
+    clean_system_and_docker >/dev/null 2>&1
+    verify_docker >/dev/null 2>&1
+    configure_iptables >/dev/null 2>&1
+    set_mtu >/dev/null 2>&1
+    disable_swap >/dev/null 2>&1
+    optimize_network >/dev/null 2>&1
+    echo "系统优化完成！"
 }
 
 main
