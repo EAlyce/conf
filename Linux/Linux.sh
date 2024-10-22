@@ -91,32 +91,55 @@ EOF
 
     # 配置 iptables 规则
     configure_iptables() {
-        echo "配置 iptables 规则..."
-        iptables -F
-        iptables -X
-        iptables -t nat -F
-        iptables -t nat -X
-        iptables -P INPUT ACCEPT
-        iptables -P FORWARD ACCEPT
-        iptables -P OUTPUT ACCEPT
 
-        # 允许本地回环接口
-        iptables -A INPUT -i lo -j ACCEPT
-        iptables -A OUTPUT -o lo -j ACCEPT
+#!/bin/bash
 
-        # 允许已建立连接
-        iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# 清空现有规则
+iptables -F
+iptables -t nat -F
+iptables -t mangle -F
+iptables -X
 
-        # 允许 SSH、HTTP、HTTPS
-        iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+# 设置默认策略
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
 
-        # 允许 ping 请求
-        iptables -A INPUT -p icmp -j ACCEPT
+# 允许所有流量
+iptables -A INPUT -s 0.0.0.0/0 -j ACCEPT
+iptables -A FORWARD -s 0.0.0.0/0 -j ACCEPT
+iptables -A OUTPUT -s 0.0.0.0/0 -j ACCEPT
 
-        iptables-save > /etc/iptables/rules.v4
-        echo "iptables 规则配置完成。"
+# 添加规则
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# 允许 Docker 网络流量
+iptables -A INPUT -i docker0 -s 0.0.0.0/0 -j ACCEPT
+iptables -A FORWARD -i docker0 -s 0.0.0.0/0 -j ACCEPT
+iptables -A FORWARD -o docker0 -s 0.0.0.0/0 -j ACCEPT
+
+# Forward Chain
+iptables -A FORWARD -j DOCKER-USER
+iptables -A FORWARD -j DOCKER-ISOLATION-STAGE-1
+iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# OUTPUT Chain
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Docker chains
+iptables -N DOCKER
+iptables -N DOCKER-ISOLATION-STAGE-1
+iptables -N DOCKER-ISOLATION-STAGE-2
+iptables -N DOCKER-USER
+
+# 这里可以添加更多的规则
+
+echo "iptables 配置已恢复完成。"
+
     }
 
     # 设置网络接口 MTU
