@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 
 # 检查是否为 root 用户
@@ -5,6 +6,34 @@ check_root() {
     [ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
 }
 check_root
+setup_ssh_keepalive() {
+    local config_path="$HOME/.ssh/config"
+    local interval=60
+    local count=3
+
+    # 检查配置文件是否存在，如果不存在则创建
+    if [[ ! -f $config_path ]]; then
+        touch "$config_path"
+        echo "# SSH Config" >> "$config_path"
+    fi
+
+    # 检查是否已存在相关配置，避免重复添加
+    if ! grep -q "ServerAliveInterval" "$config_path"; then
+        {
+            echo ""
+            echo "# KeepAlive settings"
+            echo "ServerAliveInterval $interval"
+            echo "ServerAliveCountMax $count"
+        } >> "$config_path"
+        echo "SSH KeepAlive 设置已更新。"
+    else
+        echo "SSH KeepAlive 配置已存在，无需重复设置。"
+    fi
+}
+
+# 调用函数
+setup_ssh_keepalive
+
     # 检查并清理 dpkg 锁
     clear_dpkg_lock() {
         echo "检查 dpkg 锁..."
