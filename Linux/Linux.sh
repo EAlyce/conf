@@ -1,7 +1,5 @@
-
 #!/usr/bin/env bash
 
-# 检查是否为 root 用户
 check_root() {
     [ "$(id -u)" -ne 0 ] && { echo "请以 root 权限运行此脚本。"; exit 1; }
 }
@@ -161,19 +159,64 @@ EOF
             echo "无法获取外部时间戳，跳过此步骤。"
         fi
     }
+spin() {
+    local pid=$1
+    local delay=0.1
+    local spinchars='|/-\\'
+    local i=0
+    while kill -0 $pid 2>/dev/null; do
+        local temp="${spinchars:i++%${#spinchars}:1}"
+        printf "\r%s" "$temp"
+        sleep $delay
+    done
+    printf "\r"  # 清除转动字符
+}
 
 main() {
-    clear_dpkg_lock >/dev/null 2>&1
-    set_locale_and_timezone >/dev/null 2>&1
-    get_external_timestamp >/dev/null 2>&1
-    configure_dns >/dev/null 2>&1
-    install_all_software >/dev/null 2>&1
-    clean_system_and_docker >/dev/null 2>&1
-    verify_docker >/dev/null 2>&1
-    configure_iptables >/dev/null 2>&1
-    set_mtu >/dev/null 2>&1
-    disable_swap >/dev/null 2>&1
-    optimize_network >/dev/null 2>&1
+    clear_dpkg_lock >/dev/null 2>&1 &
+    spin $!
+    echo "清理 dpkg 锁完成！"
+
+    set_locale_and_timezone >/dev/null 2>&1 &
+    spin $!
+    echo "设置语言和时区完成！"
+
+    get_external_timestamp >/dev/null 2>&1 &
+    spin $!
+    echo "获取外部时间戳完成！"
+
+    configure_dns >/dev/null 2>&1 &
+    spin $!
+    echo "配置 DNS 完成！"
+
+    install_all_software >/dev/null 2>&1 &
+    spin $!
+    echo "安装所有软件完成！"
+
+    clean_system_and_docker >/dev/null 2>&1 &
+    spin $!
+    echo "清理系统和 Docker 完成！"
+
+    verify_docker >/dev/null 2>&1 &
+    spin $!
+    echo "验证 Docker 完成！"
+
+    configure_iptables >/dev/null 2>&1 &
+    spin $!
+    echo "配置 iptables 完成！"
+
+    set_mtu >/dev/null 2>&1 &
+    spin $!
+    echo "设置 MTU 完成！"
+
+    disable_swap >/dev/null 2>&1 &
+    spin $!
+    echo "禁用交换空间完成！"
+
+    optimize_network >/dev/null 2>&1 &
+    spin $!
+    echo "优化网络完成！"
+
     echo "系统优化完成！"
 }
 
