@@ -1,37 +1,65 @@
 #!/usr/bin/env bash
 
-# 清空所有现有规则和链
 iptables -F
-iptables -X
 iptables -t nat -F
-iptables -t nat -X
 iptables -t mangle -F
-iptables -t mangle -X
+iptables -X
 
-# 创建 DOCKER 链（如果不存在）
-iptables -t nat -N DOCKER 2>/dev/null || true
-iptables -t nat -A DOCKER -j RETURN
-
-# 允许所有流量的默认策略
+# 设置默认策略，保持网络通畅
 iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 
-# 允许本地回环接口流量
+# 允许所有流量进出
+iptables -A INPUT -s 0.0.0.0/0 -j ACCEPT
+iptables -A FORWARD -s 0.0.0.0/0 -j ACCEPT
+iptables -A OUTPUT -s 0.0.0.0/0 -j ACCEPT
+
+# 允许 Docker 网络流量
+iptables -A INPUT -i docker0 -j ACCEPT
+iptables -A FORWARD -i docker0 -o docker0 -j ACCEPT
+iptables -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+iptables -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# NAT 转发，确保容器可以访问外网
+iptables -t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+
+# 允许本地环回接口通信
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
-# 允许已建立和相关的连接流量
+# 允许已经建立和相关的连接
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-# 清理其他常见链（如果需要）
-# 注释掉这些链的清理，如果不需要
-iptables -t nat -F  # 清空 NAT 链
-iptables -t mangle -F  # 清空 MANGLE 链
-iptables -X  # 清空所有用户自定义链
+# 允许 SSH (22)
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 
-# 打印当前规则
-iptables -L -n -v
+# 允许 HTTP (80) 和 HTTPS (443)
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 
-# 打印规则总结
-echo "iptables 规则已成功重置并更新。"
+# 允许 DNS (53) 流量 (TCP 和 UDP)
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+
+# 允许 PING (ICMP)
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# 允许 FTP (21)
+iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+
+# 启用 IP 转发功能
+echo 1 > /proc/sys/net/ipv4/ip_forward
+sysctl -w net.ipv4.ip_forward=1
+
+# 持久化规则
+if [ -f /etc/debian_version ]; then
+    iptables-save > /etc/iptables/rules.v4
+    apt-get install -y iptables-persistent
+elif [ -f /etc/redhat-release ]; then
+    service iptables save
+fi
+
+echo "iptables 配置已完成，常用服务和链保持畅通。"
