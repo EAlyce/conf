@@ -13,4 +13,5 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/uninstall_snell.
 
 
 
-参考自 @vocrx
+参考自[ @vocrx
+](https://github.com/vocrx)
