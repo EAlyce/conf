@@ -93,7 +93,8 @@ EOF
     systemctl start cron
     
     # 更新 cron 任务
-    local cron_job="0 * * * * cd $(pwd) && docker compose -p sub-store pull && docker compose -p sub-store up -d >/dev/null 2>&1"
+    local cron_job="0 * * * * cd $(pwd) && docker stop sub-store && docker rm sub-store && docker compose pull sub-store && docker compose up -d sub-store
+ >/dev/null 2>&1"
     (crontab -l 2>/dev/null || true; echo "$cron_job") | sort -u | crontab -
     
     # 等待容器完全启动
