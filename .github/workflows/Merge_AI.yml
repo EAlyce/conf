@@ -18,6 +18,8 @@ jobs:
         run: |
           {
            curl -sSfL "https://ruleset.skk.moe/List/non_ip/ai.conf" | awk '{print $0 "\n"}'
+           curl -sSfL "https://whatshub.top/rule/ai.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://github.com/geekdada/surge-list/raw/979502fc2db796147f3f8a82f0eabf3fc2c91953/ai.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/cutethotw/ClashRule/raw/refs/heads/main/Rule/Perplexity.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/cutethotw/ClashRule/raw/refs/heads/main/Rule/ChatGPT.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/just22tu/surfing/raw/refs/heads/main/rule/Shadowrocket/Surfing/AI.list" | awk '{print $0 "\n"}'
