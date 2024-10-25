@@ -18,6 +18,7 @@ DOMAIN,gemini.google.com
 DOMAIN,in.appcenter.ms
 DOMAIN,ios.chat.openai.com
 DOMAIN,location.microsoft.com
+DOMAIN,makersuite.google.com
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,odc.officeapps.live.com
 DOMAIN,openai-api.arkoselabs.com
@@ -34,6 +35,9 @@ DOMAIN,www.bing.com
 DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,cloudflare
+DOMAIN-KEYWORD,colab
+DOMAIN-KEYWORD,developerprofiles
+DOMAIN-KEYWORD,generativelanguage
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
@@ -43,6 +47,7 @@ DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,api.microsoftapp.net
 DOMAIN-SUFFIX,api.statsig.com
+DOMAIN-SUFFIX,apis.google.com
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,azurefd.net
@@ -75,9 +80,12 @@ DOMAIN-SUFFIX,gemini.google.com
 DOMAIN-SUFFIX,generativeai.google
 DOMAIN-SUFFIX,generativelanguage.googleapis.com
 DOMAIN-SUFFIX,google-analytics.com
+DOMAIN-SUFFIX,googleai.com
 DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,googletagmanager.com
 DOMAIN-SUFFIX,gpt3sandbox.com
+DOMAIN-SUFFIX,grazie.ai
+DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,groq.com
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,hcaptcha.com
