@@ -5,7 +5,6 @@ if ($response.statusCode != 200) {
 var body = $response.body;
 var obj = JSON.parse(body);
 
-var subtitle = obj['as'] + ' ' + obj['query'];
-var ip = obj['query'];
+var subtitle = obj['as'];
 
-$done({subtitle, ip});
+$done({subtitle});
