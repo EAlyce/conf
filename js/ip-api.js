@@ -5,8 +5,7 @@ if ($response.statusCode != 200) {
 var body = $response.body;
 var obj = JSON.parse(body);
 
-var title = obj['country'];  // 提取 country 并赋值给 title
-delete obj['city'];  // 删除 city
+var title = obj['countryCode'];
 
 var subtitle = obj['as'] + ' ' + obj['query'];
 var ip = obj['query'];
