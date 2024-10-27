@@ -9,8 +9,15 @@ var obj = JSON.parse(body);
 var asField = obj['as'];
 var asn = asField.split(' ')[0]; // 提取 'AS400618' 这样的ASN号
 
-// 获取当前系统时间
-var currentTime = new Date().toLocaleString(); // 格式化为本地时间字符串
+// 手动格式化当前系统时间
+var now = new Date();
+var year = now.getFullYear();
+var month = ('0' + (now.getMonth() + 1)).slice(-2);
+var day = ('0' + now.getDate()).slice(-2);
+var hours = ('0' + now.getHours()).slice(-2);
+var minutes = ('0' + now.getMinutes()).slice(-2);
+var seconds = ('0' + now.getSeconds()).slice(-2);
+var currentTime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 
 // 确保title显示国家和当前时间
 var title = obj['country'] + " - " + currentTime; 
