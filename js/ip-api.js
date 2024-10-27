@@ -9,8 +9,10 @@ var obj = JSON.parse(body);
 var asField = obj['as'];
 var asn = asField.split(' ')[0]; // 提取 'AS400618' 这样的ASN号
 
-var title = obj['country'];
-var subtitle = obj['as'] + ' ' + obj['isp'];
+// 确保title只显示国家
+var title = obj['country']; 
+// subtitle保持显示ASN和ISP信息
+var subtitle = asn + ' ' + obj['isp']; 
 var ip = obj['query'];
 
 var description = "国家" + ":" + obj['country'] + '\n' + 
