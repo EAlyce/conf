@@ -23,8 +23,8 @@ var obj = JSON.parse(body);
 // 获取国家信息
 var title = Country_ValidCheck(obj["country"]);
 
-// subtitle 显示ISP和ASN信息
-var subtitle = ISP_ValidCheck(obj["org"] || obj.as) + " | ASN: " + (obj["as"] || "未知ASN");
+// subtitle 显示ISP、ASN信息和IP
+var subtitle = ISP_ValidCheck(obj["org"] || obj.as) + " | ASN: " + (obj["as"] || "未知ASN") + " | IP: " + obj["query"];
 
 // IP信息
 var ip = obj["query"];
