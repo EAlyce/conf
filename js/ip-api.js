@@ -21,7 +21,7 @@ var body = $response.body;
 var obj = JSON.parse(body);
 
 // 获取国家信息
-var title = Country_ValidCheck(obj["country"]);
+var title = Country_ValidCheck(obj["as"]);
 
 // subtitle 显示ISP、ASN信息和IP
 var subtitle = ISP_ValidCheck(obj["org"] || obj.as) + " | ASN: " + (obj["as"] || "未知ASN") + " | IP: " + obj["query"];
