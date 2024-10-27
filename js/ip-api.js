@@ -9,10 +9,13 @@ var obj = JSON.parse(body);
 var asField = obj['as'];
 var asn = asField.split(' ')[0]; // 提取 'AS400618' 这样的ASN号
 
-// 确保title只显示国家
-var title = obj['country']; 
+// 获取当前系统时间
+var currentTime = new Date().toLocaleString(); // 格式化为本地时间字符串
+
+// 确保title显示国家和当前时间
+var title = obj['country'] + " - " + currentTime; 
 // subtitle保持显示ASN和ISP信息
-var subtitle = asn + ' ' + obj['isp']; 
+var subtitle = asn + ' ' + obj['isp'];
 var ip = obj['query'];
 
 var description = "国家" + ":" + obj['country'] + '\n' + 
