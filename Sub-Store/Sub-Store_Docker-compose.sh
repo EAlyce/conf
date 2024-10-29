@@ -108,9 +108,13 @@ EOF
     done
     
     echo "警告: 服务似乎未能在预期时间内启动，但可能仍在进行中。"
+    echo 
     echo -e "\n您的 Sub-Store 信息如下："
+    echo 
     echo -e "\nSub-Store 面板：http://$public_ip:3001"
+    echo 
     echo -e "后端地址：http://$public_ip:3001/$secret_key\n"
+    echo 
 }
 
 main() {
