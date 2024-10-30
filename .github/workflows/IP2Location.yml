@@ -16,7 +16,7 @@ jobs:
         cd upload
         
         # 下载IP2Location数据库
-        wget -nv -O "DB1.LITE.ZIP" "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file=MMDB"
+        wget -nv -O "DB1.LITE.ZIP" "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file=DB1LITEMMDB"
         unzip DB1.LITE.ZIP
         
         # 使用maxmind官方工具转换
