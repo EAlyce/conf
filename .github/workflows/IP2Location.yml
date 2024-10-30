@@ -13,9 +13,10 @@ jobs:
       run: |
         mkdir -p upload
         cd upload
-        wget -nv -O DB.zip "https://lite.ip2location.com/download?id=56&token=${{ secrets.IP2LOCATION_TOKEN }}"
-        unzip DB.zip "*.mmdb"
+        curl -L -o DB.zip "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file={DB1.LITE}" || exit 1
+        unzip DB.zip "*.mmdb" || exit 1
         echo "TAG_NAME=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+
 
     - name: Push to "download" branch
       run: |
