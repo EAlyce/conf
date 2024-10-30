@@ -16,8 +16,8 @@ jobs:
         cd upload
         
         # 下载IP2Location数据库
-        wget -nv -O "DB1.LITE.ZIP" "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file=DB1LITEMMDB"
-        unzip DB1.LITE.ZIP
+        wget -nv -O "DB1.LITE.ZIP" "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file=DB1LITEBIN"
+        unzip IP2LOCATION-LITE-DB1.BIN.zip
         
         # 使用maxmind官方工具转换
         wget -nv -O mmdb-convert https://raw.githubusercontent.com/maxmind/geoip2-csv-converter/main/mmdb-convert.py
