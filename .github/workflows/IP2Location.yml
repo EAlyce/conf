@@ -9,23 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-    - name: Download and Convert
+    - name: Download MMDB
       run: |
-        # 创建工作目录
         mkdir -p upload
         cd upload
-        
-        # 下载IP2Location数据库
-        wget -nv -O "DB1.LITE.ZIP" "https://www.ip2location.com/download/?token=${{ secrets.IP2LOCATION_TOKEN }}&file=DB1.LITE"
-        unzip DB1.LITE.ZIP
-        
-        # 使用maxmind官方工具转换
-        wget -nv -O mmdb-convert https://raw.githubusercontent.com/maxmind/geoip2-csv-converter/main/mmdb-convert.py
-        chmod +x mmdb-convert
-        
-        # 转换为MMDB格式
-        python3 mmdb-convert -i IP2LOCATION-DB1.LITE.BIN -o Country.mmdb
-        
+        wget -nv -O DB.zip "https://lite.ip2location.com/download?id=56&token=${{ secrets.IP2LOCATION_TOKEN }}"
+        unzip DB.zip "*.mmdb"
         echo "TAG_NAME=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
     - name: Push to "download" branch
