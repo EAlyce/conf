@@ -34,6 +34,7 @@ DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 DOMAIN,www.bing.com
 DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,anthropic
+DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,developerprofiles
