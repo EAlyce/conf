@@ -17,7 +17,7 @@ jobs:
       - name: Get and process domains
         run: |
           {
-          
+            curl -sSfL "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt" | awk '{print $0 "\n"}'
             curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list" | awk '{print $0 "\n"}'
           } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Proxy.list
