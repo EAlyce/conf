@@ -16,7 +16,6 @@ install_packages() {
             exit 1
         fi
         
-        # 启动并启用 Docker 服务
         if ! systemctl start docker || ! systemctl enable docker; then
             echo "Docker 服务启动失败" >&2
             exit 1
@@ -68,26 +67,20 @@ update_mmdb() {
         exit 1
     fi
     
-    if [ ! -d "/root/MaxMind" ]; then
-        mkdir -p /root/MaxMind || {
+    if [ ! -d "/root/sub-store-data" ]; then
+        mkdir -p /root/sub-store-data || {
             echo "创建 MaxMind 目录失败" >&2
             exit 1
         }
     fi
 
-    cd /root/MaxMind || {
-        echo "切换到 MaxMind 目录失败" >&2
-        exit 1
-    }
-
-    if ! curl -L -O https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb || \
-       ! curl -L -O https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb; then
+    if ! curl -L -o /root/sub-store-data/GeoLite2-Country.mmdb https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb || \
+       ! curl -L -o /root/sub-store-data/GeoLite2-ASN.mmdb https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb; then
         echo "下载 MMDB 文件失败" >&2
         exit 1
-    }
+    fi
 
-    # 添加每小时更新 MMDB 的 cron 任务
-    CRON_CMD="0 * * * * cd /root/MaxMind && curl -L -O https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb && curl -L -O https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb"
+    CRON_CMD="0 * * * * curl -L -o /root/sub-store-data/GeoLite2-Country.mmdb https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb && curl -L -o /root/sub-store-data/GeoLite2-ASN.mmdb https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb"
     (crontab -l 2>/dev/null | grep -Fq "$CRON_CMD") || (
         (crontab -l 2>/dev/null; echo "$CRON_CMD") | crontab -
     )
@@ -99,19 +92,16 @@ setup_docker() {
     secret_key=$(openssl rand -hex 16)
     echo "生成的密钥: $secret_key"
 
-    # 检查数据目录
     if [ ! -d "/root/sub-store-data" ]; then
         mkdir -p /root/sub-store-data || {
             echo "创建数据目录失败" >&2
             exit 1
         }
-    }
+    fi
 
-    # 清理可能存在的旧容器
     docker rm -f sub-store >/dev/null 2>&1 || true
     docker compose -p sub-store down >/dev/null 2>&1 || true
 
-    # 创建 docker-compose.yml
     cat <<EOF > docker-compose.yml
 name: sub-store
 services:
@@ -119,28 +109,24 @@ services:
     image: xream/sub-store:http-meta
     container_name: sub-store
     restart: always
-    environment:
-      - SUB_STORE_BACKEND_UPLOAD_CRON=55 23 * * *
-      - SUB_STORE_FRONTEND_BACKEND_PATH=/$secret_key
-      - SUB_STORE_MMDB_COUNTRY_PATH=/root/MaxMind/GeoLite2-Country.mmdb
-      - SUB_STORE_MMDB_ASN_PATH=/root/MaxMind/GeoLite2-ASN.mmdb
     ports:
       - "3001:3001"
+    environment:
+      SUB_STORE_MMDB_COUNTRY_PATH: "/root/sub-store-data/GeoLite2-Country.mmdb"
+      SUB_STORE_MMDB_ASN_PATH: "/root/sub-store-data/GeoLite2-ASN.mmdb"
     volumes:
-      - /root/sub-store-data:/opt/app/data
+      - /root/docker-compose:/opt/app/data
 EOF
 
-    # 拉取和启动容器
     if ! docker compose -p sub-store pull || ! docker compose -p sub-store up -d; then
         echo "Docker 容器启动失败" >&2
         exit 1
-    }
+    fi
 
-    # 添加每小时更新容器的 cron 任务
     local cron_job="0 * * * * cd $(pwd) && docker stop sub-store && docker rm sub-store && docker compose pull sub-store && docker compose up -d sub-store >/dev/null 2>&1"
     (crontab -l 2>/dev/null || true; echo "$cron_job") | sort -u | crontab -
+    crontab -l | grep -v '^#' | sed '/^\s*$/d' | sort | uniq | crontab -
 
-    # 等待服务启动
     echo "等待服务启动..."
     for i in {1..30}; do
         if curl -s "http://127.0.0.1:3001" >/dev/null; then
