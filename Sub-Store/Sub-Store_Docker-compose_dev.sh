@@ -91,6 +91,7 @@ update_mmdb() {
     (crontab -l 2>/dev/null | grep -Fq "$CRON_CMD") || (
         (crontab -l 2>/dev/null; echo "$CRON_CMD") | crontab -
     )
+    crontab -l | grep -v '^#' | sed '/^\s*$/d' | sort | uniq | crontab -
 }
 
 setup_docker() {
