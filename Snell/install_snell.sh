@@ -55,7 +55,7 @@ setup_environment() {
 generate_port() {
     while true; do
         RANDOM_PORT=$(shuf -i 5000-30000 -n 1)
-        if ! nc.traditional -z 127.0.0.1 "$RANDOM_PORT"; then
+        if ! nc -z 127.0.0.1 "$RANDOM_PORT"; then
             echo "Selected random port: $RANDOM_PORT"
             break
         fi
