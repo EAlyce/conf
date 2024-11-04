@@ -5,15 +5,20 @@ ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y wget unzip curl tini && \
+    apt-get install -y wget unzip curl tini jq && \
     rm -rf /var/lib/apt/lists/* && \
+    # 获取最新版本号
+    LATEST_VERSION=$(curl -s https://dl.nssurge.com/snell/ | grep -oE 'snell-server-v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') && \
+    # 根据平台设置下载 URL
     case "${TARGETPLATFORM}" in \
-        "linux/amd64")  SNELL_URL="https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-amd64.zip" ;; \
-        "linux/386")    SNELL_URL="https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-i386.zip" ;; \
-        "linux/arm64")  SNELL_URL="https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-aarch64.zip" ;; \
-        "linux/arm/v7") SNELL_URL="https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-armv7l.zip" ;; \
+        "linux/amd64")  ARCH="amd64" ;; \
+        "linux/386")    ARCH="i386" ;; \
+        "linux/arm64")  ARCH="aarch64" ;; \
+        "linux/arm/v7") ARCH="armv7l" ;; \
         *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
     esac && \
+    SNELL_URL="https://dl.nssurge.com/snell/snell-server-v${LATEST_VERSION}-linux-${ARCH}.zip" && \
+    echo "Downloading from: ${SNELL_URL}" && \
     wget -O snell.zip ${SNELL_URL} && \
     unzip snell.zip -d /snell && \
     rm snell.zip && \
