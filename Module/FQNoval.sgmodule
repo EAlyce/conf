@@ -1,7 +1,0 @@
-#!name=FQnoval
-#!desc=FQnoval
-
-[Rule]
-DOMAIN-KEYWORD,bdurl.net,REJECT,extended-matching
-AND,((DOMAIN-KEYWORD,zijie,extended-matching), (DOMAIN-KEYWORD,ad,extended-matching)),REJECT
-DOMAIN-SUFFIX,snssdk.com,REJECT,extended-matching
