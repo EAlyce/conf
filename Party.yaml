@@ -63,10 +63,10 @@ profile:
   store-selected: true
   store-fake-ip: true
 geox-url:
-  geoip: https://github.com/xream/geoip/releases/latest/download/ipinfo.country-only-cn-private.mmdb
-  geosite: https://github.com/xream/geoip/releases/latest/download/ipinfo.geoip-only-cn-private.dat
-  mmdb: https://github.com/xream/geoip/releases/latest/download/ipinfo.country-only-cn-private.mmdb
-  asn: https://github.com/xream/geoip/releases/latest/download/ipinfo.asn.mmdb
+  mmdb: https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Country.mmdb
+  geoip: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip-only-cn-private.dat
+  geosite: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite-lite.dat
+  asn: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-only-cn-private.mmdb
 unified-delay: false
 bind-address: "*"
 tun:
@@ -96,7 +96,7 @@ proxy-providers:
     url: 你的机场订阅
     health-check:
       enable: true
-      url: http://www.apple.com/library/test/success.html
+      url: http://1.0.0.1/media/manifest.json
       interval: 300
 proxy-groups:
   - name: Proxy
@@ -125,17 +125,9 @@ rule-providers:
     interval: 43200
     url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Proxy.list
     path: ./ruleset/Proxy.list
-  DIRECT:
-    type: http
-    behavior: classical
-    format: text
-    interval: 43200
-    url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/DIRECT.list
-    path: ./ruleset/DIRECT.list
 rules:
   - RULE-SET,AI,Proxy,no-resolve
   - RULE-SET,Proxy,Proxy,no-resolve
-  - RULE-SET,DIRECT,DIRECT,no-resolve
   - RULE-SET,Lan,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,Proxy
