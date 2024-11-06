@@ -1,4 +1,4 @@
-name: Daily Snell Version Checker and Updater
+name: Snell Update
 
 on:
   schedule:
