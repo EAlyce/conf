@@ -19,7 +19,7 @@ log_warn() { echo -e "${YELLOW}[WARN] $1${NC}"; }
 log_error() { echo -e "${RED}[ERROR] $1${NC}" >&2; }
 
 check_command() {
-    echo "检查命令: $1"
+    echo "$1"
     command -v "$1" >/dev/null 2>&1 || { log_error "需要 $1 但未安装"; exit 1; }
 }
 
