@@ -23,10 +23,8 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Wechat.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/WeChat.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/Lucius-Pan/confStore/raw/main/wechat-conf-IP-CIDR.conf" | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
-              sed 's/,no-resolve//g' |
-              sed 's/^DOMAIN-KEYWORD,\([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.\)$/IP-CIDR,\1/g' |
-              sort | uniq > Rule/WeChat.list
+          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | 
+              sed 's/,no-resolve//g' | sort | uniq > Rule/WeChat.list
 
       - name: Check and Configure Git
         run: |
