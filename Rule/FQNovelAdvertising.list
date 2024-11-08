@@ -1,4 +1,4 @@
-DOMAIN,dig.zjurl.cn
-DOMAIN,dig.bdurl.net
-AND,((DOMAIN-SUFFIX,zijieapi.com), (DOMAIN-KEYWORD,ad))
-DOMAIN,is.snssdk.com
+DOMAIN-KEYWORD,dig.zjurl.cn
+DOMAIN-KEYWORD,dig.bdurl.net
+AND,((DOMAIN-KEYWORD,zijieapi),(DOMAIN-KEYWORD,ad))
+DOMAIN-KEYWORD,is.snssdk.com
