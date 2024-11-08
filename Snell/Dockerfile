@@ -7,7 +7,6 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y wget unzip curl tini jq && \
     rm -rf /var/lib/apt/lists/* && \
-    # 获取最新版本号
     LATEST_VERSION=$(curl -s https://dl.nssurge.com/snell/ | grep -oE 'snell-server-v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') && \
     case "${TARGETPLATFORM}" in \
         "linux/amd64")  ARCH="amd64" ;; \
