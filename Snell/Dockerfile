@@ -9,7 +9,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     # 获取最新版本号
     LATEST_VERSION=$(curl -s https://dl.nssurge.com/snell/ | grep -oE 'snell-server-v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') && \
-    # 根据平台设置下载 URL
     case "${TARGETPLATFORM}" in \
         "linux/amd64")  ARCH="amd64" ;; \
         "linux/386")    ARCH="i386" ;; \
