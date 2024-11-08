@@ -8,7 +8,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/insta
 卸载
 
 ```
-bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/uninstall_snell.sh)
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/deldocker.sh)
 ```
 
 
