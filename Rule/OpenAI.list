@@ -42,6 +42,7 @@ DOMAIN-KEYWORD,generativelanguage
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
+DOMAIN-KEYWORD,prodregistryv
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
 DOMAIN-SUFFIX,algolia.net
@@ -120,7 +121,6 @@ DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,pplx.ai
 DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
-DOMAIN-SUFFIX,prodregistryv2.org
 DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,sentry.io
