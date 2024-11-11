@@ -1,3 +1,5 @@
+# 使用方法RULE-SET,https://raw.githubusercontent.com/EAlyce/conf/main/Rule/FQNovelAdvertising.list,REJECT,pre-matching,extended-matching
+
 DOMAIN-KEYWORD,dig.zjurl.cn
 DOMAIN-KEYWORD,dig.bdurl.net
 AND,((DOMAIN-KEYWORD,zijieapi),(DOMAIN-KEYWORD,ad))
