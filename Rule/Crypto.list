@@ -1,4 +1,15 @@
 
+  
+  - DOMAIN-KEYWORD,fups
+  - DOMAIN-KEYWORD,ininal
+  - DOMAIN-KEYWORD,oldubil
+  - DOMAIN-KEYWORD,ozan
+  - DOMAIN-KEYWORD,papara
+  - DOMAIN-SUFFIX,oldubil.com
+  - DOMAIN-SUFFIX,oldubil.com.tr
+  - DOMAIN-SUFFIX,ozan.com
+  - DOMAIN-SUFFIX,ozan.com.tr
+  - DOMAIN-SUFFIX,papara.com
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,bybit
@@ -6,6 +17,7 @@ DOMAIN-KEYWORD,bybit-global
 DOMAIN-KEYWORD,bybitglobal
 DOMAIN-KEYWORD,fups
 DOMAIN-KEYWORD,hbfile
+DOMAIN-KEYWORD,htx.com
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,iyzico
@@ -29,9 +41,11 @@ DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,3d.payten.com.tr
+DOMAIN-SUFFIX,88maru.com
 DOMAIN-SUFFIX,aacsw.3ds.verifiedbyvisa.com
 DOMAIN-SUFFIX,aave.com
 DOMAIN-SUFFIX,aave.com
+DOMAIN-SUFFIX,access.pushsdk.com
 DOMAIN-SUFFIX,accounts.binance.com
 DOMAIN-SUFFIX,accounts.binance.info
 DOMAIN-SUFFIX,acinq.co
@@ -49,6 +63,7 @@ DOMAIN-SUFFIX,api.saasexch.cc
 DOMAIN-SUFFIX,api.saasexch.io
 DOMAIN-SUFFIX,app.fastpay.com.tr
 DOMAIN-SUFFIX,appsflayer.com
+DOMAIN-SUFFIX,apru88.com
 DOMAIN-SUFFIX,apy999.com
 DOMAIN-SUFFIX,apy999.com
 DOMAIN-SUFFIX,arbitrum.io
@@ -402,6 +417,7 @@ DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecoview.com
 DOMAIN-SUFFIX,hecoview.com
+DOMAIN-SUFFIX,htx.co.nz
 DOMAIN-SUFFIX,htx.com
 DOMAIN-SUFFIX,huobi.br.com
 DOMAIN-SUFFIX,huobi.br.com
@@ -481,9 +497,11 @@ DOMAIN-SUFFIX,mexc.com
 DOMAIN-SUFFIX,mexc.com
 DOMAIN-SUFFIX,mexcsensors.com
 DOMAIN-SUFFIX,min-api.cryptocompare.com
+DOMAIN-SUFFIX,mokexapp.com
 DOMAIN-SUFFIX,mokexapp.net
 DOMAIN-SUFFIX,myetherwallet.com
 DOMAIN-SUFFIX,myetherwallet.com
+DOMAIN-SUFFIX,myqcloud.com 
 DOMAIN-SUFFIX,mytokenapi.com
 DOMAIN-SUFFIX,nansen.ai
 DOMAIN-SUFFIX,nansen.ai
@@ -502,6 +520,7 @@ DOMAIN-SUFFIX,nonfungible.com
 DOMAIN-SUFFIX,nonfungible.com
 DOMAIN-SUFFIX,nyctale.io
 DOMAIN-SUFFIX,nyctale.io
+DOMAIN-SUFFIX,octu88.com
 DOMAIN-SUFFIX,okex.com
 DOMAIN-SUFFIX,okex.com
 DOMAIN-SUFFIX,oklink.com
@@ -547,6 +566,8 @@ DOMAIN-SUFFIX,poolin.com
 DOMAIN-SUFFIX,pos.payby.me
 DOMAIN-SUFFIX,public-1306379396.file.myqcloud.com
 DOMAIN-SUFFIX,public.bnbstatic.com
+DOMAIN-SUFFIX,pushstat.api.engagelab.cc
+DOMAIN-SUFFIX,qcloud.com
 DOMAIN-SUFFIX,raydium.io
 DOMAIN-SUFFIX,raydium.io
 DOMAIN-SUFFIX,redotpay.com
@@ -679,3 +700,4 @@ IP-CIDR,47.107.82.99/32
 IP-CIDR,47.107.98.27/32
 IP-CIDR,52.68.117.1/32
 IP-CIDR,54.150.106.1/32
+payload:
