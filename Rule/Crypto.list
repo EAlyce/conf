@@ -1,15 +1,4 @@
 
-  
-  - DOMAIN-KEYWORD,fups
-  - DOMAIN-KEYWORD,ininal
-  - DOMAIN-KEYWORD,oldubil
-  - DOMAIN-KEYWORD,ozan
-  - DOMAIN-KEYWORD,papara
-  - DOMAIN-SUFFIX,oldubil.com
-  - DOMAIN-SUFFIX,oldubil.com.tr
-  - DOMAIN-SUFFIX,ozan.com
-  - DOMAIN-SUFFIX,ozan.com.tr
-  - DOMAIN-SUFFIX,papara.com
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,bybit
@@ -417,6 +406,8 @@ DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecoview.com
 DOMAIN-SUFFIX,hecoview.com
+DOMAIN-SUFFIX,hepsiburada.com
+DOMAIN-SUFFIX,hepsipay.com
 DOMAIN-SUFFIX,htx.co.nz
 DOMAIN-SUFFIX,htx.com
 DOMAIN-SUFFIX,huobi.br.com
@@ -444,6 +435,7 @@ DOMAIN-SUFFIX,huobitoken.com
 DOMAIN-SUFFIX,icodrops.com
 DOMAIN-SUFFIX,icodrops.com
 DOMAIN-SUFFIX,infura.io
+DOMAIN-SUFFIX,ininal.com
 DOMAIN-SUFFIX,inter-vpos.com.tr
 DOMAIN-SUFFIX,intotheblock.com
 DOMAIN-SUFFIX,intotheblock.com
@@ -533,6 +525,7 @@ DOMAIN-SUFFIX,okx-dns2.com
 DOMAIN-SUFFIX,okx-dns2.com
 DOMAIN-SUFFIX,okx.com
 DOMAIN-SUFFIX,okx.com
+DOMAIN-SUFFIX,oldubil.com.tr
 DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onekey.so
 DOMAIN-SUFFIX,onekey.zendesk.com
@@ -700,4 +693,3 @@ IP-CIDR,47.107.82.99/32
 IP-CIDR,47.107.98.27/32
 IP-CIDR,52.68.117.1/32
 IP-CIDR,54.150.106.1/32
-payload:
