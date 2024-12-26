@@ -12,7 +12,8 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4=【【
+      # 修复 checkout 的版本号
+      - uses: actions/checkout@v4
 
       - name: Get, clean, and deduplicate domains
         run: |
@@ -34,7 +35,7 @@ jobs:
       - name: Check if there are changes
         run: |
           git status
-          git diff  # 这两个命令检查本地更改，确保脚本正确处理更改
+          git diff
 
       - name: Configure Git
         run: |
@@ -43,7 +44,7 @@ jobs:
 
       - name: Commit and push changes if needed
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Token 进行身份验证
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add Rule/Crypto.list
           if [ -n "$(git status --porcelain)" ]; then
@@ -51,4 +52,3 @@ jobs:
             git push origin HEAD:main
           else
             echo "No changes to commit"
-          fi  # 确保 if 语句正确闭合
