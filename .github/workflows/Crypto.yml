@@ -29,7 +29,7 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/axtyet/Luminous/raw/589629c2eb40704bf8955947e1d6335e62c129b8/Repcz/Surge/Rules/HTX.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list" | awk '{print $0 "\n"}'
-          } | grep -v '^#' | sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g; /^IP-CIDR/!s/[\/\*]//g; s/^\.(.*)/\1/' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Crypto.list
+          } | grep -v '^#' | grep -v '^//' | sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g; /^IP-CIDR/!s/[\/\*]//g; s/^\.(.*)/\1/' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Crypto.list
 
       - name: Check if there are changes
         run: |
