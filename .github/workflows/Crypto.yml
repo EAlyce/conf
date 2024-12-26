@@ -44,11 +44,12 @@ jobs:
 
       - name: Commit and push changes if needed
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add Rule/Crypto.list
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Update Crypto.list"
-            git push origin HEAD:main
-          else
-            echo "No changes to commit"
+         git add Rule/Crypto.list
+         if [ -n "$(git status --porcelain)" ]; then
+         git commit -m "Update Crypto.list"
+         git push origin HEAD:main
+         else
+         echo "No changes to commit"
+         fi   
