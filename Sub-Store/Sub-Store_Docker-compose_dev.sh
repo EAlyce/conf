@@ -29,19 +29,47 @@ check_root() {
 install_dependencies() {
     log "检查并安装依赖..."
     
+    # 安装基础依赖
     apt-get update -qq || error "更新软件包列表失败"
+    apt-get install -y curl cron || error "安装基础依赖失败"
     
-    local deps=(curl cron docker.io docker-compose)
-    for dep in "${deps[@]}"; do
-        if ! command -v "$dep" >/dev/null 2>&1; then
-            log "安装 $dep..."
-            apt-get install -y "$dep" || error "安装 $dep 失败"
-        fi
-    done
+    # 安装 Docker
+    if ! command -v docker >/dev/null 2>&1; then
+        log "安装 Docker..."
+        # 卸载可能存在的旧版本
+        apt-get remove -y docker docker-engine docker.io containerd runc >/dev/null 2>&1 || true
+        
+        # 安装依赖
+        apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg \
+            lsb-release || error "安装 Docker 依赖失败"
+            
+        # 添加 Docker 官方 GPG key
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        
+        # 添加 Docker 仓库
+        echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+            $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+            
+        # 安装 Docker
+        apt-get update
+        apt-get install -y docker-ce docker-ce-cli containerd.io || error "安装 Docker 失败"
+    fi
     
+    # 安装 Docker Compose
+    if ! command -v docker-compose >/dev/null 2>&1; then
+        log "安装 Docker Compose..."
+        curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    fi
+    
+    systemctl enable --now docker || error "启动 Docker 服务失败"
     systemctl enable --now cron || error "启动 cron 服务失败"
 }
-
 download_file() {
     local dest="$1"
     local primary_url="$2"
