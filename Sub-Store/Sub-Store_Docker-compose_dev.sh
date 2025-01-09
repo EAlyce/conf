@@ -25,17 +25,16 @@ check_root() {
         error "此脚本需要 root 权限运行"
     fi
 }
+
 install_dependencies() {
     local missing_deps=()
     
-    # 检查必要的命令是否存在
     for cmd in curl cron docker docker-compose; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
             missing_deps+=("$cmd")
         fi
     done
     
-    # 如果有缺失的依赖,才执行安装
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         log "安装缺失的依赖: ${missing_deps[*]}"
         apt-get update -qq || error "更新软件包列表失败"
@@ -44,7 +43,7 @@ install_dependencies() {
             case "$dep" in
                 docker|docker-compose)
                     log "请手动安装 $dep"
-                    error "$dep 未找到,请先安装它"
+                    error "$dep 未找到，请先安装它"
                     ;;
                 *)
                     apt-get install -y "$dep" || error "安装 $dep 失败"
@@ -55,7 +54,6 @@ install_dependencies() {
         log "所有必要的依赖已安装"
     fi
     
-    # 确保服务正在运行
     systemctl is-active --quiet cron || systemctl start cron
     systemctl is-active --quiet docker || systemctl start docker
 }
@@ -89,7 +87,6 @@ setup_mmdb() {
     download_file "$MMDB_DIR/GeoLite2-Country.mmdb" "$PRIMARY_COUNTRY_URL" "$BACKUP_COUNTRY_URL"
     download_file "$MMDB_DIR/GeoLite2-ASN.mmdb" "$PRIMARY_ASN_URL" "$BACKUP_ASN_URL"
     
-    # 添加定时更新任务
     local update_cmd="0 */6 * * * /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-Country.mmdb $PRIMARY_COUNTRY_URL || /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-Country.mmdb $BACKUP_COUNTRY_URL; /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-ASN.mmdb $PRIMARY_ASN_URL || /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-ASN.mmdb $BACKUP_ASN_URL"
     
     (crontab -l 2>/dev/null | grep -v "GeoLite2"; echo "$update_cmd") | sort -u | crontab -
@@ -120,11 +117,9 @@ setup_docker() {
     
     mkdir -p "$DATA_DIR"
     
-    # 清理旧容器
     docker rm -f sub-store >/dev/null 2>&1 || true
     docker compose -p sub-store down >/dev/null 2>&1 || true
     
-    # 创建 docker-compose 配置
     cat > docker-compose.yml <<EOF
 name: sub-store
 services:
@@ -138,7 +133,7 @@ services:
       SUB_STORE_MMDB_COUNTRY_PATH: "$MMDB_DIR/GeoLite2-Country.mmdb"
       SUB_STORE_MMDB_ASN_PATH: "$MMDB_DIR/GeoLite2-ASN.mmdb"
     ports:
-      - "127.0.0.1:3001:3001"
+      - "3001:3001"
     volumes:
       - $DATA_DIR:/opt/app/data
       - $MMDB_DIR:$MMDB_DIR:ro
@@ -153,11 +148,9 @@ EOF
     docker compose -p sub-store pull
     docker compose -p sub-store up -d
     
-    # 添加自动更新任务
     local update_cmd="0 3 * * * cd $(pwd) && docker compose -p sub-store pull && docker compose -p sub-store up -d"
     (crontab -l 2>/dev/null | grep -v "sub-store"; echo "$update_cmd") | sort -u | crontab -
     
-    # 等待服务启动
     local max_wait=30
     local count=0
     while [[ $count -lt $max_wait ]]; do
@@ -196,8 +189,6 @@ main() {
     setup_docker
 }
 
-# 错误处理
 trap 'error "脚本执行失败，行号: $LINENO"' ERR
 
-# 执行主函数
 main
