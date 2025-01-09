@@ -18,6 +18,9 @@ jobs:
         run: |
           {
            curl -sSfL "https://ruleset.skk.moe/List/non_ip/ai.conf" | awk '{print $0 "\n"}'
+           curl -sSfL "https://github.com/tutuh/script/raw/cbbba01fe56c7db1abfb0e5a0593d2abf9c4dcc8/Surge/Ruleset/AI.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://github.com/blankmagic/surge/raw/2741d51076d1a11e2a8d1bdc3e7a1fdca2504dfc/rule/AI.list" | awk '{print $0 "\n"}'
+           curl -sSfL "https://github.com/HotKids/Rules/raw/571a4c43e1392ad5981cceabf76657dc9a222fcc/Surge/RULE-SET/GenAI.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://whatshub.top/rule/ai.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/geekdada/surge-list/raw/979502fc2db796147f3f8a82f0eabf3fc2c91953/ai.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/cutethotw/ClashRule/raw/refs/heads/main/Rule/Perplexity.list" | awk '{print $0 "\n"}'
