@@ -9,14 +9,17 @@ DOMAIN-KEYWORD,hbfile
 DOMAIN-KEYWORD,htx.com
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,huobi
+DOMAIN-KEYWORD,ininal
 DOMAIN-KEYWORD,iyzico
 DOMAIN-KEYWORD,iyzipay
 DOMAIN-KEYWORD,metamask
 DOMAIN-KEYWORD,metamask
 DOMAIN-KEYWORD,okx
 DOMAIN-KEYWORD,okx
+DOMAIN-KEYWORD,ozan
 DOMAIN-KEYWORD,papara
 DOMAIN-KEYWORD,redotpay
+DOMAIN-KEYWORD,sipay
 DOMAIN-SUFFIX,.com.tr
 DOMAIN-SUFFIX,.denizbank.com
 DOMAIN-SUFFIX,.fastpay.com.tr
@@ -530,7 +533,6 @@ DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onekey.so
 DOMAIN-SUFFIX,onekey.zendesk.com
 DOMAIN-SUFFIX,onekeycn.com
-DOMAIN-SUFFIX,op-prod-tr.ozan.com
 DOMAIN-SUFFIX,opensea.io
 DOMAIN-SUFFIX,opensea.io
 DOMAIN-SUFFIX,optimism.io
@@ -638,6 +640,7 @@ DOMAIN-SUFFIX,vitalik.ca
 DOMAIN-SUFFIX,vpos2.isbank.com.tr
 DOMAIN-SUFFIX,vpos3.isbank.com.tr
 DOMAIN-SUFFIX,walletconnect.com
+DOMAIN-SUFFIX,walletgate.io
 DOMAIN-SUFFIX,watchtheburn.com
 DOMAIN-SUFFIX,watchtheburn.com
 DOMAIN-SUFFIX,wbtc.network
