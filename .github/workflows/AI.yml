@@ -33,7 +33,9 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | awk" '{print $0 "\n"}'
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
-              sed 's/,no-resolve//g' | sed 's/#.*$//g' | grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/OpenAI.list
+              sed 's/,no-resolve//g' | sed 's/#.*$//g' | 
+              sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
+              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/OpenAI.list
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
