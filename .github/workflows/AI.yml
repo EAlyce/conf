@@ -1,5 +1,4 @@
 name: Merge AI
-
 on:
   push:
     branches:
@@ -13,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Get and merge domains from source files
         run: |
           {
@@ -35,8 +33,7 @@ jobs:
            curl -sSfL "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list | awk" '{print $0 "\n"}'
           } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | 
-              sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/OpenAI.list
-
+              sed 's/,no-resolve//g' | sed 's/#.*$//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/OpenAI.list
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -44,7 +41,6 @@ jobs:
           
       - name: Force add changes
         run: git add Rule/OpenAI.list || true
-
       - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
