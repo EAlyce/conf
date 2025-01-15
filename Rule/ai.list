@@ -2,6 +2,7 @@ IP-CIDR,129.146.3.78/32
 DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,prodregistryv
+DOMAIN-KEYWORD,Grok
 DOMAIN-SUFFIX,open-ai-chat-omega.vercel.app
 DOMAIN-SUFFIX,githubcopilot.com
 DOMAIN-SUFFIX,meta.com
