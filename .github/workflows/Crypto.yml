@@ -12,13 +12,14 @@ jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      # 修复 checkout 的版本号
+
       - uses: actions/checkout@v4
 
       - name: Get, clean, and deduplicate domains
         run: |
           {
            curl -sSfL "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt" | awk '{print $0 "\n"}'
+           curl -sSfL "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/LuckySmileOne/RuleSet/3f2121047a8cd0f55b737c5fb5bf0c387aad7e29/UBank.list" | awk '{print $0 "\n"}'
