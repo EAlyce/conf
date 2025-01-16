@@ -1,42 +1,77 @@
 name: Merge Crypto
-
 on:
   push:
     branches:
       - main
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 */6 * * *'  # 每6小时运行一次
   workflow_dispatch:
 
 jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
+    
     steps:
-
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Create Rule directory if not exists
+        run: mkdir -p Rule
 
-      - name: Get, clean, and deduplicate domains
+      - name: Get and process domains
         run: |
-          {
-           curl -sSfL "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LuckySmileOne/RuleSet/3f2121047a8cd0f55b737c5fb5bf0c387aad7e29/UBank.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/axtyet/Luminous/raw/589629c2eb40704bf8955947e1d6335e62c129b8/Repcz/Surge/Rules/HTX.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list" | awk '{print $0 "\n"}'
-          } | grep -v '^#' | grep -v '^//' | sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g; /^IP-CIDR/!s/[\/\*]//g; s/^\.(.*)/\1/' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Crypto.list
-
-      - name: Check if there are changes
-        run: |
-          git status
-          git diff
+          # 创建临时文件
+          TEMP_FILE=$(mktemp)
+          OUTPUT_FILE="Rule/Crypto.list"
+          
+          # 下载和处理函数
+          download_and_process() {
+            if curl -sSfL "$1" >> "$TEMP_FILE" 2>/dev/null; then
+              echo "Successfully downloaded: $1"
+            else
+              echo "Failed to download: $1"
+            fi
+          }
+          
+          # 要处理的URL列表
+          URLS=(
+            "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt"
+            "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list"
+            "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list"
+            "https://raw.githubusercontent.com/LuckySmileOne/RuleSet/3f2121047a8cd0f55b737c5fb5bf0c387aad7e29/UBank.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list"
+            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list"
+            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list"
+            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list"
+            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list"
+            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list"
+            "https://github.com/axtyet/Luminous/raw/589629c2eb40704bf8955947e1d6335e62c129b8/Repcz/Surge/Rules/HTX.list"
+            "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list"
+          )
+          
+          # 下载所有URL的内容
+          for url in "${URLS[@]}"; do
+            download_and_process "$url"
+          done
+          
+          # 基础处理（不包括去重）
+          cat "$TEMP_FILE" | \
+            grep -v '^#' | \
+            grep -v '^//' | \
+            sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' | \
+            sed -E '/^IP-CIDR/!s/[\/\*]//g' | \
+            sed -E 's/^\.(.*)/\1/' | \
+            grep -v '^$' | \
+            sed 's/,no-resolve//g' | \
+            grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "${OUTPUT_FILE}.tmp"
+          
+          # 最后进行排序和去重
+          sort "${OUTPUT_FILE}.tmp" | uniq > "$OUTPUT_FILE"
+          
+          # 清理临时文件
+          rm -f "$TEMP_FILE" "${OUTPUT_FILE}.tmp"
 
       - name: Configure Git
         run: |
@@ -45,12 +80,12 @@ jobs:
 
       - name: Commit and push changes if needed
         env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-         git add Rule/Crypto.list
-         if [ -n "$(git status --porcelain)" ]; then
-         git commit -m "Update Crypto.list"
-         git push origin HEAD:main
-         else
-         echo "No changes to commit"
-         fi   
+          if ! git diff --quiet Rule/Crypto.list; then
+            git add Rule/Crypto.list
+            git commit -m "Update Crypto.list [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
+          fi
