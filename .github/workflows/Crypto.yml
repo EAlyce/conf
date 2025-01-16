@@ -76,21 +76,22 @@ jobs:
             sed 's/DOMAIN-KEYWORD,/\nDOMAIN-KEYWORD,/g' | \
             sed 's/IP-CIDR,/\nIP-CIDR,/g' | \
             grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' | \
-            grep -v '^$' > "$FINAL_PROCESSED"
+            tr -d '\r' | \
+            sed 's/[[:space:]]*$//' > "$FINAL_PROCESSED"
 
           # 分类处理并严格去重
           {
             echo "# Domain Keywords"
-            grep '^DOMAIN-KEYWORD,' "$FINAL_PROCESSED" | sort -u
+            grep '^DOMAIN-KEYWORD,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++' 
             echo
             echo "# Domains"
-            grep '^DOMAIN,' "$FINAL_PROCESSED" | sort -u
+            grep '^DOMAIN,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
             echo
             echo "# Domain Suffixes"
-            grep '^DOMAIN-SUFFIX,' "$FINAL_PROCESSED" | sort -u
+            grep '^DOMAIN-SUFFIX,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
             echo
             echo "# IP CIDR"
-            grep '^IP-CIDR,' "$FINAL_PROCESSED" | sort -u
+            grep '^IP-CIDR,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
           } > "$OUTPUT_FILE"
           
           # 清理临时文件
