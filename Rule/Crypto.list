@@ -1,4 +1,4 @@
-DOMAIN,access.pushsdk.com
+# Domain Keywords
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,binance 
@@ -36,6 +36,11 @@ DOMAIN-KEYWORD,pionex
 DOMAIN-KEYWORD,redotpay
 DOMAIN-KEYWORD,sipay
 DOMAIN-KEYWORD,thepinet 
+
+# Domains
+DOMAIN,access.pushsdk.com
+
+# Domain Suffixes
 DOMAIN-SUFFIX, fees.info 
 DOMAIN-SUFFIX,.com.tr
 DOMAIN-SUFFIX,.denizbank.com
@@ -878,6 +883,8 @@ DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zksync.io
 DOMAIN-SUFFIX,zksync.io
 DOMAIN-SUFFIX,zksync.io 
+
+# IP CIDR
 IP-CIDR,120.24.233.110/32
 IP-CIDR,120.76.205.62/32
 IP-CIDR,120.78.229.149/32
