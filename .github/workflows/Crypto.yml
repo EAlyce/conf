@@ -4,7 +4,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 */6 * * *'  # 每6小时运行一次
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -23,6 +23,7 @@ jobs:
         run: |
           # 创建临时文件
           TEMP_FILE=$(mktemp)
+          PROCESSED_FILE=$(mktemp)
           OUTPUT_FILE="Rule/Crypto.list"
           
           # 下载和处理函数
@@ -56,7 +57,7 @@ jobs:
             download_and_process "$url"
           done
           
-          # 基础处理（不包括去重）
+          # 基础处理
           cat "$TEMP_FILE" | \
             grep -v '^#' | \
             grep -v '^//' | \
@@ -65,13 +66,26 @@ jobs:
             sed -E 's/^\.(.*)/\1/' | \
             grep -v '^$' | \
             sed 's/,no-resolve//g' | \
-            grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "${OUTPUT_FILE}.tmp"
-          
-          # 最后进行排序和去重
-          sort "${OUTPUT_FILE}.tmp" | uniq > "$OUTPUT_FILE"
+            grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "$PROCESSED_FILE"
+
+          # 修复格式问题和分离混合的规则
+          cat "$PROCESSED_FILE" | \
+            # 分离混合的规则（比如 DOMAIN-KEYWORD,bybit-globalDOMAIN,access.pushsdk.com）
+            sed 's/DOMAIN,/\nDOMAIN,/g' | \
+            sed 's/DOMAIN-SUFFIX,/\nDOMAIN-SUFFIX,/g' | \
+            sed 's/DOMAIN-KEYWORD,/\nDOMAIN-KEYWORD,/g' | \
+            sed 's/IP-CIDR,/\nIP-CIDR,/g' | \
+            # 确保每行都是有效的规则
+            grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' | \
+            # 移除空行
+            grep -v '^$' | \
+            # 规范化DOMAIN-KEYWORD规则
+            awk '!seen[$0]++' | \
+            # 最后排序和去重
+            sort -u > "$OUTPUT_FILE"
           
           # 清理临时文件
-          rm -f "$TEMP_FILE" "${OUTPUT_FILE}.tmp"
+          rm -f "$TEMP_FILE" "$PROCESSED_FILE"
 
       - name: Configure Git
         run: |
