@@ -77,7 +77,8 @@ jobs:
             sed 's/IP-CIDR,/\nIP-CIDR,/g' | \
             grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' | \
             tr -d '\r' | \
-            sed 's/[[:space:]]*$//' > "$FINAL_PROCESSED"
+            sed 's/[[:space:]]*$//' | \
+            sed -E 's/^DOMAIN-SUFFIX,\./DOMAIN-SUFFIX,/g' > "$FINAL_PROCESSED"
 
           # 分类处理并严格去重
           {
