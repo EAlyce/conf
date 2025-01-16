@@ -32,14 +32,6 @@ DOMAIN,access.pushsdk.com
 
 # Domain Suffixes
 DOMAIN-SUFFIX, fees.info
-DOMAIN-SUFFIX,.com.tr
-DOMAIN-SUFFIX,.denizbank.com
-DOMAIN-SUFFIX,.fastpay.com.tr
-DOMAIN-SUFFIX,.isbank.com.tr
-DOMAIN-SUFFIX,.iyzipay.com
-DOMAIN-SUFFIX,.oyunfor.com
-DOMAIN-SUFFIX,.trendyol.com
-DOMAIN-SUFFIX,.turgame.com
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,3d.payten.com.tr
