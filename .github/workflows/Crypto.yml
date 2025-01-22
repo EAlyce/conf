@@ -60,15 +60,16 @@ jobs:
           
           # 基础处理
           cat "$TEMP_FILE" | \
-            grep -v '^#' | \
-            grep -v '^//' | \
-            sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' | \
-            sed -E '/^IP-CIDR/!s/[\/\*]//g' | \
-            sed -E 's/^\.(.*)/\1/' | \
-            grep -v '^$' | \
-            sed 's/,no-resolve//g' | \
-            grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "$PROCESSED_FILE"
-
+           grep -v '^#' | \
+           grep -v '^//' | \
+           sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' | \
+           sed -E '/^IP-CIDR/!s/[\/\*]//g' | \
+           sed -E 's/^\.(.*)/\1/' | \
+           grep -v '^$' | \
+           sed 's/,no-resolve//g' | \
+           sed 's/#.*$//' | \        # 新增：删除每行中的#及其后面的内容
+           grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "$PROCESSED_FILE"
+           
           # 修复格式问题和分离混合的规则
           cat "$PROCESSED_FILE" | \
             sed 's/DOMAIN,/\nDOMAIN,/g' | \
