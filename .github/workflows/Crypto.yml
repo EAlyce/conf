@@ -18,6 +18,7 @@ jobs:
       
       - name: Create Rule directory if not exists
         run: mkdir -p Rule
+
       - name: Get and process domains
         run: |
           TEMP_FILE=$(mktemp)
@@ -65,17 +66,16 @@ jobs:
           awk '!seen[$0]++' | \
           awk -F, '{
             if ($1 == "IP-CIDR") {
-              # Fix missing / in IP-CIDR rules
-              if ($2 !~ /\//) {
-                # If the IP part is longer than 15 characters, assume the last digits are the mask
-                if (length($2) > 15) {
-                  ip = substr($2, 1, length($2) - 2);
-                  mask = substr($2, length($2) - 1);
-                  $2 = ip "/" mask;
-                } else {
-                  # Default to /32 if no mask is provided
-                  $2 = $2 "/32";
+              # Fix IP-CIDR rules with incorrect IP format
+              if ($2 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[0-9]+\//) {
+                # Extract the correct IP and mask
+                match($2, /^([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)([0-9]{2})\/([0-9]+)/, ip_parts);
+                if (ip_parts[1] != "") {
+                  $2 = ip_parts[1] "." ip_parts[2] "/" ip_parts[4];
                 }
+              } else if ($2 !~ /\//) {
+                # If no mask is provided, default to /32
+                $2 = $2 "/32";
               }
             }
             print $1 "," $2
