@@ -64,6 +64,17 @@ jobs:
             print $1 "," $2
           }' | \
           awk '!seen[$0]++' | \
+          awk -F, '{
+            if ($1 == "IP-CIDR") {
+              split($2, ip, "/");
+              if (ip[2] == "") {
+                $2 = ip[1] "/24";
+              } else if (ip[2] ~ /^0+/) {
+                $2 = ip[1] "/" substr(ip[2], length(ip[2]) - 1);
+              }
+            }
+            print $1 "," $2
+          }' | \
           awk '
             BEGIN {print "# Domain Keywords"}
             /^DOMAIN-KEYWORD,/ {print}
