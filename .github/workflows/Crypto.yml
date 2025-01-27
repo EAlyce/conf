@@ -21,9 +21,13 @@ jobs:
 
       - name: Get and process domains
         run: |
+          # 创建临时文件
           TEMP_FILE=$(mktemp)
+          PROCESSED_FILE=$(mktemp)
+          FINAL_PROCESSED=$(mktemp)
           OUTPUT_FILE="Rule/Crypto.list"
           
+          # 下载和处理函数
           download_and_process() {
             if curl -sSfL "$1" >> "$TEMP_FILE" 2>/dev/null; then
               echo "Successfully downloaded: $1"
@@ -32,6 +36,7 @@ jobs:
             fi
           }
           
+          # 要处理的URL列表
           URLS=(
             "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt"
             "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list"
@@ -48,50 +53,51 @@ jobs:
             "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list"
           )
           
+          # 下载所有URL的内容
           for url in "${URLS[@]}"; do
             download_and_process "$url"
           done
           
-          awk '!/^#|^\/\// && !/^$/ {gsub(/^DOMAIN,/, "DOMAIN-SUFFIX,"); gsub(/[\/\*]/, ""); gsub(/^\./, ""); gsub(/,no-resolve/, ""); gsub(/#.*$/, ""); if (!/^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT/) print}' "$TEMP_FILE" | \
-          awk '/^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),/ {gsub(/\r/, ""); gsub(/[[:space:]]*$/, ""); gsub(/^DOMAIN-SUFFIX,\./, "DOMAIN-SUFFIX,"); print}' | \
-          awk -F, '{
-            if ($1 == "DOMAIN-SUFFIX" || $1 == "DOMAIN") {
-              split($2, parts, ".");
-              if (length(parts) > 2) {
-                $2 = parts[length(parts)-1] "." parts[length(parts)];
-              }
-            }
-            print $1 "," $2
-          }' | \
-          awk '!seen[$0]++' | \
-          awk -F, '{
-            if ($1 == "IP-CIDR") {
-              # Fix IP-CIDR rules with incorrect IP format
-              if ($2 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[0-9]+\//) {
-                # Extract the correct IP and mask
-                match($2, /^([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)([0-9]{2})\/([0-9]+)/, ip_parts);
-                if (ip_parts[1] != "") {
-                  $2 = ip_parts[1] "." ip_parts[2] "/" ip_parts[4];
-                }
-              } else if ($2 !~ /\//) {
-                # If no mask is provided, default to /32
-                $2 = $2 "/32";
-              }
-            }
-            print $1 "," $2
-          }' | \
-          awk '
-            BEGIN {print "# Domain Keywords"}
-            /^DOMAIN-KEYWORD,/ {print}
-            END {print "\n# Domains"}
-            /^DOMAIN,/ {print}
-            END {print "\n# Domain Suffixes"}
-            /^DOMAIN-SUFFIX,/ {print}
-            END {print "\n# IP CIDR"}
-            /^IP-CIDR,/ {print}
-          ' > "$OUTPUT_FILE"
+          # 基础处理
+          cat "$TEMP_FILE" | \
+            grep -v '^#' | \
+            grep -v '^//' | \
+            sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' | \
+            sed -E '/^IP-CIDR/!s/[\/\*]//g' | \
+            sed -E 's/^\.(.*)/\1/' | \
+            grep -v '^$' | \
+            sed 's/,no-resolve//g' | \
+            sed 's/#.*$//' | \
+            grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "$PROCESSED_FILE"
+
+          # 修复格式问题和分离混合的规则
+          cat "$PROCESSED_FILE" | \
+            sed 's/DOMAIN,/\nDOMAIN,/g' | \
+            sed 's/DOMAIN-SUFFIX,/\nDOMAIN-SUFFIX,/g' | \
+            sed 's/DOMAIN-KEYWORD,/\nDOMAIN-KEYWORD,/g' | \
+            sed 's/IP-CIDR,/\nIP-CIDR,/g' | \
+            grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' | \
+            tr -d '\r' | \
+            sed 's/[[:space:]]*$//' | \
+            sed -E 's/^DOMAIN-SUFFIX,\./DOMAIN-SUFFIX,/g' > "$FINAL_PROCESSED"
+
+          # 分类处理并严格去重
+          {
+            echo "# Domain Keywords"
+            grep '^DOMAIN-KEYWORD,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++' 
+            echo
+            echo "# Domains"
+            grep '^DOMAIN,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
+            echo
+            echo "# Domain Suffixes"
+            grep '^DOMAIN-SUFFIX,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
+            echo
+            echo "# IP CIDR"
+            grep '^IP-CIDR,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
+          } > "$OUTPUT_FILE"
           
-          rm -f "$TEMP_FILE"
+          # 清理临时文件
+          rm -f "$TEMP_FILE" "$PROCESSED_FILE" "$FINAL_PROCESSED"
 
       - name: Configure Git
         run: |
