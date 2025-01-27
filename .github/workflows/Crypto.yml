@@ -86,8 +86,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git diff --quiet Rule/Crypto.list || {
+          if ! git diff --quiet Rule/Crypto.list; then
+            git pull origin main --rebase  # 同步远程更改
             git add Rule/Crypto.list
             git commit -m "Update Crypto.list [skip ci]"
             git push origin HEAD:main
-          }
+          else
+            echo "No changes to commit"
+          fi
