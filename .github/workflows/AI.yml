@@ -18,7 +18,6 @@ jobs:
            curl -sSfL "https://ruleset.skk.moe/List/non_ip/ai.conf" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/Centralmatrix3/Scripts/raw/fee7d963109c3f45028aaf1ed49ace61e3b19181/Ruleset/DeepSeek.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/Repcz/Tool/raw/a37d80d871d22714a31eb40dbab3a0c73eb94285/Surge/Custom/DeepSeek.list" | awk '{print $0 "\n"}'
-           curl -sSfL "https://github.com/yjlsx/quantumult-x/raw/2398cff51eca9651731890580a43e80567824e09/Filter/deepseek.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://raw.githubusercontent.com/deezertidal/shadowrocket-rules/fe3127960bbfd81b4cd4cf91c5ae46a76d448dd5/rule/DeepSeek.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/BaksiLi/rulesets/raw/033ddd631bfc1e5883b4b547f40b28f93f0fc496/surge/AI.list" | awk '{print $0 "\n"}'
            curl -sSfL "https://github.com/nkopjyggfesx/FilterRule/raw/48df90b8c20d8208c2683b6f1b523ffaa36c7ea4/RULE/Shadowrocket/OPENAIGC.list" | awk '{print $0 "\n"}'
