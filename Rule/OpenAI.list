@@ -63,6 +63,7 @@ DOMAIN-KEYWORD,bingviz
 DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,colab
+DOMAIN-KEYWORD,deepseek
 DOMAIN-KEYWORD,developerprofiles
 DOMAIN-KEYWORD,forefront
 DOMAIN-KEYWORD,generativelanguage
@@ -124,7 +125,6 @@ DOMAIN-SUFFIX,cookbook.openai.com
 DOMAIN-SUFFIX,coze.com
 DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,deepmind.google
-DOMAIN-SUFFIX,deepseek.com
 DOMAIN-SUFFIX,dify.ai
 DOMAIN-SUFFIX,discourse-cdn.com
 DOMAIN-SUFFIX,domoai.app
@@ -175,6 +175,7 @@ DOMAIN-SUFFIX,hsforms.net
 DOMAIN-SUFFIX,huggingface.co
 DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,ingest.sentry.io
+DOMAIN-SUFFIX,intercom.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
@@ -218,7 +219,6 @@ DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,poecdn.net
-DOMAIN-SUFFIX,portal101.cn
 DOMAIN-SUFFIX,pplx.ai
 DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
 DOMAIN-SUFFIX,quora.com
@@ -257,13 +257,6 @@ DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,volces.com
 DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,you.com
-HOST-SUFFIX,api.deepseek.com
-HOST-SUFFIX,cdn.deepseek.com
-HOST-SUFFIX,chat.deepseek.com
-HOST-SUFFIX,fengkongcloud.com
-HOST-SUFFIX,intercom.com
-HOST-SUFFIX,platform.deepseek.com
-HOST-SUFFIX,volces.com
 IP-ASN,14061
 IP-ASN,20473
 IP-CIDR,104.16.0.0/16
