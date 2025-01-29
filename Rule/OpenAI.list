@@ -63,7 +63,6 @@ DOMAIN-KEYWORD,bingviz
 DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,colab
-DOMAIN-KEYWORD,deepseek
 DOMAIN-KEYWORD,developerprofiles
 DOMAIN-KEYWORD,forefront
 DOMAIN-KEYWORD,generativelanguage
@@ -142,7 +141,6 @@ DOMAIN-SUFFIX,f7tk.com
 DOMAIN-SUFFIX,fbcdn.net
 DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,featuregates.org
-DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-SUFFIX,geller-pa.googleapis.com
 DOMAIN-SUFFIX,gemini.google.com
 DOMAIN-SUFFIX,generativeai.google
@@ -175,7 +173,6 @@ DOMAIN-SUFFIX,hsforms.net
 DOMAIN-SUFFIX,huggingface.co
 DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,ingest.sentry.io
-DOMAIN-SUFFIX,intercom.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
@@ -199,7 +196,6 @@ DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,observeit.net
-DOMAIN-SUFFIX,open-ai-chat-omega.vercel.app
 DOMAIN-SUFFIX,openai.com
 DOMAIN-SUFFIX,openai.nooc.ink
 DOMAIN-SUFFIX,openaiapi-site.azureedge.net
@@ -250,11 +246,11 @@ DOMAIN-SUFFIX,theb.ai
 DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,typingmind.com
 DOMAIN-SUFFIX,uscardforum.com
+DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,vimeocdn.com
-DOMAIN-SUFFIX,volces.com
 DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,you.com
 IP-ASN,14061
