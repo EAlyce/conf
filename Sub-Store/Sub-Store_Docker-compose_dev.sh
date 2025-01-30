@@ -163,7 +163,6 @@ EOF
 main() {
     check_root
     install_dependencies
-    setup_mmdb
     setup_docker
 }
 
