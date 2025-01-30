@@ -2,13 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Constants
-readonly PRIMARY_COUNTRY_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb"
-readonly PRIMARY_ASN_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb"
-readonly BACKUP_COUNTRY_URL="https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb"
-readonly BACKUP_ASN_URL="https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb"
 readonly DATA_DIR="/root/sub-store-data"
-readonly MMDB_DIR="/opt/mmdb"
 readonly LOG_FILE="/var/log/sub-store-setup.log"
 
 log() {
@@ -79,19 +73,6 @@ download_file() {
     error "下载文件失败: $dest"
 }
 
-setup_mmdb() {
-    log "设置 MMDB 文件..."
-    
-    mkdir -p "$MMDB_DIR"
-    
-    download_file "$MMDB_DIR/GeoLite2-Country.mmdb" "$PRIMARY_COUNTRY_URL" "$BACKUP_COUNTRY_URL"
-    download_file "$MMDB_DIR/GeoLite2-ASN.mmdb" "$PRIMARY_ASN_URL" "$BACKUP_ASN_URL"
-    
-    local update_cmd="0 */6 * * * /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-Country.mmdb $PRIMARY_COUNTRY_URL || /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-Country.mmdb $BACKUP_COUNTRY_URL; /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-ASN.mmdb $PRIMARY_ASN_URL || /usr/bin/curl -sSL -o $MMDB_DIR/GeoLite2-ASN.mmdb $BACKUP_ASN_URL"
-    
-    (crontab -l 2>/dev/null | grep -v "GeoLite2"; echo "$update_cmd") | sort -u | crontab -
-}
-
 get_public_ip() {
     local ip_services=("https://ifconfig.me" "https://ipinfo.io/ip" "https://icanhazip.com")
     local timeout=5
@@ -130,13 +111,10 @@ services:
     environment:
       SUB_STORE_BACKEND_UPLOAD_CRON: "55 23 * * *"
       SUB_STORE_FRONTEND_BACKEND_PATH: "/$secret_key"
-      SUB_STORE_MMDB_COUNTRY_PATH: "$MMDB_DIR/GeoLite2-Country.mmdb"
-      SUB_STORE_MMDB_ASN_PATH: "$MMDB_DIR/GeoLite2-ASN.mmdb"
     ports:
       - "3001:3001"
     volumes:
       - $DATA_DIR:/opt/app/data
-      - $MMDB_DIR:$MMDB_DIR:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001"]
       interval: 30s
