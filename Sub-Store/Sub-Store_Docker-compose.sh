@@ -7,53 +7,6 @@ check_root() {
         exit 1
     fi
 }
-update_mmdb() {
-    if ! command -v cron &>/dev/null; then
-        echo "安装 cron..."
-        if ! apt-get update >/dev/null 2>&1; then
-            echo "更新软件包列表失败" >&2
-            exit 1
-        fi
-        if ! apt-get install -y cron >/dev/null 2>&1; then
-            echo "安装 cron 失败" >&2
-            exit 1
-        fi
-    fi
-
-    if ! systemctl enable cron >/dev/null 2>&1 || ! systemctl start cron; then
-        echo "启动 cron 服务失败" >&2
-        exit 1
-    fi
-
-    PRIMARY_COUNTRY_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb"
-    PRIMARY_ASN_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb"
-    BACKUP_COUNTRY_URL="https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb"
-    BACKUP_ASN_URL="https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb"
-
-    download_file() {
-        local file_path=$1
-        local primary_url=$2
-        local backup_url=$3
-
-        if ! curl -L -o "$file_path" "$primary_url"; then
-            echo "从主源下载失败，尝试备用源..."
-            if ! curl -L -o "$file_path" "$backup_url"; then
-                echo "下载 $file_path 失败" >&2
-                exit 1
-            fi
-        fi
-    }
-
-    download_file /opt/app/data/GeoLite2-Country.mmdb "$PRIMARY_COUNTRY_URL" "$BACKUP_COUNTRY_URL"
-    download_file /opt/app/data/GeoLite2-ASN.mmdb "$PRIMARY_ASN_URL" "$BACKUP_ASN_URL"
-
-    CRON_CMD="0 * * * * curl -L -o /opt/app/data/GeoLite2-Country.mmdb $PRIMARY_COUNTRY_URL || curl -L -o /opt/app/data/GeoLite2-Country.mmdb $BACKUP_COUNTRY_URL && curl -L -o /opt/app/data/GeoLite2-ASN.mmdb $PRIMARY_ASN_URL || curl -L -o /opt/app/data/GeoLite2-ASN.mmdb $BACKUP_ASN_URL"
-    (crontab -l 2>/dev/null | grep -Fq "$CRON_CMD") || (
-        (crontab -l 2>/dev/null; echo "$CRON_CMD") | crontab -
-    )
-    crontab -l | grep -v '^#' | sed '/^\s*$/d' | sort | uniq | crontab -
-}
-update_mmdb
 
 install_packages() {
     if ! command -v docker &> /dev/null; then
@@ -106,17 +59,15 @@ setup_docker() {
     
     # 创建 docker-compose.yml 文件
     cat <<EOF > docker-compose.yml
-name: sub-store
+name: sub-store-app
 services:
   sub-store:
-    image: xream/sub-store:http-meta
+    image: xream/sub-store
     container_name: sub-store
     restart: always
     environment:
-      SUB_STORE_BACKEND_UPLOAD_CRON: "55 23 * * *"
-      SUB_STORE_FRONTEND_BACKEND_PATH: "/$secret_key"
-      SUB_STORE_MMDB_COUNTRY_PATH: "/opt/app/data/GeoLite2-Country.mmdb"
-      SUB_STORE_MMDB_ASN_PATH: "/opt/app/data/GeoLite2-ASN.mmdb"
+      - SUB_STORE_BACKEND_UPLOAD_CRON=55 23 * * *
+      - SUB_STORE_FRONTEND_BACKEND_PATH=/$secret_key
     ports:
       - "3001:3001"
     volumes:
