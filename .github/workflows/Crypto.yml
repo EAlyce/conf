@@ -25,7 +25,7 @@ jobs:
           TEMP_FILE=$(mktemp)
           PROCESSED_FILE=$(mktemp)
           FINAL_PROCESSED=$(mktemp)
-          OUTPUT_FILE="Rule/Crypto.list"
+          OUTPUT_FILE="Rule/CryptoDraft.list"
           
           # 下载和处理函数
           download_and_process() {
@@ -108,9 +108,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ! git diff --quiet Rule/Crypto.list; then
-            git add Rule/Crypto.list
-            git commit -m "Update Crypto.list [skip ci]"
+          if ! git diff --quiet Rule/CryptoDraft.list; then
+            git add Rule/CryptoDraft.list
+            git commit -m "Update CryptoDraft.list [skip ci]"
             git push origin HEAD:main
           else
             echo "No changes to commit"
