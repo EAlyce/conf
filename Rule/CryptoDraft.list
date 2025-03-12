@@ -235,6 +235,7 @@ DOMAIN-SUFFIX,etherscan.com
 DOMAIN-SUFFIX,etherscan.io
 DOMAIN-SUFFIX,ethfans.org
 DOMAIN-SUFFIX,ethgasstation.info
+DOMAIN-SUFFIX,eturkcell.netmera.com
 DOMAIN-SUFFIX,ewapool.net
 DOMAIN-SUFFIX,f2pool.com
 DOMAIN-SUFFIX,fapibak.binance.com
@@ -417,6 +418,7 @@ DOMAIN-SUFFIX,tronscan.org
 DOMAIN-SUFFIX,truefi.io
 DOMAIN-SUFFIX,trustwalletapp.com
 DOMAIN-SUFFIX,turgame.com
+DOMAIN-SUFFIX,turkcell.com.tr:443
 DOMAIN-SUFFIX,unisat.io
 DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,upbit.com
