@@ -26,6 +26,7 @@ DOMAIN-KEYWORD,pionex
 DOMAIN-KEYWORD,redotpay
 DOMAIN-KEYWORD,sipay
 DOMAIN-KEYWORD,thepinet
+DOMAIN-KEYWORD,zeepay
 
 # Domains
 DOMAIN,access.pushsdk.com
@@ -466,6 +467,7 @@ DOMAIN-SUFFIX,zb.app
 DOMAIN-SUFFIX,zb.com
 DOMAIN-SUFFIX,zb.io
 DOMAIN-SUFFIX,zb.live
+DOMAIN-SUFFIX,zeepay.com.tr
 DOMAIN-SUFFIX,zkscan.io
 DOMAIN-SUFFIX,zksync.io
 
