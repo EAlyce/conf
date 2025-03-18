@@ -19,6 +19,7 @@ DOMAIN-KEYWORD,iyzico
 DOMAIN-KEYWORD,iyzipay
 DOMAIN-KEYWORD,mdex
 DOMAIN-KEYWORD,metamask
+DOMAIN-KEYWORD,moneytolia
 DOMAIN-KEYWORD,okx
 DOMAIN-KEYWORD,ozan
 DOMAIN-KEYWORD,papara
@@ -26,6 +27,7 @@ DOMAIN-KEYWORD,pionex
 DOMAIN-KEYWORD,redotpay
 DOMAIN-KEYWORD,sipay
 DOMAIN-KEYWORD,thepinet
+DOMAIN-KEYWORD,turan
 DOMAIN-KEYWORD,zeepay
 
 # Domains
@@ -46,6 +48,8 @@ DOMAIN-SUFFIX,ada.support
 DOMAIN-SUFFIX,aex.com
 DOMAIN-SUFFIX,aicoin.com
 DOMAIN-SUFFIX,aimoon.com
+DOMAIN-SUFFIX,aktifbank.com.tr
+DOMAIN-SUFFIX,analytics.tr.adjust.com
 DOMAIN-SUFFIX,api.binance.com
 DOMAIN-SUFFIX,api.iyzipay.com
 DOMAIN-SUFFIX,api.saasexch.cc
@@ -320,6 +324,7 @@ DOMAIN-SUFFIX,mexcsensors.com
 DOMAIN-SUFFIX,min-api.cryptocompare.com
 DOMAIN-SUFFIX,mokexapp.com
 DOMAIN-SUFFIX,mokexapp.net
+DOMAIN-SUFFIX,moneytolia.com
 DOMAIN-SUFFIX,myetherwallet.com
 DOMAIN-SUFFIX,myqcloud.com
 DOMAIN-SUFFIX,mytokenapi.com
@@ -328,6 +333,7 @@ DOMAIN-SUFFIX,native.binance.com
 DOMAIN-SUFFIX,native.binance.info
 DOMAIN-SUFFIX,nbstream.binance.info
 DOMAIN-SUFFIX,nbstream.yingwangtech.net
+DOMAIN-SUFFIX,netmera.com
 DOMAIN-SUFFIX,nexo.com
 DOMAIN-SUFFIX,nexo.io
 DOMAIN-SUFFIX,nftcalendar.io
@@ -419,12 +425,12 @@ DOMAIN-SUFFIX,tronlink.org
 DOMAIN-SUFFIX,tronscan.org
 DOMAIN-SUFFIX,truefi.io
 DOMAIN-SUFFIX,trustwalletapp.com
+DOMAIN-SUFFIX,turan.app
 DOMAIN-SUFFIX,turgame.com
 DOMAIN-SUFFIX,turkcell.com.tr:443
 DOMAIN-SUFFIX,unisat.io
 DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,upbit.com
-DOMAIN-SUFFIX,va.tawk.to
 DOMAIN-SUFFIX,vfat.tools
 DOMAIN-SUFFIX,viewbase.com
 DOMAIN-SUFFIX,vitalik.ca
