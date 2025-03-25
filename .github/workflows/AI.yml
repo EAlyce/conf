@@ -34,7 +34,7 @@ jobs:
           } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
               sed 's/,no-resolve//g' | sed 's/#.*$//g' | 
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
-              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | 
+              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' | 
               sort | uniq > Rule/OpenAI.list  # Deduplication moved to the end
       - name: Check and Configure Git
         run: |
