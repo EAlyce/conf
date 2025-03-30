@@ -41,6 +41,7 @@ DOMAIN,openai-api.arkoselabs.com
 DOMAIN,openaiapi-site.azureedge.net
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
 DOMAIN,openaicomproductionae4b.blob.core.windows.net
+DOMAIN,pplx-res.cloudinary.com
 DOMAIN,proactivebackend-pa.googleapis.com
 DOMAIN,production-openaicom-storage.azureedge.net
 DOMAIN,r.bing.com
@@ -70,6 +71,7 @@ DOMAIN-KEYWORD,labs.google
 DOMAIN-KEYWORD,midjourney
 DOMAIN-KEYWORD,notebooklm.google
 DOMAIN-KEYWORD,openai
+DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
@@ -123,6 +125,10 @@ DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,cookbook.openai.com
 DOMAIN-SUFFIX,coze.com
+DOMAIN-SUFFIX,cursor-cdn.com
+DOMAIN-SUFFIX,cursor.com
+DOMAIN-SUFFIX,cursor.sh
+DOMAIN-SUFFIX,cursorapi.com
 DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,dify.ai
@@ -159,6 +165,7 @@ DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-SUFFIX,gpt4all.io
 DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,grazie.aws.intellij.net
+DOMAIN-SUFFIX,grok.com
 DOMAIN-SUFFIX,grok.x.ai
 DOMAIN-SUFFIX,groq.com
 DOMAIN-SUFFIX,gstatic.com
@@ -183,6 +190,7 @@ DOMAIN-SUFFIX,jasper.ai
 DOMAIN-SUFFIX,js.intercomcdn.com
 DOMAIN-SUFFIX,launchdarkly.com
 DOMAIN-SUFFIX,lemonsqueezy.com
+DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,meta.com
