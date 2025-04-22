@@ -89,6 +89,7 @@ DOMAIN-SUFFIX,api.revenuecat.com
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,apis.google.com
 DOMAIN-SUFFIX,auth0.com
+DOMAIN-SUFFIX,auth0.openai.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,bard.google.com
@@ -119,6 +120,7 @@ DOMAIN-SUFFIX,cloudflare.net
 DOMAIN-SUFFIX,cloudflareinsights.com
 DOMAIN-SUFFIX,cloudflareinsights.com
 DOMAIN-SUFFIX,cloudflareperf.com
+DOMAIN-SUFFIX,cohere.ai
 DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,cookbook.openai.com
@@ -193,6 +195,7 @@ DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,meta.com
 DOMAIN-SUFFIX,microsoft.com
+DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,nexus-websocket-a.intercom.io
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
@@ -236,6 +239,7 @@ DOMAIN-SUFFIX,slack.com
 DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sora.com
 DOMAIN-SUFFIX,sprig.com
+DOMAIN-SUFFIX,stability.ai
 DOMAIN-SUFFIX,static.metafi.codefi.network
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,statsigapi.net
