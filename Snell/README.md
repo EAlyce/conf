@@ -4,6 +4,10 @@
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell.sh)
 ```
+dev
+```
+bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell_dev.sh)
+```
 
 卸载
 
