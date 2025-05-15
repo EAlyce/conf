@@ -153,13 +153,10 @@ setup_docker() {
     local script_dir_for_compose # Directory where compose file will be stored and for crontab cd
     local compose_file_path
 
-    # Check if script is run via process substitution (e.g., bash <(curl ...))
     if [[ "${BASH_SOURCE[0]}" == /dev/fd/* || "${BASH_SOURCE[0]}" == /proc/self/fd/* ]]; then
         log "脚本通过进程替换执行。Docker Compose 文件将使用 $DATA_DIR 目录。"
         script_dir_for_compose="$DATA_DIR"
-        # No need to create $DATA_DIR again if it's already the target, but ensure it's writable for the compose file.
     else
-        # Standard execution: use script's directory
         script_dir_for_compose="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
     fi
     compose_file_path="$script_dir_for_compose/docker-compose-sub-store.yml"
@@ -167,16 +164,14 @@ setup_docker() {
 
     log "停止并移除现有的 sub-store Docker 容器和网络 (如果存在)..."
     docker rm -f sub-store >/dev/null 2>&1 || true
-    # Check for existing compose file at the determined path before trying to bring it down
     if [[ -f "$compose_file_path" ]]; then
       docker compose -f "$compose_file_path" -p sub-store down --remove-orphans >/dev/null 2>&1 || true
-    elif [[ -f "docker-compose.yml" ]]; then # Fallback for a conventionally named file in PWD if the specific one isn't found
+    elif [[ -f "docker-compose.yml" ]]; then
       log "在 $compose_file_path 未找到 docker-compose 文件，尝试在当前目录使用 docker-compose.yml"
       docker compose -p sub-store down --remove-orphans >/dev/null 2>&1 || true
     fi
     
     log "创建 docker-compose 文件于 $compose_file_path ..."
-    # Ensure the target directory for compose file exists and is writable
     mkdir -p "$(dirname "$compose_file_path")" || error "无法创建目录 $(dirname "$compose_file_path") 用于 docker-compose 文件"
     cat > "$compose_file_path" <<EOF
 name: sub-store
@@ -240,17 +235,17 @@ print_success_info() {
     local secret_key="$1"
     local public_ip
     public_ip=$(get_public_ip)
-    
-    cat <<EOF
 
-部署完成！您的 Sub-Store 信息如下：
+    if [[ -z "$public_ip" ]]; then
+        log "警告: 未能获取公共 IP 地址，成功信息中的 URL 可能不完整或不正确。"
+        public_ip="<无法获取IP>"
+    fi
 
-面板地址: http://${public_ip}:${SUB_STORE_PORT}
-后端地址: http://${public_ip}:${SUB_STORE_PORT}/${secret_key}
-
-请保存好以上信息！
-如果无法访问，请检查防火墙设置是否允许端口 ${SUB_STORE_PORT} 的入站连接。
-EOF
+    echo -e "\n部署完成！您的 Sub-Store 信息如下："
+    echo -e "\nSub-Store 面板：http://${public_ip}:${SUB_STORE_PORT}"
+    echo -e "后端地址：http://${public_ip}:${SUB_STORE_PORT}/${secret_key}\n"
+    echo -e "请保存好以上信息！"
+    echo -e "如果无法访问，请检查防火墙设置是否允许端口 ${SUB_STORE_PORT} 的入站连接。\n"
 }
 
 main() {
