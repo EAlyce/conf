@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-IFS=$'\n\t'
+IFS=$\'\n\t\'
 
 # Configuration Variables
 readonly DATA_DIR="/root/sub-store-data"
@@ -38,7 +38,6 @@ install_dependencies() {
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         log "发现缺失的依赖: ${missing_deps[*]}"
         
-        # Check if apt-get update is needed
         if [[ -f "$APT_UPDATE_STAMP_FILE" ]]; then
             local last_update_time
             last_update_time=$(stat -c %Y "$APT_UPDATE_STAMP_FILE")
@@ -118,14 +117,13 @@ download_file() {
 
 get_public_ip() {
     log "正在获取公共 IP 地址..."
-    local ip_services=("https://ifconfig.me/ip" "https://ipinfo.io/ip" "https://api.ipify.org") # Removed icanhazip.com as it sometimes returns HTML
+    local ip_services=("https://ifconfig.me/ip" "https://ipinfo.io/ip" "https://api.ipify.org")
     local timeout=5
     local public_ip
     
     for service in "${ip_services[@]}"; do
         log "尝试使用服务 $service 获取 IP..."
         if public_ip=$(curl -sSf --connect-timeout "$timeout" "$service"); then
-            # Stricter IP validation
             if [[ $public_ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
                 log "获取到公共 IP 地址: $public_ip"
                 echo "$public_ip"
@@ -136,7 +134,7 @@ get_public_ip() {
         else
             log "从 $service 获取 IP 失败。"
         fi
-        sleep 1 # Brief pause before trying next service
+        sleep 1
     done
     
     error "无法获取公共 IP 地址。请检查网络连接和防火墙设置。"
@@ -149,24 +147,37 @@ setup_docker() {
     secret_key=$(openssl rand -hex 32)
     log "已生成新的 SUB_STORE_FRONTEND_BACKEND_PATH 密钥。"
     
-    mkdir -p "$DATA_DIR"
+    mkdir -p "$DATA_DIR" || error "无法创建数据目录 $DATA_DIR"
     log "确保数据目录 $DATA_DIR 已创建。"
     
-    # Determine script's absolute directory for robust crontab and docker-compose path
-    local script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-    local compose_file_path="$script_dir/docker-compose-sub-store.yml"
+    local script_dir_for_compose # Directory where compose file will be stored and for crontab cd
+    local compose_file_path
+
+    # Check if script is run via process substitution (e.g., bash <(curl ...))
+    if [[ "${BASH_SOURCE[0]}" == /dev/fd/* || "${BASH_SOURCE[0]}" == /proc/self/fd/* ]]; then
+        log "脚本通过进程替换执行。Docker Compose 文件将使用 $DATA_DIR 目录。"
+        script_dir_for_compose="$DATA_DIR"
+        # No need to create $DATA_DIR again if it's already the target, but ensure it's writable for the compose file.
+    else
+        # Standard execution: use script's directory
+        script_dir_for_compose="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+    fi
+    compose_file_path="$script_dir_for_compose/docker-compose-sub-store.yml"
+    log "Docker Compose 文件路径设置为: $compose_file_path"
 
     log "停止并移除现有的 sub-store Docker 容器和网络 (如果存在)..."
     docker rm -f sub-store >/dev/null 2>&1 || true
-    # Use the specific compose file path if it exists, otherwise assume it's in current dir (less robust)
+    # Check for existing compose file at the determined path before trying to bring it down
     if [[ -f "$compose_file_path" ]]; then
       docker compose -f "$compose_file_path" -p sub-store down --remove-orphans >/dev/null 2>&1 || true
-    elif [[ -f "docker-compose.yml" ]]; then # Fallback for original behavior if new file not found
+    elif [[ -f "docker-compose.yml" ]]; then # Fallback for a conventionally named file in PWD if the specific one isn't found
+      log "在 $compose_file_path 未找到 docker-compose 文件，尝试在当前目录使用 docker-compose.yml"
       docker compose -p sub-store down --remove-orphans >/dev/null 2>&1 || true
     fi
     
-    log "创建 docker-compose.yml 文件于 $compose_file_path ..."
+    log "创建 docker-compose 文件于 $compose_file_path ..."
+    # Ensure the target directory for compose file exists and is writable
+    mkdir -p "$(dirname "$compose_file_path")" || error "无法创建目录 $(dirname "$compose_file_path") 用于 docker-compose 文件"
     cat > "$compose_file_path" <<EOF
 name: sub-store
 services:
@@ -178,7 +189,7 @@ services:
       SUB_STORE_BACKEND_UPLOAD_CRON: "55 23 * * *"
       SUB_STORE_FRONTEND_BACKEND_PATH: "/$secret_key"
     ports:
-      - "${SUB_STORE_PORT}:${SUB_STORE_PORT}" # Use configurable port
+      - "${SUB_STORE_PORT}:${SUB_STORE_PORT}"
     volumes:
       - ${DATA_DIR}:/opt/app/data
     healthcheck:
@@ -187,6 +198,7 @@ services:
       timeout: 10s
       retries: 3
 EOF
+    log "Docker Compose 文件已创建: $compose_file_path"
     
     log "拉取最新的 Docker 镜像 (sub-store)..."
     docker compose -f "$compose_file_path" -p sub-store pull || error "拉取 Docker 镜像失败"
@@ -199,11 +211,10 @@ EOF
         log "sub-store 容器正在运行。"
     else
         log "警告: sub-store 容器似乎没有正确启动。请检查 Docker 日志。"
-        docker logs sub-store --tail 50 # Show last 50 lines of logs for quick diagnostics
+        docker logs sub-store --tail 50 || log "无法获取 sub-store 日志 (可能容器未成功创建)。"
     fi
     
-    # Crontab update command using absolute path to the compose file
-    local update_cmd="0 3 * * * cd \"$script_dir\" && docker compose -f \"$compose_file_path\" -p sub-store pull && docker compose -f \"$compose_file_path\" -p sub-store up -d"
+    local update_cmd="0 3 * * * cd \"$script_dir_for_compose\" && docker compose -f \"$compose_file_path\" -p sub-store pull && docker compose -f \"$compose_file_path\" -p sub-store up -d"
     log "设置 crontab 定时更新任务..."
     (crontab -l 2>/dev/null | grep -v "sub-store"; echo "$update_cmd") | sort -u | crontab -
     log "Crontab 更新任务已设置。"
@@ -228,7 +239,7 @@ EOF
 print_success_info() {
     local secret_key="$1"
     local public_ip
-    public_ip=$(get_public_ip) # This might fail if network issues persist
+    public_ip=$(get_public_ip)
     
     cat <<EOF
 
@@ -243,7 +254,6 @@ EOF
 }
 
 main() {
-    # Ensure log file directory exists and is writable (basic check)
     mkdir -p "$(dirname "$LOG_FILE")" || error "无法创建日志目录 $(dirname "$LOG_FILE")"
     touch "$LOG_FILE" || error "无法写入日志文件 $LOG_FILE"
 
@@ -254,8 +264,7 @@ main() {
     log "脚本执行完毕。"
 }
 
-# Trap ERR to log errors with line numbers
-trap 'error "脚本执行失败，位于脚本 ${BASH_SOURCE[0]} 的行号: $LINENO"' ERR
+trap 'error "脚本执行失败，位于脚本 ${BASH_SOURCE[0]} (实际路径: $(realpath "${BASH_SOURCE[0]}" 2>/dev/null || echo "无法解析")) 的行号: $LINENO"' ERR
 
 main
 
