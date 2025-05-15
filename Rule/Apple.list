@@ -1567,6 +1567,10 @@ DOMAIN-SUFFIX,xn--kput3imi374g.xn--hxt814e
 DOMAIN-SUFFIX,xn--ohq11k7pl25iyo8a.cn
 DOMAIN-SUFFIX,xn--ruq8a011kt6y.xn--hxt814e
 DOMAIN-SUFFIX,yourmonsterbeats.com
+Fetchingfromhttps://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list
+Fetchingfromhttps://github.com/SukkaW/Surge/raw/master/Source/ip/apple_services.conf
+Fetchingfromhttps://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list
+Fetchingfromhttps://ruleset.skk.moe/List/non_ip/apple_services.conf
 IP-CIDR,139.178.128.0/18
 IP-CIDR,144.178.0.0/19
 IP-CIDR,144.178.36.0/22
