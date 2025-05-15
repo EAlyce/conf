@@ -323,7 +323,7 @@ print_node_info() {
     echo "  Public IP:   $public_ip"
     echo "  Port:        $port"
     echo "  Password:    $password"
-    echo "  Snell Config: snell, $public_ip, $port, psk=$password, version=4"
+    echo "  Snell Node: $location $port = snell, $public_ip, $port, psk=$password, version=4"
     echo "-------------------------"
     echo
 }
