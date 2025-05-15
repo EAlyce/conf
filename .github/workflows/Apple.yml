@@ -5,39 +5,102 @@ on:
     branches:
       - main
   schedule:
+    # Runs at the start of every hour. The cron syntax is specific to GitHub Actions.
     - cron: '0 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
 
 jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Get and merge domains from source files
+      - name: Get, process, and merge domains
+        # Explicitly use bash for array support, pipefail, and other shell features.
+        shell: bash
         run: |
-          {
-            curl -sSfL "https://github.com/SukkaW/Surge/raw/master/Source/ip/apple_services.conf" | awk '{print $0 "\n"}'
-            curl -sSfL "https://ruleset.skk.moe/List/non_ip/apple_services.conf" | awk '{print $0 "\n"}'
-            curl -sSfL "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list" | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | cat - | grep -v '^#' | grep -v '^$' | sed 's/,no-resolve//g' | grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' | sort | uniq > Rule/Apple.list
+          # Exit immediately if a command exits with a non-zero status.
+          # Treat pipe failures as errors (e.g., if curl fails, the whole pipe fails).
+          set -eo pipefail
 
-      - name: Configure Git
+          # Define source URLs in an array for better readability and easier management.
+          declare -a SOURCE_URLS=(
+            "https://github.com/SukkaW/Surge/raw/master/Source/ip/apple_services.conf"
+            "https://ruleset.skk.moe/List/non_ip/apple_services.conf"
+            "https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Apple.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list"
+          )
+
+          echo "Fetching and processing domains from ${#SOURCE_URLS[@]} sources..."
+
+          # The subshell { ... } groups the output of all curl commands.
+          # This combined output is then piped through the processing commands.
+          # The 'awk '{print $0 "\n"}'' command ensures that every line output by curl
+          # is followed by a newline character. This helps normalize lines, especially
+          # if some source files might have lines not ending with a newline.
+          {
+            for url in "${SOURCE_URLS[@]}"; do
+              echo "Fetching from $url"
+              # -s: silent mode, -S: show error on silent, -f: fail fast on HTTP errors, -L: follow redirects.
+              # --connect-timeout: max time for connection, --retry & --retry-delay: for transient network issues.
+              curl --connect-timeout 15 --retry 3 --retry-delay 5 -sSfL "$url" | awk '{print $0 "\n"}'
+            done
+          } | \
+          # Remove all literal space characters. 
+          # If you need to remove ALL whitespace (including tabs, etc.), consider using: sed 's/[[:space:]]//g'
+          sed 's/ //g' | \
+          # Filter out comment lines (those starting with '#').
+          grep -v '^#' | \
+          # Filter out any empty lines that might have resulted from previous processing (e.g., the awk step or original data).
+          grep -v '^$' | \
+          # Remove the ',no-resolve' suffix if present.
+          sed 's/,no-resolve//g' | \
+          # Filter out lines starting with specific keywords (e.g., IP-CIDR6, URL-REGEX).
+          # Using a single grep -Ev with alternation ('|') is generally more efficient than multiple greps.
+          grep -Ev '^(IP-CIDR6|URL-REGEX|PROCESS-NAME|USER-AGENT)' | \
+          # Sort the remaining lines alphabetically.
+          sort | \
+          # Remove duplicate lines.
+          uniq > Rule/Apple.list
+
+          echo "Domain list successfully generated at Rule/Apple.list"
+          # Output the number of lines in the generated file for quick verification.
+          echo "Number of lines in Rule/Apple.list: $(wc -l < Rule/Apple.list || echo '0 (file empty or not found)')"
+
+      - name: Configure Git user
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-      - name: Force add changes
+      - name: Add changes to staging
+        # This command attempts to add Rule/Apple.list to the Git staging area.
+        # The '|| true' ensures that the workflow step does not fail if Rule/Apple.list
+        # doesn't exist or has no changes to be staged (e.g., it's already up-to-date).
         run: git add Rule/Apple.list || true
 
-      - name: Commit and push changes if needed
+      - name: Commit and push changes if any
         env:
+          # GITHUB_TOKEN is automatically provided by GitHub Actions for authentication.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Check if there are any staged changes in the index compared to the last commit (HEAD).
           if ! git diff-index --quiet HEAD; then
+            echo "Committing changes to Rule/Apple.list..."
+            # Commit the changes with a descriptive message.
             git commit -m "Update Apple.list with latest domains"
+            
+            echo "Pushing changes to main branch..."
+            # Force push the changes to the main branch.
+            # IMPORTANT: Force pushing (--force) overwrites the history of the remote branch.
+            # This is generally acceptable if this workflow is the sole manager of 'Rule/Apple.list'
+            # on this branch and you want to ensure the automated update always succeeds by overwriting.
+            # For collaborative branches or if preserving history is critical, a regular push
+            # (e.g., 'git push origin HEAD:main') without --force is safer, though it might fail
+            # if there are divergent changes, requiring manual intervention or a different merge strategy.
             git push origin HEAD:main --force
+            echo "Changes pushed successfully."
           else
-            echo "No changes to commit"
+            echo "No changes to commit to Rule/Apple.list."
           fi
+
