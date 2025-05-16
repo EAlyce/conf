@@ -73,15 +73,18 @@ DOMAIN-SUFFIX,api.microsoftapp.net
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,apis.google.com
 DOMAIN-SUFFIX,auth0.com
+DOMAIN-SUFFIX,auth0.openai.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,azurefd.net
 DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io
+DOMAIN-SUFFIX,bing.com
 DOMAIN-SUFFIX,blob.core.windows.net
 DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,chat.com
+DOMAIN-SUFFIX,chat.openai.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,claude.ai
@@ -89,6 +92,7 @@ DOMAIN-SUFFIX,claude.ai.com
 DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,clipdrop.co
 DOMAIN-SUFFIX,cloudflareinsights.com
+DOMAIN-SUFFIX,cohere.ai
 DOMAIN-SUFFIX,compute-pipe.com
 DOMAIN-SUFFIX,cursor-cdn.com
 DOMAIN-SUFFIX,cursor.com
@@ -117,10 +121,12 @@ DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,grok.com
+DOMAIN-SUFFIX,grok.x.ai
 DOMAIN-SUFFIX,groq.com
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,hcaptcha.com
 DOMAIN-SUFFIX,host.livekit.cloud
+DOMAIN-SUFFIX,huggingface.co
 DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercom.io
@@ -132,6 +138,7 @@ DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,meta.com
+DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
 DOMAIN-SUFFIX,oaistatic.com
@@ -147,6 +154,7 @@ DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,perplexity.com
 DOMAIN-SUFFIX,pki.goog
+DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,pplx.ai
@@ -156,6 +164,7 @@ DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sora.com
+DOMAIN-SUFFIX,stability.ai
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
