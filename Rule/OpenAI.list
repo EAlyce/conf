@@ -49,11 +49,8 @@ DOMAIN,sydney.bing.com
 DOMAIN,th1s_rule5et_1s_m4d3_by_5ukk4w_ruleset.skk.moe
 DOMAIN,www.bing.com
 DOMAIN-KEYWORD,Claude
-DOMAIN-KEYWORD,Grok
 DOMAIN-KEYWORD,alkalimakersuite-pa.clients6.google.com
 DOMAIN-KEYWORD,anthropic
-DOMAIN-KEYWORD,claude
-DOMAIN-KEYWORD,cloudflare
 DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,developerprofiles
 DOMAIN-KEYWORD,generativelanguage
@@ -64,7 +61,6 @@ DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
-DOMAIN-KEYWORD,prodregistryv
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
 DOMAIN-SUFFIX,algolia.net
@@ -137,7 +133,6 @@ DOMAIN-SUFFIX,launchdarkly.com
 DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,meta.ai
-DOMAIN-SUFFIX,meta.com
 DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
@@ -169,14 +164,12 @@ DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,turn.livekit.cloud
-DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,x.ai
 IP-ASN,14061
 IP-ASN,20473
 IP-CIDR,104.238.150.13/32
-IP-CIDR,129.146.3.78/32
 IP-CIDR,143.110.232.239/32
 IP-CIDR,143.198.200.27/32
 IP-CIDR,159.89.204.203/32
