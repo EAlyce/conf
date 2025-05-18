@@ -5,7 +5,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Linux/tmux.
 ```
 
 
-常用指令
+## 常用指令
 
 安装软件
 ```
