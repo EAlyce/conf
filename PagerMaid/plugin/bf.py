@@ -1,12 +1,3 @@
-"""
-PagerMaid 备份与文件传输模块
-
-此模块提供了PagerMaid的备份、恢复和文件传输功能。
-包含三个主要命令：
-- bf: 备份data和plugins文件夹
-- hf: 恢复备份
-- transfer: 上传/下载文件
-"""
 
 import os
 import sys
