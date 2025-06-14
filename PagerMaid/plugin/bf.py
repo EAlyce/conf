@@ -11,14 +11,12 @@ from traceback import format_exc
 from typing import List, Optional, Tuple, Union
 from contextlib import contextmanager
 
-# 导入PagerMaid相关模块
 from pagermaid.config import Config
 from pagermaid.listener import listener
 from pagermaid.enums import Client, Message
 from pagermaid.utils import lang
 from pagermaid.utils.bot_utils import upload_attachment
 
-# 常量定义
 DEFAULT_BACKUP_FILENAME = "pagermaid_backup.tar.gz"
 EXCLUDED_FILES = ["pagermaid.session-journal", "pagermaid.session"]
 TEMP_DIR_NAME = "temp_backup"
