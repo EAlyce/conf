@@ -1,0 +1,114 @@
+mode: rule
+redir-port: 0
+tproxy-port: 0
+mixed-port: 7897
+allow-lan: false
+log-level: silent
+ipv6: false
+external-controller: 127.0.0.1:9097
+secret: ""
+unified-delay: false
+geodata-mode: false
+external-controller-cors:
+  allow-private-network: true
+  allow-origins:
+    - "*"
+find-process-mode: off
+authentication: []
+geodata-loader: standard
+global-ua: clash.meta
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  default-nameserver:
+    - 119.29.29.29
+    - 8.8.8.8
+  enhanced-mode: fake-ip
+  fake-ip-range: 172.29.0.1/16
+  nameserver:
+    - https://106.75.164.170/Eaf9nie7quee/endusers
+    - https://139.224.50.204/Eaf9nie7quee/endusers
+    - https://60.205.14.96/Eaf9nie7quee/endusers
+  fallback-filter:
+    geoip: true
+    ipcidr: null
+  fallback: []
+  use-system-hosts: false
+  fake-ip-filter:
+    - "*"
+    - +.lan
+    - +.local
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+  ipv6: false
+  use-hosts: false
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+  respect-rules: true
+profile:
+  store-selected: true
+  store-fake-ip: false
+hosts: {}
+skip-auth-prefixes:
+  - 127.0.0.1/32
+geox-url:
+  mmdb: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb
+tcp-concurrent: false
+lan-allowed-ips:
+  - 0.0.0.0/0
+  - ::/0
+lan-disallowed-ips: []
+geo-update-interval: 1
+geo-auto-update: false
+global-client-fingerprint: chrome
+bind-address: "*"
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports:
+        - 80
+        - 443
+      override-destination: false
+    TLS:
+      ports:
+        - 443
+    QUIC:
+      ports:
+        - 443
+  skip-domain:
+    - +.push.apple.com
+  force-domain: []
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  auto-redirect: false
+  auto-detect-interface: true
+  dns-hijack: []
+  device: Mihomo
+  mtu: 1492
+  route-exclude-address: []
+  strict-route: false
+proxies:
+
+proxy-groups:
+  - name: Proxy
+    type: select
+    include-all-proxies: true
+rule-providers:
+  Proxy:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Proxy.list
+    path: ./ruleset/Proxy.list
+rules:
+  - RULE-SET,Proxy,Proxy,no-resolve
+  - GEOIP,CN,DIRECT
+  - MATCH,Proxy
