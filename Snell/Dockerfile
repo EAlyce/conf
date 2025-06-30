@@ -16,7 +16,7 @@ RUN set -eux; \
         "linux/arm64")  ARCH="aarch64" ;; \
         "linux/arm/v7") ARCH="armv7l" ;; \
         *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
-    ; fi; \
+    esac; \
     URL="https://github.com/EAlyce/conf/raw/refs/heads/main/Snell/source/${VERSION}/snell-server-${VERSION}-linux-${ARCH}.zip"; \
     echo "Downloading from: ${URL}"; \
     wget -O snell.zip "${URL}"; \
