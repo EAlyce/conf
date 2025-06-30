@@ -61,7 +61,7 @@ print_proxy() {
     local port="${PORT:-$(grep -oP 'listen=0.0.0.0:\K\d+' /snell/snell.conf)}"
     local psk="${PSK:-$(grep -oP 'psk=\K.*' /snell/snell.conf)}"
 
-    echo "Proxy = snell, $ipv4, $port, psk=$psk, version=4, tfo=false"
+    echo "Proxy = snell, $ipv4, $port, psk=$psk, version=5, tfo=false"
 }
 
 # 主函数
