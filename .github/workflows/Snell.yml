@@ -2,7 +2,7 @@ name: Snell Update
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每小时运行
+    - cron: '0 0 * * *'  # 每天午夜运行
   workflow_dispatch:  # 保留手动触发选项
 
 jobs:
@@ -14,74 +14,49 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests beautifulsoup4
 
       - name: 检测下载并补全文件
         run: |
           import requests
+          from bs4 import BeautifulSoup
+          import re
           import os
 
-          def check_version_exists(version, arch):
-              filename = f'snell-server-v{version}-linux-{arch}.zip'
-              url = f'https://dl.nssurge.com/snell/{filename}'
-              try:
-                  response = requests.head(url, allow_redirects=True, timeout=5)
-                  return response.status_code == 200
-              except requests.exceptions.RequestException:
-                  return False
+          def get_latest_version():
+              url = "https://manual.nssurge.com/others/snell.html"
+              response = requests.get(url)
+              soup = BeautifulSoup(response.text, 'html.parser')
+              links = soup.find_all('a', href=re.compile(r'snell-server-v[\d\.]+'))
+              versions = set(re.search(r'v([\d\.]+)', link['href']).group(1) for link in links)
+              return max(versions, key=lambda v: list(map(int, v.split('.'))))
 
           def download_file(url, path):
               response = requests.get(url)
               with open(path, 'wb') as f:
                   f.write(response.content)
 
-          def get_latest_version():
-              latest_found_version = None
-              # Iterate through major.minor.patch and then beta/rc versions
-              for major in range(1, 6): # Check from v1 to v5
-                  for minor in range(0, 20): # Assuming minor versions up to 19
-                      for patch in range(0, 20): # Assuming patch versions up to 19
-                          current_version = f'{major}.{minor}.{patch}'
-                          # Check stable version
-                          if check_version_exists(current_version, 'amd64'):
-                              latest_found_version = current_version
-                          
-                          # Check beta/rc versions (e.g., 5.0.0b1, 5.0.0rc1)
-                          for pre_release_type in ['b', 'rc']:
-                              for pre_release_num in range(1, 10): # Assuming up to 9 beta/rc releases
-                                  pre_release_version = f'{current_version}{pre_release_type}{pre_release_num}'
-                                  if check_version_exists(pre_release_version, 'amd64'):
-                                      latest_found_version = pre_release_version
-              return latest_found_version
-
           latest_version = get_latest_version()
+          version_dir = f'Snell/source/v{latest_version}'
 
-          if latest_version:
-              version_dir = f'Snell/source/v{latest_version}'
-
-              if not os.path.exists(version_dir):
-                  os.makedirs(version_dir)
-                  print(f'Created new directory: {version_dir}')
-              else:
-                  print(f'Directory already exists: {version_dir}')
-
-              architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
-              for arch in architectures:
-                  filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
-                  url = f'https://dl.nssurge.com/snell/{filename}'
-                  path = os.path.join(version_dir, filename)
-                  if not os.path.exists(path):
-                      if check_version_exists(latest_version, arch):
-                          download_file(url, path)
-                          print(f'Downloaded {filename}')
-                      else:
-                          print(f'Version {latest_version} for {arch} does not exist.')
-                  else:
-                      print(f'{filename} already exists')
-
-              print(f'Finished processing version {latest_version}')
+          if not os.path.exists(version_dir):
+              os.makedirs(version_dir)
+              print(f'Created new directory: {version_dir}')
           else:
-              print('No version found.')
+              print(f'Directory already exists: {version_dir}')
+
+          architectures = ['amd64', 'i386', 'aarch64', 'armv7l']
+          for arch in architectures:
+              filename = f'snell-server-v{latest_version}-linux-{arch}.zip'
+              url = f'https://dl.nssurge.com/snell/{filename}'
+              path = os.path.join(version_dir, filename)
+              if not os.path.exists(path):
+                  download_file(url, path)
+                  print(f'Downloaded {filename}')
+              else:
+                  print(f'{filename} already exists')
+
+          print(f'Finished processing version {latest_version}')
         shell: python
 
       - name: Check and Configure Git
