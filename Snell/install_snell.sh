@@ -179,7 +179,7 @@ services:
     environment:
       - PORT=$RANDOM_PORT
       - PSK=$PASSWORD
-      - IPV6=false
+      - IPV6=true
       - DNS=8.8.8.8,8.8.4.4
     volumes:
       - $node_dir/snell-conf:/etc/snell
@@ -197,7 +197,7 @@ psk = $PASSWORD
 tfo = false
 obfs = off
 dns = 8.8.8.4,9.9.9.12,208.67.220.220,94.140.14.141
-ipv6 = false
+ipv6 = true
 EOF
 }
 
