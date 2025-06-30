@@ -24,5 +24,5 @@ docker buildx build --network host --platform linux/386,linux/amd64,linux/arm/v7
 ```
 
 
- ## 参考自：
+ ## 致谢：
  [ @vocrx](https://github.com/vocrx)
