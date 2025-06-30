@@ -1,4 +1,4 @@
-![20250630_205417](https://github.com/user-attachments/assets/cea2aeb3-2e25-4f3e-a793-d80d67de37d3) ## 使用方法：
+## 使用方法：
 
 安装
 ```
