@@ -205,7 +205,7 @@ print_node() {
     echo
     log_info "Configuration Summary:"
     echo "-------------------------"
-    echo "$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=4"
+    echo "$LOCATION Snell $RANDOM_PORT = snell, $public_ip, $RANDOM_PORT, psk=$PASSWORD, version=5"
     echo "-------------------------"
     echo
 }
