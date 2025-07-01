@@ -8,7 +8,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Linux/tmux.
 
 ### 安装软件
 ```
-apt update && apt install curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux -y
+apt update && apt install curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
+ -y
 ```
 
 ### 更新所有包
