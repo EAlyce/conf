@@ -19,12 +19,26 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/deldocker.sh)
  ## 构建镜像：
 
 ```
+mkdir -p /root/snell-docker
+```
+```
 cd /root/snell-docker && \
 curl -fsSL -o Dockerfile https://raw.githubusercontent.com/EAlyce/conf/main/Snell/Dockerfile && \
-sed -i 's/; fi;/esac;/' Dockerfile && \
-curl -fsSL -o entrypoint.sh https://raw.githubusercontent.com/EAlyce/conf/main/Snell/entrypoint.sh && \
-chmod +x entrypoint.sh && \
-docker buildx build --network host --platform linux/386,linux/amd64,linux/arm/v7,linux/arm64 --no-cache -t azurelane/snell:latest --push . 2>&1 | tee build.log
+curl -fsSL -o entrypoint.sh https://raw.githubusercontent.com/EAlyce/conf/main/Snell/entrypoint.sh
+
+```
+```
+sed -i 's/\r$//' entrypoint.sh
+```
+```
+sed -i 's/\r$//' Dockerfile
+```
+
+```
+docker buildx build --network host \
+  --platform linux/386,linux/amd64,linux/arm/v7,linux/arm64 \
+  --no-cache -t azurelane/snell:latest --push . \
+  2>&1 | tee build.log
 
 ```
 
