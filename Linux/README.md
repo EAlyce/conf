@@ -6,6 +6,14 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Linux/tmux.
 
 # 常用指令
 
+### docker清理
+```
+docker kill $(docker ps -q)
+docker rm -f $(docker ps -aq)
+docker rmi -f $(docker images -q)
+docker system prune -a --volumes -f
+```
+
 ### 安装软件
 ```
 apt update && apt install curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
@@ -22,7 +30,6 @@ apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-u
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 12 -v 64 -p As112211 -port 7890
 
 ```
-
 ```
 curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh && bash reinstall.sh debian 12 --password As112211 --ssh-port 7890
 ```
