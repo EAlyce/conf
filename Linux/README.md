@@ -1,10 +1,7 @@
- # 使用方法：
-
+# 常用指令
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Linux/tmux.sh)
 ```
-
-# 常用指令
 
 ### docker清理
 ```
