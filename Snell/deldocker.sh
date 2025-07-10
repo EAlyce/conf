@@ -126,7 +126,7 @@ list_running_containers() {
     
     echo "0. 退出脚本"
 }
-
+docker image prune -f
 main() {
 
     check_command docker
