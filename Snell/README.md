@@ -1,6 +1,5 @@
 ## 使用方法：
-
-###安装
+安装
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell.sh)
 ```
@@ -9,14 +8,14 @@ dev
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell_dev.sh)
 ```
 
-###卸载
+Docker管理
 
 ```
 bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/deldocker.sh)
 ```
 
 
- ## 构建镜像：
+## 构建镜像：
 
 ```
 mkdir -p /root/snell-docker
