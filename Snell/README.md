@@ -1,3 +1,7 @@
+## Snell官网
+
+[点击跳转](https://kb.nssurge.com/surge-knowledge-base/zh/release-notes/snell)
+
 ## 使用方法：
 安装
 ```
