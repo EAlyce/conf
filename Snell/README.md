@@ -25,7 +25,9 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/deldocker.sh)
 mkdir -p /root/snell-docker
 ```
 ```
-cd /root/snell-docker && \
+cd /root/snell-docker
+```
+```
 curl -fsSL -o Dockerfile https://raw.githubusercontent.com/EAlyce/conf/main/Snell/Dockerfile && \
 curl -fsSL -o entrypoint.sh https://raw.githubusercontent.com/EAlyce/conf/main/Snell/entrypoint.sh
 
