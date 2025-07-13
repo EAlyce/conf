@@ -24,7 +24,7 @@ jobs:
           import os
 
           def get_latest_version():
-              url = "https://manual.nssurge.com/others/snell.html"
+              url = "https://kb.nssurge.com/surge-knowledge-base/zh/release-notes/snell"
               response = requests.get(url)
               soup = BeautifulSoup(response.text, 'html.parser')
               links = soup.find_all('a', href=re.compile(r'snell-server-v[\d\.]+'))
