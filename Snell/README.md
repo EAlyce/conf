@@ -3,7 +3,7 @@
 [点击跳转](https://kb.nssurge.com/surge-knowledge-base/zh/release-notes/snell)
 
 ## 使用方法：
-快速安装(推荐使用)
+快速安装 (推荐使用)
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell.sh)
 ```
