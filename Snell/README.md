@@ -12,7 +12,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/insta
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell_dev.sh)
 ```
 
-Docker管理
+卸载
 
 ```
 bash <(curl -fsSL https://github.com/EAlyce/conf/raw/main/Snell/deldocker.sh)
