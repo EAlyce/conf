@@ -2,7 +2,7 @@ FROM debian:bookworm
 
 ARG TARGETPLATFORM
 ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
-ENV VERSION=v5.0.0b3
+ENV VERSION=v5.0.0
 
 RUN apt-get update && \
     apt-get upgrade -y && \
