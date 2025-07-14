@@ -23,6 +23,9 @@ mkdir -p ~/weibo-monitor && cd ~/weibo-monitor && \
 npm init -y && \
 npm install node-fetch cheerio
 ```
+```
+npm install -g pm2
+```
 
 ### 更新所有包
 ```
