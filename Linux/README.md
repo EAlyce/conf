@@ -16,6 +16,13 @@ docker system prune -a --volumes -f
 apt update && apt install curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
  -y
 ```
+```
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+apt install -y nodejs && \
+mkdir -p ~/weibo-monitor && cd ~/weibo-monitor && \
+npm init -y && \
+npm install node-fetch cheerio
+```
 
 ### 更新所有包
 ```
