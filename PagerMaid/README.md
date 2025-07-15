@@ -1,6 +1,6 @@
 
 
-# PagerMaid RX 安装指南
+# PagerMaid安装指南
 
 
 
