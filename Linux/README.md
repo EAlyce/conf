@@ -1,13 +1,6 @@
 
 # 🚀 常用指令速查手册
 
-## 🧰 一键安装 tmux 配置
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Linux/tmux.sh)
-```
-
----
-
 ## 🐳 Docker 清理命令
 ```bash
 docker kill $(docker ps -q)
@@ -20,7 +13,7 @@ docker system prune -a --volumes -f
 
 ## 📦 安装常用软件
 ```bash
-apt update && apt install -y   curl git zip unzip wget sudo   netcat-openbsd vim nano cron   tmux file
+apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
 ```
 
 ---
