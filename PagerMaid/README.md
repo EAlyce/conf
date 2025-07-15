@@ -9,6 +9,7 @@
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
 ````
+
 所需其他参数
 `api_id`
 `api_hash`
