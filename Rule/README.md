@@ -2,7 +2,9 @@
 
 - 🍎 **Apple**  
 
-  ```https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Apple.list```
+  ```
+  https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Apple.list
+  ```
   📝 用途：Apple 相关服务和内容的过滤规则列表。
 
 - 💰 **Crypto**  
