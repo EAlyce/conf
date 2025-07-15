@@ -1,55 +1,52 @@
 # 📋 规则列表及用途说明
 
 - 🍎 **Apple**  
-
+  Apple 相关服务和内容的规则列表。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Apple.list
   ```
-  Apple 相关服务和内容的过滤规则列表。
+
 
 
 - 💰 **Crypto**  
-
+  针对加密货币服务和交易平台的规则集合。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Crypto.list
   ```
-  针对加密货币服务和交易平台的规则集合。
+
 
 - 📚 **FQNovelAdvertising**  
-
-
+  屏蔽番茄小说广告的规则。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/FQNovelAdvertising.list
   ```
-  屏蔽小说类广告和相关推送的过滤规则。
-
 
 - 🤖 **OpenAI**  
-
+  专门针对 AI 服务访问的规则。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/OpenAI.list
   ```
-  专门针对 OpenAI 服务访问优化和限制的规则。
+
 
 - 🏛️ **Oracle**  
-
+  Oracle 云服务相关的访问和SSH流量规则。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Oracle.list
   ```
-  Oracle 云服务相关的访问和流量规则。
+
 
 
 - 💳 **PayPal**  
-
+  PayPal 支付及账户服务相关的规则。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/PayPal.list
   ```
-  PayPal 支付及账户服务相关的过滤规则。
+
 
 
 - 🛡️ **Proxy**  
-
+  GFW和中国大陆需要代理相关的网站。
   ```
   https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Proxy.list
   ```
-  代理服务器相关的规则配置。
+
