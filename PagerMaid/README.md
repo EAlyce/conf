@@ -12,7 +12,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/R
 
 ## 🙏 致谢
 
-感谢 [TeamPGM/PagerMaid-Pyro](https://github.com/TeamPGM/PagerMaid-Pyro) 的支持与贡献。
+本项目基于 [TeamPGM/PagerMaid-Pyro](https://github.com/TeamPGM/PagerMaid-Pyro) 
 
 
 ## 📖 使用方法
