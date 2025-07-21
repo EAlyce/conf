@@ -20,6 +20,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/R
 
 `password` 你的二次验证密码（如果有）
 
+登录成功后请按下 `ctrl+c` 
+
 ## 🙏 致谢
 
 本项目基于 [TeamPGM/PagerMaid-Pyro](https://github.com/TeamPGM/PagerMaid-Pyro) 
