@@ -3,6 +3,7 @@
 
 ## 🐳 Docker 清理命令
 ```bash
+sudo systemctl stop docker && sudo iptables -t filter -F && sudo systemctl restart docker
 docker kill $(docker ps -q)
 docker rm -f $(docker ps -aq)
 docker rmi -f $(docker images -q)
