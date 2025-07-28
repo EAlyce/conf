@@ -91,7 +91,19 @@ start_installation() {
     build_docker
     start_docker
     data_persistence
+
+    # Ask user whether to reboot, default is yes
+    read -p "Installation complete. Reboot now? [Y/n]: " choice
+    choice=${choice:-y}  # Default to 'y' if empty
+
+    if [[ "$choice" =~ ^[Yy]$ ]]; then
+        echo "Rebooting..."
+        reboot
+    else
+        echo "Reboot cancelled."
+    fi
 }
+
 
 # Start the installation process directly
 start_installation
