@@ -7,7 +7,7 @@ import zipfile
 from pathlib import Path
 from os.path import exists, isfile
 from traceback import format_exc
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple
 from contextlib import contextmanager
 
 from pagermaid.config import Config
@@ -157,9 +157,18 @@ async def restore_backup(backup_file: str, target_dir: str) -> None:
         if not extract_archive(backup_file, target_dir):
             raise BackupError("解压备份文件失败")
         os.remove(backup_file)
+        # 确保 pagermaid_backup 目录存在
         backup_folder = os.path.join(target_dir, "pagermaid_backup")
-        if not os.path.exists(backup_folder):
-            os.makedirs(backup_folder)
+        if not os.path.isdir(backup_folder):
+            os.makedirs(backup_folder, exist_ok=True)
+            # 将解压出的所有内容移入该目录
+            for item in os.listdir(target_dir):
+                if item == "pagermaid_backup":
+                    continue
+                src = os.path.join(target_dir, item)
+                dst = os.path.join(backup_folder, item)
+                shutil.move(src, dst)
+        # 复制 backup_folder 中的内容回根目录
         for item in os.listdir(backup_folder):
             src_path = os.path.join(backup_folder, item)
             dest_path = os.path.join(target_dir, item)
@@ -167,48 +176,10 @@ async def restore_backup(backup_file: str, target_dir: str) -> None:
                 shutil.copytree(src_path, dest_path, dirs_exist_ok=True)
             else:
                 shutil.copy2(src_path, dest_path)
+        # 清理临时目录
         shutil.rmtree(backup_folder)
     except Exception as e:
         raise BackupError(f"恢复备份失败: {str(e)}")
-
-
-async def handle_file_upload(bot: Client, message: Message, file_paths: List[str]) -> None:
-    chat_id = message.chat.id
-    total_files = len(file_paths)
-    for index, file_path in enumerate(file_paths, 1):
-        await message.edit(f"正在上传第 {index}/{total_files} 个文件")
-        if not exists(file_path):
-            await message.edit(f"文件不存在: {file_path}")
-            continue
-        try:
-            if isfile(file_path):
-                await bot.send_document(chat_id, file_path, force_document=True)
-            else:
-                token = os.path.basename(file_path)
-                temp_zip = f"/tmp/{token}.zip"
-                create_archive([file_path], temp_zip, archive_type="zip")
-                await bot.send_document(chat_id, temp_zip, force_document=True)
-                os.remove(temp_zip)
-        except Exception as e:
-            await message.edit(f"上传文件 {file_path} 失败: {str(e)}")
-    await message.edit("上传完毕")
-
-
-async def handle_file_download(message: Message, save_path: str) -> None:
-    reply = message.reply_to_message
-    if not reply:
-        await message.edit("未回复消息")
-        return
-    file_path = Path(save_path)
-    if exists(file_path):
-        await message.edit("路径已存在文件")
-        return
-    await message.edit("下载中...")
-    try:
-        _file = await reply.download(file_name=save_path)
-        await message.edit(f"保存成功, 保存路径 `{save_path}`")
-    except Exception as e:
-        await message.edit(f"无法下载此类型的文件: {str(e)}")
 
 
 @listener(outgoing=True, command="bf",
@@ -240,19 +211,36 @@ async def backup_and_clean(bot: Client, message: Message):
           description="释放pagermaid_backup文件夹到程序根目录，并删除原pagermaid_backup文件夹")
 async def release_backup_folder(message: Message):
     reply = message.reply_to_message
-    if not reply or not reply.document or ".tar.gz" not in reply.document.file_name:
-        return await message.edit("请回复一个.tar.gz文件以进行恢复。")
-    try:
-        await message.edit("下载中...")
-        backup_file = await reply.download()
-        await message.edit("解压中...")
-        program_dir = get_program_dir()
-        await restore_backup(backup_file, program_dir)
-        completion_message = "备份已恢复请 `,restart`"
-        await message.edit(completion_message)
-    except Exception as e:
-        error_message = f"释放失败: {str(e)}"
-        await message.edit(error_message)
+    program_dir = get_program_dir()
+    local_backup = os.path.join(program_dir, "pagermaid_backup")
+    # 回复 .tar.gz 文件时恢复备份
+    if reply and hasattr(reply, 'document') and reply.document and ".tar.gz" in reply.document.file_name:
+        try:
+            await message.edit("下载中...")
+            backup_file = await reply.download()
+            await message.edit("解压中...")
+            await restore_backup(backup_file, program_dir)
+            await message.edit("备份已恢复，请 `,restart`")
+        except Exception as e:
+            await message.edit(f"恢复失败: {e}")
+        return
+    # 如果存在本地备份文件夹，则释放它
+    if os.path.isdir(local_backup):
+        try:
+            await message.edit("正在释放本地备份...")
+            for item in os.listdir(local_backup):
+                src_path = os.path.join(local_backup, item)
+                dest_path = os.path.join(program_dir, item)
+                if os.path.isdir(src_path):
+                    shutil.copytree(src_path, dest_path, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(src_path, dest_path)
+            shutil.rmtree(local_backup)
+            await message.edit("本地备份释放完成，请 `,restart`")
+        except Exception as e:
+            await message.edit(f"释放失败: {e}")
+    else:
+        await message.edit("请回复一个 `.tar.gz` 备份文件以进行恢复。")
 
 
 @listener(
