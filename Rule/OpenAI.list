@@ -21,7 +21,6 @@ DOMAIN,cdn.openai.com
 DOMAIN,cdn.usefathom.com
 DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
-DOMAIN,chatgpt.livekit.cloud
 DOMAIN,console.groq.com
 DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
@@ -46,16 +45,13 @@ DOMAIN,openaiapi-site.azureedge.net
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
 DOMAIN,openaicomproductionae4b.blob.core.windows.net
 DOMAIN,pplx-res.cloudinary.com
-DOMAIN,proactivebackend-pa.googleapis.com
 DOMAIN,production-openaicom-storage.azureedge.net
 DOMAIN,r.bing.com
 DOMAIN,self.events.data.microsoft.com
 DOMAIN,services.bingapis.com
-DOMAIN,sfo3.turn.livekit.cloud
 DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
-DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,Grok
 DOMAIN-KEYWORD,alkalimakersuite-pa.clients6.google.com
 DOMAIN-KEYWORD,anthropic
@@ -100,7 +96,6 @@ DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,circumlunar.space
 DOMAIN-SUFFIX,claude.ai
 DOMAIN-SUFFIX,claude.ai
-DOMAIN-SUFFIX,claude.ai.com
 DOMAIN-SUFFIX,claudeusercontent.com
 DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,client-api.arkoselabs.com
@@ -176,7 +171,6 @@ DOMAIN-SUFFIX,openart.ai
 DOMAIN-SUFFIX,openrouter.ai
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,perplexity.ai
-DOMAIN-SUFFIX,perplexity.com
 DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,pplx.ai
