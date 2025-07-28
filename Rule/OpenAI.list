@@ -38,7 +38,6 @@ DOMAIN,in.appcenter.ms
 DOMAIN,ios.chat.openai.com
 DOMAIN,jules.google.com
 DOMAIN,location.microsoft.com
-DOMAIN,makersuite.google.com
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,odc.officeapps.live.com
 DOMAIN,openai-api.arkoselabs.com
@@ -55,22 +54,17 @@ DOMAIN,sfo3.turn.livekit.cloud
 DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
-DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,Grok
 DOMAIN-KEYWORD,alkalimakersuite-pa.clients6.google.com
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,cloudflare
-DOMAIN-KEYWORD,colab
-DOMAIN-KEYWORD,developerprofiles
-DOMAIN-KEYWORD,generativelanguage
 DOMAIN-KEYWORD,labs.google
 DOMAIN-KEYWORD,notebooklm.google
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaiapi
 DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
-DOMAIN-KEYWORD,perplexity
 DOMAIN-KEYWORD,prodregistryv
 DOMAIN-SUFFIX,ai.azure.com
 DOMAIN-SUFFIX,ai.com
@@ -104,8 +98,6 @@ DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,circumlunar.space
 DOMAIN-SUFFIX,claude.ai
 DOMAIN-SUFFIX,claude.ai
-DOMAIN-SUFFIX,claude.ai.com
-DOMAIN-SUFFIX,claudeusercontent.com
 DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,clipdrop.co
@@ -139,7 +131,6 @@ DOMAIN-SUFFIX,generativelanguage.googleapis.com
 DOMAIN-SUFFIX,genspark.ai
 DOMAIN-SUFFIX,githubcopilot.com
 DOMAIN-SUFFIX,google-analytics.com
-DOMAIN-SUFFIX,googleai.com
 DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,googletagmanager.com
 DOMAIN-SUFFIX,googleusercontent.com
@@ -175,7 +166,6 @@ DOMAIN-SUFFIX,mistral.ai
 DOMAIN-SUFFIX,mozz.us
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
-DOMAIN-SUFFIX,nvidia.com
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
@@ -187,10 +177,8 @@ DOMAIN-SUFFIX,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,openaiapi-site.azureedge.net
 DOMAIN-SUFFIX,openaicom.imgix.net
 DOMAIN-SUFFIX,openart.ai
-DOMAIN-SUFFIX,openrouter.ai
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,perplexity.ai
-DOMAIN-SUFFIX,perplexity.com
 DOMAIN-SUFFIX,pki.goog
 DOMAIN-SUFFIX,platform.openai.com
 DOMAIN-SUFFIX,poe.com
@@ -208,7 +196,6 @@ DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,tktn.be
-DOMAIN-SUFFIX,together.xyz
 DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,vimeo.com
