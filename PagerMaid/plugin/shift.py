@@ -1,4 +1,4 @@
-shift.py""" PagerMaid module for channel help. """
+""" PagerMaid module for channel help. """
 
 import contextlib
 import datetime
@@ -37,7 +37,7 @@ HELP_TEXT = """📢 智能转发助手使用说明
 - filter [源] add [关键词] - 添加过滤关键词
 - filter [源] del [关键词] - 删除过滤关键词
 - filter [源] list - 查看过滤列表
-
+- 支持序号操作 例如 shift del 1,2,3...
 🎯 支持的目标类型：
 - 频道/群组 - @channel_username 或 -1001234567890
 - 个人用户 - @username 或 user_id
@@ -309,35 +309,50 @@ async def shift_func_set(client: Client, message: Message):
 
 
 @shift_func.sub_command(command="del")
-async def shift_func_del(message: Message):
-    if len(message.parameter) != 2:
-        return await message.edit(f"❌ {lang('error_prefix')}{lang('arg_error')}\n\n💡 使用方法：shift del [源]")
+async def shift_func_del(client: Client, message: Message):
+    if len(message.parameter) < 2:
+        return await message.edit("❌ 参数错误，请提供要删除的规则序号。\n\n💡 使用方法：`shift del 1,2,3`")
+
+    indices_str = message.parameter[1]
+    indices_to_process = []
+    invalid_indices = []
+
+    all_shifts = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
+
+    for i_str in indices_str.split(','):
+        try:
+            index = int(i_str.strip()) - 1
+            if 0 <= index < len(all_shifts):
+                indices_to_process.append(index)
+            else:
+                invalid_indices.append(i_str)
+        except ValueError:
+            invalid_indices.append(i_str)
+
+    if not indices_to_process:
+        return await message.edit(f"❌ 未提供有效序号。无效输入：{', '.join(invalid_indices)}")
+
+    deleted_count = 0
+    # 从大到小删除，避免索引变化导致错误
+    for index in sorted(indices_to_process, reverse=True):
+        try:
+            key_to_del = all_shifts.pop(index)
+            source_id_str = key_to_del.split('.')[1]
+            
+            # 删除所有相关键
+            keys_to_remove = [k for k in sqlite if k.startswith(f"shift.{source_id_str}") or k.startswith(f"shift.stats.{source_id_str}")]
+            for k in keys_to_remove:
+                with contextlib.suppress(KeyError):
+                    del sqlite[k]
+            deleted_count += 1
+        except (IndexError, KeyError):
+            pass  # 忽略已删除或无效的
     
-    try:
-        source = try_cast_or_fallback(message.parameter[1], int)
-        assert isinstance(source, int)
-    except Exception:
-        return await message.edit(f"❌ 无法识别的来源对话：{message.parameter[1]}")
+    result_message = f"✅ 成功删除 {deleted_count} 条转发规则。"
+    if invalid_indices:
+        result_message += f"\n⚠️ 无效或越界的序号: {', '.join(invalid_indices)}。"
     
-    if f"shift.{source}" not in sqlite:
-        return await message.edit("❌ 当前对话不存在于自动转发列表中")
-    
-    # 删除相关配置
-    keys_to_delete = [
-        f"shift.{source}",
-        f"shift.{source}.options",
-        f"shift.{source}.created",
-        f"shift.{source}.paused",
-        f"shift.{source}.target_type",
-        f"shift.filter.{source}"
-    ]
-    
-    for key in keys_to_delete:
-        with contextlib.suppress(Exception):
-            del sqlite[key]
-    
-    await message.edit(f"✅ 已成功删除对话 {source} 的自动转发规则")
-    await log(f"已成功关闭对话 {source} 的自动转发功能")
+    await message.edit(result_message)
 
 
 @shift_func.sub_command(command="backup")
@@ -411,13 +426,32 @@ async def shift_func_backup(client: Client, message: Message):
 
 
 @shift_func.sub_command(command="list")
+async def get_chat_display_name_for_list(client: Client, chat_id: int, chat_type: str = "chat") -> str:
+    """获取用于列表显示的聊天名称，优先使用 username。"""
+    try:
+        if chat_type == "user":
+            chat_info = await client.get_users(chat_id)
+        else:
+            chat_info = await client.get_chat(chat_id)
+        
+        if hasattr(chat_info, 'username') and chat_info.username:
+            return f"@{chat_info.username}"
+        elif hasattr(chat_info, 'title') and chat_info.title:
+            return chat_info.title
+        elif hasattr(chat_info, 'first_name') and chat_info.first_name:
+            name_parts = [chat_info.first_name]
+            if hasattr(chat_info, 'last_name') and chat_info.last_name:
+                name_parts.append(chat_info.last_name)
+            return " ".join(name_parts)
+        else:
+            return str(chat_id)
+    except Exception:
+        return str(chat_id)
+
+
+@shift_func.sub_command(command="list")
 async def shift_func_list(client: Client, message: Message):
-    from_ids = list(
-        filter(
-            lambda x: (x.startswith("shift.") and (not x.endswith(("options", "created", "paused", "target_type")))),
-            list(sqlite.keys()),
-        )
-    )
+    from_ids = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
     if not from_ids:
         return await message.edit("📭 当前没有配置任何转发规则")
     
@@ -446,8 +480,11 @@ async def shift_func_list(client: Client, message: Message):
             pass
         
         output += f"{i}. {status}\n"
-        output += f"   📤 {format_id_link(source_id)}\n"
-        output += f"   📥 {target_emoji} {format_id_link(target_id)}\n"
+        source_display = await get_chat_display_name_for_list(client, int(source_id))
+        target_display = await get_chat_display_name_for_list(client, target_id, target_type)
+
+        output += f"   📤 {source_display}\n"
+        output += f"   📥 {target_emoji} {target_display}\n"
         output += f"   ⚙️ 选项：{', '.join(options)}\n"
         output += f"   🎯 类型：{'个人用户' if target_type == 'user' else '聊天'}\n"
         
@@ -511,91 +548,175 @@ async def shift_func_stats(message: Message):
 
 
 @shift_func.sub_command(command="pause")
-async def shift_func_pause(message: Message):
+async def shift_func_pause(client: Client, message: Message):
     """暂停转发"""
-    if len(message.parameter) != 2:
-        return await message.edit("❌ 使用方法：shift pause [源]")
-    
-    try:
-        source = try_cast_or_fallback(message.parameter[1], int)
-    except:
-        return await message.edit(f"❌ 无法识别的来源对话：{message.parameter[1]}")
-    
-    if f"shift.{source}" not in sqlite:
-        return await message.edit("❌ 该对话未配置转发规则")
-    
-    sqlite[f"shift.{source}.paused"] = True
-    await message.edit(f"⏸️ 已暂停来源 {source} 的转发功能")
+    if len(message.parameter) < 2:
+        return await message.edit("❌ 参数错误，请提供要暂停的规则序号。\n\n💡 使用方法：`shift pause 1,2,3`")
+
+    indices_str = message.parameter[1]
+    indices_to_process = []
+    invalid_indices = []
+
+    all_shifts = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
+
+    for i_str in indices_str.split(','):
+        try:
+            index = int(i_str.strip()) - 1
+            if 0 <= index < len(all_shifts):
+                indices_to_process.append(index)
+            else:
+                invalid_indices.append(i_str)
+        except ValueError:
+            invalid_indices.append(i_str)
+
+    if not indices_to_process:
+        return await message.edit(f"❌ 未提供有效序号。无效输入：{', '.join(invalid_indices)}")
+
+    paused_count = 0
+    for index in indices_to_process:
+        try:
+            key = all_shifts[index]
+            source_id = int(key.split('.')[1])
+            sqlite[f"shift.{source_id}.paused"] = True
+            paused_count += 1
+        except (IndexError, KeyError):
+            pass
+
+    result_message = f"⏸️ 成功暂停 {paused_count} 条转发规则。"
+    if invalid_indices:
+        result_message += f"\n⚠️ 无效或越界的序号: {', '.join(invalid_indices)}。"
+
+    await message.edit(result_message)
 
 
 @shift_func.sub_command(command="resume")
-async def shift_func_resume(message: Message):
+async def shift_func_resume(client: Client, message: Message):
     """恢复转发"""
-    if len(message.parameter) != 2:
-        return await message.edit("❌ 使用方法：shift resume [源]")
-    
-    try:
-        source = try_cast_or_fallback(message.parameter[1], int)
-    except:
-        return await message.edit(f"❌ 无法识别的来源对话：{message.parameter[1]}")
-    
-    if f"shift.{source}" not in sqlite:
-        return await message.edit("❌ 该对话未配置转发规则")
-    
-    if f"shift.{source}.paused" in sqlite:
-        del sqlite[f"shift.{source}.paused"]
-    
-    await message.edit(f"▶️ 已恢复来源 {source} 的转发功能")
+    if len(message.parameter) < 2:
+        return await message.edit("❌ 参数错误，请提供要恢复的规则序号。\n\n💡 使用方法：`shift resume 1,2,3`")
+
+    indices_str = message.parameter[1]
+    indices_to_process = []
+    invalid_indices = []
+
+    all_shifts = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
+
+    for i_str in indices_str.split(','):
+        try:
+            index = int(i_str.strip()) - 1
+            if 0 <= index < len(all_shifts):
+                indices_to_process.append(index)
+            else:
+                invalid_indices.append(i_str)
+        except ValueError:
+            invalid_indices.append(i_str)
+
+    if not indices_to_process:
+        return await message.edit(f"❌ 未提供有效序号。无效输入：{', '.join(invalid_indices)}")
+
+    resumed_count = 0
+    for index in indices_to_process:
+        try:
+            key = all_shifts[index]
+            source_id = int(key.split('.')[1])
+            if f"shift.{source_id}.paused" in sqlite:
+                del sqlite[f"shift.{source_id}.paused"]
+            resumed_count += 1
+        except (IndexError, KeyError):
+            pass
+
+    result_message = f"▶️ 成功恢复 {resumed_count} 条转发规则。"
+    if invalid_indices:
+        result_message += f"\n⚠️ 无效或越界的序号: {', '.join(invalid_indices)}。"
+
+    await message.edit(result_message)
 
 
 @shift_func.sub_command(command="filter")
-async def shift_func_filter(message: Message):
-    """过滤关键词管理"""
+async def shift_func_filter(client: Client, message: Message):
+    """管理过滤关键词"""
     if len(message.parameter) < 3:
-        return await message.edit("❌ 使用方法：\n• shift filter [源] add [关键词]\n• shift filter [源] del [关键词]\n• shift filter [源] list")
-    
-    try:
-        source = try_cast_or_fallback(message.parameter[1], int)
-        action = message.parameter[2]
-    except:
-        return await message.edit("❌ 参数错误")
-    
-    filter_key = f"shift.filter.{source}"
-    keywords = sqlite.get(filter_key, [])
-    
-    if action == "add":
-        if len(message.parameter) < 4:
-            return await message.edit("❌ 请输入要添加的关键词")
-        
-        keyword = " ".join(message.parameter[3:])
-        if keyword not in keywords:
-            keywords.append(keyword)
-            sqlite[filter_key] = keywords
-            await message.edit(f"✅ 已添加过滤关键词：{keyword}")
-        else:
-            await message.edit(f"⚠️ 关键词已存在：{keyword}")
-    
-    elif action == "del":
-        if len(message.parameter) < 4:
-            return await message.edit("❌ 请输入要删除的关键词")
-        
-        keyword = " ".join(message.parameter[3:])
-        if keyword in keywords:
-            keywords.remove(keyword)
-            sqlite[filter_key] = keywords
-            await message.edit(f"✅ 已删除过滤关键词：{keyword}")
-        else:
-            await message.edit(f"⚠️ 关键词不存在：{keyword}")
-    
-    elif action == "list":
-        if not keywords:
-            await message.edit(f"📝 来源 {source} 暂无过滤关键词")
-        else:
-            keyword_list = "\n".join([f"• {kw}" for kw in keywords])
-            await message.edit(f"📝 来源 {source} 的过滤关键词：\n\n{keyword_list}")
-    
-    else:
-        await message.edit("❌ 无效操作，请使用：add、del 或 list")
+        return await message.edit(
+            "❌ 使用方法：\n"
+            "`shift filter add/del [序号] [关键词]`\n"
+            "`shift filter list [序号]`"
+        )
+
+    action = message.parameter[1]
+    all_shifts = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
+
+    if action == "list":
+        try:
+            index = int(message.parameter[2]) - 1
+            if not (0 <= index < len(all_shifts)):
+                return await message.edit("❌ 无效的序号。")
+            key = all_shifts[index]
+            source_id = int(key.split('.')[1])
+        except (ValueError, IndexError):
+            return await message.edit("❌ 无效的序号。")
+
+        filter_key = f"shift.{source_id}.filter"
+        if filter_key not in sqlite or not sqlite[filter_key]:
+            return await message.edit(f"🔍 规则 {index + 1} ({source_id}) 没有设置过滤关键词。")
+
+        filters = sqlite[filter_key]
+        text = f"🔍 规则 {index + 1} ({source_id}) 的过滤关键词：\n"
+        text += "\n".join([f"- `{f}`" for f in filters])
+        return await message.edit(text)
+
+    if action not in ["add", "del"]:
+        return await message.edit("❌ 无效的操作，请使用 `add`, `del`, 或 `list`。")
+
+    if len(message.parameter) < 4:
+        return await message.edit(f"❌ 请提供要 {action} 的关键词。")
+
+    indices_str = message.parameter[2]
+    keywords = message.parameter[3:]
+    keywords = message.parameter[3:]
+
+    indices_to_process = []
+    invalid_indices = []
+
+    for i_str in indices_str.split(','):
+        try:
+            index = int(i_str.strip()) - 1
+            if 0 <= index < len(all_shifts):
+                indices_to_process.append(index)
+            else:
+                invalid_indices.append(i_str)
+        except ValueError:
+            invalid_indices.append(i_str)
+
+    if not indices_to_process:
+        return await message.edit(f"❌ 未提供有效序号。无效输入：{', '.join(invalid_indices)}")
+
+    updated_count = 0
+    for index in indices_to_process:
+        try:
+            key = all_shifts[index]
+            source_id = int(key.split('.')[1])
+            filter_key = f"shift.{source_id}.filter"
+
+            current_filters = sqlite.get(filter_key, [])
+
+            if action == "add":
+                for kw in keywords:
+                    if kw not in current_filters:
+                        current_filters.append(kw)
+            elif action == "del":
+                current_filters = [f for f in current_filters if f not in keywords]
+
+            sqlite[filter_key] = current_filters
+            updated_count += 1
+        except (IndexError, KeyError):
+            pass
+
+    action_text = "添加" if action == "add" else "删除"
+    result_message = f"✅ 成功为 {updated_count} 条规则 {action_text} 了关键词。"
+    if invalid_indices:
+        result_message += f"\n⚠️ 无效或越界的序号: {', '.join(invalid_indices)}。"
+
+    await message.edit(result_message)
 
 
 def format_id_link(chat_id):
@@ -748,3 +869,4 @@ def add_or_replace_forward_group_media(
         run_date=datetime.datetime.now(pytz.timezone(Config.TIME_ZONE))
         + datetime.timedelta(seconds=4),
     )
+
