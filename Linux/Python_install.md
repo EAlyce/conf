@@ -115,7 +115,7 @@ python -m pip install --root-user-action=ignore requests numpy pandas
 
 ## 以下是一些其他操作
 
-# 测试新特性
+### 测试新特性
 
 ```bash
 python -c "
@@ -126,7 +126,7 @@ print('New features include improved error messages, better performance, and mor
 "
 ```
 
-# 从 requirements.txt 安装包
+### 从 requirements.txt 安装包
 
 ```bash
 /usr/local/bin/python3.13 -m pip install -r requirements.txt --root-user-action=ignore
