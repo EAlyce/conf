@@ -91,7 +91,6 @@ start_installation() {
     build_docker
     start_docker
     data_persistence
-    reboot
 }
 
 
