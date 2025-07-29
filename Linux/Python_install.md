@@ -111,6 +111,9 @@ rm -rf /tmp/Python-3.13.0*
 python -m pip install --root-user-action=ignore requests numpy pandas
 ```
 
+现在你可以开始使用 Python 3.13 了！🐍✨
+以下是一些其他操作
+
 ## 测试新特性
 
 ```bash
