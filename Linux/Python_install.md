@@ -72,8 +72,6 @@ source ~/.bashrc
 
 ## 验证安装
 
-### 基本验证
-
 ```bash
 /usr/local/bin/python3.13 --version
 /usr/local/bin/python3.13 -c "import sys; print(sys.version_info)"
@@ -100,45 +98,7 @@ which python3.13
 which python3
 ```
 
-## 3. 关于 root 用户警告的处理
-
-由于你现在是 root 用户，有几个选择：
-
-### 选项A：继续使用root但抑制警告
-
-```bash
-python3.13 -m pip install --root-user-action=ignore package_name
-```
-
-### 选项B：创建虚拟环境（推荐）
-
-```bash
-# 即使是root用户也可以创建虚拟环境
-python3.13 -m venv /opt/myenv
-source /opt/myenv/bin/activate
-# 现在在虚拟环境中安装包就不会有警告了
-```
-
-### 选项C：创建普通用户来使用Python
-
-```bash
-# 创建一个普通用户
-adduser pythonuser
-su - pythonuser
-# 然后使用python3.13
-```
-
-## 4. 测试 Python 3.13 的新特性
-
-```bash
-python3.13 -c "
-import sys
-print(f'Python version: {sys.version}')
-print('Testing new Python 3.13 features...')
-"
-```
-
-## 5. 清理安装文件
+## 清理安装文件
 
 ```bash
 cd ~
@@ -149,10 +109,6 @@ rm -rf /tmp/Python-3.13.0*
 
 ```bash
 python -m pip install --root-user-action=ignore requests numpy pandas
-
-# 或者创建虚拟环境来避免root警告
-python -m venv ~/myproject
-source ~/myproject/bin/activate
 ```
 
 ## 测试新特性
