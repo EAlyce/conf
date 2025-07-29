@@ -22,7 +22,6 @@ DOMAIN-KEYWORD,redotpay
 DOMAIN-KEYWORD,thepinet
 
 # Domains
-DOMAIN,access.pushsdk.com
 
 # Domain Suffixes
 DOMAIN-SUFFIX, fees.info
@@ -30,6 +29,7 @@ DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,88maru.com
 DOMAIN-SUFFIX,aave.com
+DOMAIN-SUFFIX,access.pushsdk.com
 DOMAIN-SUFFIX,accounts.binance.com
 DOMAIN-SUFFIX,accounts.binance.info
 DOMAIN-SUFFIX,acinq.co
