@@ -61,7 +61,7 @@ data_persistence() {
 
     # Add a cron job to restart the container hourly
     if command -v crontab &> /dev/null; then
-        local cron_job="10 * * * * containers=\$(docker ps -q --filter 'name=PagerMaid'); if [ -n \"\$containers\" ]; then docker restart \$containers; fi"
+        local cron_job="*/10 * * * * containers=\$(docker ps -q --filter 'name=PagerMaid'); if [ -n \"\$containers\" ]; then docker restart \$containers; fi"
         (crontab -l 2>/dev/null; echo "$cron_job") | sort - | uniq - | crontab -
         echo "Data persistence completed. Cron job added to restart containers every hour at 43 minutes past the hour."
     else
