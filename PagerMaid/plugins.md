@@ -3,11 +3,9 @@
 本页列出了由 [@EAlyce](https://t.me/EAlyce) 维护的所有 PagerMaid 插件。所有插件均托管于：
 
 📦 插件源地址（用于添加源）：
+```
 ,apt_source add https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/plugin/list.json
-
-yaml
-复制
-编辑
+```
 
 ---
 
