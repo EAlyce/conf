@@ -32,7 +32,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/R
 | `number` | 电话号码 | `+8618888888888` |
 | `password` | 二次验证密码 | 如果启用了两步验证 |
 
-> **💡 提示**: 登录成功后请按下 `Ctrl+C` 退出
+> **💡 提示**: 登录成功后请按下 `Ctrl+C` 退出终端
 
 ---
 
