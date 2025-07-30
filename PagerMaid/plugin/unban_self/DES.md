@@ -1,4 +1,4 @@
-```markdown
+
 # unban_self 插件说明
 
 ## 插件简介
