@@ -1,373 +1,152 @@
-#!/usr/bin/env bash
+from typing import List, Optional
 
-# PagerMaid Docker Setup Script - Optimized Version
-# Enhanced with better error handling, logging, and performance improvements
+from pyrogram.enums import ChatMembersFilter
+from pyrogram.errors import (
+    ChatAdminRequired,
+    FloodWait,
+    PeerIdInvalid,
+    UserAdminInvalid,
+)
+from pyrogram.types import ChatMember
 
-set -euo pipefail  # Exit on error, undefined vars, pipe failures
+from pagermaid.dependence import add_delete_message_job
+from pagermaid.listener import listener
+from pagermaid.enums import Client, Message
+from pagermaid.utils import lang
+from pagermaid.utils.bot_utils import log
 
-# Global variables
-SCRIPT_NAME="$(basename "$0")"
-LOG_FILE="/tmp/${SCRIPT_NAME%.*}.log"
-DOCKER_IMAGE="teampgm/pagermaid_pyro"
-CONTAINER_PREFIX="PagerMaid-"
-DATA_BASE_PATH="/root"
-CRON_RESTART_INTERVAL="*/10"
 
-# Color codes for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-# Logging function
-log() {
-    local level="$1"
-    shift
-    local message="$*"
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] [$level] $message" | tee -a "$LOG_FILE"
-}
-
-# Enhanced output functions
-log_info() { echo -e "${BLUE}[INFO]${NC} $*" | tee -a "$LOG_FILE"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $*" | tee -a "$LOG_FILE"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $*" | tee -a "$LOG_FILE"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*" | tee -a "$LOG_FILE"; }
-
-# Cleanup function for graceful exit
-cleanup() {
-    local exit_code=$?
-    if [ $exit_code -ne 0 ]; then
-        log_error "Script failed with exit code $exit_code. Check log: $LOG_FILE"
-    fi
-    exit $exit_code
-}
-
-# Set trap for cleanup
-trap cleanup EXIT
-
-# Check if running as root
-check_root() {
-    if [ "$EUID" -ne 0 ]; then
-        log_error "This script must be run as root. Use: sudo $0"
-        exit 1
-    fi
-}
-
-# System requirements check
-check_system_requirements() {
-    log_info "Checking system requirements..."
+async def get_banned_members_by_user(client: Client, chat_id: int, user_id: int) -> List[ChatMember]:
+    """获取指定用户封禁的所有成员
     
-    # Check available disk space (minimum 2GB)
-    local available_space=$(df / | awk 'NR==2 {print $4}')
-    if [ "$available_space" -lt 2097152 ]; then  # 2GB in KB
-        log_error "Insufficient disk space. At least 2GB required."
-        return 1
-    fi
-    
-    # Check memory (minimum 512MB)
-    local available_memory=$(free -m | awk 'NR==2{print $7}')
-    if [ "$available_memory" -lt 512 ]; then
-        log_warning "Low memory detected. Performance may be affected."
-    fi
-    
-    log_success "System requirements check passed"
-}
-
-# Optimized package installation with retry logic
-install_system_packages() {
-    log_info "Updating package list and installing system utilities..."
-    
-    local max_retries=3
-    local retry_count=0
-    
-    while [ $retry_count -lt $max_retries ]; do
-        if apt-get update && apt-get install -y apparmor apparmor-utils curl openssl cron; then
-            log_success "System packages installed successfully"
-            return 0
-        else
-            retry_count=$((retry_count + 1))
-            log_warning "Package installation failed. Retry $retry_count/$max_retries"
-            sleep 5
-        fi
-    done
-    
-    log_error "Failed to install system packages after $max_retries attempts"
-    return 1
-}
-
-# Enhanced Docker installation with version check
-docker_check() {
-    log_info "Checking Docker installation..."
-    
-    if command -v docker &> /dev/null; then
-        local docker_version=$(docker --version | cut -d' ' -f3 | cut -d',' -f1)
-        log_info "Docker is already installed (version: $docker_version)"
+    Args:
+        client: Pyrogram客户端
+        chat_id: 群组ID
+        user_id: 用户ID
         
-        # Check if Docker daemon is running
-        if ! docker info &> /dev/null; then
-            log_info "Starting Docker daemon..."
-            systemctl start docker || {
-                log_error "Failed to start Docker daemon"
-                return 1
-            }
-        fi
-    else
-        log_info "Installing Docker and Docker Compose..."
+    Returns:
+        被该用户封禁的成员列表
+    """
+    banned_by_user = []
+    
+    try:
+        async for member in client.get_chat_members(
+            chat_id,
+            filter=ChatMembersFilter.BANNED
+        ):
+            # 检查是否由指定用户封禁
+            if (
+                member.restricted_by 
+                and member.restricted_by.id == user_id 
+                and member.user
+            ):
+                banned_by_user.append(member)
+    except Exception as e:
+        await log(f"unban_self - 获取封禁列表时出错: {e}")
         
-        # Install Docker with error handling
-        if ! curl -fsSL https://get.docker.com | bash; then
-            log_error "Failed to install Docker"
-            return 1
-        fi
+    return banned_by_user
+
+
+async def unban_member_safe(client: Client, chat_id: int, user_id: int) -> bool:
+    """安全地解除用户封禁
+    
+    Args:
+        client: Pyrogram客户端
+        chat_id: 群组ID
+        user_id: 用户ID
         
-        # Install Docker Compose
-        if ! apt-get install -y docker-compose; then
-            log_error "Failed to install Docker Compose"
-            return 1
-        fi
+    Returns:
+        是否成功解除封禁
+    """
+    try:
+        await client.unban_chat_member(chat_id, user_id)
+        return True
+    except ChatAdminRequired:
+        await log(f"unban_self - 解封用户 {user_id} 失败: 权限不足")
+        return False
+    except UserAdminInvalid:
+        await log(f"unban_self - 解封用户 {user_id} 失败: 用户是管理员")
+        return False
+    except PeerIdInvalid:
+        await log(f"unban_self - 解封用户 {user_id} 失败: 无效的用户ID")
+        return False
+    except FloodWait as e:
+        await log(f"unban_self - 解封用户 {user_id} 失败: 请求过于频繁，需等待 {e.value} 秒")
+        return False
+    except Exception as e:
+        await log(f"unban_self - 解封用户 {user_id} 时出现未知错误: {e}")
+        return False
+
+
+@listener(
+    command="unban_self",
+    description="一键解除自己封禁的所有用户",
+    need_admin=True,
+    groups_only=True,
+)
+async def unban_self(client: Client, message: Message):
+    """解除当前用户封禁的所有用户
+    
+    该命令会:
+    1. 获取群组中所有被封禁的用户
+    2. 筛选出由当前用户封禁的用户
+    3. 逐一解除这些用户的封禁
+    4. 提供详细的操作反馈
+    """
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    
+    # 更新消息状态
+    await message.edit("🔍 正在查找您封禁的用户...")
+    
+    # 获取被当前用户封禁的成员列表
+    banned_members = await get_banned_members_by_user(client, chat_id, user_id)
+    
+    if not banned_members:
+        await message.edit("✅ 没有找到您封禁的用户")
+        return add_delete_message_job(message, 10)
+    
+    # 开始解封操作
+    total_count = len(banned_members)
+    success_count = 0
+    failed_users = []
+    
+    await message.edit(f"🔄 找到 {total_count} 个被您封禁的用户，开始解封...")
+    
+    for i, member in enumerate(banned_members, 1):
+        # 更新进度
+        if total_count > 5:  # 只有在用户较多时才显示进度
+            await message.edit(f"🔄 解封进度: {i}/{total_count}")
         
-        # Enable and start Docker service
-        systemctl enable docker
-        systemctl start docker
-        
-        log_success "Docker and Docker Compose installation completed"
-    fi
+        # 尝试解封用户
+        if await unban_member_safe(client, chat_id, member.user.id):
+            success_count += 1
+        else:
+            failed_users.append(member.user)
     
-    # Add current user to docker group if not root
-    if [ "$SUDO_USER" ] && [ "$SUDO_USER" != "root" ]; then
-        usermod -aG docker "$SUDO_USER"
-        log_info "Added $SUDO_USER to docker group"
-    fi
-}
-
-# Generate unique container name with collision avoidance
-generate_container_name() {
-    log_info "Generating unique container name..."
+    # 生成结果消息
+    if success_count == total_count:
+        result_text = f"✅ 成功解封 {success_count} 个用户"
+    elif success_count > 0:
+        result_text = f"⚠️ 成功解封 {success_count}/{total_count} 个用户"
+        if failed_users:
+            failed_names = [user.first_name or f"用户{user.id}" for user in failed_users[:3]]
+            if len(failed_users) > 3:
+                failed_names.append(f"等{len(failed_users)}人")
+            result_text += f"\n失败用户: {', '.join(failed_names)}"
+    else:
+        result_text = f"❌ 解封失败，共 {total_count} 个用户"
     
-    local max_attempts=10
-    local attempt=0
+    await message.edit(result_text)
     
-    while [ $attempt -lt $max_attempts ]; do
-        container_name="${CONTAINER_PREFIX}$(openssl rand -hex 4)"
-        
-        if ! docker inspect "$container_name" &>/dev/null; then
-            log_success "Generated container name: $container_name"
-            return 0
-        fi
-        
-        attempt=$((attempt + 1))
-        log_warning "Container name collision, retrying... ($attempt/$max_attempts)"
-    done
+    # 记录详细日志
+    log_message = (
+        f"unban_self 操作完成\n"
+        f"执行用户: {message.from_user.mention}\n"
+        f"群组: {message.chat.title}\n"
+        f"总数: {total_count}, 成功: {success_count}, 失败: {len(failed_users)}"
+    )
+    await log(log_message)
     
-    log_error "Failed to generate unique container name after $max_attempts attempts"
-    return 1
-}
-
-# Enhanced Docker image management
-pull_docker_image() {
-    log_info "Pulling Docker image: $DOCKER_IMAGE"
-    
-    # Check if image already exists and is recent
-    if docker image inspect "$DOCKER_IMAGE" &>/dev/null; then
-        local image_age=$(docker image inspect "$DOCKER_IMAGE" --format '{{.Created}}' | xargs date -d)
-        local current_time=$(date)
-        local age_diff=$(( ($(date -d "$current_time" +%s) - $(date -d "$image_age" +%s)) / 86400 ))
-        
-        if [ $age_diff -lt 7 ]; then
-            log_info "Recent image found (${age_diff} days old), skipping pull"
-            return 0
-        fi
-    fi
-    
-    # Pull with retry logic
-    local max_retries=3
-    local retry_count=0
-    
-    while [ $retry_count -lt $max_retries ]; do
-        if docker pull "$DOCKER_IMAGE"; then
-            log_success "Docker image pulled successfully"
-            return 0
-        else
-            retry_count=$((retry_count + 1))
-            log_warning "Image pull failed. Retry $retry_count/$max_retries"
-            sleep 10
-        fi
-    done
-    
-    log_error "Failed to pull Docker image after $max_retries attempts"
-    return 1
-}
-
-# Optimized container startup with health checks
-start_docker() {
-    log_info "Starting Docker container: $container_name"
-    
-    # Create container with optimized settings
-    if ! docker run -dit \
-        --restart=unless-stopped \
-        --name="$container_name" \
-        --hostname="$container_name" \
-        --memory="512m" \
-        --memory-swap="1g" \
-        --cpus="1.0" \
-        "$DOCKER_IMAGE"; then
-        log_error "Failed to create Docker container"
-        return 1
-    fi
-    
-    # Wait for container to be ready
-    log_info "Waiting for container to be ready..."
-    local timeout=30
-    local elapsed=0
-    
-    while [ $elapsed -lt $timeout ]; do
-        if docker exec "$container_name" test -f /pagermaid/utils/docker-config.sh 2>/dev/null; then
-            break
-        fi
-        sleep 2
-        elapsed=$((elapsed + 2))
-    done
-    
-    if [ $elapsed -ge $timeout ]; then
-        log_error "Container failed to become ready within $timeout seconds"
-        return 1
-    fi
-    
-    log_info "Configuring container parameters..."
-    log_warning "After configuration, press Ctrl + C to continue with background setup"
-    
-    # Configure container with timeout
-    if ! timeout 300 docker exec -it "$container_name" bash utils/docker-config.sh; then
-        log_error "Container configuration failed or timed out"
-        return 1
-    fi
-    
-    log_info "Restarting container to apply configuration..."
-    if ! docker restart "$container_name"; then
-        log_error "Failed to restart container"
-        return 1
-    fi
-    
-    log_success "Docker container setup completed successfully"
-}
-
-# Enhanced data persistence with backup
-data_persistence() {
-    log_info "Setting up data persistence..."
-    
-    local data_path="$DATA_BASE_PATH/$container_name"
-    
-    # Create data directory with proper permissions
-    if ! mkdir -p "$data_path"; then
-        log_error "Failed to create data directory: $data_path"
-        return 1
-    fi
-    
-    # Verify container exists
-    if ! docker inspect "$container_name" &>/dev/null; then
-        log_error "Container '$container_name' does not exist"
-        return 1
-    fi
-    
-    # Copy data with verification
-    log_info "Copying container data to persistent storage..."
-    if ! docker cp "$container_name":/pagermaid/workdir "$data_path/"; then
-        log_error "Failed to copy data from container"
-        return 1
-    fi
-    
-    # Verify data was copied successfully
-    if [ ! -d "$data_path/workdir" ]; then
-        log_error "Data copy verification failed"
-        return 1
-    fi
-    
-    # Gracefully stop and remove old container
-    log_info "Stopping and removing temporary container..."
-    docker stop "$container_name" &>/dev/null || true
-    docker rm "$container_name" &>/dev/null || true
-    
-    # Create new container with persistent volume
-    log_info "Creating container with persistent data volume..."
-    if ! docker run -dit \
-        -v "$data_path/workdir:/pagermaid/workdir" \
-        --restart=unless-stopped \
-        --name="$container_name" \
-        --hostname="$container_name" \
-        --memory="512m" \
-        --memory-swap="1g" \
-        --cpus="1.0" \
-        "$DOCKER_IMAGE"; then
-        log_error "Failed to create persistent container"
-        return 1
-    fi
-    
-    # Setup automated restart cron job
-    setup_cron_restart
-    
-    log_success "Data persistence setup completed"
-}
-
-# Optimized cron job setup
-setup_cron_restart() {
-    log_info "Setting up automated container restart..."
-    
-    # Ensure cron is installed and running
-    if ! command -v crontab &> /dev/null; then
-        log_info "Installing cron service..."
-        if ! apt-get install -y cron; then
-            log_error "Failed to install cron"
-            return 1
-        fi
-    fi
-    
-    # Enable and start cron service
-    systemctl enable cron &>/dev/null || true
-    systemctl start cron &>/dev/null || true
-    
-    # Create optimized cron job
-    local cron_job="$CRON_RESTART_INTERVAL * * * * /usr/bin/docker ps -q --filter 'name=$CONTAINER_PREFIX' | /usr/bin/xargs -r /usr/bin/docker restart >/dev/null 2>&1"
-    
-    # Add cron job with duplicate prevention
-    (crontab -l 2>/dev/null | grep -v "$CONTAINER_PREFIX" || true; echo "$cron_job") | crontab -
-    
-    log_success "Automated restart scheduled every 10 minutes for PagerMaid containers"
-}
-
-# Main installation orchestrator with error recovery
-start_installation() {
-    log_info "Starting PagerMaid Docker installation..."
-    log_info "Log file: $LOG_FILE"
-    
-    # Pre-installation checks
-    check_root
-    check_system_requirements
-    
-    # Installation steps with error handling
-    install_system_packages || return 1
-    docker_check || return 1
-    generate_container_name || return 1
-    pull_docker_image || return 1
-    start_docker || return 1
-    data_persistence || return 1
-    
-    log_success "PagerMaid installation completed successfully!"
-    log_info "Container name: $container_name"
-    log_info "Data path: $DATA_BASE_PATH/$container_name/workdir"
-    log_info "Use 'docker logs $container_name' to view container logs"
-    log_info "Use 'docker exec -it $container_name bash' to access container shell"
-}
-
-# Script entry point
-main() {
-    # Initialize logging
-    echo "PagerMaid Docker Setup - $(date)" > "$LOG_FILE"
-    
-    # Run installation
-    start_installation
-}
-
-# Execute main function
-main "$@"
+    # 延迟删除消息
+    add_delete_message_job(message, 15)
