@@ -1,57 +1,14 @@
-[
-  {
-    "name": "set",
-    "description": "创建自动转发规则，格式: set [源] [目标] [选项...]",
-    "usage": "shift set @source @target silent photo"
-  },
-  {
-    "name": "del",
-    "description": "删除指定源的转发规则",
-    "usage": "shift del @source"
-  },
-  {
-    "name": "backup",
-    "description": "备份历史消息到目标",
-    "usage": "shift backup @source @target text"
-  },
-  {
-    "name": "list",
-    "description": "显示当前所有转发规则",
-    "usage": "shift list"
-  },
-  {
-    "name": "stats",
-    "description": "查看转发统计信息",
-    "usage": "shift stats"
-  },
-  {
-    "name": "pause",
-    "description": "暂停指定源的转发规则",
-    "usage": "shift pause @source"
-  },
-  {
-    "name": "resume",
-    "description": "恢复指定源的转发规则",
-    "usage": "shift resume @source"
-  },
-  {
-    "name": "filter add",
-    "description": "添加关键词过滤",
-    "usage": "shift filter @source add 广告 垃圾"
-  },
-  {
-    "name": "filter del",
-    "description": "删除关键词过滤",
-    "usage": "shift filter @source del 广告"
-  },
-  {
-    "name": "filter list",
-    "description": "查看关键词过滤列表",
-    "usage": "shift filter @source list"
-  },
-  {
-    "name": "shift del",
-    "description": "支持序号批量删除规则或关键词",
-    "usage": "shift del 1,2,3"
-  }
-]
+{
+  "list": [
+    {
+      "name": "shift",
+      "version": "1.0",
+      "section": "channel_help",
+      "maintainer": "EAlyce",
+      "size": "8.2 kb",
+      "supported": true,
+      "des_short": "智能频道消息自动转发助手",
+      "des": "支持自动转发频道、群组和私聊消息，具有消息类型过滤、备份、关键词过滤、暂停与恢复功能，适用于复杂的消息管理和同步需求。"
+    }
+  ]
+}
