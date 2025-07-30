@@ -104,6 +104,62 @@ def check_target_available(chat_or_user):
     return False
 
 
+def is_circular_forward(source_id: int, target_id: int) -> (bool, str):
+    """检查添加转发规则是否会产生循环。返回 (is_circular, error_message)。"""
+    # 直接循环检查：源和目标相同
+    if source_id == target_id:
+        return True, f"不能设置自己到自己的转发规则"
+    
+    # 直接循环检查：目标已经转发到源
+    existing_rule_str = sqlite.get(f"shift.{target_id}")
+    if existing_rule_str:
+        try:
+            existing_rule = json.loads(existing_rule_str)
+            if int(existing_rule.get('target_id', -1)) == source_id:
+                return True, f"检测到直接循环：{target_id} 已经转发到 {source_id}"
+        except (json.JSONDecodeError, ValueError, TypeError):
+            pass  # 如果数据损坏，则忽略
+    
+    # 间接循环检查：沿着转发链追踪
+    path = {source_id}
+    current_id = target_id
+    chain = [source_id, target_id]
+
+    # 间接循环检查：沿着转发链追踪
+    while True:
+        # 从数据库中获取下一个转发目标
+        # 我们只关心是否存在转发，不关心具体配置
+        value = sqlite.get(f"shift.{current_id}")
+        if not value:
+            # 链条中断，没有循环
+            return False, ""
+
+        # 假设 value 是一个 JSON 字符串，包含 target_id
+        try:
+            rule_data = json.loads(value)
+            next_target_id = int(rule_data.get('target_id', -1))
+            if next_target_id == -1:
+                return False, ""
+        except (json.JSONDecodeError, ValueError, TypeError):
+            # 如果数据损坏或格式不正确，则认为链中断
+            return False, ""
+
+        # 检查是否形成循环
+        if next_target_id in path:
+            chain.append(next_target_id)
+            path_str = " -> ".join(map(str, chain))
+            return True, f"检测到间接循环：{path_str}"
+
+        # 安全退出：防止因意外数据导致的无限循环
+        if len(path) > 50:  # 假设转发链深度不超过50
+            return True, "转发链过长，可能存在循环"
+
+        # 继续追踪
+        path.add(next_target_id)
+        chain.append(next_target_id)
+        current_id = next_target_id
+
+
 def get_display_name(chat_or_user) -> str:
     """获取聊天或用户的显示名称"""
     if isinstance(chat_or_user, User):
@@ -276,6 +332,11 @@ async def shift_func_set(client: Client, message: Message):
     target_id = target.id
     if target_id in WHITELIST:
         return await message.edit("❌ 此对话位于白名单中，无法设置为目标")
+
+    # 检查转发循环
+    is_circular, error_msg = is_circular_forward(source.id, target_id)
+    if is_circular:
+        return await message.edit(f"❌ 操作被禁止：{error_msg}")
     
     # 检查silent选项的有效性
     if "silent" in options and isinstance(target, User):
@@ -284,14 +345,14 @@ async def shift_func_set(client: Client, message: Message):
         await sleep(2)
     
     # 保存配置
-    sqlite[f"shift.{source.id}"] = target_id
-    sqlite[f"shift.{source.id}.options"] = (
-        message.parameter[3:] if len(message.parameter) > 3 else ["all"]
-    )
-    
-    # 记录创建时间和目标类型
-    sqlite[f"shift.{source.id}.created"] = datetime.datetime.now().isoformat()
-    sqlite[f"shift.{source.id}.target_type"] = "user" if isinstance(target, User) else "chat"
+    rule_data = {
+        "target_id": target_id,
+        "options": list(options),
+        "target_type": "user" if isinstance(target, User) else "chat",
+        "paused": False,
+        "created_at": datetime.datetime.now(pytz.timezone(Config.TIME_ZONE)).isoformat()
+    }
+    sqlite[f"shift.{source.id}"] = json.dumps(rule_data)
     
     source_name = get_display_name(source)
     target_name = get_display_name(target)
@@ -339,12 +400,17 @@ async def shift_func_del(client: Client, message: Message):
             key_to_del = all_shifts.pop(index)
             source_id_str = key_to_del.split('.')[1]
             
-            # 删除所有相关键
-            keys_to_remove = [k for k in sqlite if k.startswith(f"shift.{source_id_str}") or k.startswith(f"shift.stats.{source_id_str}")]
+            # 1. 删除主规则键
+            if key_to_del in sqlite:
+                del sqlite[key_to_del]
+                deleted_count += 1
+            
+            # 2. 删除相关的统计键
+            stats_prefix = f"shift.stats.{source_id_str}"
+            keys_to_remove = [k for k in sqlite if k.startswith(stats_prefix)]
             for k in keys_to_remove:
                 with contextlib.suppress(KeyError):
                     del sqlite[k]
-            deleted_count += 1
         except (IndexError, KeyError):
             pass  # 忽略已删除或无效的
     
@@ -385,6 +451,11 @@ async def shift_func_backup(client: Client, message: Message):
     
     if target.id in WHITELIST:
         return await message.edit("❌ 此对话位于白名单中")
+
+    # 检查是否存在循环转发
+    is_circular, error_msg = is_circular_forward(source.id, target.id)
+    if is_circular:
+        return await message.edit(f"❌ 操作被禁止：{error_msg}")
     
     source_name = get_display_name(source)
     target_name = get_display_name(target)
@@ -405,6 +476,8 @@ async def shift_func_backup(client: Client, message: Message):
                 target.id,
                 list(options),
                 disable_notification="silent" in options and isinstance(target, Chat),
+                ignore_forwarded=True,  # 在备份时强制转发
+                _chain_depth=0,  # 备份时重置链深度
             )
             count += 1
         except Exception as e:
@@ -426,31 +499,44 @@ async def shift_func_backup(client: Client, message: Message):
 
 
 @shift_func.sub_command(command="list")
-async def get_chat_display_name_for_list(client: Client, chat_id: int, chat_type: str = "chat") -> str:
-    """获取用于列表显示的聊天名称，优先使用 username。"""
-    try:
-        if chat_type == "user":
-            chat_info = await client.get_users(chat_id)
-        else:
-            chat_info = await client.get_chat(chat_id)
-        
+async def get_chat_display_name_and_info(client: Client, chat_id: int, chat_type: str = "chat", cache: Optional[Dict[int, Any]] = None) -> (str, Any):
+    """获取聊天显示名称和信息对象，支持缓存。"""
+    if cache is not None and chat_id in cache:
+        chat_info = cache[chat_id]
+    else:
+        try:
+            if chat_type == "user":
+                chat_info = await client.get_users(chat_id)
+            else:
+                chat_info = await client.get_chat(chat_id)
+            if cache is not None:
+                cache[chat_id] = chat_info
+        except Exception:
+            chat_info = None
+            if cache is not None:
+                cache[chat_id] = None # 缓存失败结果，避免重复请求
+
+    if chat_info:
         if hasattr(chat_info, 'username') and chat_info.username:
-            return f"@{chat_info.username}"
+            display_name = f"@{chat_info.username}"
         elif hasattr(chat_info, 'title') and chat_info.title:
-            return chat_info.title
+            display_name = chat_info.title
         elif hasattr(chat_info, 'first_name') and chat_info.first_name:
             name_parts = [chat_info.first_name]
             if hasattr(chat_info, 'last_name') and chat_info.last_name:
                 name_parts.append(chat_info.last_name)
-            return " ".join(name_parts)
+            display_name = " ".join(name_parts)
         else:
-            return str(chat_id)
-    except Exception:
-        return str(chat_id)
+            display_name = str(chat_id)
+    else:
+        display_name = str(chat_id)
+    
+    return display_name, chat_info
 
 
 @shift_func.sub_command(command="list")
 async def shift_func_list(client: Client, message: Message):
+    info_cache: Dict[int, Any] = {}
     from_ids = sorted([k for k in sqlite if k.startswith("shift.") and k.count('.') == 1])
     if not from_ids:
         return await message.edit("📭 当前没有配置任何转发规则")
@@ -459,38 +545,40 @@ async def shift_func_list(client: Client, message: Message):
     
     for i, from_id in enumerate(from_ids, 1):
         source_id = from_id[6:]  # 移除 "shift." 前缀
-        target_id = sqlite[from_id]
-        options = sqlite.get(f"shift.{source_id}.options", ["all"])
-        created = sqlite.get(f"shift.{source_id}.created", "未知")
-        target_type = sqlite.get(f"shift.{source_id}.target_type", "chat")
-        is_paused = sqlite.get(f"shift.{source_id}.paused", False)
+        try:
+            rule_data = json.loads(sqlite[from_id])
+            target_id = rule_data["target_id"]
+            options = rule_data.get("options", ["all"])
+            created_str = rule_data.get("created_at", "")
+            target_type = rule_data.get("target_type", "chat")
+            is_paused = rule_data.get("paused", False)
+        except (json.JSONDecodeError, KeyError, TypeError):
+            # 跳过格式不正确或已损坏的规则，仍然输出简要信息
+            logs.warning(f"[SHIFT] 无法解析规则: {from_id}")
+            output += f"{i}. ⚠️ 规则数据损坏或非标准格式: {from_id}\n\n"
+            continue
         
         status = "⏸️ 已暂停" if is_paused else "▶️ 运行中"
-        
-        # 尝试获取目标信息以确定emoji
-        target_emoji = "📝"
-        try:
-            if target_type == "user":
-                target_info = await client.get_users(target_id)
-                target_emoji = "👤"
-            else:
-                target_info = await client.get_chat(target_id)
-                target_emoji = get_target_type_emoji(target_info)
-        except:
-            pass
-        
+
+        source_display, _ = await get_chat_display_name_and_info(client, int(source_id), cache=info_cache)
+        target_display, target_info = await get_chat_display_name_and_info(client, target_id, target_type, cache=info_cache)
+
+        # 根据获取到的 target_info 设置 emoji
+        if target_info:
+            target_emoji = get_target_type_emoji(target_info)
+        else:
+            target_emoji = "📝"
+
         output += f"{i}. {status}\n"
-        source_display = await get_chat_display_name_for_list(client, int(source_id))
-        target_display = await get_chat_display_name_for_list(client, target_id, target_type)
 
         output += f"   📤 {source_display}\n"
         output += f"   📥 {target_emoji} {target_display}\n"
         output += f"   ⚙️ 选项：{', '.join(options)}\n"
         output += f"   🎯 类型：{'个人用户' if target_type == 'user' else '聊天'}\n"
         
-        if created != "未知":
+        if created_str:
             try:
-                created_dt = datetime.datetime.fromisoformat(created)
+                created_dt = datetime.datetime.fromisoformat(created_str)
                 output += f"   📅 创建：{created_dt.strftime('%Y-%m-%d %H:%M')}\n"
             except:
                 pass
@@ -576,9 +664,17 @@ async def shift_func_pause(client: Client, message: Message):
     for index in indices_to_process:
         try:
             key = all_shifts[index]
-            source_id = int(key.split('.')[1])
-            sqlite[f"shift.{source_id}.paused"] = True
-            paused_count += 1
+            source_id_str = key.split('.')[1]
+            rule_str = sqlite.get(f"shift.{source_id_str}")
+            if rule_str:
+                try:
+                    rule_data = json.loads(rule_str)
+                    rule_data['paused'] = True
+                    sqlite[f"shift.{source_id_str}"] = json.dumps(rule_data)
+                    paused_count += 1
+                except (json.JSONDecodeError, TypeError):
+                    # 跳过损坏的规则
+                    pass
         except (IndexError, KeyError):
             pass
 
@@ -618,10 +714,16 @@ async def shift_func_resume(client: Client, message: Message):
     for index in indices_to_process:
         try:
             key = all_shifts[index]
-            source_id = int(key.split('.')[1])
-            if f"shift.{source_id}.paused" in sqlite:
-                del sqlite[f"shift.{source_id}.paused"]
-            resumed_count += 1
+            rule_str = sqlite.get(key)
+            if rule_str:
+                try:
+                    rule_data = json.loads(rule_str)
+                    rule_data['paused'] = False
+                    sqlite[key] = json.dumps(rule_data)
+                    resumed_count += 1
+                except (json.JSONDecodeError, TypeError):
+                    # 跳过损坏的规则
+                    pass
         except (IndexError, KeyError):
             pass
 
@@ -655,14 +757,20 @@ async def shift_func_filter(client: Client, message: Message):
         except (ValueError, IndexError):
             return await message.edit("❌ 无效的序号。")
 
-        filter_key = f"shift.{source_id}.filter"
-        if filter_key not in sqlite or not sqlite[filter_key]:
-            return await message.edit(f"🔍 规则 {index + 1} ({source_id}) 没有设置过滤关键词。")
-
-        filters = sqlite[filter_key]
-        text = f"🔍 规则 {index + 1} ({source_id}) 的过滤关键词：\n"
-        text += "\n".join([f"- `{f}`" for f in filters])
-        return await message.edit(text)
+        rule_str = sqlite.get(key)
+        if not rule_str:
+            return await message.edit("❌ 规则数据不存在或已损坏。")
+        try:
+            rule_data = json.loads(rule_str)
+            filters = rule_data.get("filters", [])
+            if not filters:
+                return await message.edit(f"🔍 规则 {index + 1} ({source_id}) 没有设置过滤关键词。")
+            
+            text = f"🔍 规则 {index + 1} ({source_id}) 的过滤关键词：\n"
+            text += "\n".join([f"- `{f}`" for f in filters])
+            return await message.edit(text)
+        except (json.JSONDecodeError, TypeError):
+            return await message.edit("❌ 规则数据损坏。")
 
     if action not in ["add", "del"]:
         return await message.edit("❌ 无效的操作，请使用 `add`, `del`, 或 `list`。")
@@ -694,20 +802,25 @@ async def shift_func_filter(client: Client, message: Message):
     for index in indices_to_process:
         try:
             key = all_shifts[index]
-            source_id = int(key.split('.')[1])
-            filter_key = f"shift.{source_id}.filter"
+            rule_str = sqlite.get(key)
+            if not rule_str:
+                continue
+            try:
+                rule_data = json.loads(rule_str)
+                current_filters = rule_data.get("filters", [])
 
-            current_filters = sqlite.get(filter_key, [])
-
-            if action == "add":
-                for kw in keywords:
-                    if kw not in current_filters:
-                        current_filters.append(kw)
-            elif action == "del":
-                current_filters = [f for f in current_filters if f not in keywords]
-
-            sqlite[filter_key] = current_filters
-            updated_count += 1
+                if action == "add":
+                    for kw in keywords:
+                        if kw not in current_filters:
+                            current_filters.append(kw)
+                elif action == "del":
+                    current_filters = [f for f in current_filters if f not in keywords]
+                
+                rule_data["filters"] = current_filters
+                sqlite[key] = json.dumps(rule_data)
+                updated_count += 1
+            except (json.JSONDecodeError, TypeError):
+                pass # 跳过损坏的规则
         except (IndexError, KeyError):
             pass
 
@@ -729,33 +842,41 @@ def format_id_link(chat_id):
         return str(chat_id)
 
 
-@listener(is_plugin=True, incoming=True, ignore_edited=True)
+@listener(is_plugin=True, incoming=True, ignore_edited=True, ignore_forwarded=False, from_self=True)
 async def shift_channel_message(message: Message):
     """Event handler to auto forward channel messages."""
     source = message.chat.id
-    target = sqlite.get(f"shift.{source}")
-    if not target:
+    rule_str = sqlite.get(f"shift.{source}")
+    if not rule_str:
         return
-    
-    # 检查是否暂停
-    if sqlite.get(f"shift.{source}.paused", False):
+
+    try:
+        rule_data = json.loads(rule_str)
+        target_id = int(rule_data["target_id"])
+        is_paused = rule_data.get("paused", False)
+        options = rule_data.get("options", ["all"])
+        target_type = rule_data.get("target_type", "chat")
+    except (json.JSONDecodeError, KeyError, TypeError) as e:
+        logs.error(f"[SHIFT] 无法解析规则 {source}: {e}")
+        return
+
+    logs.debug(f"[SHIFT] 收到消息 - 频道: {source}, 消息ID: {message.id}, 目标: {target_id}, 暂停: {is_paused}")
+
+    if is_paused:
         return
     
     if message.chat.has_protected_content:
+        # 如果源频道开启了内容保护，自动删除规则
         del sqlite[f"shift.{source}"]
         return
     
-    # 检查过滤关键词
     if is_message_filtered(message, source):
         return
-    
-    options = sqlite.get(f"shift.{source}.options") or []
-    target_type = sqlite.get(f"shift.{source}.target_type", "chat")
 
     with contextlib.suppress(Exception):
         if message.media_group_id:
             add_or_replace_forward_group_media(
-                target,
+                target_id,
                 source,
                 message.id,
                 message.media_group_id,
@@ -764,18 +885,19 @@ async def shift_channel_message(message: Message):
             )
             return
         
-        # 转发消息并更新统计
+        logs.debug(f"[SHIFT] 开始转发 - 从 {source} 到 {target_id}")
         await loosely_forward(
             None,
             message,
-            target,
+            target_id,
             options,
-            disable_notification="silent" in options,
+            disable_notification="silent" in options and target_type == "chat",
+            ignore_forwarded=True,
         )
+        logs.debug(f"[SHIFT] 转发完成 - 从 {source} 到 {target_id}")
         
-        # 更新统计
         media_type = message.media.value if message.media else "text"
-        update_stats(source, target, media_type)
+        update_stats(source, target_id, media_type)
 
 
 async def loosely_forward(
@@ -784,19 +906,67 @@ async def loosely_forward(
     chat_id: int,
     options: List[AVAILABLE_OPTIONS_TYPE],
     disable_notification: bool = False,
+    ignore_forwarded: bool = False,
+    _chain_depth: int = 0,  # 防止无限递归的深度计数器
 ):
+    # 防止无限递归，最大链长度为10
+    if _chain_depth > 10:
+        logs.warning(f"[SHIFT] 转发链深度超过限制，停止转发")
+        return
+
     # 找訊息類型video、document...
+    # 如果不忽略转发，并且消息是转发的，则跳过
+    if not ignore_forwarded and message.forward_from:
+        return
+
     media_type = message.media.value if message.media else "text"
+    should_forward = False
+    
     if (not options) or "all" in options:
-        await forward_messages(
-            chat_id, message.chat.id, [message.id], disable_notification, notifier
-        )
+        should_forward = True
     elif media_type in options:
-        await forward_messages(
-            chat_id, message.chat.id, [message.id], disable_notification, notifier
-        )
+        should_forward = True
     else:
         logs.debug("skip message type: %s", media_type)
+        return
+    
+    if should_forward:
+        # 执行转发
+        await forward_messages(
+            chat_id, message.chat.id, [message.id], disable_notification, notifier
+        )
+        
+        # 检查目标频道是否有下一级转发规则
+        next_rule_str = sqlite.get(f"shift.{chat_id}")
+        if next_rule_str:
+            try:
+                next_rule = json.loads(next_rule_str)
+                if not next_rule.get("paused", False):
+                    next_target_id = int(next_rule["target_id"])
+
+                    # 在运行时再次检查循环（双重保障）
+                    is_circular, _ = is_circular_forward(message.chat.id, next_target_id)
+                    if is_circular:
+                        logs.warning(f"[SHIFT] 检测到运行时循环，停止转发链: {message.chat.id} -> {next_target_id}")
+                        return
+
+                    next_options = next_rule.get("options", ["all"])
+                    next_target_type = next_rule.get("target_type", "chat")
+
+                    logs.debug(f"[SHIFT] 检测到转发链，继续转发到 {next_target_id} (深度: {_chain_depth + 1})")
+
+                    # 递归调用，继续转发链
+                    await loosely_forward(
+                        notifier,
+                        message,  # 使用原始消息
+                        next_target_id,
+                        next_options,
+                        disable_notification="silent" in next_options and next_target_type == "chat",
+                        ignore_forwarded=True,  # 在链式转发中总是忽略转发标记
+                        _chain_depth=_chain_depth + 1
+                    )
+            except (json.JSONDecodeError, KeyError, TypeError) as e:
+                logs.error(f"[SHIFT] 解析下一跳规则失败: {e}")
 
 
 async def forward_messages(

@@ -1,0 +1,11 @@
+[
+  {
+    "name": "bf",
+    "version": "1.0.0",
+    "description": "备份和恢复 Pagermaid 的数据与插件，支持上传/下载操作",
+    "path": "bf",
+    "author": "你自己填写或替换",
+    "requires": [],
+    "dependencies": []
+  }
+]
