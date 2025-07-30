@@ -4,7 +4,7 @@
 
 📦 插件源地址（用于添加源）：
 ```
-,apt_source add https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/plugin/list.json
+,apt_source add https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/plugin/
 ```
 
 ---
