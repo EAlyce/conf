@@ -1,0 +1,19 @@
+智能转发助手命令列表：
+
+1. set [源] [目标] [选项...]      - 创建转发规则
+2. del [源]                    - 删除转发规则
+3. backup [源] [目标] [选项...] - 备份历史消息
+4. list                       - 查看当前转发规则
+5. stats                      - 查看转发统计
+6. pause [源]                 - 暂停转发
+7. resume [源]                - 恢复转发
+8. filter [源] add [关键词]     - 添加过滤关键词
+9. filter [源] del [关键词]     - 删除过滤关键词
+10. filter [源] list            - 查看过滤关键词列表
+11. shift del 1,2,3...          - 批量删除规则或关键词
+
+支持消息类型选项：silent, text, photo, document, video, sticker, animation, voice, audio, all
+
+示例：
+shift set @source @target silent photo
+shift filter -1001234567890 add 广告 垃圾
