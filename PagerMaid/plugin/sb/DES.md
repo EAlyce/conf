@@ -1,8 +1,3 @@
----
-
-### ✅ `sb/DES.md`
-
-```markdown
 # sb 插件（Super Ban）
 
 ## 插件功能
@@ -14,9 +9,7 @@
 ## 命令格式
 
 ```
-
-/sb \[reply | user\_id | @username] \[do\_not\_del\_all]
-
+/sb [reply | user_id | @username] [do_not_del_all]
 ```
 
 ## 参数说明
@@ -28,26 +21,23 @@
 ## 使用示例
 
 - 回复一条用户消息并输入：
-```
 
-/sb
-
-```
-→ 会在所有共同群中封禁该用户，并删除其所有消息。
+  ```
+  /sb
+  ```
+  → 会在所有共同群中封禁该用户，并删除其所有消息。
 
 - 使用用户名封禁但不删消息：
-```
 
-/sb @spammer do\_not\_del\_all
-
-```
+  ```
+  /sb @spammer do_not_del_all
+  ```
 
 - 使用用户 ID 并删除消息：
-```
 
-/sb 123456789
-
-```
+  ```
+  /sb 123456789
+  ```
 
 ## 权限要求
 
@@ -69,6 +59,3 @@
 ---
 
 维护者：[@EAlyce](https://github.com/EAlyce)
-```
-
----
