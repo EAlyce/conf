@@ -56,7 +56,7 @@ cp config.gen.yml config.yml
 
 ## ⚙️ 6. 创建 systemd 服务（用于后台运行）
 
-粘贴以下内容创建服务文件：
+Finalshell 命令编辑区 粘贴以下内容创建服务文件发送即可：
 
 ```bash
 sudo tee /etc/systemd/system/PagerMaid-Modify.service > /dev/null << 'EOF'
