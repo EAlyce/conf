@@ -46,7 +46,7 @@ pip3 install coloredlogs
 
 ```bash
 cd /root/PagerMaid-Modify
-python3 -m pagermaid
+python3.13 -m pagermaid
 cp config.gen.yml config.yml
 ```
 
