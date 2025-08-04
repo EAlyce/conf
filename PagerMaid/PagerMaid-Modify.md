@@ -8,7 +8,8 @@
 ## 📥 1. 克隆项目并准备环境
 
 ```bash
-sudo -i
+sudo apt update && sudo apt upgrade -y
+apt install git curl
 cd /root
 git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify && cd PagerMaid-Modify
 sudo apt update && sudo apt upgrade -y
