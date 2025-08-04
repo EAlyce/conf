@@ -9,10 +9,9 @@
 
 ```bash
 sudo apt update && sudo apt upgrade -y
-apt install git curl
+sudo apt install git curl -y
 cd /root
 git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify && cd PagerMaid-Modify
-sudo apt update && sudo apt upgrade -y
 ```
 
 ---
