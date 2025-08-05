@@ -23,7 +23,10 @@ apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-u
 ```bash
 apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
 ```
-
+文件同步工具
+```
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/syncthing-reinstall.sh)
+```
 ---
 
 ## 🛠️ 应用环境配置
