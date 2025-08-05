@@ -65,15 +65,10 @@ Description=PagerMaid-Modify telegram utility daemon
 After=network.target
 
 [Service]
-Type=simple
 WorkingDirectory=/root/PagerMaid-Modify
-ExecStart=/bin/bash -c "cd /root/PagerMaid-Modify && python3 -m pagermaid"
+ExecStart=python3 -m pagermaid
 Restart=always
 User=root
-Environment="PYTHONPATH=/root/PagerMaid-Modify"
-Environment="HOME=/root"
-StandardOutput=journal
-StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
