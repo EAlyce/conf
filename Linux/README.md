@@ -21,7 +21,10 @@ apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-u
 安装一些日常管理和开发中不可或缺的命令行工具。
 
 ```bash
+grep -qxF 'export PATH=$PATH:/root/bin' /etc/profile || echo 'export PATH=$PATH:/root/bin' >> /etc/profile && source /etc/profile
+```
 apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
+```
 ```
 文件同步工具
 ```
