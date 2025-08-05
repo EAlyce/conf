@@ -154,6 +154,4 @@ systemctl status PagerMaid-Modify
 
 ---
 
-*Made with ❤️ for the Telegram community*
-
 </div>
