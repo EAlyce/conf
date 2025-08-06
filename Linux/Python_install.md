@@ -89,8 +89,4 @@ print('New features include improved error messages, better performance, and mor
 /usr/local/bin/python3.13 -m pip install -r requirements.txt --root-user-action=ignore
 ```
 
----
-
 ## 现在你可以开始使用 Python 3.13 了！🐍✨
-```
-
