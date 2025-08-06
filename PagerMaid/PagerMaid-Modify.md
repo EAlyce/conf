@@ -21,8 +21,7 @@ sudo apt install git curl -y
 
 # 克隆项目到根目录
 cd /root
-git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify
-cd PagerMaid-Modify
+mkdir -p PagerMaid-Modify && git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify
 ```
 
 > 💡 **提示**：建议在全新的系统上进行安装以避免依赖冲突
