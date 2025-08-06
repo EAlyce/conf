@@ -13,19 +13,24 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libns
 ```
 
 ### 下载并编译 Python 3.13
+```
+cd /tmp
+```
+一键安装编译依赖并下载编译Python 3.13.5
+```
+apt update && apt install -y build-essential libssl-dev libffi-dev libsqlite3-dev libbz2-dev libreadline-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev liblzma-dev && cd /tmp && wget https://www.python.org/ftp/python/3.13.5/Python-3.13.5.tgz && tar -xzf Python-3.13.5.tgz && cd Python-3.13.5 && ./configure --enable-optimizations --prefix=/usr/local && make -j$(nproc) && make altinstall
+```
+手动编译安装
 ```bash
-# 下载Python 3.13源码
 cd /tmp
 wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz
 tar -xf Python-3.13.0.tgz
 cd Python-3.13.0
 
-# 配置和编译
 ./configure --enable-optimizations --prefix=/usr/local
 make -j$(nproc)
 sudo make altinstall
 
-# 验证安装
 /usr/local/bin/python3.13 --version
 ```
 
