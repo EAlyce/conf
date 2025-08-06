@@ -68,7 +68,7 @@ python3 -m pip install --upgrade pip
 pip3 install coloredlogs
 
 # 安装项目依赖
-/usr/local/bin/python3.13 -m pip install -r requirements.txt --root-user-action=ignore
+python3.13.5 -m pip install -r requirements.txt --root-user-action=ignore
 ```
 
 ---
