@@ -9,7 +9,7 @@ set -euo pipefail
 
 APP_DIR="/root/PagerMaid-Modify"
 REPO_URL="https://github.com/TeamPGM/PagerMaid-Modify.git"
-PY_VER_DEFAULT="3.13.1"  # default Python to build if system one is too old
+PY_VER_DEFAULT="3.13.4"  # default Python to build if system one is too old
 PY_BIN="python3"         # will be set to the detected/built python
 VENV_DIR="/root/PagerMaid-Modify/.venv"
 START_TIMEOUT="180"      # 最长等待启动日志秒数（可用环境变量覆盖）
@@ -379,17 +379,21 @@ first_login_if_needed()
       }
       -re {(?i)code|验证码|输入.*验证码} {
         logline $fout "PROMPT_CODE";
-        # 交互读取验证码（此时才询问），兼容回车 \r 或 \n
+        # 交互读取验证码（此时才询问），循环等待直到捕获到非空输入；同时兼容 CR/LF
         set code ""
-        send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："
-        expect_user {
-          -re "(.*)\r" { set code $expect_out(1,string) }
-          -re "(.*)\n" { set code $expect_out(1,string) }
-          timeout { set code "" }
-          eof { set code "" }
-        }
-        if {[string length $code] == 0} {
-          send_user "\n未检测到输入，若已收到验证码可直接在此终端输入后回车。\n"
+        while {[string length $code] == 0} {
+          send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："
+          expect_user {
+            -re "(.*)\r" {
+              if {[info exists expect_out(1,string)]} { set code $expect_out(1,string) } else { set code "" }
+            }
+            -re "(.*)\n" {
+              if {[info exists expect_out(1,string)]} { set code $expect_out(1,string) } else { set code "" }
+            }
+            timeout { set code "" }
+            eof { set code "" }
+          }
+          if {[string length $code] == 0} { send_user "\n未检测到输入，请再次输入验证码：" }
         }
         send -- "$code\r"; exp_continue
       }
