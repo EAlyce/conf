@@ -9,7 +9,7 @@ set -euo pipefail
 
 APP_DIR="/root/PagerMaid-Modify"
 REPO_URL="https://github.com/TeamPGM/PagerMaid-Modify.git"
-PY_VER_DEFAULT="3.13.4"  # default Python to build if system one is too old
+PY_VER_DEFAULT="3.13.1"  # default Python to build if system one is too old
 PY_BIN="python3"         # will be set to the detected/built python
 VENV_DIR="/root/PagerMaid-Modify/.venv"
 START_TIMEOUT="180"      # 最长等待启动日志秒数（可用环境变量覆盖）
@@ -371,48 +371,63 @@ first_login_if_needed()
     # 将输出同步到日志文件
     set fout [open $outfile "w"]
     proc logline {f s} { puts $f $s; flush $f }
-    # 轻触回车，防止部分环境不主动打印提示
-    send "\r"
+    # 安全发送封装
+    proc safe_send {s} { catch {send -- $s} }
+    # 1) 等待手机号提示并发送
+    expect -re {(?i)phone|手机号|电话|number|请输入.*手机}
+    logline $fout "PROMPT_PHONE"
+    safe_send "$phone\r"
+    # 2) 等待验证码提示；若子进程提前退出则友好提示
     expect {
-      -re {(?i)phone|手机号|电话|number|请输入.*手机} {
-        logline $fout "PROMPT_PHONE"; send -- "$phone\r"; exp_continue
-      }
       -re {(?i)code|验证码|输入.*验证码} {
-        logline $fout "PROMPT_CODE";
-        # 交互读取验证码（此时才询问），循环等待直到捕获到非空输入；同时兼容 CR/LF
+        logline $fout "PROMPT_CODE"
+        # 通过 /dev/tty 直接读取用户输入，避免 expect_user 在非交互管道中的问题
         set code ""
-        while {[string length $code] == 0} {
-          send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："
-          expect_user {
-            -re "(.*)\r" {
-              if {[info exists expect_out(1,string)]} { set code $expect_out(1,string) } else { set code "" }
+        set tty_path "/dev/tty"
+        if {[file readable $tty_path]} {
+          set tty [open $tty_path "r+"]
+          fconfigure $tty -buffering line -blocking 1 -translation auto
+          puts $tty ""
+          puts -nonewline $tty "请在 Telegram 或短信中查收验证码，输入后回车："
+          flush $tty
+          while {[string length $code] == 0} {
+            if {[catch {gets $tty code}]} { set code "" }
+            if {[string length $code] == 0} {
+              puts -nonewline $tty "\n验证码不能为空，请重新输入："
+              flush $tty
             }
-            -re "(.*)\n" {
-              if {[info exists expect_out(1,string)]} { set code $expect_out(1,string) } else { set code "" }
-            }
-            timeout { set code "" }
-            eof { set code "" }
           }
-          if {[string length $code] == 0} { send_user "\n未检测到输入，请再次输入验证码：" }
+          close $tty
+        } else {
+          send_user "\n检测到当前环境无交互终端(/dev/tty 不可用)。请先手动完成首次登录：\n  source ${app_dir}/.venv/bin/activate && python -m pagermaid\n完成后再次运行安装脚本。\n"
+          close $fout
+          exit 1
         }
-        send -- "$code\r"; exp_continue
+        safe_send "$code\r"
       }
+      eof {
+        logline $fout "EOF_BEFORE_CODE"
+        send_user "\n登录进程已退出，可能是网络/限制导致。请稍后重试，或手动运行：\n  source ${app_dir}/.venv/bin/activate && python -m pagermaid\n完成首次登录后再重新执行安装脚本。\n"
+        close $fout
+        exit 1
+      }
+    }
+    # 3) 可能出现二次密码或直接启动
+    expect {
       -re {(?i)password|two[- ]?step|二步|两步|密码|输入.*密码} {
-        logline $fout "PROMPT_2FA";
+        logline $fout "PROMPT_2FA"
         if {[string length $pwd] == 0} {
           send_user "\n请输入二次密码（留空直接回车跳过）："; stty -echo; expect_user -re "(.*)\n"; stty echo; set pwd $expect_out(1,string)
         }
-        if {[string length $pwd] > 0} { send -- "$pwd\r" }
+        if {[string length $pwd] > 0} { safe_send "$pwd\r" }
         exp_continue
       }
       -re {已启动|has started|Started PagerMaid} {
-        logline $fout "STARTED"; after 500; send \003; exp_continue
+        logline $fout "STARTED"; after 500; safe_send \003
       }
-      timeout {
-        # 若长时间没有任何提示，再次轻触并继续等待
-        send "\r"; exp_continue
+      eof {
+        # 子进程结束
       }
-      eof { }
     }
     close $fout
 EOEXP
