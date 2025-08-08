@@ -202,6 +202,92 @@ install_requirements()
   fi
   "$PY_BIN" -m pip install -r requirements.txt --root-user-action=ignore || \
   "$PY_BIN" -m pip install -r requirements.txt
+
+  # ================= 环境配置与全局软链接 =================
+  echo "配置环境变量与全局命令..."
+  PROFILE_FILE="/etc/profile.d/pagermaid.sh"
+  WRAP_PM="/usr/local/bin/pagermaid"
+  WRAP_INSTALL="/usr/local/bin/pmminstall"
+  WRAP_RESTART="/usr/local/bin/pmmrestart"
+
+  # 写入 /etc/profile.d（幂等覆盖）
+  cat > "$PROFILE_FILE" <<EOF
+  # PagerMaid 环境配置（自动生成）
+  export PAGERMAID_HOME="${APP_DIR}"
+  if [ -d "\"$PAGERMAID_HOME/.venv/bin\"" ]; then
+    case ":$PATH:" in *":$PAGERMAID_HOME/.venv/bin:":*) :;; *) PATH="$PAGERMAID_HOME/.venv/bin:$PATH";; esac
+  fi
+
+  # 可选默认参数（按需取消注释）
+  # export START_TIMEOUT=180
+  # export START_REGEX='(?i)started|running'
+  # 默认不跳过依赖安装；若你希望默认跳过，请取消下一行注释
+  # export SKIP_PIP=1
+
+  # 便捷别名
+  alias pagermaid='cd "$PAGERMAID_HOME" && python -m pagermaid'
+  alias pmmlog='pm2 logs pagermaid'
+  alias pmmstart='pm2 start /usr/local/bin/pagermaid --name pagermaid'
+  alias pmmstop='pm2 stop pagermaid >/dev/null 2>&1 || true; pm2 delete pagermaid >/dev/null 2>&1 || true'
+  alias pmmrestart='pm2 restart pagermaid >/dev/null 2>&1 || pm2 start /usr/local/bin/pagermaid --name pagermaid'
+  export PATH
+EOF
+  chmod 644 "$PROFILE_FILE" || true
+
+  # 包装启动脚本 /usr/local/bin/pagermaid（幂等覆盖）
+  cat > "$WRAP_PM" <<EOF
+  #!/usr/bin/env bash
+  set -e
+  APP_DIR="${APP_DIR}"
+  if [ -d "$APP_DIR/.venv" ]; then
+    source "$APP_DIR/.venv/bin/activate"
+  fi
+  cd "$APP_DIR"
+  exec python -m pagermaid "$@"
+EOF
+  chmod +x "$WRAP_PM" || true
+
+  # 确保安装脚本就位以便全局调用
+  if [ ! -f "${APP_DIR}/pgmimstall.sh" ] && [ -f "$0" ]; then
+    cp -f "$0" "${APP_DIR}/pgmimstall.sh" 2>/dev/null || true
+    chmod +x "${APP_DIR}/pgmimstall.sh" 2>/dev/null || true
+  fi
+
+  # 包装安装脚本 /usr/local/bin/pmminstall（幂等覆盖）
+  cat > "$WRAP_INSTALL" <<EOF
+  #!/usr/bin/env bash
+  set -e
+  APP_DIR="${APP_DIR}"
+  if [ -x "$APP_DIR/pgmimstall.sh" ]; then
+    exec bash "$APP_DIR/pgmimstall.sh" "$@"
+  else
+    echo "未找到 $APP_DIR/pgmimstall.sh，请手动执行安装脚本。"
+    exit 1
+  fi
+EOF
+  chmod +x "$WRAP_INSTALL" || true
+
+  # pmmrestart 全局脚本（幂等覆盖）
+  cat > "$WRAP_RESTART" <<'EOF'
+  #!/usr/bin/env bash
+  set -e
+  if pm2 describe pagermaid >/dev/null 2>&1; then
+    exec pm2 restart pagermaid
+  else
+    exec pm2 start /usr/local/bin/pagermaid --name pagermaid
+  fi
+EOF
+  chmod +x "$WRAP_RESTART" || true
+
+  # 便捷软链接到 venv 的 python/pip（幂等）
+  ln -sf "${APP_DIR}/.venv/bin/python" /usr/local/bin/pagermaid-python 2>/dev/null || true
+  ln -sf "${APP_DIR}/.venv/bin/pip" /usr/local/bin/pagermaid-pip 2>/dev/null || true
+
+  # 立刻让当前会话生效
+  if [ -r "$PROFILE_FILE" ]; then
+    # shellcheck disable=SC1090
+    . "$PROFILE_FILE"
+  fi
 }
 
 prepare_config()
