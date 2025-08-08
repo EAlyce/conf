@@ -11,7 +11,7 @@ Pyro
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
 ```
-Modify
+Modify (推荐)
 ```
 bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/PagerMaid/PagerMaid-Modifyinstall.sh)
 ```
