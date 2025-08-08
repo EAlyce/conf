@@ -7,10 +7,17 @@
 ## ⚙️ 快速运行
 
 使用以下命令一键安装：
-
-```bash
+Pyro
+```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
 ```
+Modify
+```
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/PagerMaid/PagerMaid-Modifyinstall.sh)
+```
+安装后出现`[pagermaid] PagerMaid-Modify 已启动，在任何聊天中输入 -help 以获得帮助消息。`
+
+按下 `CTRL+C`
 
 ---
 
