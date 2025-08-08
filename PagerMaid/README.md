@@ -6,7 +6,7 @@
 
 ## ⚙️ 快速运行
 
-使用以下命令一键安装：
+
 Pyro
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
