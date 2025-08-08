@@ -17,6 +17,23 @@ START_TIMEOUT="180"      # 最长等待启动日志秒数（可用环境变量�
 START_REGEX="PagerMaid-Modify 已启动|已启动.*-help|PagerMaid-Modify (has )?started|Started PagerMaid-Modify|Bot started"
 
 green() { echo -e "\033[32m$*\033[0m"; }
+
+# 仅保留最新的备份目录，删除其余（默认匹配 /root/PMM_backup_*）
+prune_old_backups()
+{
+  local keep=${1:-1}
+  local pattern=${2:-"/root/PMM_backup_*"}
+  # 收集备份目录，按修改时间倒序
+  # shellcheck disable=SC2206
+  local dirs=( $(ls -1dt ${pattern} 2>/dev/null || true) )
+  (( ${#dirs[@]} <= keep )) && return 0
+  local to_delete=( "${dirs[@]:keep}" )
+  for d in "${to_delete[@]}"; do
+    [[ -d "$d" ]] || continue
+    yellow "清理旧备份目录：$d"
+    rm -rf -- "$d" 2>/dev/null || true
+  done
+}
 yellow() { echo -e "\033[33m$*\033[0m"; }
 red() { echo -e "\033[31m$*\033[0m"; }
 
@@ -128,6 +145,9 @@ clone_or_update_repo()
     cp -af "${APP_DIR}"/*.session "${BK_DIR}/" 2>/dev/null || true
     cp -af "${APP_DIR}/plugins" "${BK_DIR}/" 2>/dev/null || true
     cp -af "${APP_DIR}/data" "${BK_DIR}/" 2>/dev/null || true
+
+    # 清理旧备份，仅保留最新一个
+    prune_old_backups 1 "/root/PMM_backup_*"
 
     # 询问是否重置数据库文件（当数据库损坏/无法登录时有用）
     echo
@@ -347,8 +367,29 @@ first_login_if_needed()
     if grep -E -m1 -q "$start_regex" "$out_file"; then
       detected_start=true
       yellow "检测到启动成功日志，发送 Ctrl+C 以结束前台运行并继续安装..."
-      # 向前台程序发送 SIGINT（等价 Ctrl+C）
-      kill -INT "$run_pid" 2>/dev/null || true
+      # 向整个进程组发送 SIGINT（管道包含 python 与 tee），避免 tee 挂住
+      kill -INT -"$run_pid" 2>/dev/null || true
+      # 等待优雅退出，若未退出则升级为 TERM，再 KILL
+      for j in $(seq 1 10); do
+        if ! kill -0 "$run_pid" 2>/dev/null; then
+          break
+        fi
+        sleep 0.5
+      done
+      if kill -0 "$run_pid" 2>/dev/null; then
+        yellow "进程未按预期退出，发送 SIGTERM..."
+        kill -TERM -"$run_pid" 2>/dev/null || true
+      fi
+      for j in $(seq 1 10); do
+        if ! kill -0 "$run_pid" 2>/dev/null; then
+          break
+        fi
+        sleep 0.5
+      done
+      if kill -0 "$run_pid" 2>/dev/null; then
+        yellow "进程仍未退出，发送 SIGKILL..."
+        kill -KILL -"$run_pid" 2>/dev/null || true
+      fi
       break
     fi
     # 若进程已退出则跳出
