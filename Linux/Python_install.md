@@ -41,7 +41,6 @@ rm get-pip.py
 ```bash
 ln -sf /usr/local/bin/python3.13 /usr/local/bin/python3
 ln -sf /usr/local/bin/python3.13 /usr/local/bin/python
-ln -sf /usr/local/bin/pip3 /usr/local/bin/pip3
 ```
 
 ### 更新 PATH 环境变量
