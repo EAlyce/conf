@@ -18,9 +18,9 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libns
 cd /tmp
 ```
 
-### 一键安装编译依赖并编译 Python 3.13.5
+### 一键安装编译依赖并编译 Python 3.13.6
 ```bash
-apt update && apt install -y build-essential libssl-dev libffi-dev libsqlite3-dev libbz2-dev libreadline-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev liblzma-dev && cd /tmp && wget https://www.python.org/ftp/python/3.13.5/Python-3.13.5.tgz && tar -xzf Python-3.13.5.tgz && cd Python-3.13.5 && ./configure --enable-optimizations --prefix=/usr/local && make -j$(nproc) && make altinstall
+apt update && apt install -y build-essential libssl-dev libffi-dev libsqlite3-dev libbz2-dev libreadline-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev liblzma-dev && cd /tmp && wget https://www.python.org/ftp/python/3.13.6/Python-3.13.6.tgz && tar -xzf Python-3.13.6.tgz && cd Python-3.13.6 && ./configure --enable-optimizations --prefix=/usr/local && make -j$(nproc) && make altinstall
 ```
 
 ## 3. 安装 pip
@@ -68,7 +68,7 @@ python -m pip install --root-user-action=ignore requests numpy pandas
 ## 7. 清理安装文件
 
 ```bash
-cd / && rm -rf /tmp/Python-3.13.5*
+cd / && rm -rf /tmp/Python-3.13.6*
 ```
 
 ## 8. 测试新特性
