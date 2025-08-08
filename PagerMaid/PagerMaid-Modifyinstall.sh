@@ -150,20 +150,16 @@ clone_or_update_repo()
     # 清理旧备份，仅保留最新一个
     prune_old_backups 1 "/root/PMM_backup_*"
 
-    # 询问是否重置数据库文件（当数据库损坏/无法登录时有用）
+    # 自动选择：重置数据库（不再询问）
     echo
-    yellow "发现现有数据文件。是否重置数据库以避免潜在错误？"
-    echo "说明：仅在启动报错（如数据库损坏/版本不兼容）时才建议重置。"
-    echo "将会删除常见数据库文件 (*.db, *.sqlite, *.sqlite3)，并已备份到：${BK_DIR}"
-    echo "默认：N（不重置，保留现有数据）。输入 y 才会执行重置。"
-    read -rp "是否重置数据库文件？[y/N]: " resetdb
-    resetdb=${resetdb:-N}
+    yellow "发现现有数据文件。已自动选择：重置数据库（会先备份到：${BK_DIR}）。"
+    local resetdb="Y"
 
     yellow "正在更新仓库代码..."
     git -C "${APP_DIR}" reset --hard HEAD || true
     git -C "${APP_DIR}" pull --ff-only || git -C "${APP_DIR}" pull || true
 
-    # 可选的数据库清理
+    # 数据库清理（已自动选择重置）
     if [[ "${resetdb}" =~ ^[Yy]$ ]]; then
       yellow "正在清理常见数据库文件...（已备份到 ${BK_DIR}）"
       find "${APP_DIR}" -maxdepth 2 -type f \( -name "*.db" -o -name "*.sqlite" -o -name "*.sqlite3" \) -print -delete 2>/dev/null || true
@@ -174,13 +170,9 @@ clone_or_update_repo()
       rm -f "${APP_DIR}/data/pagermaid.sqlite" 2>/dev/null || true
     fi
 
-    # 询问是否保留 .session 会话文件（推荐，避免重新登录）
-    read -rp "是否保留现有 .session 会话文件（推荐）？[Y/n]: " keepss
-    keepss=${keepss:-Y}
-    if [[ ! "${keepss}" =~ ^[Yy]$ ]]; then
-      yellow "将删除会话文件（已备份到 ${BK_DIR}）。删除后需要重新登录。"
-      rm -f "${APP_DIR}"/*.session 2>/dev/null || true
-    fi
+    # 自动选择：不保留 .session（不再询问）
+    yellow "已自动选择：不保留现有 .session 会话文件（已备份到 ${BK_DIR}）。删除后需要重新登录。"
+    rm -f "${APP_DIR}"/*.session 2>/dev/null || true
 
   else
     # If APP_DIR exists but is not a git repo, move it aside (keep .venv if present)
