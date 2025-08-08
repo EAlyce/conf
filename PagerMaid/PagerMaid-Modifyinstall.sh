@@ -65,7 +65,8 @@ install_deps()
                  build-essential libssl-dev zlib1g-dev libncurses5-dev libffi-dev \
                  libreadline-dev libsqlite3-dev libbz2-dev liblzma-dev tk-dev \
                  imagemagick libwebp-dev neofetch libzbar-dev libxml2-dev libxslt-dev \
-                 sqlite3 \
+                 sqlite3 libjpeg-dev libtiff5-dev libopenjp2-7 libharfbuzz-dev libfribidi-dev \
+                 lsb-release gnupg software-properties-common expect \
                  tesseract-ocr tesseract-ocr-all
 }
 
@@ -349,77 +350,69 @@ first_login_if_needed()
   fi
   stop_daemons
   echo
-  yellow "未检测到 .session 会话文件。将前台运行 PagerMaid-Modify 以创建会话。"
+  yellow "未检测到 .session 会话文件。将使用自动交互模式引导你完成登录（手机号/验证码/二次密码）。"
   cd "${APP_DIR}"
-  set +e
+  # 采集用户输入（不回显二次密码）
+  read -rp "请输入手机号码（含国家区号，如 +86xxxxxxxxxxx）：" USER_PHONE
+  while [[ -z "${USER_PHONE}" ]]; do read -rp "手机号码不能为空，请重新输入：" USER_PHONE; done
+  read -rp "请输入收到的验证码（稍后发送时再输入也可以留空回车）：" USER_CODE || true
+  read -rsp "若账号设置了二次密码，请输入（可留空回车跳过）：" USER_2FA; echo
+  # 输出日志文件，供后续匹配校验
   local out_file
   out_file=$(mktemp)
-  # 使用 setsid 启动，使其拥有独立的进程组，便于整体发送信号终止
-  setsid "$PY_BIN" -m pagermaid >"$out_file" 2>&1 &
-  local run_pid=$!
-  # 获取进程组 ID（与组长 PID 通常相同）
-  local pgid
-  pgid="$(ps -o pgid= -p "$run_pid" 2>/dev/null | tr -d ' ' || echo "$run_pid")"
-  local ec=0 detected_start=false
-  # 使用可配置的启动成功匹配与等待时间（可通过环境变量覆盖）
+  # 导出环境变量供 expect 使用
+  export PY_BIN APP_DIR USER_PHONE USER_CODE USER_2FA
+  export OUT_FILE="$out_file"
   local start_regex="${START_REGEX}"
   local start_timeout="${START_TIMEOUT}"
-  # 最长等待指定秒数检测启动日志
-  for i in $(seq 1 "$start_timeout"); do
-    if grep -E -m1 -q "$start_regex" "$out_file"; then
-      detected_start=true
-      yellow "检测到启动成功日志，发送 Ctrl+C 以结束前台运行并继续安装..."
-      # 依次尝试优雅结束整个进程组（避免子进程/重定向残留）
-      kill -INT -"$pgid" 2>/dev/null || true
-      # 等待优雅退出，若未退出则升级为 TERM，再 KILL
-      for j in $(seq 1 10); do
-        if ! kill -0 "$run_pid" 2>/dev/null; then
-          break
-        fi
-        sleep 0.5
-      done
-      if kill -0 "$run_pid" 2>/dev/null; then
-        yellow "进程未按预期退出，发送 SIGTERM..."
-        kill -TERM -"$pgid" 2>/dev/null || true
-      fi
-      for j in $(seq 1 10); do
-        if ! kill -0 "$run_pid" 2>/dev/null; then
-          break
-        fi
-        sleep 0.5
-      done
-      if kill -0 "$run_pid" 2>/dev/null; then
-        yellow "进程仍未退出，发送 SIGKILL..."
-        kill -KILL -"$pgid" 2>/dev/null || true
-      fi
-      break
-    fi
-    # 若进程已退出则跳出
-    if ! kill -0 "$run_pid" 2>/dev/null; then
-      break
-    fi
-    sleep 1
-  done
-  # 等待进程退出；若仍存活则跳过等待，避免卡住，继续自动化流程
-  if kill -0 "$run_pid" 2>/dev/null; then
-    yellow "前台进程仍存活，跳过等待并继续后续步骤..."
-    disown "$run_pid" 2>/dev/null || true
-    ec=0
+  yellow "正在启动并自动化登录流程...（最长等待 ${start_timeout} 秒）"
+  expect <<'EOEXP'
+    log_user 1
+    set timeout -1
+    # 从环境读取变量
+    set py_bin $env(PY_BIN)
+    set app_dir $env(APP_DIR)
+    set phone $env(USER_PHONE)
+    set code $env(USER_CODE)
+    set pwd $env(USER_2FA)
+    set outfile $env(OUT_FILE)
+    spawn -noecho $py_bin -m pagermaid
+    # 将输出同步到日志文件
+    set fout [open $outfile "w"]
+    proc logline {f s} { puts $f $s; flush $f }
+    expect {
+      -re {(?i)phone|手机号|电话|number} {
+        logline $fout "PROMPT_PHONE"; send -- "$phone\r"; exp_continue
+      }
+      -re {(?i)code|验证码} {
+        logline $fout "PROMPT_CODE";
+        if {[string length $code] == 0} {
+          # 交互读取验证码
+          send_user "\n请输入验证码："; expect_user -re "(.*)\n"; set code $expect_out(1,string)
+        }
+        send -- "$code\r"; exp_continue
+      }
+      -re {(?i)password|two[- ]?step|二步|两步|密码} {
+        logline $fout "PROMPT_2FA";
+        if {[string length $pwd] == 0} {
+          send_user "\n请输入二次密码（留空直接回车跳过）："; stty -echo; expect_user -re "(.*)\n"; stty echo; set pwd $expect_out(1,string)
+        }
+        if {[string length $pwd] > 0} { send -- "$pwd\r" }
+        exp_continue
+      }
+      -re {已启动|has started|Started PagerMaid} {
+        logline $fout "STARTED"; after 500; send \003; exp_continue
+      }
+      eof { }
+    }
+    close $fout
+EOEXP
+  # 简单校验：是否在日志中看到 STARTED 记录
+  if [[ -f "$out_file" ]] && grep -q "STARTED" "$out_file"; then
+    yellow "登录并启动成功，已自动发送 Ctrl+C 结束前台。"
+    export AUTO_CHOOSE_PM2=1
   else
-    wait "$run_pid" 2>/dev/null; ec=$?
-  fi
-  set -e
-  if grep -q "database disk image is malformed" "$out_file"; then
-    yellow "启动过程中检测到数据库损坏，将自动清理并重试一次..."
-    backup_and_remove_files "${APP_DIR}/pagermaid.session*"
-    backup_and_remove_files "${APP_DIR}/"*.session*
-    backup_and_remove_files "${APP_DIR}/data/"*.session*
-    # retry once
-    "$PY_BIN" -m pagermaid || true
-  fi
-  # 若已检测到正常启动，则自动选择 pm2 保活
-  if [[ "$detected_start" == true ]]; then
-    AUTO_CHOOSE_PM2=1
+    yellow "未确认到启动成功标记，请检查输出或稍后用 pm2 logs 观察。"
   fi
   rm -f "$out_file" 2>/dev/null || true
 }
