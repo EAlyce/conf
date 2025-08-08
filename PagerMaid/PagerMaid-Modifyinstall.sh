@@ -379,8 +379,18 @@ first_login_if_needed()
       }
       -re {(?i)code|验证码|输入.*验证码} {
         logline $fout "PROMPT_CODE";
-        # 交互读取验证码（此时才询问）
-        send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："; expect_user -re "(.*)\n"; set code $expect_out(1,string)
+        # 交互读取验证码（此时才询问），兼容回车 \r 或 \n
+        set code ""
+        send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："
+        expect_user {
+          -re "(.*)\r" { set code $expect_out(1,string) }
+          -re "(.*)\n" { set code $expect_out(1,string) }
+          timeout { set code "" }
+          eof { set code "" }
+        }
+        if {[string length $code] == 0} {
+          send_user "\n未检测到输入，若已收到验证码可直接在此终端输入后回车。\n"
+        }
         send -- "$code\r"; exp_continue
       }
       -re {(?i)password|two[- ]?step|二步|两步|密码|输入.*密码} {
