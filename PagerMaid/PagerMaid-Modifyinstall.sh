@@ -8,11 +8,13 @@
 set -euo pipefail
 
 APP_DIR="/root/PagerMaid-Modify"
-SERVICE_FILE="/etc/systemd/system/PagerMaid-Modify.service"
 REPO_URL="https://github.com/TeamPGM/PagerMaid-Modify.git"
 PY_VER_DEFAULT="3.13.1"  # default Python to build if system one is too old
 PY_BIN="python3"         # will be set to the detected/built python
 VENV_DIR="/root/PagerMaid-Modify/.venv"
+START_TIMEOUT="180"      # 最长等待启动日志秒数（可用环境变量覆盖）
+# 启动成功日志匹配（可用环境变量覆盖），包含中英文常见形式
+START_REGEX="PagerMaid-Modify 已启动|已启动.*-help|PagerMaid-Modify (has )?started|Started PagerMaid-Modify|Bot started"
 
 green() { echo -e "\033[32m$*\033[0m"; }
 yellow() { echo -e "\033[33m$*\033[0m"; }
@@ -20,27 +22,27 @@ red() { echo -e "\033[31m$*\033[0m"; }
 
 require_root() {
   if [[ "$EUID" -ne 0 ]]; then
-    red "Please run as root: sudo bash $0"; exit 1;
+    red "请使用 root 权限运行：sudo bash $0"; exit 1;
   fi
 }
 
 ask_api()
 {
   echo
-  yellow "Enter your Telegram API credentials (get them at https://my.telegram.org):"
+  yellow "请输入你的 Telegram API 凭据（可在 https://my.telegram.org 获取）："
   while true; do
-    read -rp "api_id (digits only): " API_ID
-    [[ -n "${API_ID}" && "${API_ID}" =~ ^[0-9]+$ ]] && break || yellow "api_id must be numeric and not empty"
+    read -rp "api_id（仅数字）：" API_ID
+    [[ -n "${API_ID}" && "${API_ID}" =~ ^[0-9]+$ ]] && break || yellow "api_id 必须为非空数字"
   done
   while true; do
-    read -rp "api_hash (string from my.telegram.org): " API_HASH
-    [[ -n "${API_HASH}" ]] && break || yellow "api_hash must not be empty"
+    read -rp "api_hash（来自 my.telegram.org）：" API_HASH
+    [[ -n "${API_HASH}" ]] && break || yellow "api_hash 不能为空"
   done
 }
 
 install_deps()
 {
-  yellow "Updating apt and installing dependencies..."
+  yellow "正在更新 apt 并安装依赖..."
   apt update -y
   apt install -y git curl wget ca-certificates python3 python3-pip python3-venv \
                  build-essential libssl-dev zlib1g-dev libncurses5-dev libffi-dev \
@@ -54,7 +56,7 @@ version_ge() { [ "$(printf '%s\n' "$2" "$1" | sort -V | head -n1)" = "$2" ]; }
 
 ensure_python()
 {
-  yellow "Checking Python..."
+  yellow "正在检查 Python..."
   local want="${PY_VER_DEFAULT}"
   local have=""
   if command -v python3 >/dev/null 2>&1; then
@@ -62,15 +64,15 @@ ensure_python()
   fi
   if [[ -n "$have" ]] && version_ge "$have" "3.13.0"; then
     PY_BIN="python3"
-    green "Using system python3 (${have})"
+    green "使用系统自带的 python3（${have}）"
   else
-    yellow "System python3 is missing or too old (${have:-none}). Building Python ${want} from source..."
+    yellow "系统 python3 缺失或版本过旧（${have:-none}）。将从源码构建 Python ${want}..."
     local tgz="Python-${want}.tgz"
     local url="https://www.python.org/ftp/python/${want}/Python-${want}.tgz"
     cd /usr/src || cd /tmp
     rm -rf "Python-${want}" "$tgz" 2>/dev/null || true
     if ! curl -fsSLo "$tgz" "$url"; then
-      red "Failed to download $url"; exit 1;
+      red "下载失败：$url"; exit 1;
     fi
     tar -xzf "$tgz"
     cd "Python-${want}"
@@ -82,7 +84,7 @@ ensure_python()
       # Fallback to the exact minor path
       PY_BIN="/usr/local/bin/python${want%.*}"
     fi
-    green "Built and selected ${PY_BIN}"
+    green "构建完成并选择 ${PY_BIN}"
   fi
   # Upgrade pip and essentials
   "$PY_BIN" -m pip install --upgrade pip || true
@@ -91,7 +93,7 @@ ensure_python()
 
 create_venv()
 {
-  yellow "Creating Python virtual environment..."
+  yellow "正在创建 Python 虚拟环境..."
   # Ensure app dir exists before venv
   mkdir -p "${APP_DIR}"
   if [[ ! -d "${VENV_DIR}" ]]; then
@@ -108,18 +110,18 @@ create_venv()
 clone_or_update_repo()
 {
   if [[ -d "${APP_DIR}/.git" ]]; then
-    yellow "Detected existing PagerMaid-Modify directory."
+    yellow "检测到已存在的 PagerMaid-Modify 目录。"
 
     # If service is running, stop it first
     if systemctl is-active --quiet PagerMaid-Modify; then
-      yellow "Detected running systemd service, trying to stop it..."
+      yellow "检测到 systemd 服务正在运行，正在尝试停止..."
       systemctl stop PagerMaid-Modify || true
     fi
 
     # Backup critical files
     TS=$(date +%Y%m%d_%H%M%S)
     BK_DIR="/root/PMM_backup_${TS}"
-    yellow "Backup current directory to: ${BK_DIR}"
+    yellow "将当前目录备份到：${BK_DIR}"
     mkdir -p "${BK_DIR}"
     # Backup config/session/plugins/data if present
     cp -af "${APP_DIR}/config.yml" "${BK_DIR}/" 2>/dev/null || true
@@ -127,18 +129,22 @@ clone_or_update_repo()
     cp -af "${APP_DIR}/plugins" "${BK_DIR}/" 2>/dev/null || true
     cp -af "${APP_DIR}/data" "${BK_DIR}/" 2>/dev/null || true
 
-    # Ask whether to reset database files (useful if DB is corrupted / login fails)
+    # 询问是否重置数据库文件（当数据库损坏/无法登录时有用）
     echo
-    read -rp "Detected existing data. Reset database files to avoid errors? [y/N]: " resetdb
+    yellow "发现现有数据文件。是否重置数据库以避免潜在错误？"
+    echo "说明：仅在启动报错（如数据库损坏/版本不兼容）时才建议重置。"
+    echo "将会删除常见数据库文件 (*.db, *.sqlite, *.sqlite3)，并已备份到：${BK_DIR}"
+    echo "默认：N（不重置，保留现有数据）。输入 y 才会执行重置。"
+    read -rp "是否重置数据库文件？[y/N]: " resetdb
     resetdb=${resetdb:-N}
 
-    yellow "Updating repository code..."
+    yellow "正在更新仓库代码..."
     git -C "${APP_DIR}" reset --hard HEAD || true
     git -C "${APP_DIR}" pull --ff-only || git -C "${APP_DIR}" pull || true
 
-    # Optional DB cleanup
+    # 可选的数据库清理
     if [[ "${resetdb}" =~ ^[Yy]$ ]]; then
-      yellow "Cleaning common database files... (backup at ${BK_DIR})"
+      yellow "正在清理常见数据库文件...（已备份到 ${BK_DIR}）"
       find "${APP_DIR}" -maxdepth 2 -type f \( -name "*.db" -o -name "*.sqlite" -o -name "*.sqlite3" \) -print -delete 2>/dev/null || true
       # Extra common paths
       rm -f "${APP_DIR}/pagermaid.db" 2>/dev/null || true
@@ -147,11 +153,11 @@ clone_or_update_repo()
       rm -f "${APP_DIR}/data/pagermaid.sqlite" 2>/dev/null || true
     fi
 
-    # Ask whether to keep session files (recommended to avoid re-login)
-    read -rp "Keep existing .session files (recommended)? [Y/n]: " keepss
+    # 询问是否保留 .session 会话文件（推荐，避免重新登录）
+    read -rp "是否保留现有 .session 会话文件（推荐）？[Y/n]: " keepss
     keepss=${keepss:-Y}
     if [[ ! "${keepss}" =~ ^[Yy]$ ]]; then
-      yellow "Deleting session files (backup at ${BK_DIR})"
+      yellow "将删除会话文件（已备份到 ${BK_DIR}）。删除后需要重新登录。"
       rm -f "${APP_DIR}"/*.session 2>/dev/null || true
     fi
 
@@ -160,15 +166,15 @@ clone_or_update_repo()
     if [[ -d "${APP_DIR}" && ! -d "${APP_DIR}/.git" ]]; then
       TS=$(date +%Y%m%d_%H%M%S)
       local OLD_DIR="${APP_DIR}_nongit_${TS}"
-      yellow "Directory exists but is not a git repo. Moving it to ${OLD_DIR} and recloning..."
+      yellow "检测到目录存在但不是 Git 仓库，将其移动到 ${OLD_DIR} 并重新克隆..."
       mv "${APP_DIR}" "${OLD_DIR}"
     fi
-    yellow "Cloning repository..."
+    yellow "正在克隆仓库..."
     mkdir -p "${APP_DIR%/*}"
     git clone "${REPO_URL}" "${APP_DIR}"
     # If we moved an old dir that had a venv, move it back
     if [[ -n "${OLD_DIR:-}" && -d "${OLD_DIR}/.venv" && ! -d "${APP_DIR}/.venv" ]]; then
-      yellow "Restoring existing virtual environment to new clone..."
+      yellow "检测到旧环境，正在将现有虚拟环境迁移至新的克隆目录..."
       mv "${OLD_DIR}/.venv" "${APP_DIR}/.venv" || true
     fi
   fi
@@ -176,10 +182,10 @@ clone_or_update_repo()
 
 install_requirements()
 {
-  yellow "Installing project dependencies..."
+  yellow "正在安装项目依赖..."
   cd "${APP_DIR}"
   if [[ ! -f requirements.txt ]]; then
-    red "requirements.txt not found. Repository may be incomplete."; exit 1;
+    red "未找到 requirements.txt，仓库可能不完整。"; exit 1;
   fi
   "$PY_BIN" -m pip install -r requirements.txt --root-user-action=ignore || \
   "$PY_BIN" -m pip install -r requirements.txt
@@ -192,7 +198,7 @@ prepare_config()
     if [[ -f config.gen.yml ]]; then
       cp config.gen.yml config.yml
     else
-      red "config.gen.yml not found, cannot create config.yml."; exit 1;
+      red "未找到 config.gen.yml，无法生成 config.yml。"; exit 1;
     fi
   fi
 
@@ -200,53 +206,29 @@ prepare_config()
   sed -i -E "s/^(\s*api_id:\s*).*/\1${API_ID}/" config.yml
   sed -i -E "s/^(\s*api_hash:\s*).*/\1\"${API_HASH}\"/" config.yml
 
-  green "Wrote api_id and api_hash -> ${APP_DIR}/config.yml"
+  green "已写入 api_id 与 api_hash -> ${APP_DIR}/config.yml"
 }
 
-create_service()
-{
-  yellow "Creating systemd service..."
-  local py_path
-  py_path="$(command -v "$PY_BIN" || echo /usr/bin/python3)"
-  tee "${SERVICE_FILE}" >/dev/null <<EOF
-[Unit]
-Description=PagerMaid-Modify telegram utility daemon
-After=network.target
-
-[Service]
-WorkingDirectory=/root/PagerMaid-Modify
-ExecStart=${py_path} -m pagermaid
-Restart=always
-User=root
-
-[Install]
-WantedBy=multi-user.target
-EOF
-  systemctl daemon-reload
-  systemctl enable PagerMaid-Modify
-  systemctl restart PagerMaid-Modify
-  systemctl status --no-pager --full PagerMaid-Modify || true
-}
 
 install_pm2()
 {
-  yellow "Installing pm2..."
+  yellow "正在安装 pm2..."
   if ! command -v node >/dev/null 2>&1; then
-    yellow "Installing Node.js (NodeSource 20.x)..."
+    yellow "正在安装 Node.js（NodeSource 20.x）..."
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
     apt-get install -y nodejs || true
   fi
   if ! command -v npm >/dev/null 2>&1; then
-    red "npm not found after Node.js installation. Please check your OS/distro."; return 1;
+    red "安装 Node.js 后未发现 npm，请检查系统发行版环境。"; return 1;
   fi
   if ! command -v pm2 >/dev/null 2>&1; then
-    npm i -g pm2 || { red "Failed to install pm2 via npm"; return 1; }
+    npm i -g pm2 || { red "通过 npm 安装 pm2 失败"; return 1; }
   fi
 }
 
 create_pm2_process()
 {
-  yellow "Creating pm2 process..."
+  yellow "正在创建 pm2 进程..."
   local py_path
   py_path="$(command -v "$PY_BIN" || echo /usr/bin/python3)"
   cd "${APP_DIR}"
@@ -274,7 +256,7 @@ stop_daemons()
 {
   # stop systemd service if active
   if systemctl is-active --quiet PagerMaid-Modify; then
-    yellow "Stopping running systemd service..."
+    yellow "正在停止已运行的 systemd 服务..."
     systemctl stop PagerMaid-Modify || true
   fi
   # stop pm2 process if exists
@@ -295,7 +277,7 @@ backup_and_remove_files()
   local TS BK_DIR
   TS=$(date +%Y%m%d_%H%M%S)
   BK_DIR="/root/PMM_session_bak_${TS}"
-  yellow "Backing up corrupted session/DB files to: ${BK_DIR}"
+  yellow "检测到可能损坏的会话/数据库文件，正在备份到：${BK_DIR}"
   mkdir -p "${BK_DIR}"
   for f in "${files[@]}"; do
     cp -af "$f" "${BK_DIR}/" 2>/dev/null || true
@@ -329,7 +311,7 @@ check_and_clean_corruption()
     fi
   done
   if [[ "$bad" == true ]]; then
-    yellow "Detected corrupted session/DB files. Auto-backup and clean."
+    yellow "检测到损坏的会话/数据库文件，将自动备份并清理。"
     backup_and_remove_files "${APP_DIR}/pagermaid.session*"
     backup_and_remove_files "${APP_DIR}/"*.session*
     backup_and_remove_files "${APP_DIR}/data/"*.session*
@@ -342,27 +324,53 @@ first_login_if_needed()
 {
   check_and_clean_corruption
   if has_session; then
-    yellow "Existing .session found. Skip first-time login."
+    yellow "检测到已存在的 .session，会话文件。跳过首次登录步骤。"
     return 0
   fi
   stop_daemons
   echo
-  yellow "No existing .session found. Run PagerMaid-Modify to create one."
+  yellow "未检测到 .session 会话文件。将前台运行 PagerMaid-Modify 以创建会话。"
   cd "${APP_DIR}"
   # Run once in foreground and capture output to detect malformed DB
   set +e
   local out_file
   out_file=$(mktemp)
-  "$PY_BIN" -m pagermaid 2>&1 | tee "$out_file"
-  local ec=$?
+  # 后台启动并实时写入日志文件，便于模式匹配
+  "$PY_BIN" -m pagermaid 2>&1 | tee "$out_file" &
+  local run_pid=$!
+  local ec=0 detected_start=false
+  # 使用可配置的启动成功匹配与等待时间（可通过环境变量覆盖）
+  local start_regex="${START_REGEX}"
+  local start_timeout="${START_TIMEOUT}"
+  # 最长等待指定秒数检测启动日志
+  for i in $(seq 1 "$start_timeout"); do
+    if grep -E -m1 -q "$start_regex" "$out_file"; then
+      detected_start=true
+      yellow "检测到启动成功日志，发送 Ctrl+C 以结束前台运行并继续安装..."
+      # 向前台程序发送 SIGINT（等价 Ctrl+C）
+      kill -INT "$run_pid" 2>/dev/null || true
+      break
+    fi
+    # 若进程已退出则跳出
+    if ! kill -0 "$run_pid" 2>/dev/null; then
+      break
+    fi
+    sleep 1
+  done
+  # 等待进程退出
+  wait "$run_pid" 2>/dev/null; ec=$?
   set -e
   if grep -q "database disk image is malformed" "$out_file"; then
-    yellow "Detected malformed session DB during startup. Auto-clean and retry once..."
+    yellow "启动过程中检测到数据库损坏，将自动清理并重试一次..."
     backup_and_remove_files "${APP_DIR}/pagermaid.session*"
     backup_and_remove_files "${APP_DIR}/"*.session*
     backup_and_remove_files "${APP_DIR}/data/"*.session*
     # retry once
     "$PY_BIN" -m pagermaid || true
+  fi
+  # 若已检测到正常启动，则自动选择 pm2 保活
+  if [[ "$detected_start" == true ]]; then
+    AUTO_CHOOSE_PM2=1
   fi
   rm -f "$out_file" 2>/dev/null || true
 }
@@ -380,28 +388,12 @@ main()
   prepare_config
   first_login_if_needed
 
+  # 仅使用 pm2 作为保活方式
   echo
-  echo "Choose run mode:"
-  echo "  [1] systemd (default)"
-  echo "  [2] pm2"
-  echo "  [3] none (run manually)"
-  read -rp "Your choice [1/2/3]: " mode
-  mode=${mode:-1}
-  case "$mode" in
-    2)
-      install_pm2
-      create_pm2_process
-      green "Installation complete. Managed by pm2: pm2 status"
-      ;;
-    3)
-      yellow "Skipped creating a service. You can run manually:"
-      echo "  cd ${APP_DIR} && ${PY_BIN} -m pagermaid"
-      ;;
-    *)
-      create_service
-      green "Installation complete. Service started: systemctl status PagerMaid-Modify"
-      ;;
-  esac
+  yellow "将使用 pm2 进行保活与管理..."
+  install_pm2
+  create_pm2_process
+  green "安装完成。已由 pm2 管理：pm2 status"
 }
 
 main "$@"
