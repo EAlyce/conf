@@ -347,13 +347,13 @@ first_login_if_needed()
   # 采集用户输入（不回显二次密码）
   read -rp "请输入手机号码（含国家区号，如 +86xxxxxxxxxxx）：" USER_PHONE
   while [[ -z "${USER_PHONE}" ]]; do read -rp "手机号码不能为空，请重新输入：" USER_PHONE; done
-  read -rp "请输入收到的验证码（稍后发送时再输入也可以留空回车）：" USER_CODE || true
+  # 不再预先询问验证码；仅在真正提示输入验证码时再向你索取
   read -rsp "若账号设置了二次密码，请输入（可留空回车跳过）：" USER_2FA; echo
   # 输出日志文件，供后续匹配校验
   local out_file
   out_file=$(mktemp)
   # 导出环境变量供 expect 使用
-  export PY_BIN APP_DIR USER_PHONE USER_CODE USER_2FA
+  export PY_BIN APP_DIR USER_PHONE USER_2FA
   export OUT_FILE="$out_file"
   local start_regex="${START_REGEX}"
   local start_timeout="${START_TIMEOUT}"
@@ -365,26 +365,25 @@ first_login_if_needed()
     set py_bin $env(PY_BIN)
     set app_dir $env(APP_DIR)
     set phone $env(USER_PHONE)
-    set code $env(USER_CODE)
     set pwd $env(USER_2FA)
     set outfile $env(OUT_FILE)
     spawn -noecho $py_bin -m pagermaid
     # 将输出同步到日志文件
     set fout [open $outfile "w"]
     proc logline {f s} { puts $f $s; flush $f }
+    # 轻触回车，防止部分环境不主动打印提示
+    send "\r"
     expect {
-      -re {(?i)phone|手机号|电话|number} {
+      -re {(?i)phone|手机号|电话|number|请输入.*手机} {
         logline $fout "PROMPT_PHONE"; send -- "$phone\r"; exp_continue
       }
-      -re {(?i)code|验证码} {
+      -re {(?i)code|验证码|输入.*验证码} {
         logline $fout "PROMPT_CODE";
-        if {[string length $code] == 0} {
-          # 交互读取验证码
-          send_user "\n请输入验证码："; expect_user -re "(.*)\n"; set code $expect_out(1,string)
-        }
+        # 交互读取验证码（此时才询问）
+        send_user "\n请在 Telegram 或短信中查收验证码，输入后回车："; expect_user -re "(.*)\n"; set code $expect_out(1,string)
         send -- "$code\r"; exp_continue
       }
-      -re {(?i)password|two[- ]?step|二步|两步|密码} {
+      -re {(?i)password|two[- ]?step|二步|两步|密码|输入.*密码} {
         logline $fout "PROMPT_2FA";
         if {[string length $pwd] == 0} {
           send_user "\n请输入二次密码（留空直接回车跳过）："; stty -echo; expect_user -re "(.*)\n"; stty echo; set pwd $expect_out(1,string)
@@ -394,6 +393,10 @@ first_login_if_needed()
       }
       -re {已启动|has started|Started PagerMaid} {
         logline $fout "STARTED"; after 500; send \003; exp_continue
+      }
+      timeout {
+        # 若长时间没有任何提示，再次轻触并继续等待
+        send "\r"; exp_continue
       }
       eof { }
     }
