@@ -351,13 +351,15 @@ first_login_if_needed()
   echo
   yellow "未检测到 .session 会话文件。将前台运行 PagerMaid-Modify 以创建会话。"
   cd "${APP_DIR}"
-  # Run once in foreground and capture output to detect malformed DB
   set +e
   local out_file
   out_file=$(mktemp)
-  # 后台启动并实时写入日志文件，便于模式匹配
-  "$PY_BIN" -m pagermaid 2>&1 | tee "$out_file" &
+  # 使用 setsid 启动，使其拥有独立的进程组，便于整体发送信号终止
+  setsid "$PY_BIN" -m pagermaid >"$out_file" 2>&1 &
   local run_pid=$!
+  # 获取进程组 ID（与组长 PID 通常相同）
+  local pgid
+  pgid="$(ps -o pgid= -p "$run_pid" 2>/dev/null | tr -d ' ' || echo "$run_pid")"
   local ec=0 detected_start=false
   # 使用可配置的启动成功匹配与等待时间（可通过环境变量覆盖）
   local start_regex="${START_REGEX}"
@@ -367,8 +369,8 @@ first_login_if_needed()
     if grep -E -m1 -q "$start_regex" "$out_file"; then
       detected_start=true
       yellow "检测到启动成功日志，发送 Ctrl+C 以结束前台运行并继续安装..."
-      # 向整个进程组发送 SIGINT（管道包含 python 与 tee），避免 tee 挂住
-      kill -INT -"$run_pid" 2>/dev/null || true
+      # 依次尝试优雅结束整个进程组（避免子进程/重定向残留）
+      kill -INT -"$pgid" 2>/dev/null || true
       # 等待优雅退出，若未退出则升级为 TERM，再 KILL
       for j in $(seq 1 10); do
         if ! kill -0 "$run_pid" 2>/dev/null; then
@@ -378,7 +380,7 @@ first_login_if_needed()
       done
       if kill -0 "$run_pid" 2>/dev/null; then
         yellow "进程未按预期退出，发送 SIGTERM..."
-        kill -TERM -"$run_pid" 2>/dev/null || true
+        kill -TERM -"$pgid" 2>/dev/null || true
       fi
       for j in $(seq 1 10); do
         if ! kill -0 "$run_pid" 2>/dev/null; then
@@ -388,7 +390,7 @@ first_login_if_needed()
       done
       if kill -0 "$run_pid" 2>/dev/null; then
         yellow "进程仍未退出，发送 SIGKILL..."
-        kill -KILL -"$run_pid" 2>/dev/null || true
+        kill -KILL -"$pgid" 2>/dev/null || true
       fi
       break
     fi
@@ -398,8 +400,14 @@ first_login_if_needed()
     fi
     sleep 1
   done
-  # 等待进程退出
-  wait "$run_pid" 2>/dev/null; ec=$?
+  # 等待进程退出；若仍存活则跳过等待，避免卡住，继续自动化流程
+  if kill -0 "$run_pid" 2>/dev/null; then
+    yellow "前台进程仍存活，跳过等待并继续后续步骤..."
+    disown "$run_pid" 2>/dev/null || true
+    ec=0
+  else
+    wait "$run_pid" 2>/dev/null; ec=$?
+  fi
   set -e
   if grep -q "database disk image is malformed" "$out_file"; then
     yellow "启动过程中检测到数据库损坏，将自动清理并重试一次..."
