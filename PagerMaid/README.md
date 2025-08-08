@@ -51,26 +51,7 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/PagerMaid/P
 
 ---
 
-## 🔌 插件生态
 
-### 官方插件仓库
-
-🏠 **主仓库**: [TeamPGM/PagerMaid_Plugins_Pyro](https://github.com/TeamPGM/PagerMaid_Plugins_Pyro)
-
-🔧 **自定义插件**: [EAlyce/conf/PagerMaid/plugin](https://github.com/EAlyce/conf/tree/main/PagerMaid/plugin)
-
-### 第三方插件源
-
-以下是社区维护的第三方插件源：
-
-| 状态 | 命令 | 维护者 |
-|------|------|--------|
-| ✅ | `,apt_source add https://v2.xtaolabs.com/alpha` | [@omg_xtao](https://t.me/omg_xtao) |
-| ✅ | `,apt_source add http://res.guimc.ltd` | [@bakaxiluo](https://t.me/bakaxiluo) |
-
-> **📝 注意**: 如需添加新的插件源到列表，请联系 [@omg_xtao](https://t.me/omg_xtao)
-
----
 
 ## ⚠️ 免责声明
 
