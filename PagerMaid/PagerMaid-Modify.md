@@ -82,7 +82,33 @@ cd /root/PagerMaid-Modify
 
 # 复制配置模板
 cp config.gen.yml config.yml
+```
 
+
+## 🛠️ 应用环境配置
+
+为您的应用程序配置必要的运行环境。
+
+### 1. 安装 Node.js
+
+此命令将安装 Node.js 20.x 版本，并初始化一个 `npm` 项目及常用依赖。
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+apt install -y nodejs && \
+mkdir -p ~/weibo-monitor && \
+cd ~/weibo-monitor && \
+npm init -y && \
+npm install node-fetch cheerio
+```
+
+### 2. 安装 PM2 进程管理器
+
+PM2 是一个强大的 Node.js 进程管理器，可以帮助您保持应用持续在线。
+
+```bash
+npm install -g pm2
+```
 ## 🎯 启动管理
 
 ```bash
