@@ -17,7 +17,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/insta
 ### ⚠️ 实验性安装（不推荐）
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/Snell/install_snell_dev.sh)
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Snell/snellv3_pm2.sh)
 ```
 
 ### 🧹 卸载 Snell
