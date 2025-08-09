@@ -67,7 +67,7 @@ python3 -m pip install --upgrade pip
 pip3 install coloredlogs
 
 # 安装项目依赖
-python3.13 -m pip install -r requirements.txt --root-user-action=ignore
+python3.13.5 -m pip install -r requirements.txt --root-user-action=ignore
 ```
 
 ---
@@ -82,42 +82,65 @@ cd /root/PagerMaid-Modify
 
 # 复制配置模板
 cp config.gen.yml config.yml
+
+# 首次运行生成配置
+python3.13 -m pagermaid
 ```
 
+> 📝 **配置说明**：请编辑 `config.yml` 文件，填入您的 `api_id` 和 `api_hash`
 
-## 🛠️ 应用环境配置
-
-为您的应用程序配置必要的运行环境。
-
-### 1. 安装 Node.js
-
-此命令将安装 Node.js 20.x 版本，并初始化一个 `npm` 项目及常用依赖。
-
+### 步骤 6：创建系统服务
+在命令编辑器中粘贴发送以下内容
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-apt install -y nodejs && \
-mkdir -p ~/weibo-monitor && \
-cd ~/weibo-monitor && \
-npm init -y && \
-npm install node-fetch cheerio
+sudo tee /etc/systemd/system/PagerMaid-Modify.service > /dev/null << 'EOF'
+[Unit]
+Description=PagerMaid-Modify telegram utility daemon
+After=network.target
+
+[Service]
+WorkingDirectory=/root/PagerMaid-Modify
+ExecStart=python3 -m pagermaid
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
 ```
 
-### 2. 安装 PM2 进程管理器
+---
 
-PM2 是一个强大的 Node.js 进程管理器，可以帮助您保持应用持续在线。
-
-```bash
-npm install -g pm2
-```
 ## 🎯 启动管理
 
-```bash
-cd /root/PagerMaid-Modify
+### 快速启动（推荐）
 
-pm2 start python3 --name pagermaid -- -m pagermaid
+```bash
+systemctl daemon-reload && \
+systemctl enable --now PagerMaid-Modify && \
+systemctl status PagerMaid-Modify
 ```
 
+### 详细操作命令
 
+| 操作 | 命令 | 说明 |
+|------|------|------|
+| 🔄 重载配置 | `systemctl daemon-reload` | 重新加载 systemd 配置 |
+| ▶️ 启动服务 | `systemctl start PagerMaid-Modify` | 启动 PagerMaid 服务 |
+| 🔒 开机自启 | `systemctl enable PagerMaid-Modify` | 设置开机自动启动 |
+| 📊 查看状态 | `systemctl status PagerMaid-Modify` | 检查服务运行状态 |
+| ⏹️ 停止服务 | `systemctl stop PagerMaid-Modify` | 停止 PagerMaid 服务 |
+| 🔄 重启服务 | `systemctl restart PagerMaid-Modify` | 重启 PagerMaid 服务 |
 
+---
 
+<div align="center">
 
+### 🎉 恭喜完成安装！
+
+*PagerMaid-Modify 现已成功部署并运行*
+
+**如遇问题，请检查服务状态或查看系统日志**
+
+---
+
+</div>
