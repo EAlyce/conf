@@ -64,7 +64,7 @@ sudo apt install -y \
 python3 -m pip install --upgrade pip
 
 # 安装 coloredlogs
-pip3 install coloredlogs
+pip3 install coloredlogs --break-system-packages
 
 # 安装项目依赖
 python3.13.5 -m pip install -r requirements.txt --root-user-action=ignore
