@@ -28,11 +28,6 @@ apt update && apt install -y build-essential libssl-dev libffi-dev libsqlite3-de
 ```bash
 # 使用内置模块安装pip
 /usr/local/bin/python3.13 -m ensurepip --upgrade
-
-# 或者手动安装pip
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-/usr/local/bin/python3.13 get-pip.py
-rm get-pip.py
 ```
 
 ## 4. 创建符号链接和配置环境
@@ -52,14 +47,13 @@ source ~/.bashrc
 ## 5. 验证安装
 
 ```bash
-python --version && python3 --version && python3.13 --version && pip --version
+python --version && python3 --version && python3.13 --version && pip3 --version
 which python3.13 && which python3
 ```
 
 ## 6. 安装常用包
 
 ```bash
-/usr/local/bin/python3.13 -m pip install --upgrade pip
 /usr/local/bin/python3.13 -m pip install setuptools wheel virtualenv
 python -m pip install --root-user-action=ignore requests numpy pandas
 ```
