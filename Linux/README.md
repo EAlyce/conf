@@ -52,8 +52,6 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/synct
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 apt install -y nodejs && \
-mkdir -p ~/weibo-monitor && \
-cd ~/weibo-monitor && \
 npm init -y && \
 npm install node-fetch cheerio
 ```
