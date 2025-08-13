@@ -49,7 +49,6 @@ sudo apt install -y \
     python3-venv \
     imagemagick \
     libwebp-dev \
-    neofetch \
     libzbar-dev \
     libxml2-dev \
     libxslt-dev \
