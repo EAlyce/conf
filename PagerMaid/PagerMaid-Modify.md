@@ -83,7 +83,7 @@ cd /root/PagerMaid-Modify
 cp config.gen.yml config.yml
 
 # 首次运行生成配置
-python3.13 -m pagermaid
+/root/.pyenv/versions/3.13.6/bin/python3 -m pagermaid
 ```
 
 > 📝 **配置说明**：请编辑 `config.yml` 文件，填入您的 `api_id` 和 `api_hash`
