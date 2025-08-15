@@ -98,27 +98,23 @@ After=network.target
 
 [Service]
 WorkingDirectory=/root/PagerMaid-Modify
-ExecStart=python3 -m pagermaid
+ExecStart=/root/.pyenv/versions/3.13.6/bin/python3 -m pagermaid
 Restart=always
+RestartSec=5
 User=root
+StandardOutput=append:/var/log/pagermaid.log
+StandardError=append:/var/log/pagermaid-error.log
 
 [Install]
 WantedBy=multi-user.target
 EOF
+
+# 重新加载 systemd 配置、启用开机自启并立即重启服务
+sudo systemctl daemon-reload && \
+sudo systemctl enable --now PagerMaid-Modify && \
+sudo systemctl restart PagerMaid-Modify && \
+sudo systemctl status PagerMaid-Modify
 ```
-
----
-
-## 🎯 启动管理
-
-### 快速启动（推荐）
-
-```bash
-systemctl daemon-reload && \
-systemctl enable --now PagerMaid-Modify && \
-systemctl status PagerMaid-Modify
-```
-
 ### 详细操作命令
 
 | 操作 | 命令 | 说明 |
