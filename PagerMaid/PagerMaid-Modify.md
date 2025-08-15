@@ -33,10 +33,11 @@ mkdir -p PagerMaid-Modify && git clone https://github.com/TeamPGM/PagerMaid-Modi
 ### 步骤 2：安装 Python 3.13
 
 
-📖 **安装指南**：[Python 安装教程](https://github.com/EAlyce/conf/blob/main/Linux/Python_install.md)
-
-> ⚠️ **重要**：确保 Python 3.13 已正确安装并可通过 `python3.13` 命令调用
-
+📖 **安装脚本**：
+```
+curl -sS -O https://kejilion.pro/kejilion.sh && chmod +x kejilion.sh && ./kejilion.sh
+```
+选择13  然后选择 4 填写 python3.13.6
 ---
 
 ## 📦 依赖安装
