@@ -19,6 +19,10 @@ sudo apt update && sudo apt upgrade -y
 # 安装基础工具
 sudo apt install git curl -y
 
+# 安装相关依赖
+sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp && \
+sudo apt install -y ffmpeg
+
 # 克隆项目到根目录
 cd /root
 mkdir -p PagerMaid-Modify && git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify
