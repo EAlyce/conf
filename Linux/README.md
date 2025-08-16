@@ -32,7 +32,7 @@ apt-get install -f
 grep -qxF 'export PATH=$PATH:/root/bin' /etc/profile || echo 'export PATH=$PATH:/root/bin' >> /etc/profile && source /etc/profile
 ```
 ```
-apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file
+apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nano cron tmux file python3-pip
 ```
 
 文件同步工具
