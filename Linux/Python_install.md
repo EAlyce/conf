@@ -18,9 +18,19 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libns
 cd /tmp
 ```
 
-### 一键安装编译依赖并编译 Python 3.13.6
+### 一键安装编译依赖并编译
+`PYTHON_VERSION="3.13.7"` 可自定义版本
 ```bash
-apt update && apt install -y build-essential libssl-dev libffi-dev libsqlite3-dev libbz2-dev libreadline-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev liblzma-dev && cd /tmp && wget https://www.python.org/ftp/python/3.13.6/Python-3.13.6.tgz && tar -xzf Python-3.13.6.tgz && cd Python-3.13.6 && ./configure --enable-optimizations --prefix=/usr/local && make -j$(nproc) && make altinstall
+PYTHON_VERSION="3.13.7" INSTALL_DIR="/opt/python" ADD_LIBSSL="true" && \
+sudo apt update && sudo apt install -y build-essential libffi-dev libsqlite3-dev libbz2-dev \
+libreadline-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev liblzma-dev \
+$( [ "$ADD_LIBSSL" = "true" ] && echo "libssl-dev" ) && \
+cd /tmp && wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz && \
+tar -xzf Python-$PYTHON_VERSION.tgz && cd Python-$PYTHON_VERSION && \
+./configure --enable-optimizations --prefix=$INSTALL_DIR && \
+make -j$(nproc) && sudo make altinstall && \
+echo "export PATH=$INSTALL_DIR/bin:\$PATH" >> ~/.bashrc && source ~/.bashrc && \
+echo "Python $PYTHON_VERSION 已成功安装到 $INSTALL_DIR"
 ```
 
 ## 3. 安装 pip
