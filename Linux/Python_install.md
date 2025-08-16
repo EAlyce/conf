@@ -37,7 +37,7 @@ echo "Python $PYTHON_VERSION 已成功安装到 $INSTALL_DIR"
 
 ```bash
 # 使用内置模块安装pip
-/usr/local/bin/python3.13 -m ensurepip --upgrade
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 ```
 
 ## 4. 创建符号链接和配置环境
