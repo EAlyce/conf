@@ -71,7 +71,7 @@ python -m pip install --root-user-action=ignore requests numpy pandas
 ## 7. 清理安装文件
 
 ```bash
-cd / && rm -rf /tmp/Python-3.13.6*
+cd / && rm -rf /tmp/Python-3.13*
 ```
 
 ## 8. 测试新特性
