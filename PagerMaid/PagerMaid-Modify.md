@@ -56,6 +56,7 @@ python3 -m pip install --upgrade pip
 ```
 cd /root/PagerMaid-Modify
 ```
+```
 cp config.gen.yml config.yml
 ```
 ```
