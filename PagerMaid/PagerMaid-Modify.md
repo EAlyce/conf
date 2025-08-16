@@ -18,7 +18,7 @@ sudo apt update && sudo apt upgrade -y
 
 # 安装基础工具
 sudo apt install git curl -y
-
+find /usr -name "EXTERNALLY-MANAGED" -delete 2>/dev/null
 # 安装相关依赖
 sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp && \
 sudo apt install -y ffmpeg
