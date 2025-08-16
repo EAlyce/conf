@@ -1,55 +1,39 @@
-# 🚀 PagerMaid-Modify 安装教程
+# 🚀 PagerMaid-Modify 安装
 
-<div align="center">
-
-**适用于 Linux 系统（Debian / Ubuntu）**
-
----
-
-</div>
-
-## 🛠️ 环境准备
-
-### 步骤 1：更新系统并克隆项目
-
-```bash
-# 更新系统包
+```
 sudo apt update && sudo apt upgrade -y
-
-# 安装基础工具
+```
+```
 sudo apt install git curl -y
+```
+```
 find /usr -name "EXTERNALLY-MANAGED" -delete 2>/dev/null
-# 安装相关依赖
-sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp && \
+```
+```
+sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp PyYAML coloredlogs
+```
+```
 sudo apt install -y ffmpeg
-
-# 克隆项目到根目录
+```
+```
+/root/.pyenv/versions/3.13.6/bin/python3 -m pip install yt-dlp
+```
+```
 cd /root
+```
+```
 mkdir -p PagerMaid-Modify && git clone https://github.com/TeamPGM/PagerMaid-Modify.git PagerMaid-Modify
-
+```
+```
 cd ~/PagerMaid-Modify/
 ```
 
-> 💡 **提示**：建议在全新的系统上进行安装以避免依赖冲突
-
----
-
-## 🐍 Python 配置
-
-### 步骤 2：安装 Python 3.13
+安装 Python 3.13
 
 
-📖 **安装脚本**：
 ```
 curl -sS -O https://kejilion.pro/kejilion.sh && chmod +x kejilion.sh && ./kejilion.sh
 ```
-选择13  然后选择 4 填写 python3.13.6
----
-
-## 📦 依赖安装
-
-### 步骤 3：安装系统依赖
-
 ```bash
 sudo apt install -y \
     python3-pip \
@@ -62,42 +46,26 @@ sudo apt install -y \
     tesseract-ocr \
     tesseract-ocr-all
 ```
-
-### 步骤 4：配置 Python 环境
-
-```bash
-# 升级 pip
+```
 python3 -m pip install --upgrade pip
-
-# 安装 coloredlogs
-pip3 install coloredlogs --break-system-packages
-
-# 安装项目依赖
+```
+```
 /root/.pyenv/versions/3.13.6/bin/python3 -m pip install -r requirements.txt --root-user-action=ignore
 ```
 
----
-
-## ⚙️ 服务配置
-
-### 步骤 5：初始化配置
-
-```bash
-# 进入项目目录
+```
 cd /root/PagerMaid-Modify
-
-# 复制配置模板
+```
 cp config.gen.yml config.yml
-
-# 首次运行生成配置
+```
+```
 /root/.pyenv/versions/3.13.6/bin/python3 -m pagermaid
 ```
 
 > 📝 **配置说明**：请编辑 `config.yml` 文件，填入您的 `api_id` 和 `api_hash`
 
-### 步骤 6：创建系统服务
 在命令编辑器中粘贴发送以下内容
-```bash
+```
 sudo tee /etc/systemd/system/PagerMaid-Modify.service > /dev/null << 'EOF'
 [Unit]
 Description=PagerMaid-Modify telegram utility daemon
@@ -133,16 +101,3 @@ sudo systemctl status PagerMaid-Modify
 | ⏹️ 停止服务 | `systemctl stop PagerMaid-Modify` | 停止 PagerMaid 服务 |
 | 🔄 重启服务 | `systemctl restart PagerMaid-Modify` | 重启 PagerMaid 服务 |
 
----
-
-<div align="center">
-
-### 🎉 恭喜完成安装！
-
-*PagerMaid-Modify 现已成功部署并运行*
-
-**如遇问题，请检查服务状态或查看系统日志**
-
----
-
-</div>
