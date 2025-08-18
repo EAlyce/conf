@@ -33,7 +33,7 @@ find /usr -name "EXTERNALLY-MANAGED" -delete 2>/dev/null
 
 ## 5. 升级 pip 并安装 Python 依赖
 ```bash
-python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade --ignore-installed pip
 sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp PyYAML coloredlogs
 /root/.pyenv/versions/3.13.7/bin/python3 -m pip install yt-dlp
 ```
