@@ -6,7 +6,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install git curl -y
 ```
 
-## 2. 安装 Python 3.13  选13 选4 输入 3.13.6
+## 2. 安装 Python 3.13  选13 选4 输入 3.13.7
 ```bash
 curl -sS -O https://kejilion.pro/kejilion.sh && chmod +x kejilion.sh && ./kejilion.sh
 ```
@@ -35,7 +35,7 @@ find /usr -name "EXTERNALLY-MANAGED" -delete 2>/dev/null
 ```bash
 python3 -m pip install --upgrade pip
 sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp PyYAML coloredlogs
-/root/.pyenv/versions/3.13.6/bin/python3 -m pip install yt-dlp
+/root/.pyenv/versions/3.13.7/bin/python3 -m pip install yt-dlp
 ```
 
 ## 6. 下载和配置 PagerMaid-Modify
@@ -47,7 +47,7 @@ cd ~/PagerMaid-Modify/
 
 ## 7. 安装项目依赖
 ```bash
-/root/.pyenv/versions/3.13.6/bin/python3 -m pip install -r requirements.txt --root-user-action=ignore
+/root/.pyenv/versions/3.13.7/bin/python3 -m pip install -r requirements.txt --root-user-action=ignore
 ```
 
 ## 8. 配置文件设置
@@ -59,7 +59,7 @@ cp config.gen.yml config.yml
 
 ## 9. 首次运行测试
 ```bash
-/root/.pyenv/versions/3.13.6/bin/python3 -m pagermaid
+/root/.pyenv/versions/3.13.7/bin/python3 -m pagermaid
 ```
 
 ## 10. 创建系统服务（自动启动）
@@ -71,7 +71,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/root/PagerMaid-Modify
-ExecStart=/root/.pyenv/versions/3.13.6/bin/python3 -m pagermaid
+ExecStart=/root/.pyenv/versions/3.13.7/bin/python3 -m pagermaid
 Restart=always
 RestartSec=5
 User=root
