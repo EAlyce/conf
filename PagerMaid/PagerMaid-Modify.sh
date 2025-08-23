@@ -433,6 +433,12 @@ install_system_deps() {
                     log_warn "tesseract-ocr-all 不可用，已安装基础语言包"
                 }
             fi
+
+            # 额外尝试安装 fastfetch（如源不可用则跳过，不中断）
+            log_info "尝试安装 fastfetch"
+            DEBIAN_FRONTEND=noninteractive apt install -y fastfetch 2>/dev/null || {
+                log_warn "fastfetch 不可用，跳过"
+            }
             ;;
         "yum"|"dnf")
             # CentOS/RHEL/Fedora packages
@@ -441,7 +447,7 @@ install_system_deps() {
                 "ImageMagick-devel" "libwebp-devel" "zbar-devel"
                 "libxml2-devel" "libxslt-devel" "tesseract"
                 "ffmpeg" "libffi-devel" "openssl-devel"
-                "libjpeg-turbo-devel" "zlib-devel" "fastfetch"
+                "libjpeg-turbo-devel" "zlib-devel"
             )
             
             for pkg in "${packages[@]}"; do
@@ -459,7 +465,11 @@ install_system_deps() {
                 ffmpeg libffi openssl libjpeg-turbo zlib 2>/dev/null || true
             ;;
     esac
-    
+
+    # 创建根日志目录（用于系统级日志归档）
+    mkdir -p /root/logs
+    chmod 700 /root/logs 2>/dev/null || true
+
     log_info "系统依赖安装完成"
 }
 
