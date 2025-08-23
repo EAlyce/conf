@@ -11,9 +11,13 @@ Pyro
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
 ```
-Modify
+Modify 官方Docker版
 ```
-wget https://raw.githubusercontent.com/TeamPGM/PagerMaid-Modify/development/utils/docker.sh -O docker.sh && chmod +x docker.sh && bash docker.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/TeamPGM/PagerMaid-Modify/development/utils/docker.sh)
+```
+Linux版本
+```
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/PagerMaid/PagerMaid-Modify.sh)
 ```
 安装后出现`[pagermaid] PagerMaid-Modify 已启动，在任何聊天中输入 -help 以获得帮助消息。`
 
