@@ -11,7 +11,7 @@ Pyro
 ```
 bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
 ```
-Mpdify
+Modify
 ```
 wget https://raw.githubusercontent.com/TeamPGM/PagerMaid-Modify/development/utils/docker.sh -O docker.sh && chmod +x docker.sh && bash docker.sh
 ```
