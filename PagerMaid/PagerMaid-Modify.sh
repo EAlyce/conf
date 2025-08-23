@@ -441,7 +441,7 @@ install_system_deps() {
                 "ImageMagick-devel" "libwebp-devel" "zbar-devel"
                 "libxml2-devel" "libxslt-devel" "tesseract"
                 "ffmpeg" "libffi-devel" "openssl-devel"
-                "libjpeg-turbo-devel" "zlib-devel"
+                "libjpeg-turbo-devel" "zlib-devel" "fastfetch"
             )
             
             for pkg in "${packages[@]}"; do
