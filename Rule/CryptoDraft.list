@@ -1,30 +1,19 @@
 # Domain Keywords
 DOMAIN-KEYWORD,binance
-DOMAIN-KEYWORD,bitget
-DOMAIN-KEYWORD,bnbstatic
-DOMAIN-KEYWORD,byabcde
-DOMAIN-KEYWORD,bybdc6
 DOMAIN-KEYWORD,bybit
 DOMAIN-KEYWORD,bybit-global
 DOMAIN-KEYWORD,bybitglobal
-DOMAIN-KEYWORD,coinbase
-DOMAIN-KEYWORD,ethereum
-DOMAIN-KEYWORD,gate
 DOMAIN-KEYWORD,hbfile
 DOMAIN-KEYWORD,htx.com
 DOMAIN-KEYWORD,huobi
-DOMAIN-KEYWORD,mdex
 DOMAIN-KEYWORD,metamask
 DOMAIN-KEYWORD,mokexapp
 DOMAIN-KEYWORD,okx
-DOMAIN-KEYWORD,pionex
 DOMAIN-KEYWORD,redotpay
-DOMAIN-KEYWORD,thepinet
 
 # Domains
 
 # Domain Suffixes
-DOMAIN-SUFFIX, fees.info
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,1ml.com
 DOMAIN-SUFFIX,88maru.com
@@ -157,7 +146,6 @@ DOMAIN-SUFFIX,coinonecore.com
 DOMAIN-SUFFIX,coinonecorp.com
 DOMAIN-SUFFIX,coinowo.com
 DOMAIN-SUFFIX,cointrendz.com
-DOMAIN-SUFFIX,compare.com
 DOMAIN-SUFFIX,compound.finance
 DOMAIN-SUFFIX,crunchbase.com
 DOMAIN-SUFFIX,crypto.com
@@ -183,11 +171,8 @@ DOMAIN-SUFFIX,defirate.com
 DOMAIN-SUFFIX,deribit.cdn.prismic.io
 DOMAIN-SUFFIX,deribit.com
 DOMAIN-SUFFIX,devcon.org
-DOMAIN-SUFFIX,developers.eos.io
 DOMAIN-SUFFIX,dextools.io
 DOMAIN-SUFFIX,digiconomist.net
-DOMAIN-SUFFIX,discuss.ipfs.io
-DOMAIN-SUFFIX,docs.ipfs.io
 DOMAIN-SUFFIX,docs.lotu.sh
 DOMAIN-SUFFIX,dogecoin.com
 DOMAIN-SUFFIX,domain-config-1306379396.file.myqcloud.com
@@ -203,7 +188,6 @@ DOMAIN-SUFFIX,eos.io
 DOMAIN-SUFFIX,eosflare.io
 DOMAIN-SUFFIX,eospark.com
 DOMAIN-SUFFIX,eostracker.io
-DOMAIN-SUFFIX,epin.com.tr
 DOMAIN-SUFFIX,ethereum-magicians.org
 DOMAIN-SUFFIX,ethereum.cn
 DOMAIN-SUFFIX,ethereum.foundation
@@ -218,7 +202,6 @@ DOMAIN-SUFFIX,ethgasstation.info
 DOMAIN-SUFFIX,ewapool.net
 DOMAIN-SUFFIX,f2pool.com
 DOMAIN-SUFFIX,fapibak.binance.com
-DOMAIN-SUFFIX,ffbbbdc6d3c353211fe2ba39c9f744cd.com
 DOMAIN-SUFFIX,filecoin.io
 DOMAIN-SUFFIX,flashbots.net
 DOMAIN-SUFFIX,fragment.com
@@ -241,8 +224,6 @@ DOMAIN-SUFFIX,hbfile.net
 DOMAIN-SUFFIX,heco-scan.com
 DOMAIN-SUFFIX,hecochain.com
 DOMAIN-SUFFIX,hecoview.com
-DOMAIN-SUFFIX,hepsiburada.com
-DOMAIN-SUFFIX,hepsipay.com
 DOMAIN-SUFFIX,htx.co.nz
 DOMAIN-SUFFIX,htx.com
 DOMAIN-SUFFIX,huobi.br.com
@@ -258,12 +239,9 @@ DOMAIN-SUFFIX,huobigroup.com
 DOMAIN-SUFFIX,huobitoken.com
 DOMAIN-SUFFIX,icodrops.com
 DOMAIN-SUFFIX,infura.io
-DOMAIN-SUFFIX,ininal.com
 DOMAIN-SUFFIX,intotheblock.com
 DOMAIN-SUFFIX,invity.io
 DOMAIN-SUFFIX,ipfs.io
-DOMAIN-SUFFIX,iyzico.com
-DOMAIN-SUFFIX,iyzipay.com
 DOMAIN-SUFFIX,jaxx.io
 DOMAIN-SUFFIX,korbit.co.kr
 DOMAIN-SUFFIX,kraken.com
@@ -288,7 +266,6 @@ DOMAIN-SUFFIX,mdex.one
 DOMAIN-SUFFIX,metalpha.finance
 DOMAIN-SUFFIX,mexc.com
 DOMAIN-SUFFIX,mexcsensors.com
-DOMAIN-SUFFIX,min-api.cryptocompare.com
 DOMAIN-SUFFIX,mokexapp.com
 DOMAIN-SUFFIX,mokexapp.io
 DOMAIN-SUFFIX,mokexapp.net
@@ -314,7 +291,6 @@ DOMAIN-SUFFIX,okx-dns.com
 DOMAIN-SUFFIX,okx-dns1.com
 DOMAIN-SUFFIX,okx-dns2.com
 DOMAIN-SUFFIX,okx.com
-DOMAIN-SUFFIX,oldubil.com.tr
 DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onekey.so
 DOMAIN-SUFFIX,onekey.zendesk.com
@@ -322,14 +298,10 @@ DOMAIN-SUFFIX,onekeycn.com
 DOMAIN-SUFFIX,opensea.io
 DOMAIN-SUFFIX,optimism.io
 DOMAIN-SUFFIX,osl.com
-DOMAIN-SUFFIX,oyunfor.com
-DOMAIN-SUFFIX,ozan.com
 DOMAIN-SUFFIX,pancakeswap.com
 DOMAIN-SUFFIX,pancakeswap.finance
-DOMAIN-SUFFIX,papara.com
 DOMAIN-SUFFIX,parity.io
 DOMAIN-SUFFIX,paxful.com
-DOMAIN-SUFFIX,paytr.com
 DOMAIN-SUFFIX,phantom.app
 DOMAIN-SUFFIX,pod-15-sunco-ws.zendesk.com
 DOMAIN-SUFFIX,poloniex.com
@@ -337,13 +309,10 @@ DOMAIN-SUFFIX,poly.network
 DOMAIN-SUFFIX,polymarket.com
 DOMAIN-SUFFIX,poolin.com
 DOMAIN-SUFFIX,privacyportal-bn.my.onetrust.com
-DOMAIN-SUFFIX,probit.com
 DOMAIN-SUFFIX,public-1306379396.file.myqcloud.com
 DOMAIN-SUFFIX,public.bnbstatic.com
 DOMAIN-SUFFIX,pushstat.api.engagelab.cc
 DOMAIN-SUFFIX,qcloud.com
-DOMAIN-SUFFIX,quant.com
-DOMAIN-SUFFIX,rank.io
 DOMAIN-SUFFIX,raydium.io
 DOMAIN-SUFFIX,redotpay.com
 DOMAIN-SUFFIX,redotpay.zendesk.com
@@ -357,7 +326,6 @@ DOMAIN-SUFFIX,saasexch.io
 DOMAIN-SUFFIX,satoshilabs.com
 DOMAIN-SUFFIX,sdstream.yingwangtech.net
 DOMAIN-SUFFIX,sfstream.yingwangtech.net
-DOMAIN-SUFFIX,slam.io
 DOMAIN-SUFFIX,solana.com
 DOMAIN-SUFFIX,stateofthedapps.com
 DOMAIN-SUFFIX,static-file-1306379396.file.myqcloud.com
@@ -388,14 +356,12 @@ DOMAIN-SUFFIX,trustwallet.com
 DOMAIN-SUFFIX,trustwalletapp.com
 DOMAIN-SUFFIX,unisat.io
 DOMAIN-SUFFIX,uniswap.org
-DOMAIN-SUFFIX,upbit.com
 DOMAIN-SUFFIX,vfat.tools
 DOMAIN-SUFFIX,viewbase.com
 DOMAIN-SUFFIX,vitalik.ca
 DOMAIN-SUFFIX,walletconnect.com
 DOMAIN-SUFFIX,watchtheburn.com
 DOMAIN-SUFFIX,wbtc.network
-DOMAIN-SUFFIX,wbtc.network,Crypt
 DOMAIN-SUFFIX,wintermute.com
 DOMAIN-SUFFIX,wisecoin.com
 DOMAIN-SUFFIX,wiseid.com
