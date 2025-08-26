@@ -26,9 +26,7 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 172.29.0.1/16
   nameserver:
-    - https://106.75.164.170/Eaf9nie7quee/endusers
-    - https://139.224.50.204/Eaf9nie7quee/endusers
-    - https://60.205.14.96/Eaf9nie7quee/endusers
+    - 119.29.29.29
   fallback-filter:
     geoip: true
     ipcidr: null
