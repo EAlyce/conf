@@ -16,6 +16,7 @@ jobs:
         run: |
           {
             curl -sSfL "https://ruleset.skk.moe/List/non_ip/ai.conf" | awk '{print $0 "\n"}'
+            curl -sSfL "https://github.com/PengRunhAn/ios_rule_script/raw/75011e852affbb0909a4ca4749137ed08fe4581d/rule/Surge/Windsurf.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/BaksiLi/rulesets/raw/033ddd631bfc1e5883b4b547f40b28f93f0fc496/surge/AI.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/tutuh/script/raw/cbbba01fe56c7db1abfb0e5a0593d2abf9c4dcc8/Surge/Ruleset/AI.list" | awk '{print $0 "\n"}'
             curl -sSfL "https://github.com/blankmagic/surge/raw/2741d51076d1a11e2a8d1bdc3e7a1fdca2504dfc/rule/AI.list" | awk '{print $0 "\n"}'
