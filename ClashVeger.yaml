@@ -5,61 +5,91 @@ mixed-port: 7897
 allow-lan: false
 log-level: silent
 ipv6: false
-external-controller: 127.0.0.1:9097
-secret: ""
+external-controller: ""
+secret: set-your-secret
 unified-delay: false
-geodata-mode: false
-external-controller-cors:
-  allow-private-network: true
-  allow-origins:
-    - "*"
-find-process-mode: off
-authentication: []
-geodata-loader: standard
-global-ua: clash.meta
-dns:
-  enable: true
-  listen: 0.0.0.0:53
-  default-nameserver:
-    - 119.29.29.29
-  enhanced-mode: fake-ip
-  fake-ip-range: 172.29.0.1/16
-  nameserver:
-    - 119.29.29.29
-  fallback-filter:
-    geoip: true
-    ipcidr: null
-  fallback: []
-  use-system-hosts: false
-  fake-ip-filter:
-    - "*"
-    - +.lan
-    - +.local
-    - time.*.com
-    - ntp.*.com
-    - +.market.xiaomi.com
-  ipv6: false
-  use-hosts: false
-  proxy-server-nameserver:
-    - https://doh.pub/dns-query
-  respect-rules: true
+external-controller-pipe: \\.\pipe\verge-mihomo
 profile:
   store-selected: true
   store-fake-ip: false
 hosts: {}
-skip-auth-prefixes:
-  - 127.0.0.1/32
-geox-url:
-  mmdb: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb
-tcp-concurrent: false
+global-client-fingerprint: chrome
+geodata-loader: standard
+dns:
+  default-nameserver:
+    - system
+    - 223.6.6.6
+    - 8.8.8.8
+    - 2400:3200::1
+    - 2001:4860:4860::8888
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "*.arpa"
+    - time.*.com
+    - ntp.*.com
+    - time.*.com
+    - +.market.xiaomi.com
+    - localhost.ptlogin2.qq.com
+    - "*.msftncsi.com"
+    - www.msftconnecttest.com
+  fake-ip-filter-mode: blacklist
+  fake-ip-range: 198.18.0.1/16
+  fallback: []
+  fallback-filter:
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+  ipv6: false
+  listen: :53
+  nameserver:
+    - 8.8.8.8
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  prefer-h3: false
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - tls://223.5.5.5
+  respect-rules: false
+  use-hosts: false
+  use-system-hosts: false
+geodata-mode: false
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  auto-redirect: false
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+  device: Mihomo
+  mtu: 1492
+  route-exclude-address: []
+  strict-route: false
 lan-allowed-ips:
   - 0.0.0.0/0
   - ::/0
-lan-disallowed-ips: []
-geo-update-interval: 1
+global-ua: clash.meta
 geo-auto-update: false
-global-client-fingerprint: chrome
-bind-address: "*"
+lan-disallowed-ips: []
+external-controller-cors:
+  allow-private-network: true
+  allow-origins:
+    - "*"
+geo-update-interval: 1
+skip-auth-prefixes:
+  - 127.0.0.1/32
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -80,23 +110,119 @@ sniffer:
   skip-domain:
     - +.push.apple.com
   force-domain: []
-tun:
-  enable: true
-  stack: gvisor
-  auto-route: true
-  auto-redirect: false
-  auto-detect-interface: true
-  dns-hijack: []
-  device: Mihomo
-  mtu: 1492
-  route-exclude-address: []
-  strict-route: false
+authentication: []
+find-process-mode: off
+bind-address: "*"
+tcp-concurrent: false
+geox-url:
+  mmdb: https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Country.mmdb
 proxies:
 
+proxy-providers:
+   机场1:
+    type: http
+    url: 订阅链接
+    path: ./proxy_providers/机场1.yaml
+    interval: 3600
+    proxy: DIRECT
+    size-limit: 0
+    header:
+      User-Agent:
+        - Clash/v1.18.0
+        - mihomo/1.18.3
+      Authorization:
+        - token 1231231
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      tfo: false
+      mptcp: false
+      udp: true
+      udp-over-tcp: false
+      skip-cert-verify: true
+      ip-version: ipv4
+  机场2:
+    type: http
+    url: 订阅链接
+    path: ./proxy_providers/机场2.yaml
+    interval: 3600
+    proxy: DIRECT
+    size-limit: 0
+    header:
+      User-Agent:
+        - Clash/v1.18.0
+        - mihomo/1.18.3
+      Authorization:
+        - token 1231231
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      tfo: false
+      mptcp: false
+      udp: true
+      udp-over-tcp: false
+      skip-cert-verify: true
+      ip-version: ipv4
 proxy-groups:
   - name: Proxy
+    type: fallback
+    include-all-proxies: true
+    use:
+      - 机场1
+      - 机场2
+    interval: 86400
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+  - name: SSH
     type: select
     include-all-proxies: true
+    use:
+      - 机场1
+      - 机场2
+    interval: 86400
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+  - name: Oracle
+    type: select
+    include-all-proxies: true
+    use:
+      - 机场1
+      - 机场2
+    interval: 86400
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+  - name: OpenAI
+    type: select
+    include-all-proxies: true
+    use:
+      - 机场1
+      - 机场2
+    interval: 86400
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+
 rule-providers:
   Proxy:
     type: http
@@ -105,7 +231,44 @@ rule-providers:
     interval: 86400
     url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Proxy.list
     path: ./ruleset/Proxy.list
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+  OpenAI:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/OpenAI.list
+    path: ./ruleset/OpenAI.list
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
+  Oracle:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Oracle.list
+    path: ./ruleset/Oracle.list
+    health-check:
+      enable: true
+      url: http://1.0.0.1/favicon.ico
+      interval: 1800
+      timeout: 5000
 rules:
+  - DST-PORT,22,SSH
+  - RULE-SET,Oracle,Oracle,no-resolve
+  - RULE-SET,OpenAI,OpenAI,no-resolve
   - RULE-SET,Proxy,Proxy,no-resolve
-  - GEOIP,CN,DIRECT
+  - DOMAIN-KEYWORD,cn,DIRECT
+  - IP-CIDR, 192.168.0.0/16,DIRECT
+  - IP-CIDR, 10.0.0.0/8, DIRECT
+  - IP-CIDR, 172.16.0.0/12, DIRECT
+  - IP-CIDR, 127.0.0.0/8, DIRECT
+  - GEOIP,cn,DIRECT
   - MATCH,Proxy
