@@ -37,9 +37,21 @@ apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nan
 
 文件同步工具
 ```
-bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/syncthing-reinstall.sh)
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/syncthing.sh)
 ```
-
+WARP
+```
+wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
+```
+解除Python限制
+```
+SITE_FILE=$(python3 -c "import site,inspect; print(inspect.getsourcefile(site))" 2>/dev/null) && [ -n "$SITE_FILE" ] && [ -f "$SITE_FILE" ] && sudo cp "$SITE_FILE" "$SITE_FILE.backup.$(date +%s)" && sudo sed -i '/sys\.setprofile/d' "$SITE_FILE" && sudo find /usr/lib/python3* /usr/local/lib/python3* /opt/*/lib/python3* -name "*.pyc" -type f -delete 2>/dev/null && sudo find /usr/lib/python3* /usr/local/lib/python3* -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null && unset PYTHONNOUSERSITE PYTHONPATH && echo "✅ Python环境清理完成"
+```
+安装依赖
+```
+sudo pip install --break-system-packages youtube-search-python yt-dlp aiohttp mutagen&& \
+sudo apt install -y ffmpeg
+```
 
 ## 🛠️ 应用环境配置
 
