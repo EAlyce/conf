@@ -23,6 +23,10 @@ bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/PagerMaid/P
 
 按下 `CTRL+C`
 
+TeleBox
+```
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/installTeleBox.sh)
+```
 ---
 
 ## 📋 所需参数
