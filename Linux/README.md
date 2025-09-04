@@ -38,6 +38,10 @@ apt update && apt install -y curl git zip unzip wget sudo netcat-openbsd vim nan
 ```
 bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/syncthing.sh)
 ```
+自动生成密钥并发送到Telegram bot
+```
+bash <(curl -fsSL https://github.com/EAlyce/conf/raw/refs/heads/main/Linux/sshkey.sh)
+```
 WARP
 ```
 wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
