@@ -19,10 +19,9 @@ dpkg --purge $(dpkg -l | grep '^rc' | awk '{print $2}')
 ```bash
 apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt full-upgrade -y
 ```
-检查破损依赖和修复
+系统补全
 ```
-apt-get check
-apt-get install -f
+apt update && apt upgrade -y && apt install -y sudo vim nano curl wget git gnupg lsb-release ca-certificates net-tools dnsutils build-essential python3 python3-pip python3-venv tzdata util-linux htop tree unzip zip tar rsync man-db netcat-openbsd tcpdump iproute2 iputils-ping less screen tmux && timedatectl set-timezone Asia/Shanghai && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && date && timedatectl status && (command -v hwclock >/dev/null && hwclock --show || echo "⚠️ hwclock not available in this VM") && echo "✅ Debian Minimal 已补全 🚀"
 ```
 ### 2. 安装常用工具
 
