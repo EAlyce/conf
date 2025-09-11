@@ -63,13 +63,17 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
         NODE_ENV: production
-        LOG_LEVEL: info
+        LOG_LEVEL: debug
         CHECK_INTERVAL_MINUTES: 30
         GITHUB_RUN_ID: ${{ github.run_id }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_ACTOR: ${{ github.actor }}
       run: |
         cd windsurf-release-monitor
+        echo "Running test mode..."
+        echo "Environment check:"
+        echo "TELEGRAM_BOT_TOKEN length: ${#TELEGRAM_BOT_TOKEN}"
+        echo "TELEGRAM_CHANNEL_ID: $TELEGRAM_CHANNEL_ID"
         node src/index.js test
 
     - name: Push latest version info
@@ -79,12 +83,16 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
         NODE_ENV: production
-        LOG_LEVEL: info
+        LOG_LEVEL: debug
         GITHUB_RUN_ID: ${{ github.run_id }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_ACTOR: ${{ github.actor }}
       run: |
         cd windsurf-release-monitor
+        echo "Pushing latest version info..."
+        echo "Environment check:"
+        echo "TELEGRAM_BOT_TOKEN length: ${#TELEGRAM_BOT_TOKEN}"
+        echo "TELEGRAM_CHANNEL_ID: $TELEGRAM_CHANNEL_ID"
         node src/index.js latest
 
     - name: Run monitoring cycle
@@ -94,7 +102,7 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
         NODE_ENV: production
-        LOG_LEVEL: info
+        LOG_LEVEL: debug
         CHECK_INTERVAL_MINUTES: 30
         REQUEST_TIMEOUT_MS: 30000
         MAX_RETRIES: 3
@@ -103,7 +111,35 @@ jobs:
         GITHUB_ACTOR: ${{ github.actor }}
       run: |
         cd windsurf-release-monitor
-        node src/index.js once
+        echo "Starting Windsurf Release Monitor..."
+        echo "Node version: $(node --version)"
+        echo "NPM version: $(npm --version)"
+        echo "Current directory: $(pwd)"
+        echo "Files in directory:"
+        ls -la
+        echo "Environment variables check:"
+        echo "TELEGRAM_BOT_TOKEN length: ${#TELEGRAM_BOT_TOKEN}"
+        echo "TELEGRAM_CHANNEL_ID: $TELEGRAM_CHANNEL_ID"
+        echo "Starting application..."
+        node src/index.js once || {
+          echo "Application failed with exit code $?"
+          echo "Checking for log files..."
+          if [ -d "logs" ]; then
+            echo "Log directory exists:"
+            ls -la logs/
+            if [ -f "logs/app.log" ]; then
+              echo "Application log:"
+              cat logs/app.log
+            fi
+            if [ -f "logs/error.log" ]; then
+              echo "Error log:"
+              cat logs/error.log
+            fi
+          else
+            echo "No logs directory found"
+          fi
+          exit 1
+        }
 
     - name: Save data cache
       if: always()
