@@ -4,10 +4,10 @@ dotenv.config();
 const config = {
   // Telegram Bot Configuration
   telegram: {
-    botToken: process.env.TELEGRAM_BOT_TOKEN,
-    channelId: process.env.TELEGRAM_CHANNEL_ID,
+    botToken: process.env.TELEGRAM_BOT_TOKEN || '',
+    channelId: process.env.TELEGRAM_CHANNEL_ID || '',
     // Optional: Admin user IDs for error notifications
-    adminIds: process.env.TELEGRAM_ADMIN_IDS ? process.env.TELEGRAM_ADMIN_IDS.split(',') : []
+    adminIds: process.env.TELEGRAM_ADMIN_IDS ? process.env.TELEGRAM_ADMIN_IDS.split(',').filter(id => id.trim()) : []
   },
 
   // Windsurf Release URLs
@@ -60,6 +60,10 @@ const config = {
 function validateConfig() {
   const errors = [];
 
+  console.log('Validating configuration...');
+  console.log('Bot token length:', config.telegram.botToken ? config.telegram.botToken.length : 0);
+  console.log('Channel ID:', config.telegram.channelId);
+
   if (!config.telegram.botToken) {
     errors.push('TELEGRAM_BOT_TOKEN is required');
   }
@@ -69,9 +73,11 @@ function validateConfig() {
   }
 
   if (errors.length > 0) {
+    console.error('Configuration errors:', errors);
     throw new Error(`Configuration validation failed:\n${errors.join('\n')}`);
   }
 
+  console.log('Configuration validation passed');
   return true;
 }
 

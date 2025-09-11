@@ -33,6 +33,12 @@ process.on('unhandledRejection', (reason, promise) => {
  */
 async function main() {
   try {
+    // Early logging to see if script starts
+    console.log('Windsurf Release Monitor starting...');
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Bot token exists:', !!process.env.TELEGRAM_BOT_TOKEN);
+    console.log('Channel ID:', process.env.TELEGRAM_CHANNEL_ID);
+    
     // Validate configuration
     validateConfig();
     
