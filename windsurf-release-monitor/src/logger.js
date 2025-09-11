@@ -1,13 +1,21 @@
 const winston = require('winston');
 const path = require('path');
 const fs = require('fs');
-const { config } = require('./config');
 
-// Ensure logs directory exists
-const logsDir = path.dirname(config.storage.logFile);
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+// Ensure logs directory exists - use try/catch for safety
+const logsDir = path.join(__dirname, '..', 'logs');
+try {
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+    console.log('Created logs directory:', logsDir);
+  }
+} catch (error) {
+  console.error('Failed to create logs directory:', error.message);
+  // Continue without file logging if directory creation fails
 }
+
+// Import config after ensuring logs directory exists
+const { config } = require('./config');
 
 // Custom format for logs
 const logFormat = winston.format.combine(

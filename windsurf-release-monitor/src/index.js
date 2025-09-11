@@ -34,13 +34,22 @@ process.on('unhandledRejection', (reason, promise) => {
 async function main() {
   try {
     // Early logging to see if script starts
-    console.log('Windsurf Release Monitor starting...');
+    console.log('=== Windsurf Release Monitor Starting ===');
+    console.log('Node version:', process.version);
+    console.log('Current directory:', process.cwd());
     console.log('Environment:', process.env.NODE_ENV);
     console.log('Bot token exists:', !!process.env.TELEGRAM_BOT_TOKEN);
+    console.log('Bot token length:', process.env.TELEGRAM_BOT_TOKEN ? process.env.TELEGRAM_BOT_TOKEN.length : 0);
     console.log('Channel ID:', process.env.TELEGRAM_CHANNEL_ID);
     
-    // Validate configuration
-    validateConfig();
+    // Validate configuration with detailed error handling
+    try {
+      validateConfig();
+      console.log('✅ Configuration validation successful');
+    } catch (configError) {
+      console.error('❌ Configuration validation failed:', configError.message);
+      throw configError;
+    }
     
     logger.info('Starting Windsurf Release Monitor', {
       version: '1.0.0',
@@ -147,15 +156,14 @@ Examples:
     }
 
   } catch (error) {
-    logger.error('Application startup failed', { 
-      error: error.message, 
-      stack: error.stack 
-    });
+    console.error('❌ Fatal application error:', error.message);
+    console.error('Stack trace:', error.stack);
     
-    console.error('Failed to start application:', error.message);
-    
-    if (config.app.environment === 'development') {
-      console.error(error.stack);
+    // Try to log to file if logger is available
+    try {
+      logger.error('Application error', { error: error.message, stack: error.stack });
+    } catch (logError) {
+      console.error('Failed to write to log file:', logError.message);
     }
     
     process.exit(1);
