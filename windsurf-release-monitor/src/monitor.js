@@ -1,9 +1,11 @@
 const cron = require('node-cron');
-const { logger, monitoringCycle, errorWithContext } = require('./logger');
-const { config } = require('./config');
+const { monitoringCycle, errorWithContext } = require('./logger');
+// 使用简化的scraper避免Node.js兼容性问题
+const SimpleScraper = require('./scraper-simple');
+const scraper = new SimpleScraper();
 const storage = require('./storage');
-const scraper = require('./scraper');
 const telegram = require('./telegram');
+const logger = require('./logger');
 
 class ReleaseMonitor {
   constructor() {
