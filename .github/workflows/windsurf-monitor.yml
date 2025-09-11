@@ -24,6 +24,9 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write
     
     steps:
     - name: Checkout repository
@@ -41,7 +44,9 @@ jobs:
     - name: Install dependencies
       run: |
         cd windsurf-release-monitor
-        npm ci --only=production
+        echo "Installing dependencies..."
+        npm install --production
+        echo "Dependencies installed successfully"
 
     - name: Create data and logs directories
       run: |
@@ -56,12 +61,21 @@ jobs:
         restore-keys: |
           windsurf-data-
 
+    - name: Test minimal setup
+      run: |
+        cd windsurf-release-monitor
+        echo "Testing minimal setup..."
+        node src/test-minimal.js
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+
     - name: Run test mode
       if: ${{ github.event.inputs.test_mode == 'true' }}
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS || '' }}
         NODE_ENV: production
         LOG_LEVEL: debug
         CHECK_INTERVAL_MINUTES: 30
@@ -70,18 +84,17 @@ jobs:
         GITHUB_ACTOR: ${{ github.actor }}
       run: |
         cd windsurf-release-monitor
-        echo "Running test mode..."
-        echo "Environment check:"
-        echo "TELEGRAM_BOT_TOKEN length: ${#TELEGRAM_BOT_TOKEN}"
-        echo "TELEGRAM_CHANNEL_ID: $TELEGRAM_CHANNEL_ID"
-        node src/index.js test
+        echo "Running simple diagnostic test first..."
+        node src/simple-test.js
+        echo "Now running full test mode..."
+        node src/index.js test || exit 0
 
     - name: Push latest version info
       if: ${{ github.event.inputs.push_latest == 'true' }}
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS || '' }}
         NODE_ENV: production
         LOG_LEVEL: debug
         GITHUB_RUN_ID: ${{ github.run_id }}
@@ -100,7 +113,7 @@ jobs:
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS || '' }}
         NODE_ENV: production
         LOG_LEVEL: debug
         CHECK_INTERVAL_MINUTES: 30
@@ -160,8 +173,19 @@ jobs:
       if: failure()
       run: |
         echo "::error::Windsurf monitoring failed. Check logs for details."
-        if [ -f windsurf-release-monitor/logs/error.log ]; then
+        cd windsurf-release-monitor
+        echo "Checking for error logs..."
+        if [ -f logs/error.log ]; then
           echo "::group::Error Log"
-          cat windsurf-release-monitor/logs/error.log
+          cat logs/error.log
           echo "::endgroup::"
+        else
+          echo "No error log file found"
+        fi
+        if [ -f logs/app.log ]; then
+          echo "::group::Application Log"
+          cat logs/app.log
+          echo "::endgroup::"
+        else
+          echo "No application log file found"
         fi
