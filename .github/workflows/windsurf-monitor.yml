@@ -89,6 +89,13 @@ jobs:
         echo "Now running full test mode..."
         node src/index.js test || exit 0
 
+    - name: Test scraping functionality
+      if: ${{ github.event.inputs.push_latest == 'true' }}
+      run: |
+        cd windsurf-release-monitor
+        echo "Testing scraping functionality first..."
+        node src/test-scraping.js
+        
     - name: Push latest version info
       if: ${{ github.event.inputs.push_latest == 'true' }}
       env:
