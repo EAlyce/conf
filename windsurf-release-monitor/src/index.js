@@ -83,9 +83,15 @@ async function main() {
         break;
 
       case 'latest':
-        // Push latest version info to channel
-        await monitor.pushLatestVersions();
-        process.exit(0);
+        logger.info('Pushing latest version info');
+        console.log('Pushing latest version info to Telegram...');
+        try {
+          await monitor.pushLatestVersions();
+          console.log('Latest version info pushed successfully');
+        } catch (latestError) {
+          console.error('Failed to push latest version:', latestError.message);
+          throw latestError;
+        }
         break;
 
       case 'test':

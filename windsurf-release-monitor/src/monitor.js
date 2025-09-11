@@ -250,11 +250,15 @@ class ReleaseMonitor {
   async pushLatestVersions() {
     try {
       logger.info('Pushing latest version info to channel');
+      console.log('Starting pushLatestVersions...');
       
       await this.initialize();
+      console.log('Initialization complete');
       
       // Scrape current releases
+      console.log('Scraping releases from Windsurf...');
       const scrapedReleases = await scraper.getAllReleases();
+      console.log(`Scraped ${scrapedReleases.stable.length} stable and ${scrapedReleases.next.length} next releases`);
       
       if (scrapedReleases.errors.length > 0) {
         logger.warn('Scraping completed with errors', { 
@@ -289,25 +293,34 @@ class ReleaseMonitor {
         return;
       }
       
-      // Send notifications
-      logger.info('Sending latest version notifications', { count: releasesToSend.length });
-      
-      const notificationResults = await telegram.sendMultipleNotifications(releasesToSend);
-      
-      if (notificationResults.errors.length > 0) {
-        logger.error('Some notifications failed', { 
-          failed: notificationResults.errors.length,
-          total: releasesToSend.length 
-        });
-        throw new Error(`Failed to send ${notificationResults.errors.length} notifications`);
+      // Send notifications for new releases
+      if (releasesToSend.length > 0) {
+        logger.info('Sending manual push notifications', { count: releasesToSend.length });
+        console.log(`Sending ${releasesToSend.length} release notifications...`);
+        
+        for (const release of releasesToSend) {
+          console.log(`Sending notification for ${release.type} version ${release.version}...`);
+          const result = await telegram.sendReleaseNotification(release);
+          if (result.success) {
+            logger.info('Manual push notification sent', { 
+              version: release.version,
+              type: release.type 
+            });
+            console.log(`✅ Successfully sent ${release.type} version ${release.version}`);
+          } else {
+            logger.error('Failed to send manual push notification', { 
+              version: release.version,
+              error: result.error 
+            });
+            console.error(`❌ Failed to send ${release.type} version ${release.version}: ${result.error}`);
+          }
+        }
+        
+        logger.info('Manual push completed successfully');
+        console.log('✅ Manual push completed successfully');
       }
       
-      logger.info('Latest version info pushed successfully', {
-        stable: latestStable ? latestStable.version : 'none',
-        next: latestNext ? latestNext.version : 'none',
-        notifications: releasesToSend.length
-      });
-      
+      return true;
     } catch (error) {
       errorWithContext('Failed to push latest versions', error);
       
