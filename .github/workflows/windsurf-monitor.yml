@@ -1,0 +1,131 @@
+name: Windsurf Release Monitor
+
+on:
+  schedule:
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Run in test mode'
+        required: false
+        default: false
+        type: boolean
+      push_latest:
+        description: 'Push latest version info to channel'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: windsurf-release-monitor/package.json
+
+    - name: Install dependencies
+      run: |
+        cd windsurf-release-monitor
+        npm ci --only=production
+
+    - name: Create data and logs directories
+      run: |
+        cd windsurf-release-monitor
+        mkdir -p data logs
+
+    - name: Restore cached data
+      uses: actions/cache/restore@v3
+      with:
+        path: windsurf-release-monitor/data
+        key: windsurf-data-${{ github.run_number }}
+        restore-keys: |
+          windsurf-data-
+
+    - name: Run test mode
+      if: ${{ github.event.inputs.test_mode == 'true' }}
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        NODE_ENV: production
+        LOG_LEVEL: info
+        CHECK_INTERVAL_MINUTES: 30
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_ACTOR: ${{ github.actor }}
+      run: |
+        cd windsurf-release-monitor
+        node src/index.js test
+
+    - name: Push latest version info
+      if: ${{ github.event.inputs.push_latest == 'true' }}
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        NODE_ENV: production
+        LOG_LEVEL: info
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_ACTOR: ${{ github.actor }}
+      run: |
+        cd windsurf-release-monitor
+        node src/index.js latest
+
+    - name: Run monitoring cycle
+      if: ${{ github.event.inputs.test_mode != 'true' && github.event.inputs.push_latest != 'true' }}
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        TELEGRAM_ADMIN_IDS: ${{ secrets.TELEGRAM_ADMIN_IDS }}
+        NODE_ENV: production
+        LOG_LEVEL: info
+        CHECK_INTERVAL_MINUTES: 30
+        REQUEST_TIMEOUT_MS: 30000
+        MAX_RETRIES: 3
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_ACTOR: ${{ github.actor }}
+      run: |
+        cd windsurf-release-monitor
+        node src/index.js once
+
+    - name: Save data cache
+      if: always()
+      uses: actions/cache/save@v3
+      with:
+        path: windsurf-release-monitor/data
+        key: windsurf-data-${{ github.run_number }}
+
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: windsurf-monitor-logs-${{ github.run_id }}
+        path: windsurf-release-monitor/logs/
+        retention-days: 7
+
+    - name: Check for errors
+      if: failure()
+      run: |
+        echo "::error::Windsurf monitoring failed. Check logs for details."
+        if [ -f windsurf-release-monitor/logs/error.log ]; then
+          echo "::group::Error Log"
+          cat windsurf-release-monitor/logs/error.log
+          echo "::endgroup::"
+        fi

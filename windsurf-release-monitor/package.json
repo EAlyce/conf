@@ -1,0 +1,39 @@
+{
+  "name": "windsurf-release-monitor",
+  "version": "1.0.0",
+  "description": "Production-grade Telegram bot to monitor Windsurf releases and post updates to TG channel",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js once",
+    "dev": "node src/index.js run",
+    "test": "node src/test.js",
+    "setup": "node setup.js",
+    "build": "echo 'No build step required for Node.js'",
+    "lint": "echo 'Linting would go here'"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "windsurf",
+    "release",
+    "monitor",
+    "github-actions"
+  ],
+  "author": "Windsurf Release Monitor Bot",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-telegram-bot-api": "^0.64.0",
+    "node-cron": "^3.0.3",
+    "winston": "^3.11.0",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/conf.git"
+  }
+}
