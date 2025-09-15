@@ -76,7 +76,7 @@ setup_application() {
     git clone "$GITHUB_REPO" .
     
     echo -e "${BLUE}==== 安装依赖 ====${NC}"
-    npm ci --prefer-offline --no-audit
+    npm install --prefer-offline --no-audit
 }
 
 # 首次登录配置
