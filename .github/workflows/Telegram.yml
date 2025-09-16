@@ -14,14 +14,39 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get and merge domains from source files
         run: |
-          {
-            curl -sSfL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Telegram/Telegram.list" | awk '{print $0 "\n"}'
-            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/Telegram.list" | awk '{print $0 "\n"}'
-          } | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
+          # 定义资源列表
+          declare -a urls=(
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Telegram/Telegram.list"
+            "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/Telegram.list"
+          )
+          
+          # 创建临时文件
+          temp_file=$(mktemp)
+          
+          # 逐个下载并记录状态
+          for url in "${urls[@]}"; do
+            echo "正在获取: $url"
+            if curl -sSfL "$url" >> "$temp_file" 2>/dev/null; then
+              echo "✅ 成功: $url"
+            else
+              exit_code=$?
+              echo "❌ 失败 (退出码: $exit_code): $url"
+              # 继续处理其他URL，不中断整个流程
+            fi
+            echo "" >> "$temp_file"  # 添加换行
+          done
+          
+          # 处理合并的内容
+          cat "$temp_file" | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
               sed 's/,no-resolve//g' | sed 's/#.*$//g' | 
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
               grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' | 
-              sort | uniq > Rule/Telegram.list  # Deduplication moved to the end
+              sort | uniq > Rule/Telegram.list
+          
+          # 清理临时文件
+          rm "$temp_file"
+          
+          echo "生成的规则数量: $(wc -l < Rule/Telegram.list)"
               
       - name: Check and Configure Git
         run: |

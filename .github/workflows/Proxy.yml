@@ -16,11 +16,38 @@ jobs:
 
       - name: Get and process domains
         run: |
-          {
-            curl -sSfL "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt"
-            curl -sSfL "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list"
-            curl -sSfL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list"
-          } | sed -E 's/#.*$//; s/\/\/.*$//; s/,no-resolve//g; s/ //g' | grep -v '^$' | grep -Ev '^(URL-REGEX|PROCESS-NAME|USER-AGENT)' | sort | uniq > Rule/Proxy.list
+          # 定义资源列表
+          declare -a urls=(
+            "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt"
+            "https://raw.githubusercontent.com/axcsz/Collect/master/Ruleset/GlobalGFW.list"
+            "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/ProxyGFWlist.list"
+          )
+          
+          # 创建临时文件
+          temp_file=$(mktemp)
+          
+          # 逐个下载并记录状态
+          for url in "${urls[@]}"; do
+            echo "正在获取: $url"
+            if curl -sSfL "$url" >> "$temp_file" 2>/dev/null; then
+              echo " 成功: $url"
+            else
+              exit_code=$?
+              echo " 失败 (退出码: $exit_code): $url"
+              # 继续处理其他URL，不中断整个流程
+            fi
+            echo "" >> "$temp_file"  # 添加换行
+          done
+          
+          # 处理合并的内容
+          cat "$temp_file" | sed -E 's/#.*$//; s/\/\/.*$//; s/,no-resolve//g; s/ //g' | 
+              grep -v '^$' | grep -Ev '^(URL-REGEX|PROCESS-NAME|USER-AGENT)' | 
+              sort | uniq > Rule/Proxy.list
+          
+          # 清理临时文件
+          rm "$temp_file"
+          
+          echo "生成的规则数量: $(wc -l < Rule/Proxy.list)"
 
       - name: Check and Configure Git
         run: |
