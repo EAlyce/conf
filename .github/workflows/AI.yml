@@ -74,9 +74,10 @@ jobs:
             echo "" >> "$temp_file"  # 添加换行
           done
           
-          # 处理合并的内容（不进行去重）
+          # 清理、标准化、去重 - 一体化处理
           cat "$temp_file" | 
-              sed 's/ //g' | 
+              tr -d '\r' |
+              tr -d ' \t' |
               grep -v '^#' | 
               grep -v '^$' | 
               sed 's/,no-resolve//g' | 
@@ -84,20 +85,23 @@ jobs:
               sed 's/\/\/.*$//g' |
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
               sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
+              sed 's/^OMAIN,/DOMAIN,/g' |
               grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
-              sed 's/^domain,/DOMAIN,/gi' |
-              sed 's/^domain-/DOMAIN-/gi' |
-              sed 's/^ip-cidr,/IP-CIDR,/gi' |
-              sed 's/^ip-cidr6,/IP-CIDR6,/gi' |
-              sed 's/^ip-asn,/IP-ASN,/gi' |
-              sed 's/DOMAIN-keyword/DOMAIN-KEYWORD/gi' |
-              sed 's/DOMAIN-suffix/DOMAIN-SUFFIX/gi' > Rule/OpenAI.list.tmp
-          
-          # 最后一步：彻底去重
-          sort Rule/OpenAI.list.tmp | uniq > Rule/OpenAI.list
-          
-          # 清理临时文件
-          rm Rule/OpenAI.list.tmp
+              awk -F',' '{
+                  prefix = toupper($1)
+                  if (prefix ~ /^IP-/) {
+                      # IP规则全部大写
+                      print toupper($0)
+                  } else {
+                      # 域名规则：前缀大写，域名小写
+                      domain = tolower($2)
+                      if (NF == 2) {
+                          print prefix "," domain
+                      } else {
+                          print prefix "," domain "," tolower($3)
+                      }
+                  }
+              }' | sort -u > Rule/OpenAI.list
           
           # 清理临时文件
           rm "$temp_file"
