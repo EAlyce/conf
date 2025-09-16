@@ -70,7 +70,6 @@ DOMAIN,sfo3.turn.livekit.cloud
 DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
-DOMAIN-KEYWARD,notebooklm.google
 DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,Claude
 DOMAIN-KEYWORD,Grok
@@ -84,6 +83,7 @@ DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,developerprofiles
 DOMAIN-KEYWORD,generativelanguage
 DOMAIN-KEYWORD,labs.google
+DOMAIN-KEYWORD,notebooklm.google
 DOMAIN-KEYWORD,notebooklm.google
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openai
