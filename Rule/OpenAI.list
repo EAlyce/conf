@@ -2,7 +2,6 @@
 DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
 DOMAIN,ai.google.dev
 DOMAIN,ai.google.dev
-DOMAIN,aida.googleapis.com
 DOMAIN,aistudio.google.com
 DOMAIN,alkalicore-pa.clients6.google.com
 DOMAIN,alkalimakersuite-pa.clients6.google.com
@@ -11,12 +10,10 @@ DOMAIN,api.codeium.com
 DOMAIN,api.github.com
 DOMAIN,api.githubcopilot.com
 DOMAIN,api.groq.com
-DOMAIN,api.groq.com//Addedfor:api.groq.com:443
 DOMAIN,api.jetbrains.ai
 DOMAIN,api.msn.com
 DOMAIN,api.statsig.com
 DOMAIN,api.together.xyz
-DOMAIN,api.together.xyz//Addedfor:api.together.xyz:443
 DOMAIN,api.windsurf.ai
 DOMAIN,apple-relay.apple.com
 DOMAIN,apple-relay.cloudflare.com
@@ -28,13 +25,10 @@ DOMAIN,browser-intake-datadoghq.com
 DOMAIN,cdn.openai.com
 DOMAIN,cdn.usefathom.com
 DOMAIN,cdn.windsurf.ai
-DOMAIN,chat.mistral.ai
 DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
 DOMAIN,chatgpt.livekit.cloud
 DOMAIN,console.groq.com
-DOMAIN,console.groq.com//Addedfor:console.groq.com:443
-DOMAIN,console.mistral.ai
 DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
 DOMAIN,copilot.microsoft.com
@@ -58,7 +52,6 @@ DOMAIN,odc.officeapps.live.com
 DOMAIN,openai-api.arkoselabs.com
 DOMAIN,openaiapi-site.azureedge.net
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
-DOMAIN,openaicom.imgix.net
 DOMAIN,openaicomproductionae4b.blob.core.windows.net
 DOMAIN,pplx-res.cloudinary.com
 DOMAIN,proactivebackend-pa.googleapis.com
@@ -95,7 +88,6 @@ DOMAIN-KEYWORD,prodregistryv
 DOMAIN-SUFFIX,AI.com
 DOMAIN-SUFFIX,Anthropic.com
 DOMAIN-SUFFIX,ai.azure.com
-DOMAIN-SUFFIX,ai.azure.com//Addedfor:models.inference.ai.azure.com:443
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
 DOMAIN-SUFFIX,aistudio.google.com
@@ -283,7 +275,6 @@ IP-CIDR,129.146.3.78/32
 IP-CIDR,143.110.232.239/32
 IP-CIDR,143.198.200.27/32
 IP-CIDR,159.89.204.203/32
-IP-CIDR,160.79.104.0/23
 IP-CIDR,164.92.115.213/32
 IP-CIDR,164.92.71.155/32
 IP-CIDR,198.13.38.242/32
@@ -297,4 +288,3 @@ IP-CIDR6,2001:19f0:7001:1149:5400:4ff:feac:a0b3/128
 IP-CIDR6,2001:19f0:7001:55b3:5400:4ff:feab:ba8f/128
 IP-CIDR6,2001:19f0:7001:8e6:5400:4ff:feab:b953/128
 IP-CIDR6,2401:c080:1000:47c5:5400:4ff:feab:f724/128
-IP-CIDR6,2607:6bc0::/48
