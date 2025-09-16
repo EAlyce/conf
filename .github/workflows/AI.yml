@@ -78,6 +78,7 @@ jobs:
           cat "$temp_file" | sed 's/ //g' | grep -v '^#' | grep -v '^$' | 
               sed 's/,no-resolve//g' | sed 's/#.*$//g' | 
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
+              sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
               grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' | 
               sort | uniq > Rule/OpenAI.list
           
