@@ -79,8 +79,16 @@ jobs:
               sed 's/,no-resolve//g' | sed 's/#.*$//g' | 
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
               sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
-              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' | 
-              sort | uniq > Rule/OpenAI.list
+              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
+              sed 's/^OMAIN,/DOMAIN,/g' |
+              tr '[:upper:]' '[:lower:]' |
+              sort -u > Rule/OpenAI.list.tmp
+          
+          # 恢复部分大小写敏感的内容并最终去重
+          cat Rule/OpenAI.list.tmp | sed 's/^domain,/DOMAIN,/g' | sed 's/^domain-/DOMAIN-/g' | sed 's/^ip-cidr,/IP-CIDR,/g' | sed 's/^ip-cidr6,/IP-CIDR6,/g' | sort -u > Rule/OpenAI.list
+          
+          # 清理临时文件
+          rm Rule/OpenAI.list.tmp
           
           # 清理临时文件
           rm "$temp_file"
