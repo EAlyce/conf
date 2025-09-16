@@ -11,12 +11,10 @@ DOMAIN,api.codeium.com
 DOMAIN,api.github.com
 DOMAIN,api.githubcopilot.com
 DOMAIN,api.groq.com
-DOMAIN,api.groq.com//addedfor:api.groq.com:443
 DOMAIN,api.jetbrains.ai
 DOMAIN,api.msn.com
 DOMAIN,api.statsig.com
 DOMAIN,api.together.xyz
-DOMAIN,api.together.xyz//addedfor:api.together.xyz:443
 DOMAIN,api.windsurf.ai
 DOMAIN,apple-relay.apple.com
 DOMAIN,apple-relay.cloudflare.com
@@ -33,7 +31,6 @@ DOMAIN,chat.openai.com
 DOMAIN,chat.openai.com.cdn.cloudflare.net
 DOMAIN,chatgpt.livekit.cloud
 DOMAIN,console.groq.com
-DOMAIN,console.groq.com//addedfor:console.groq.com:443
 DOMAIN,console.mistral.ai
 DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
@@ -92,7 +89,6 @@ DOMAIN-keyword,openaicom-api
 DOMAIN-keyword,perplexity
 DOMAIN-keyword,prodregistryv
 DOMAIN-suffix,ai.azure.com
-DOMAIN-suffix,ai.azure.com//addedfor:models.inference.ai.azure.com:443
 DOMAIN-suffix,ai.com
 DOMAIN-suffix,ai.com
 DOMAIN-suffix,aistudio.google.com
@@ -274,6 +270,8 @@ DOMAIN-suffix,windsurf.ai
 DOMAIN-suffix,x.ai
 DOMAIN-suffix,x.ai
 DOMAIN-suffix,x.com
+IP-ASN,14061
+IP-ASN,20473
 IP-CIDR,104.238.150.13/32
 IP-CIDR,129.146.3.78/32
 IP-CIDR,143.110.232.239/32
@@ -294,5 +292,3 @@ IP-CIDR6,2001:19f0:7001:55b3:5400:4ff:feab:ba8f/128
 IP-CIDR6,2001:19f0:7001:8e6:5400:4ff:feab:b953/128
 IP-CIDR6,2401:c080:1000:47c5:5400:4ff:feab:f724/128
 IP-CIDR6,2607:6bc0::/48
-ip-asn,14061
-ip-asn,20473
