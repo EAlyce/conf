@@ -74,7 +74,7 @@ jobs:
             echo "" >> "$temp_file"  # 添加换行
           done
           
-          # 处理合并的内容
+          # 处理合并的内容（不进行去重）
           cat "$temp_file" | 
               sed 's/ //g' | 
               grep -v '^#' | 
@@ -85,17 +85,16 @@ jobs:
               sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
               sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
               grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
-              tr '[:upper:]' '[:lower:]' |
-              sort -u > Rule/OpenAI.list.tmp
+              sed 's/^domain,/DOMAIN,/gi' |
+              sed 's/^domain-/DOMAIN-/gi' |
+              sed 's/^ip-cidr,/IP-CIDR,/gi' |
+              sed 's/^ip-cidr6,/IP-CIDR6,/gi' |
+              sed 's/^ip-asn,/IP-ASN,/gi' |
+              sed 's/DOMAIN-keyword/DOMAIN-KEYWORD/gi' |
+              sed 's/DOMAIN-suffix/DOMAIN-SUFFIX/gi' > Rule/OpenAI.list.tmp
           
-          # 恢复标准格式并最终去重
-          cat Rule/OpenAI.list.tmp | 
-              sed 's/^domain,/DOMAIN,/g' | 
-              sed 's/^domain-/DOMAIN-/g' | 
-              sed 's/^ip-cidr,/IP-CIDR,/g' | 
-              sed 's/^ip-cidr6,/IP-CIDR6,/g' |
-              sed 's/^ip-asn,/IP-ASN,/g' |
-              sort -u > Rule/OpenAI.list
+          # 最后一步：彻底去重
+          sort Rule/OpenAI.list.tmp | uniq > Rule/OpenAI.list
           
           # 清理临时文件
           rm Rule/OpenAI.list.tmp
