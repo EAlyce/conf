@@ -55,12 +55,21 @@ jobs:
           # 逐个下载并记录状态
           for url in "${urls[@]}"; do
             echo "正在获取: $url"
-            if curl -sSfL "$url" >> "$temp_file" 2>/dev/null; then
-              echo "✅ 成功: $url"
+            # 为反爬虫网站添加浏览器标识
+            if [[ "$url" == *"whatshub.top"* ]]; then
+              if curl -sSfL -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "$url" >> "$temp_file" 2>/dev/null; then
+                echo "✅ 成功 (使用浏览器标识): $url"
+              else
+                exit_code=$?
+                echo "❌ 失败 (退出码: $exit_code): $url"
+              fi
             else
-              exit_code=$?
-              echo "❌ 失败 (退出码: $exit_code): $url"
-              # 继续处理其他URL，不中断整个流程
+              if curl -sSfL "$url" >> "$temp_file" 2>/dev/null; then
+                echo "✅ 成功: $url"
+              else
+                exit_code=$?
+                echo "❌ 失败 (退出码: $exit_code): $url"
+              fi
             fi
             echo "" >> "$temp_file"  # 添加换行
           done
