@@ -10,6 +10,9 @@
 
 set -e  # Exit on any error
 
+# Non-interactive for Debian apt operations
+export DEBIAN_FRONTEND=noninteractive
+
 # =============================================================================
 # CONFIGURATION VARIABLES
 # =============================================================================
@@ -179,6 +182,98 @@ install_python_packages() {
     print_success "Python packages installed"
 }
 
+# 新增：一键最小化补全（中文简化文案）
+debian_minimal_bundle() {
+    print_info "执行 Debian 最小化补全..."
+    apt update
+    apt upgrade -y
+    apt install -y sudo vim nano curl wget git gnupg lsb-release \
+        ca-certificates net-tools dnsutils build-essential \
+        python3 python3-pip python3-venv tzdata util-linux \
+        htop tree unzip zip tar rsync man-db \
+        netcat-openbsd tcpdump iproute2 iputils-ping \
+        less screen tmux
+    timedatectl set-timezone "$TIMEZONE"
+    ln -sf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
+    date
+    timedatectl status
+    if command -v hwclock >/dev/null; then
+        hwclock --show
+    else
+        echo "⚠️ 本环境无 hwclock"
+    fi
+    echo "✅ Debian Minimal 已补全 🚀"
+}
+
+# 稳定性增强组件
+install_stability_addons() {
+    print_info "安装稳定性组件..."
+    apt update
+    apt install -y \
+        apt-utils software-properties-common \
+        openssl jq bash-completion \
+        openssh-server ethtool \
+        rsyslog logrotate cron psmisc \
+        socat mtr-tiny traceroute \
+        dirmngr xz-utils zstd \
+        iptables-persistent
+    systemctl enable --now ssh || true
+    systemctl enable --now rsyslog || true
+    systemctl enable --now cron || true
+    update-ca-certificates || true
+    print_success "稳定性组件已安装"
+}
+
+# 配置中文本地化
+configure_locale_zh_cn() {
+    print_info "配置中文 Locale..."
+    apt install -y locales
+    sed -i 's/^# *zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
+    locale-gen
+    update-locale LANG=zh_CN.UTF-8
+    export LANG=zh_CN.UTF-8
+    print_success "中文 Locale 已配置"
+}
+
+# 启用自动安全更新
+enable_unattended_upgrades() {
+    print_info "启用自动安全更新..."
+    apt install -y unattended-upgrades
+    printf 'APT::Periodic::Update-Package-Lists "1";\nAPT::Periodic::Unattended-Upgrade "1";\n' > /etc/apt/apt.conf.d/20auto-upgrades
+    systemctl enable --now unattended-upgrades || true
+    print_success "自动更新已启用"
+}
+
+# 启用 Chrony 时间同步
+enable_chrony() {
+    print_info "启用 Chrony 时间同步..."
+    apt install -y chrony
+    systemctl enable --now chrony || true
+    print_success "Chrony 已启用"
+}
+
+# 开放端口并持久化保存
+open_ports_and_persist() {
+    print_info "开放端口并保存规则..."
+    local ports=(8964 23556 23456 40000)
+    for p in "${ports[@]}"; do
+        iptables -C INPUT -p tcp --dport "$p" -j ACCEPT 2>/dev/null || \
+        iptables -I INPUT -p tcp --dport "$p" -j ACCEPT
+    done
+    # 安装并使用 iptables-persistent 保存
+    if ! command -v netfilter-persistent >/dev/null; then
+        apt update
+        apt install -y iptables-persistent
+    fi
+    mkdir -p /etc/iptables
+    iptables-save > /etc/iptables/rules.v4
+    if command -v netfilter-persistent >/dev/null; then
+        netfilter-persistent save || true
+        netfilter-persistent reload || true
+    fi
+    print_success "端口已开放并持久化"
+}
+
 # =============================================================================
 # SYSTEM OPTIMIZATION FUNCTIONS
 # =============================================================================
@@ -218,20 +313,46 @@ show_system_info() {
 
 # Complete system setup
 full_system_setup() {
-    print_info "Starting complete system setup..."
+    print_info "开始完整系统配置..."
     
     check_root
-    update_system
+    install_curl
     configure_hostname
     configure_dns
-    install_curl
-    optimize_apt_sources
-    install_essential_packages
-    configure_timezone
-    install_python_packages
+    
+    # 一键最小化补全
+    debian_minimal_bundle
+    
+    # 稳定性增强：常用组件、本地化与自动更新、时间同步
+    install_stability_addons
+    configure_locale_zh_cn
+    enable_unattended_upgrades
+    enable_chrony
+    
+    # 明确新增：iptables 与 ffmpeg
+    print_info "安装 iptables..."
+    apt install -y iptables
+    print_info "安装 ffmpeg..."
+    apt install -y ffmpeg
+    
+    # 明确新增：yt-dlp 强制重装（兼容 pip/pip3）
+    print_info "安装/重装 yt-dlp..."
+    if command -v pip >/dev/null; then
+        sudo pip install --upgrade --force-reinstall yt-dlp --break-system-packages
+    else
+        sudo pip3 install --upgrade --force-reinstall yt-dlp --break-system-packages
+    fi
+    
+    # 明确新增：3x-ui 安装
+    print_info "安装 3x-ui..."
+    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) || print_warning "3x-ui 安装脚本执行失败"
+    
+    # 新增：开放端口并持久化
+    open_ports_and_persist
+
     cleanup_system
     
-    print_success "✅ Debian Minimal system setup completed! 🚀"
+    print_success "✅ Debian Minimal 已补全 🚀"
     show_system_info
 }
 
@@ -256,17 +377,17 @@ quick_setup() {
 
 show_menu() {
     echo ""
-    echo "=== Linux System Setup Menu ==="
-    echo "1. Full System Setup (Complete)"
-    echo "2. Quick Setup (Basic packages only)"
-    echo "3. Update System Only"
-    echo "4. Install Essential Packages"
-    echo "5. Configure DNS"
-    echo "6. Configure Timezone"
-    echo "7. Install Python Packages"
-    echo "8. System Cleanup"
-    echo "9. Show System Information"
-    echo "0. Exit"
+    echo "=== Linux 系统一键配置菜单 ==="
+    echo "1. 完整配置（推荐）"
+    echo "2. 快速配置（基础）"
+    echo "3. 仅更新系统"
+    echo "4. 安装常用软件"
+    echo "5. 配置 DNS"
+    echo "6. 配置时区"
+    echo "7. 安装 Python 包"
+    echo "8. 清理系统"
+    echo "9. 显示系统信息"
+    echo "0. 退出"
     echo "==============================="
 }
 
@@ -274,7 +395,7 @@ show_menu() {
 main_menu() {
     while true; do
         show_menu
-        read -p "Select an option (0-9): " choice
+        read -p "请选择(0-9): " choice
         
         case $choice in
             1) full_system_setup ;;
@@ -286,12 +407,12 @@ main_menu() {
             7) install_python_packages ;;
             8) cleanup_system ;;
             9) show_system_info ;;
-            0) print_info "Goodbye!"; exit 0 ;;
-            *) print_error "Invalid option. Please try again." ;;
+            0) print_info "再见！"; exit 0 ;;
+            *) print_error "无效选项，请重试。" ;;
         esac
         
         echo ""
-        read -p "Press Enter to continue..."
+        read -p "回车继续..."
     done
 }
 
