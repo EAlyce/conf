@@ -38,6 +38,7 @@ DOMAIN,gateway.bingviz.microsoft.net
 DOMAIN,gateway.bingviz.microsoftapp.net
 DOMAIN,gemini.google.com
 DOMAIN,generativelanguage.googleapis.com
+DOMAIN,gspe1-ssl.ls.apple.com
 DOMAIN,guzzoni.apple.com
 DOMAIN,imagine.meta.com
 DOMAIN,in.appcenter.ms
@@ -162,7 +163,6 @@ DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,grok.com
 DOMAIN-SUFFIX,grok.x.ai
 DOMAIN-SUFFIX,groq.com
-DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,hcaptcha.com
 DOMAIN-SUFFIX,host.livekit.cloud
