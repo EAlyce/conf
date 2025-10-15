@@ -115,7 +115,9 @@ DOMAIN-SUFFIX,chat.com
 DOMAIN-SUFFIX,chat.openai.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.livekit.cloud
+DOMAIN-SUFFIX,cici.com,extended-matching
 DOMAIN-SUFFIX,ciciai.com
+DOMAIN-SUFFIX,ciciai.com,extended-matching
 DOMAIN-SUFFIX,circumlunar.space
 DOMAIN-SUFFIX,civitai.com
 DOMAIN-SUFFIX,claude.ai
