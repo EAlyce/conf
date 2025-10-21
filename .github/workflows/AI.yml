@@ -95,11 +95,8 @@ jobs:
                   } else {
                       # 域名规则：前缀大写，域名小写
                       domain = tolower($2)
-                      if (NF == 2) {
-                          print prefix "," domain
-                      } else {
-                          print prefix "," domain "," tolower($3)
-                      }
+                      # 始终只打印前缀和域名，忽略第三个字段
+                      print prefix "," domain
                   }
               }' | sort -u > Rule/OpenAI.list
           
