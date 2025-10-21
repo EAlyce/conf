@@ -82,6 +82,7 @@ DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
 DOMAIN-KEYWORD,prodregistryv
+DOMAIN-SUFFIX,abtest-sg.byteoversea.com,extended-matching
 DOMAIN-SUFFIX,ai.azure.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
@@ -143,6 +144,7 @@ DOMAIN-SUFFIX,dify.a
 DOMAIN-SUFFIX,dify.ai
 DOMAIN-SUFFIX,difyai.com
 DOMAIN-SUFFIX,ditu.live.com
+DOMAIN-SUFFIX,dola.com,extended-matching
 DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,edgecompute.app
 DOMAIN-SUFFIX,edgeservices.bing.com
