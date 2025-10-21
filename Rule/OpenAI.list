@@ -82,7 +82,7 @@ DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
 DOMAIN-KEYWORD,prodregistryv
-DOMAIN-SUFFIX,abtest-sg.byteoversea.com,extended-matching
+DOMAIN-SUFFIX,abtest-sg.byteoversea.com
 DOMAIN-SUFFIX,ai.azure.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
@@ -116,9 +116,8 @@ DOMAIN-SUFFIX,chat.com
 DOMAIN-SUFFIX,chat.openai.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.livekit.cloud
-DOMAIN-SUFFIX,cici.com,extended-matching
+DOMAIN-SUFFIX,cici.com
 DOMAIN-SUFFIX,ciciai.com
-DOMAIN-SUFFIX,ciciai.com,extended-matching
 DOMAIN-SUFFIX,circumlunar.space
 DOMAIN-SUFFIX,civitai.com
 DOMAIN-SUFFIX,claude.ai
@@ -144,7 +143,7 @@ DOMAIN-SUFFIX,dify.a
 DOMAIN-SUFFIX,dify.ai
 DOMAIN-SUFFIX,difyai.com
 DOMAIN-SUFFIX,ditu.live.com
-DOMAIN-SUFFIX,dola.com,extended-matching
+DOMAIN-SUFFIX,dola.com
 DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,edgecompute.app
 DOMAIN-SUFFIX,edgeservices.bing.com
