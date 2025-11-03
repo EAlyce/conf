@@ -32,6 +32,7 @@ DOMAIN,console.groq.com
 DOMAIN,console.mistral.ai
 DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,copilot.microsoft.com
+DOMAIN,cp2.cloudflare.com
 DOMAIN,cp4.cloudflare.com
 DOMAIN,file.oaiusercontent.com
 DOMAIN,gateway.ai.cloudflare.com
