@@ -83,7 +83,6 @@ DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
 DOMAIN-KEYWORD,perplexity
 DOMAIN-KEYWORD,prodregistryv
-DOMAIN-SUFFIX,abtest-sg.byteoversea.com
 DOMAIN-SUFFIX,ai.azure.com
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aistudio.google.com
@@ -110,6 +109,7 @@ DOMAIN-SUFFIX,bingworld.com
 DOMAIN-SUFFIX,blob.core.windows.net
 DOMAIN-SUFFIX,bluehatnights.com
 DOMAIN-SUFFIX,bortzmeyer.org
+DOMAIN-SUFFIX,byteoversea.com
 DOMAIN-SUFFIX,cdn.auth0.com
 DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,challenges.cloudflare.com
