@@ -92,6 +92,7 @@ DOMAIN-SUFFIX,api.microsoftapp.net
 DOMAIN-SUFFIX,api.openai.com
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,apis.google.com
+DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,auth0.openai.com
 DOMAIN-SUFFIX,azureedge.net
@@ -154,6 +155,7 @@ DOMAIN-SUFFIX,events.statsigapi.net
 DOMAIN-SUFFIX,f7tk.com
 DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,flipwithsurface.com
+DOMAIN-SUFFIX,gateway.icloud.com
 DOMAIN-SUFFIX,geller-pa.googleapis.com
 DOMAIN-SUFFIX,gemini.google
 DOMAIN-SUFFIX,gemini.google.com
