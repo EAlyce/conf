@@ -48,6 +48,7 @@ DOMAIN,ios.chat.openai.com
 DOMAIN,jules.google.com
 DOMAIN,location.microsoft.com
 DOMAIN,makersuite.google.com
+DOMAIN,notebooklm.google.com
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,odc.officeapps.live.com
 DOMAIN,openai-api.arkoselabs.com
@@ -182,6 +183,7 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
 DOMAIN-SUFFIX,jasper.ai
+DOMAIN-SUFFIX,jetbrains.ai
 DOMAIN-SUFFIX,launchdarkly.com
 DOMAIN-SUFFIX,learning.google.com
 DOMAIN-SUFFIX,livekit.cloud
