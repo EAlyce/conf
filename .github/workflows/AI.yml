@@ -32,6 +32,7 @@ jobs:
             "https://github.com/tutuh/script/raw/cbbba01fe56c7db1abfb0e5a0593d2abf9c4dcc8/Surge/Ruleset/AI.list"
             "https://github.com/blankmagic/surge/raw/2741d51076d1a11e2a8d1bdc3e7a1fdca2504dfc/rule/AI.list"
             "https://github.com/HotKids/Rules/raw/571a4c43e1392ad5981cceabf76657dc9a222fcc/Surge/RULE-SET/GenAI.list"
+            "https://whatshub.top/rule/ai.list"
             "https://github.com/cutethotw/ClashRule/raw/refs/heads/main/Rule/Perplexity.list"
             "https://github.com/cutethotw/ClashRule/raw/refs/heads/main/Rule/ChatGPT.list"
             "https://github.com/just22tu/surfing/raw/refs/heads/main/rule/Shadowrocket/Surfing/AI.list"
@@ -46,7 +47,6 @@ jobs:
             "https://raw.githubusercontent.com/yaoqufeng/clash/b2bf06a2ba883b0d4080d6caee9f619a36febc09/AI.list"
             "https://raw.githubusercontent.com/Jacky-Bruse/Rules/refs/heads/main/Rules/AI.list"
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list"
-            "https://github.com/leewooshung/Sh_config/raw/378242aaf88d026b8b1284b66dcc2766b7334563/AI.list"
           )
           
           # 创建临时文件
