@@ -42,7 +42,6 @@ DOMAIN,gemini.google.com
 DOMAIN,generativelanguage.googleapis.com
 DOMAIN,gspe1-ssl.ls.apple.com
 DOMAIN,guzzoni.apple.com
-DOMAIN,guzzoni.smoot.apple.com
 DOMAIN,imagine.meta.com
 DOMAIN,in.appcenter.ms
 DOMAIN,ios.chat.openai.com
@@ -94,7 +93,6 @@ DOMAIN-SUFFIX,api.microsoftapp.net
 DOMAIN-SUFFIX,api.openai.com
 DOMAIN-SUFFIX,api.statsig.com
 DOMAIN-SUFFIX,apis.google.com
-DOMAIN-SUFFIX,apple-relay.apple.com
 DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,auth0.openai.com
@@ -116,7 +114,6 @@ DOMAIN-SUFFIX,bortzmeyer.org
 DOMAIN-SUFFIX,byteoversea.com
 DOMAIN-SUFFIX,cdn.auth0.com
 DOMAIN-SUFFIX,cdn.cloudflare.net
-DOMAIN-SUFFIX,cdn.oaistatic.com
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,chat.com
 DOMAIN-SUFFIX,chat.openai.com
@@ -193,7 +190,6 @@ DOMAIN-SUFFIX,livekit.cloud
 DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,masalladeloslimites.com
 DOMAIN-SUFFIX,meta.ai
-DOMAIN-SUFFIX,meta.com
 DOMAIN-SUFFIX,metademolab.com
 DOMAIN-SUFFIX,microsoftcloudsummit.com
 DOMAIN-SUFFIX,microsoftdiplomados.com
@@ -208,7 +204,6 @@ DOMAIN-SUFFIX,msunlimitedcloudsummit.com
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
 DOMAIN-SUFFIX,nvidia.com
-DOMAIN-SUFFIX,o33249.ingest.sentry.io
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,observeit.net
@@ -242,7 +237,6 @@ DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,tktn.be
 DOMAIN-SUFFIX,together.xyz
 DOMAIN-SUFFIX,turn.livekit.cloud
-DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,vimeo.com
 DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,vulpes.one
@@ -271,4 +265,3 @@ IP-CIDR6,2001:19F0:7001:55B3:5400:4FF:FEAB:BA8F/128
 IP-CIDR6,2001:19F0:7001:8E6:5400:4FF:FEAB:B953/128
 IP-CIDR6,2401:C080:1000:47C5:5400:4FF:FEAB:F724/128
 IP-CIDR6,2607:6BC0::/48
-PAYLOAD:,
