@@ -46,7 +46,6 @@ jobs:
             "https://raw.githubusercontent.com/yaoqufeng/clash/b2bf06a2ba883b0d4080d6caee9f619a36febc09/AI.list"
             "https://raw.githubusercontent.com/Jacky-Bruse/Rules/refs/heads/main/Rules/AI.list"
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list"
-            "https://raw.githubusercontent.com/PaPerseller/chn-iplist/master/ruleset/proxy-ai.list"
             "https://github.com/leewooshung/Sh_config/raw/378242aaf88d026b8b1284b66dcc2766b7334563/AI.list"
           )
           
