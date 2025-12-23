@@ -147,7 +147,6 @@ DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,dictate.ms
 DOMAIN-SUFFIX,dify.a
 DOMAIN-SUFFIX,dify.ai
-DOMAIN-SUFFIX,difyai.com
 DOMAIN-SUFFIX,ditu.live.com
 DOMAIN-SUFFIX,dola.com
 DOMAIN-SUFFIX,doubleclick.net
@@ -163,13 +162,11 @@ DOMAIN-SUFFIX,gemini.google
 DOMAIN-SUFFIX,gemini.google.com
 DOMAIN-SUFFIX,generativeai.google
 DOMAIN-SUFFIX,generativelanguage.googleapis.com
-DOMAIN-SUFFIX,genspark.ai
 DOMAIN-SUFFIX,githubcopilot.com
 DOMAIN-SUFFIX,google-analytics.com
 DOMAIN-SUFFIX,googleai.com
 DOMAIN-SUFFIX,googleapis.com
 DOMAIN-SUFFIX,googletagmanager.com
-DOMAIN-SUFFIX,googleusercontent.com
 DOMAIN-SUFFIX,gpt3sandbox.com
 DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,grazie.aws.intellij.net
@@ -235,7 +232,6 @@ DOMAIN-SUFFIX,stability.ai
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
-DOMAIN-SUFFIX,tktn.be
 DOMAIN-SUFFIX,together.xyz
 DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,vimeo.com
@@ -243,7 +239,6 @@ DOMAIN-SUFFIX,vimeocdn.com
 DOMAIN-SUFFIX,vulpes.one
 DOMAIN-SUFFIX,windsurf.ai
 DOMAIN-SUFFIX,x.ai
-DOMAIN-SUFFIX,x.com
 IP-ASN,14061
 IP-ASN,20473
 IP-CIDR,104.238.150.13/32
