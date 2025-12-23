@@ -73,12 +73,12 @@ jobs:
                       # 始终只打印前缀和域名，忽略第三个字段
                       print prefix "," domain
                   }
-              }' | sort -u > Rule/Douyin.list
+              }' | sort -u > Rule/Bilibili.list
           
           # 清理临时文件
           rm "$temp_file"
           
-          echo "生成的规则数量: $(wc -l < Rule/Douyin.list)"
+          echo "生成的规则数量: $(wc -l < Rule/Bilibili.list)"
               
       - name: Check and Configure Git
         run: |
@@ -86,14 +86,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           
       - name: Force add changes
-        run: git add Rule/Douyin.list || true
+        run: git add Rule/Bilibili.list || true
 
       - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ! git diff-index --quiet HEAD; then
-            git commit -m "Auto Update Douyin.list"
+            git commit -m "Auto Update Bilibili.list"
             git push origin HEAD:main --force
           else
             echo "No changes to commit"
