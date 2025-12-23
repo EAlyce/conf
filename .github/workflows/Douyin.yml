@@ -1,4 +1,4 @@
-name: Merge AI
+name: Merge Douyin
 on:
   push:
     branches:
