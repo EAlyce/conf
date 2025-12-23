@@ -17,12 +17,10 @@ jobs:
         run: |
           # 定义资源列表
           declare -a urls=(
-            " 4 "
-            " 4 "
-            " 4 "
-            " 4 "
-            " 4 "
-            " 4 "
+            "https://github.com/Moli-X/Resources/raw/02f6f70562a2a68665acd9ad1e8f6c82cc461639/Ruleset/AutoBilibili.list"
+            "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/Bilibili.list"
+            "https://github.com/erdongchanyo/blackmatrix7_rule_script/raw/5c99589260de11a06f7f88094c595384d1df624f/rule/Surge/BiliBili/BiliBili.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BiliBili/BiliBili.list"
 
           )
           
