@@ -105,6 +105,31 @@ jobs:
           
           echo "生成的规则数量: $(wc -l < Rule/OpenAI.list)"
               
+      - name: Fetch and Process Remote YAML
+        run: |
+          # Fetch the remote YAML content
+          curl -sSfL "https://gist.githubusercontent.com/ddgksf2013/cb4121e8b5c5d865cc949cb8120320c4/raw/Ai.yaml" -o remote_ai.yaml
+          
+          # Process the fetched content
+          cat remote_ai.yaml |
+              grep -v '^#' | 
+              grep -v '^$' | 
+              sed 's/,no-resolve//g' | 
+              sed 's/#.*$//g' | 
+              sed 's/\/\/.*$//g' |
+              awk -F',' '{
+                  prefix = toupper($1)
+                  if (prefix ~ /^IP-/) {
+                      print toupper($0)
+                  } else {
+                      domain = tolower($2)
+                      print prefix "," domain
+                  }
+              }' | sort -u >> Rule/OpenAI.list
+          
+          # Clean up
+          rm remote_ai.yaml
+
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
