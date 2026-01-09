@@ -110,7 +110,7 @@ jobs:
           # Fetch the remote YAML content
           curl -sSfL "https://gist.githubusercontent.com/ddgksf2013/cb4121e8b5c5d865cc949cb8120320c4/raw/Ai.yaml" -o remote_ai.yaml
           
-          # Process the fetched YAML content properly
+          # Process the fetched YAML content properly and append to existing list
           cat remote_ai.yaml |
               grep -E '^  - ' |
               sed 's/^  - //' |
@@ -126,7 +126,10 @@ jobs:
                       domain = tolower($2)
                       print prefix "," domain
                   }
-              }' >> "$temp_file"
+              }' >> Rule/OpenAI.list
+          
+          # Remove duplicates after adding remote content
+          sort -u Rule/OpenAI.list -o Rule/OpenAI.list
           
           # Clean up
           rm remote_ai.yaml
