@@ -130,6 +130,17 @@ jobs:
           # Clean up
           rm remote_ai.yaml
 
+      - name: Clean Up Domain Entries
+        run: |
+          # Remove duplicates and clean up formatting
+          awk '!seen[$0]++' Rule/OpenAI.list | \
+              sed '/^PAYLOAD:/d' | \
+              sed 's/^- //' | \
+              sed 's/^,//' > Rule/OpenAI_cleaned.list
+          
+          # Replace the original list with the cleaned list
+          mv Rule/OpenAI_cleaned.list Rule/OpenAI.list
+
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
