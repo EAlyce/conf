@@ -141,6 +141,15 @@ jobs:
           # Replace the original list with the cleaned list
           mv Rule/OpenAI_cleaned.list Rule/OpenAI.list
 
+      - name: Finalize Domain List Formatting
+        run: |
+          # Remove standalone commas and ensure proper formatting
+          grep -v '^,$' Rule/OpenAI.list | \
+              awk '!seen[$0]++' > Rule/OpenAI_final.list
+          
+          # Replace the original list with the finalized list
+          mv Rule/OpenAI_final.list Rule/OpenAI.list
+
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
