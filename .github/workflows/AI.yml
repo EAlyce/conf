@@ -110,13 +110,14 @@ jobs:
           # Fetch the remote YAML content
           curl -sSfL "https://gist.githubusercontent.com/ddgksf2013/cb4121e8b5c5d865cc949cb8120320c4/raw/Ai.yaml" -o remote_ai.yaml
           
-          # Process the fetched content
+          # Process the fetched YAML content properly
           cat remote_ai.yaml |
-              grep -v '^#' | 
-              grep -v '^$' | 
-              sed 's/,no-resolve//g' | 
-              sed 's/#.*$//g' | 
+              grep -E '^  - ' |
+              sed 's/^  - //' |
+              sed 's/,no-resolve//g' |
+              sed 's/#.*$//g' |
               sed 's/\/\/.*$//g' |
+              grep -v '^$' |
               awk -F',' '{
                   prefix = toupper($1)
                   if (prefix ~ /^IP-/) {
@@ -125,30 +126,10 @@ jobs:
                       domain = tolower($2)
                       print prefix "," domain
                   }
-              }' | sort -u >> Rule/OpenAI.list
+              }' >> "$temp_file"
           
           # Clean up
           rm remote_ai.yaml
-
-      - name: Clean Up Domain Entries
-        run: |
-          # Remove duplicates and clean up formatting
-          awk '!seen[$0]++' Rule/OpenAI.list | \
-              sed '/^PAYLOAD:/d' | \
-              sed 's/^- //' | \
-              sed 's/^,//' > Rule/OpenAI_cleaned.list
-          
-          # Replace the original list with the cleaned list
-          mv Rule/OpenAI_cleaned.list Rule/OpenAI.list
-
-      - name: Finalize Domain List Formatting
-        run: |
-          # Remove standalone commas and ensure proper formatting
-          grep -v '^,$' Rule/OpenAI.list | \
-              awk '!seen[$0]++' > Rule/OpenAI_final.list
-          
-          # Replace the original list with the finalized list
-          mv Rule/OpenAI_final.list Rule/OpenAI.list
 
       - name: Check and Configure Git
         run: |
