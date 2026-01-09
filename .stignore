@@ -1,8 +1,0 @@
-.git
-!.git/config
-*.part
-*.crdownload
-*~
-.*.swp
-(?d)desktop.ini
-(?d)Thumbs.db
