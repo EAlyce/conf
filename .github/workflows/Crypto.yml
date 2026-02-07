@@ -10,33 +10,26 @@ on:
 jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      
+
       - name: Create Rule directory if not exists
         run: mkdir -p Rule
 
       - name: Get and process domains
         run: |
-          # 创建临时文件
           TEMP_FILE=$(mktemp)
           PROCESSED_FILE=$(mktemp)
           FINAL_PROCESSED=$(mktemp)
           OUTPUT_FILE="Rule/CryptoDraft.list"
-          
-          # 下载和处理函数
+
           download_and_process() {
-            if curl -sSfL "$1" >> "$TEMP_FILE" 2>/dev/null; then
-              echo "Successfully downloaded: $1"
-            else
-              echo "Failed to download: $1"
-            fi
+            curl -sSfL "$1" >> "$TEMP_FILE" 2>/dev/null || true
           }
-          
-          # 要处理的URL列表
+
           URLS=(
             "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt"
             "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list"
@@ -52,52 +45,44 @@ jobs:
             "https://github.com/axtyet/Luminous/raw/589629c2eb40704bf8955947e1d6335e62c129b8/Repcz/Surge/Rules/HTX.list"
             "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list"
           )
-          
-          # 下载所有URL的内容
+
           for url in "${URLS[@]}"; do
             download_and_process "$url"
           done
-          
-          # 基础处理
-          cat "$TEMP_FILE" | \
-            grep -v '^#' | \
-            grep -v '^//' | \
-            sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' | \
-            sed -E '/^IP-CIDR/!s/[\/\*]//g' | \
-            sed -E 's/^\.(.*)/\1/' | \
-            grep -v '^$' | \
-            sed 's/,no-resolve//g' | \
-            sed 's/#.*$//' | \
+
+          cat "$TEMP_FILE" |
+            grep -v '^#' |
+            grep -v '^//' |
+            sed -E 's/^DOMAIN,/DOMAIN-SUFFIX,/g' |
+            sed -E '/^IP-CIDR/!s/[\/\*]//g' |
+            sed -E 's/^\.(.*)/\1/' |
+            grep -v '^$' |
+            sed 's/,no-resolve//g' |
+            sed 's/#.*$//' |
             grep -Ev '^IP-CIDR6|^URL-REGEX|^PROCESS-NAME|^USER-AGENT' > "$PROCESSED_FILE"
 
-          # 修复格式问题和分离混合的规则
-          cat "$PROCESSED_FILE" | \
-            sed 's/DOMAIN,/\nDOMAIN,/g' | \
-            sed 's/DOMAIN-SUFFIX,/\nDOMAIN-SUFFIX,/g' | \
-            sed 's/DOMAIN-KEYWORD,/\nDOMAIN-KEYWORD,/g' | \
-            sed 's/IP-CIDR,/\nIP-CIDR,/g' | \
-            grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' | \
-            tr -d '\r' | \
-            sed 's/[[:space:]]*$//' | \
+          cat "$PROCESSED_FILE" |
+            sed 's/DOMAIN,/\nDOMAIN,/g' |
+            sed 's/DOMAIN-SUFFIX,/\nDOMAIN-SUFFIX,/g' |
+            sed 's/DOMAIN-KEYWORD,/\nDOMAIN-KEYWORD,/g' |
+            sed 's/IP-CIDR,/\nIP-CIDR,/g' |
+            grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR),' |
+            tr -d '\r' |
+            sed 's/[[:space:]]*$//' |
             sed -E 's/^DOMAIN-SUFFIX,\./DOMAIN-SUFFIX,/g' > "$FINAL_PROCESSED"
 
-          # 分类处理并严格去重
           {
-            echo "# Domain Keywords"
-            grep '^DOMAIN-KEYWORD,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++' 
-            echo
-            echo "# Domains"
-            grep '^DOMAIN,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
-            echo
-            echo "# Domain Suffixes"
-            grep '^DOMAIN-SUFFIX,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
-            echo
-            echo "# IP CIDR"
-            grep '^IP-CIDR,' "$FINAL_PROCESSED" | sort | awk '!seen[$0]++'
-          } > "$OUTPUT_FILE"
-          
-          # 清理临时文件
+            grep '^DOMAIN,' "$FINAL_PROCESSED"
+            grep '^DOMAIN-SUFFIX,' "$FINAL_PROCESSED"
+            grep '^DOMAIN-KEYWORD,' "$FINAL_PROCESSED"
+            grep '^IP-CIDR,' "$FINAL_PROCESSED"
+          } | sort -u > "$OUTPUT_FILE"
+
           rm -f "$TEMP_FILE" "$PROCESSED_FILE" "$FINAL_PROCESSED"
+
+      - name: Remove DOMAIN-KEYWORD rules
+        run: |
+          sed -i '/^DOMAIN-KEYWORD/d' Rule/CryptoDraft.list
 
       - name: Configure Git
         run: |
@@ -112,6 +97,4 @@ jobs:
             git add Rule/CryptoDraft.list
             git commit -m "Update CryptoDraft.list [skip ci]"
             git push origin HEAD:main
-          else
-            echo "No changes to commit"
           fi
