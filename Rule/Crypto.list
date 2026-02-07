@@ -1,27 +1,3 @@
-# Domain Keywords
-DOMAIN-KEYWORD,binance
-DOMAIN-KEYWORD,bitget
-DOMAIN-KEYWORD,bnbstatic
-DOMAIN-KEYWORD,byabcde
-DOMAIN-KEYWORD,bybdc6
-DOMAIN-KEYWORD,bybit
-DOMAIN-KEYWORD,bybit-global
-DOMAIN-KEYWORD,bybitglobal
-DOMAIN-KEYWORD,coinbase
-DOMAIN-KEYWORD,ethereum
-DOMAIN-KEYWORD,gate
-DOMAIN-KEYWORD,hbfile
-DOMAIN-KEYWORD,htx.com
-DOMAIN-KEYWORD,huobi
-DOMAIN-KEYWORD,mdex
-DOMAIN-KEYWORD,metamask
-DOMAIN-KEYWORD,mokexapp
-DOMAIN-KEYWORD,okx
-DOMAIN-KEYWORD,pionex
-DOMAIN-KEYWORD,redotpay
-DOMAIN-KEYWORD,thepinet
-
-# Domains
 
 # Domain Suffixes
 DOMAIN-SUFFIX, fees.info
@@ -64,6 +40,7 @@ DOMAIN-SUFFIX,binance.us
 DOMAIN-SUFFIX,binance.vision
 DOMAIN-SUFFIX,binanceapi.com
 DOMAIN-SUFFIX,binancecnt.com
+DOMAIN-SUFFIX,binanceru.net
 DOMAIN-SUFFIX,binancezh.be
 DOMAIN-SUFFIX,binancezh.biz
 DOMAIN-SUFFIX,binancezh.cc
@@ -114,6 +91,7 @@ DOMAIN-SUFFIX,bnbstatic.com
 DOMAIN-SUFFIX,bnbzh.ac
 DOMAIN-SUFFIX,bntrace.com
 DOMAIN-SUFFIX,boba.network
+DOMAIN-SUFFIX,bsappapi.com
 DOMAIN-SUFFIX,bsc.getblock.io
 DOMAIN-SUFFIX,bscscan.com
 DOMAIN-SUFFIX,btc.com
@@ -174,8 +152,8 @@ DOMAIN-SUFFIX,cryptorank.io
 DOMAIN-SUFFIX,cryptoslam.io
 DOMAIN-SUFFIX,curve.fi
 DOMAIN-SUFFIX,cyberx.com
-DOMAIN-SUFFIX,cloudfront.net
-DOMAIN-SUFFIX,cnouyi.pizza
+DOMAIN-SUFFIX,d3r7nsslvs6aaf.cloudfront.net
+DOMAIN-SUFFIX,d3sknckuh1o9tg.cloudfront.net
 DOMAIN-SUFFIX,dapp.review
 DOMAIN-SUFFIX,dappradar.com
 DOMAIN-SUFFIX,dcabtc.com
@@ -320,6 +298,7 @@ DOMAIN-SUFFIX,oklink.com
 DOMAIN-SUFFIX,okx-dns.com
 DOMAIN-SUFFIX,okx-dns1.com
 DOMAIN-SUFFIX,okx-dns2.com
+DOMAIN-SUFFIX,okx.cab
 DOMAIN-SUFFIX,okx.com
 DOMAIN-SUFFIX,oldubil.com.tr
 DOMAIN-SUFFIX,onekey-asset.com
