@@ -12,10 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # curl -sSfL "" | awk '{print $0 "\n"}'
+
       - name: Get and merge domains from source files
         run: |
-          # 定义资源列表
           declare -a urls=(
             "https://ruleset.skk.moe/List/non_ip/ai.conf"
             "https://raw.githubusercontent.com/austiecodes/outtawall/main/Surge/AI/AI.list"
@@ -48,97 +47,74 @@ jobs:
             "https://raw.githubusercontent.com/Jacky-Bruse/Rules/refs/heads/main/Rules/AI.list"
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list"
           )
-          
-          # 创建临时文件
+
           temp_file=$(mktemp)
-          
-          # 逐个下载并记录状态
+
           for url in "${urls[@]}"; do
-            echo "正在获取: $url"
-            # 为反爬虫网站添加浏览器标识
             if [[ "$url" == *"whatshub.top"* ]]; then
-              if curl -sSfL -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "$url" >> "$temp_file" 2>/dev/null; then
-                echo "✅ 成功 (使用浏览器标识): $url"
-              else
-                exit_code=$?
-                echo "❌ 失败 (退出码: $exit_code): $url"
-              fi
+              curl -sSfL -H "User-Agent: Mozilla/5.0" "$url" >> "$temp_file" 2>/dev/null || true
             else
-              if curl -sSfL "$url" >> "$temp_file" 2>/dev/null; then
-                echo "✅ 成功: $url"
-              else
-                exit_code=$?
-                echo "❌ 失败 (退出码: $exit_code): $url"
-              fi
+              curl -sSfL "$url" >> "$temp_file" 2>/dev/null || true
             fi
-            echo "" >> "$temp_file"  # 添加换行
+            echo "" >> "$temp_file"
           done
-          
-          # 清理、标准化、去重 - 一体化处理
-          cat "$temp_file" | 
-              tr -d '\r' |
-              tr -d ' \t' |
-              grep -v '^#' | 
-              grep -v '^$' | 
-              sed 's/,no-resolve//g' | 
-              sed 's/#.*$//g' | 
-              sed 's/\/\/.*$//g' |
-              sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
-              sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
-              sed 's/^OMAIN,/DOMAIN,/g' |
-              grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
-              awk -F',' '{
-                  prefix = toupper($1)
-                  if (prefix ~ /^IP-/) {
-                      # IP规则全部大写
-                      print toupper($0)
-                  } else {
-                      # 域名规则：前缀大写，域名小写
-                      domain = tolower($2)
-                      # 始终只打印前缀和域名，忽略第三个字段
-                      print prefix "," domain
-                  }
-              }' | sort -u > Rule/OpenAI.list
-          
-          # 清理临时文件
+
+          cat "$temp_file" |
+            tr -d '\r' |
+            tr -d ' \t' |
+            grep -v '^#' |
+            grep -v '^$' |
+            sed 's/,no-resolve//g' |
+            sed 's/#.*$//g' |
+            sed 's/\/\/.*$//g' |
+            sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
+            sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
+            sed 's/^OMAIN,/DOMAIN,/g' |
+            grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
+            awk -F',' '{
+              prefix = toupper($1)
+              if (prefix ~ /^IP-/) {
+                print toupper($0)
+              } else {
+                print prefix "," tolower($2)
+              }
+            }' |
+            sort -u > Rule/OpenAI.list
+
           rm "$temp_file"
-          
-          echo "生成的规则数量: $(wc -l < Rule/OpenAI.list)"
-              
+
       - name: Fetch and Process Remote YAML
         run: |
-          # Fetch the remote YAML content
           curl -sSfL "https://gist.githubusercontent.com/ddgksf2013/cb4121e8b5c5d865cc949cb8120320c4/raw/Ai.yaml" -o remote_ai.yaml
-          
-          # Process the fetched YAML content properly and append to existing list
+
           cat remote_ai.yaml |
-              grep -E '^  - ' |
-              sed 's/^  - //' |
-              sed 's/,no-resolve//g' |
-              sed 's/#.*$//g' |
-              sed 's/\/\/.*$//g' |
-              grep -v '^$' |
-              awk -F',' '{
-                  prefix = toupper($1)
-                  if (prefix ~ /^IP-/) {
-                      print toupper($0)
-                  } else {
-                      domain = tolower($2)
-                      print prefix "," domain
-                  }
-              }' >> Rule/OpenAI.list
-          
-          # Remove duplicates after adding remote content
+            grep -E '^  - ' |
+            sed 's/^  - //' |
+            sed 's/,no-resolve//g' |
+            sed 's/#.*$//g' |
+            sed 's/\/\/.*$//g' |
+            grep -v '^$' |
+            awk -F',' '{
+              prefix = toupper($1)
+              if (prefix ~ /^IP-/) {
+                print toupper($0)
+              } else {
+                print prefix "," tolower($2)
+              }
+            }' >> Rule/OpenAI.list
+
           sort -u Rule/OpenAI.list -o Rule/OpenAI.list
-          
-          # Clean up
           rm remote_ai.yaml
+
+      - name: Remove DOMAIN-KEYWORD rules
+        run: |
+          sed -i '/^DOMAIN-KEYWORD/d' Rule/OpenAI.list
 
       - name: Check and Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
+
       - name: Force add changes
         run: git add Rule/OpenAI.list || true
 
@@ -149,6 +125,4 @@ jobs:
           if ! git diff-index --quiet HEAD; then
             git commit -m "Auto Update OpenAI.list"
             git push origin HEAD:main --force
-          else
-            echo "No changes to commit"
           fi
