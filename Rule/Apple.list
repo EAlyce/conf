@@ -1,5 +1,4 @@
 DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
-DOMAIN,appldnld.apple.com.edgesuite.net
 DOMAIN,apple-events.akamaized.net
 DOMAIN,apple.comscoreresearch.com
 DOMAIN,appleworldwidedeveloper.hb-api.omtrdc.net
@@ -86,6 +85,7 @@ DOMAIN-SUFFIX,appl-e.com
 DOMAIN-SUFFIX,appl.com
 DOMAIN-SUFFIX,appl4e.com
 DOMAIN-SUFFIX,appla.com
+DOMAIN-SUFFIX,appldnld.apple.com.edgesuite.net
 DOMAIN-SUFFIX,apple-appstore.cn
 DOMAIN-SUFFIX,apple-cloudkit.com
 DOMAIN-SUFFIX,apple-darwin.com
