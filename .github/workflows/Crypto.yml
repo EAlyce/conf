@@ -35,19 +35,14 @@ jobs:
           }
           
           URLS=(
-            "https://raw.githubusercontent.com/yuumimi/rules/release/loon/category-cryptocurrency.txt"
-            "https://github.com/carl092185/Network-tool/raw/93b195d4a043a239e0dd376d8f769402e56ddff8/Crypto.list"
             "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Crypto.list"
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list"
-            "https://raw.githubusercontent.com/LuckySmileOne/RuleSet/3f2121047a8cd0f55b737c5fb5bf0c387aad7e29/UBank.list"
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list"
             "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binance.list"
             "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Binancenew.list"
             "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/HTX.list"
-            "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/TR.list"
             "https://raw.githubusercontent.com/LeiyuG/Surge/main/rules/Bybit.list"
-            "https://github.com/axtyet/Luminous/raw/589629c2eb40704bf8955947e1d6335e62c129b8/Repcz/Surge/Rules/HTX.list"
-            "https://github.com/mymolasses/TutuBetterRules/raw/561d00e2ef99360692a65d298d5d575655246792/Tu%CC%88rkiye.list"
+            "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Crypto.list"
           )
           
           for url in "${URLS[@]}"; do
