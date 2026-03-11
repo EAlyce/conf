@@ -52,7 +52,7 @@ jobs:
             awk -F',' '{
               prefix = toupper($1)
               if (prefix ~ /^IP-/) {
-                print toupper($0)
+                print toupper($0) ",no-resolve"
               } else {
                 print prefix "," tolower($2)
               }
