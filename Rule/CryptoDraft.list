@@ -11,6 +11,7 @@ DOMAIN-SUFFIX,ada.support
 DOMAIN-SUFFIX,aex.com
 DOMAIN-SUFFIX,aicoin.com
 DOMAIN-SUFFIX,aimoon.com
+DOMAIN-SUFFIX,api-eu.bybit.com
 DOMAIN-SUFFIX,api.ffbbbdc6d3c353211fe2ba39c9f744cd.com
 DOMAIN-SUFFIX,apy999.com
 DOMAIN-SUFFIX,arbitrum.io
@@ -91,13 +92,17 @@ DOMAIN-SUFFIX,by-csi.com
 DOMAIN-SUFFIX,byabcde.com
 DOMAIN-SUFFIX,byapps.net
 DOMAIN-SUFFIX,bybdc6.com
+DOMAIN-SUFFIX,bybit-eu.com
 DOMAIN-SUFFIX,bybit-global.com
 DOMAIN-SUFFIX,bybit-static.com
 DOMAIN-SUFFIX,bybit.biz
 DOMAIN-SUFFIX,bybit.cloud
 DOMAIN-SUFFIX,bybit.com
+DOMAIN-SUFFIX,bybit.eu
+DOMAIN-SUFFIX,bybit.fr
 DOMAIN-SUFFIX,bybit.io
 DOMAIN-SUFFIX,bybit.net
+DOMAIN-SUFFIX,bybit.nl
 DOMAIN-SUFFIX,bybit.org
 DOMAIN-SUFFIX,bybitapi.com
 DOMAIN-SUFFIX,bybitglobal.com
@@ -249,6 +254,7 @@ DOMAIN-SUFFIX,poolin.com
 DOMAIN-SUFFIX,probit.com
 DOMAIN-SUFFIX,raydium.io
 DOMAIN-SUFFIX,relay.walletconnect.com
+DOMAIN-SUFFIX,sc-datasink.ffe390afd658c19dcbf707e0597b846d.de
 DOMAIN-SUFFIX,solana.com
 DOMAIN-SUFFIX,stateofthedapps.com
 DOMAIN-SUFFIX,sunswap.com
