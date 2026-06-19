@@ -20,12 +20,10 @@ jobs:
           declare -a urls=(
             "https://ruleset.skk.moe/List/non_ip/ai.conf"
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
-            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list"
-            "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/Gemini/Gemini.list"
+           
             "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/Claude/Claude.list"
-            "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/BardAI/BardAI.list"
             "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list"
-            "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/AI.list"
+            
           )
 
           temp_file=$(mktemp)
