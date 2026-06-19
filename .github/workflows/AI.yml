@@ -15,6 +15,8 @@ jobs:
 
       - name: Get and merge domains from source files
         run: |
+          set -uo pipefail
+
           declare -a urls=(
             "https://ruleset.skk.moe/List/non_ip/ai.conf"
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
@@ -27,15 +29,30 @@ jobs:
           )
 
           temp_file=$(mktemp)
+          fail_count=0
 
           for url in "${urls[@]}"; do
             if [[ "$url" == *"whatshub.top"* ]]; then
-              curl -sSfL -H "User-Agent: Mozilla/5.0" "$url" >> "$temp_file" 2>/dev/null || true
+              if ! curl -sSfL --retry 3 --retry-delay 2 -H "User-Agent: Mozilla/5.0" "$url" >> "$temp_file"; then
+                echo "::warning::Failed to fetch $url"
+                fail_count=$((fail_count + 1))
+              fi
             else
-              curl -sSfL "$url" >> "$temp_file" 2>/dev/null || true
+              if ! curl -sSfL --retry 3 --retry-delay 2 "$url" >> "$temp_file"; then
+                echo "::warning::Failed to fetch $url"
+                fail_count=$((fail_count + 1))
+              fi
             fi
             echo "" >> "$temp_file"
           done
+
+          if [ "$fail_count" -eq "${#urls[@]}" ]; then
+            echo "::error::All source URLs failed to fetch, aborting to avoid wiping the list"
+            rm -f "$temp_file"
+            exit 1
+          fi
+
+          mkdir -p Rule
 
           cat "$temp_file" |
             tr -d '\r' |
@@ -57,9 +74,17 @@ jobs:
                 print prefix "," tolower($2)
               }
             }' |
-            sort -u > Rule/OpenAI.list
+            sort -u > Rule/OpenAI.list.tmp
 
-          rm "$temp_file"
+          if [ -s Rule/OpenAI.list.tmp ]; then
+            mv Rule/OpenAI.list.tmp Rule/OpenAI.list
+          else
+            echo "::error::Generated list is empty, keeping previous version"
+            rm -f Rule/OpenAI.list.tmp
+            exit 1
+          fi
+
+          rm -f "$temp_file"
 
       - name: Remove DOMAIN-KEYWORD rules
         run: |
@@ -71,13 +96,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
 
       - name: Force add changes
-        run: git add Rule/OpenAI.list || true
+        run: git add Rule/OpenAI.list
 
       - name: Commit and push changes if needed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "Auto Update OpenAI.list"
-            git push origin HEAD:main --force
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto Update OpenAI.list ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
           fi
