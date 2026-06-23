@@ -145,7 +145,7 @@ docker system prune -a --volumes -f
 
 - **安装 PagerMaid (PGP 版):**
   ```bash
-  bash <(curl -fsSL https://raw.githubusercontent.com/EAlyce/conf/main/PagerMaid/RXsetup.sh)
+  wget https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Linux/RXsetup.sh -O install.sh && chmod +x install.sh && bash install.sh
   ```
 
 - **安装 Snell:**
