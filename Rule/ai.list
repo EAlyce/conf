@@ -4,6 +4,7 @@ DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,prodregistryv
 DOMAIN-KEYWORD,Grok
 DOMAIN-SUFFIX,clients6.google.com
+DOMAIN-SUFFIX,aicode.googleapis.com
 # 核心域名
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,claude.ai
