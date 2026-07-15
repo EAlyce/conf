@@ -1,8 +1,8 @@
 IP-CIDR,129.146.3.78/32
-DOMAIN-KEYWORD,cloudflare
-DOMAIN-KEYWORD,claude
-DOMAIN-KEYWORD,prodregistryv
-DOMAIN-KEYWORD,Grok
+# DOMAIN-KEYWORD,cloudflare
+# DOMAIN-KEYWORD,claude
+# DOMAIN-KEYWORD,prodregistryv
+# DOMAIN-KEYWORD,Grok
 DOMAIN-SUFFIX,clients6.google.com
 DOMAIN-SUFFIX,aicode.googleapis.com
 # 核心域名
@@ -13,7 +13,7 @@ DOMAIN-SUFFIX,clau.de
 DOMAIN-SUFFIX,claudemcpclient.com
 DOMAIN-SUFFIX,claudemcpcontent.com
 DOMAIN-SUFFIX,claudeusercontent.com
-
+DOMAIN-SUFFIX,chatgpt.site
 # CDN 和静态资源
 DOMAIN,servd-anthropic-website.b-cdn.net
 DOMAIN,anthropic.com.cdn.cloudflare.net
