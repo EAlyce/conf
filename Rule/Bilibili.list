@@ -124,6 +124,17 @@ DOMAIN-SUFFIX,smtcdns.net
 DOMAIN-SUFFIX,upos-hz-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,uposdash-302-bilivideo.yfcdn.net
 DOMAIN-SUFFIX,yo9.com
+HOST,api.biliapi.com
+HOST,api.biliapi.net
+HOST,api.bilibili.com
+HOST,app.biliapi.com
+HOST,app.biliapi.net
+HOST,app.bilibili.com
+HOST,grpc.biliapi.net
+HOST,m.bilibili.com
+HOST,upos-hz-mirrorakam.akamaized.net
+HOST,www.bilibili.com
+HOST-KEYWORD,cn-hk-eq-bcache-
 IP-CIDR,106.75.74.76/32
 IP-CIDR,111.206.25.147/32
 IP-CIDR,119.3.238.64/32
@@ -131,5 +142,6 @@ IP-CIDR,120.92.108.182/32
 IP-CIDR,120.92.113.99/32
 IP-CIDR,120.92.153.217/32
 IP-CIDR,121.11.192.0/24
+IP-CIDR,121.11.192.0/24,BILIBILI
 IP-CIDR,134.175.207.130/32
 IP-CIDR,203.107.1.0/24
