@@ -26,8 +26,8 @@ DOMAIN,anthropic-com.ghost.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN,browser-intake-us5-datadoghq.com
-DOMAIN-KEYWORD,datadog
-DOMAIN-KEYWORD,sift
+#DOMAIN-KEYWORD,datadog
+#DOMAIN-KEYWORD,sift
 
 # 客服 / 第三方 widget
 DOMAIN-SUFFIX,intercom.io
