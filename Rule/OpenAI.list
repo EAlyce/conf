@@ -56,6 +56,7 @@ DOMAIN-SUFFIX,clientstream.launchdarkly.com
 DOMAIN-SUFFIX,clipdrop.co
 DOMAIN-SUFFIX,cloudcode-pa.googleapis.com
 DOMAIN-SUFFIX,ct.sendgrid.net
+DOMAIN-SUFFIX,datadog.pool.ntp.org
 DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,desktop.chat.openai.com
