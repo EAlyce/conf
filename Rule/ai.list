@@ -5,7 +5,7 @@ IP-CIDR,129.146.3.78/32
 # DOMAIN-KEYWORD,Grok
 DOMAIN-SUFFIX,clients6.google.com
 DOMAIN-SUFFIX,aicode.googleapis.com
-DOMAIN-SUFFIX,datadog.pool.ntp.org
+DOMAIN-SUFFIX,pool.ntp.org
 DOMAIN-SUFFIX,api.revenuecat.com
 # 核心域名
 DOMAIN-SUFFIX,anthropic.com
