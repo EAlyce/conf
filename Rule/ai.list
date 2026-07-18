@@ -7,6 +7,7 @@ DOMAIN-SUFFIX,clients6.google.com
 DOMAIN-SUFFIX,aicode.googleapis.com
 DOMAIN-SUFFIX,pool.ntp.org
 DOMAIN-SUFFIX,api.revenuecat.com
+DOMAIN-SUFFIX,firebaseinstallations.googleapis.com
 # 核心域名
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,claude.ai
