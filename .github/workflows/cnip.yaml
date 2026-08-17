@@ -1,0 +1,105 @@
+name: Merge CNIP
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  deduplicate_and_remove_empty_lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get and merge domains from source files
+        run: |
+          set -uo pipefail
+
+          declare -a urls=(
+            "https://ruleset.skk.moe/List/ip/china_ip.conf"
+            "https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Geo_AS_IP_CN_V4_Surge.list"
+            
+          )
+
+          temp_file=$(mktemp)
+          fail_count=0
+
+          for url in "${urls[@]}"; do
+            if [[ "$url" == *"whatshub.top"* ]]; then
+              if ! curl -sSfL --retry 3 --retry-delay 2 -H "User-Agent: Mozilla/5.0" "$url" >> "$temp_file"; then
+                echo "::warning::Failed to fetch $url"
+                fail_count=$((fail_count + 1))
+              fi
+            else
+              if ! curl -sSfL --retry 3 --retry-delay 2 "$url" >> "$temp_file"; then
+                echo "::warning::Failed to fetch $url"
+                fail_count=$((fail_count + 1))
+              fi
+            fi
+            echo "" >> "$temp_file"
+          done
+
+          if [ "$fail_count" -eq "${#urls[@]}" ]; then
+            echo "::error::All source URLs failed to fetch, aborting to avoid wiping the list"
+            rm -f "$temp_file"
+            exit 1
+          fi
+
+          mkdir -p Rule
+
+          cat "$temp_file" |
+            tr -d '\r' |
+            tr -d ' \t' |
+            grep -v '^#' |
+            grep -v '^$' |
+            sed 's/,no-resolve//g' |
+            sed 's/#.*$//g' |
+            sed 's/\/\/.*$//g' |
+            sed '/^IP-CIDR,2[6-9]/s/^IP-CIDR/IP-CIDR6/' |
+            sed 's/^DOMAIN-KEYWARD/DOMAIN-KEYWORD/g' |
+            sed 's/^OMAIN,/DOMAIN,/g' |
+            grep -Ev '^URL-REGEX|^PROCESS-NAME|^USER-AGENT|^IP-CIDR,13\.107\.0\.0/16' |
+            awk -F',' '{
+              prefix = toupper($1)
+              if (prefix ~ /^IP-/) {
+                print toupper($0) ",no-resolve"
+              } else {
+                print prefix "," tolower($2)
+              }
+            }' |
+            sort -u > Rule/cnip.list.tmp
+
+          if [ -s Rule/OpenAI.list.tmp ]; then
+            mv Rule/cnip.list.tmp Rule/cnip.list
+          else
+            echo "::error::Generated list is empty, keeping previous version"
+            rm -f Rule/cnip.list.tmp
+            exit 1
+          fi
+
+          rm -f "$temp_file"
+
+      - name: Remove DOMAIN-KEYWORD rules
+        run: |
+          sed -i '/^DOMAIN-KEYWORD/d' Rule/cnip.list
+
+      - name: Check and Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Force add changes
+        run: git add Rule/cnip.list
+
+      - name: Commit and push changes if needed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto Update cnip.list ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
+          fi
