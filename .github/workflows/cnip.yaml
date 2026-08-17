@@ -71,7 +71,7 @@ jobs:
             }' |
             sort -u > Rule/cnip.list.tmp
 
-          if [ -s Rule/OpenAI.list.tmp ]; then
+          if [ -s Rule/cnip.list.tmp ]; then
             mv Rule/cnip.list.tmp Rule/cnip.list
           else
             echo "::error::Generated list is empty, keeping previous version"
