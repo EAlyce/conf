@@ -118,9 +118,7 @@ DOMAIN-SUFFIX,turn.livekit.cloud
 DOMAIN-SUFFIX,workos.com
 DOMAIN-SUFFIX,workos.imgix.net
 DOMAIN-SUFFIX,x.ai
-IP-ASN,13335,no-resolve
 IP-ASN,20473,no-resolve
-IP-ASN,399358,no-resolve
 IP-CIDR,129.146.3.78/32,no-resolve
 IP-CIDR,160.79.104.0/21,no-resolve
 IP-CIDR,24.199.123.28/32,no-resolve
