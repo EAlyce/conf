@@ -1,4 +1,5 @@
 name: Merge CNIP
+
 on:
   push:
     branches:
@@ -7,26 +8,33 @@ on:
     - cron: '0 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   deduplicate_and_remove_empty_lines:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Get and merge domains from source files
+        shell: bash
         run: |
-          set -uo pipefail
+          set -euo pipefail
 
-          declare -a urls=(
+          urls=(
             "https://ruleset.skk.moe/List/ip/china_ip.conf"
             "https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Geo_AS_IP_CN_V4_Surge.list"
           )
 
           temp_file=$(mktemp)
+          trap 'rm -f "$temp_file"' EXIT
           fail_count=0
 
           for url in "${urls[@]}"; do
-            if ! curl -sSfL --retry 3 --retry-delay 2 "$url" >> "$temp_file"; then
+            if ! curl -sSfL --retry 3 --retry-delay 2 \
+              "$url" >> "$temp_file"; then
               echo "::warning::Failed to fetch $url"
               fail_count=$((fail_count + 1))
             fi
@@ -34,47 +42,94 @@ jobs:
           done
 
           if [ "$fail_count" -eq "${#urls[@]}" ]; then
-            echo "::error::All source URLs failed to fetch, aborting"
-            rm -f "$temp_file"
+            echo "::error::All source URLs failed to fetch"
             exit 1
           fi
 
           mkdir -p Rule
 
-          # 仅保留 IP-CIDR 和 IP-CIDR6 行，去除 no-resolve，去除注释和空白
-          cat "$temp_file" |
-            tr -d '\r' |
-            grep -E '^IP-CIDR|^IP-CIDR6' |
+          tr -d '\r' < "$temp_file" |
+            grep -E '^IP-CIDR(6)?, ' |
             sed 's/,no-resolve//g' |
             sed 's/#.*$//g' |
-            sed 's/\/\/.*$//g' |
+            sed 's|//.*$||g' |
+            sed 's/[[:space:]]*$//' |
             grep -v '^$' |
-            sort -u > Rule/cnip.list.tmp
+            sort -u > Rule/cnip.list.tmp || true
 
-          if [ -s Rule/cnip.list.tmp ]; then
-            mv Rule/cnip.list.tmp Rule/cnip.list
-          else
-            echo "::error::Generated list is empty, keeping previous version"
+          if [ ! -s Rule/cnip.list.tmp ]; then
+            echo "::error::Generated list is empty; keeping previous version"
             rm -f Rule/cnip.list.tmp
             exit 1
           fi
 
-          rm -f "$temp_file"
+          mv Rule/cnip.list.tmp Rule/cnip.list
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          cache: false
+
+      - name: Install GeoIP generator
+        run: |
+          go install github.com/Loyalsoldier/geoip@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Generate standard geoip.dat
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p Rule
+          tmp_dat=$(mktemp)
+
+          trap 'rm -f "$tmp_dat"' EXIT
+
+          # 将 Surge 格式转换为纯 CIDR，再生成 V2Ray GeoIP dat
+          sed -E 's/^IP-CIDR6?,[[:space:]]*//' Rule/cnip.list |
+            grep -E '^[0-9a-fA-F:.]+/[0-9]{1,3}$' |
+            geoip merge |
+            geoip convert \
+              -c <(cat <<EOF
+          {
+            "input": [
+              {
+                "type": "text",
+                "action": "add",
+                "args": ["stdin"]
+              }
+            ],
+            "output": [
+              {
+                "type": "v2rayGeoIPDat",
+                "action": "output",
+                "args": ["$tmp_dat"],
+                "wantedList": ["cn"]
+              }
+            ]
+          }
+          EOF
+          )
+
+          if [ ! -s "$tmp_dat" ]; then
+            echo "::error::geoip.dat generation failed"
+            exit 1
+          fi
+
+          mv "$tmp_dat" Rule/geoip.dat
 
       - name: Check and Configure Git
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-
-      - name: Force add changes
-        run: git add Rule/cnip.list
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
 
       - name: Commit and push changes if needed
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git add Rule/cnip.list Rule/geoip.dat
+
           if ! git diff --cached --quiet; then
-            git commit -m "Auto Update cnip.list ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git commit -m "Auto Update CNIP ($(date -u +'%Y-%m-%d %H:%M UTC'))"
             git push origin HEAD:main
           else
             echo "No changes to commit"
