@@ -11,126 +11,242 @@ on:
 permissions:
   contents: write
 
+# 同一时间只允许一个实例运行，避免并发 push 冲突（不取消正在运行的任务）
+concurrency:
+  group: merge-cnip
+  cancel-in-progress: false
+
 jobs:
-  deduplicate_and_remove_empty_lines:
+  merge_cnip:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      # 上游源（每行一个 URL）
+      SOURCES: |
+        https://ruleset.skk.moe/List/ip/china_ip.conf
+        https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Geo_AS_IP_CN_V4_Surge.list
+      # 是否允许部分源失败时继续（false = 任一源失败即中止，保留旧版本）
+      ALLOW_PARTIAL: 'false'
+      # 合并结果最少条目数，低于此值视为异常，不覆盖旧版本
+      MIN_ENTRIES: '1000'
+      # 新结果条目数低于旧版本的该百分比时视为异常
+      MIN_RATIO_PERCENT: '50'
+      # Loyalsoldier/geoip 版本，生产环境建议固定为具体 tag
+      GEOIP_VERSION: 'latest'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get and merge domains from source files
+      - name: Fetch and merge CNIP sources
+        id: merge
         shell: bash
         run: |
           set -euo pipefail
+          export LC_ALL=C
 
-          urls=(
-            "https://ruleset.skk.moe/List/ip/china_ip.conf"
-            "https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Geo_AS_IP_CN_V4_Surge.list"
-          )
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
 
-          temp_file=$(mktemp)
-          trap 'rm -f "$temp_file"' EXIT
-          fail_count=0
-
-          for url in "${urls[@]}"; do
-            if ! curl -sSfL --retry 3 --retry-delay 2 \
-              "$url" >> "$temp_file"; then
+          # ---------- 1. 下载 ----------
+          total=0
+          fail=0
+          while IFS= read -r url; do
+            url="${url#"${url%%[![:space:]]*}"}"
+            url="${url%"${url##*[![:space:]]}"}"
+            [ -z "$url" ] && continue
+            total=$((total + 1))
+            if curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors \
+                 --connect-timeout 15 --max-time 120 \
+                 "$url" -o "$work/src.$total"; then
+              echo "Fetched: $url ($(wc -l < "$work/src.$total") lines)"
+            else
               echo "::warning::Failed to fetch $url"
-              fail_count=$((fail_count + 1))
+              rm -f "$work/src.$total"
+              fail=$((fail + 1))
             fi
-            echo "" >> "$temp_file"
-          done
+          done <<< "$SOURCES"
 
-          if [ "$fail_count" -eq "${#urls[@]}" ]; then
+          if [ "$total" -eq 0 ]; then
+            echo "::error::No source URLs configured"
+            exit 1
+          fi
+          if [ "$fail" -eq "$total" ]; then
             echo "::error::All source URLs failed to fetch"
             exit 1
           fi
-
-          mkdir -p Rule
-
-          tr -d '\r' < "$temp_file" |
-            grep -E '^IP-CIDR(6)?, ' |
-            sed 's/,no-resolve//g' |
-            sed 's/#.*$//g' |
-            sed 's|//.*$||g' |
-            sed 's/[[:space:]]*$//' |
-            grep -v '^$' |
-            sort -u > Rule/cnip.list.tmp || true
-
-          if [ ! -s Rule/cnip.list.tmp ]; then
-            echo "::error::Generated list is empty; keeping previous version"
-            rm -f Rule/cnip.list.tmp
+          if [ "$fail" -gt 0 ] && [ "$ALLOW_PARTIAL" != "true" ]; then
+            echo "::error::$fail/$total sources failed; keeping previous version (ALLOW_PARTIAL=false)"
             exit 1
           fi
 
-          mv Rule/cnip.list.tmp Rule/cnip.list
+          # ---------- 2. 解析、校验、规范化、去重 ----------
+          # 只接受 IP-CIDR / IP-CIDR6 规则；丢弃 no-resolve 等参数、注释、非法 CIDR 和 /0 全局路由
+          cat "$work"/src.* |
+            tr -d '\r' |
+            awk -F',' '
+              function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
+              function valid_v4(c,   p, n, i, o, ip, len) {
+                n = split(c, p, "/")
+                if (n != 2) return 0
+                ip = p[1]; len = p[2]
+                if (len !~ /^[0-9]+$/ || len + 0 < 1 || len + 0 > 32) return 0
+                if (split(ip, o, ".") != 4) return 0
+                for (i = 1; i <= 4; i++) {
+                  if (o[i] !~ /^[0-9]+$/ || length(o[i]) > 3 || o[i] + 0 > 255) return 0
+                }
+                return 1
+              }
+              function valid_v6(c,   p, n, ip, len) {
+                n = split(c, p, "/")
+                if (n != 2) return 0
+                ip = p[1]; len = p[2]
+                if (len !~ /^[0-9]+$/ || len + 0 < 1 || len + 0 > 128) return 0
+                if (ip !~ /^[0-9A-Fa-f:]+$/ || index(ip, ":") == 0) return 0
+                if (ip ~ /:::/) return 0
+                return 1
+              }
+              {
+                sub(/[ \t]*(#|\/\/).*$/, "")
+                if ($0 ~ /^[ \t]*$/) next
+                type = toupper(trim($1))
+                cidr = trim($2)
+                if (type != "IP-CIDR" && type != "IP-CIDR6") next
+                if (index(cidr, ":") > 0) {
+                  if (valid_v6(cidr)) print "IP-CIDR6," tolower(cidr)
+                } else {
+                  if (valid_v4(cidr)) print "IP-CIDR," cidr
+                }
+              }
+            ' |
+            sort -u > "$work/cnip.list"
+
+          # ---------- 3. 完整性检查 ----------
+          new_count=$(wc -l < "$work/cnip.list")
+          if [ "$new_count" -lt "$MIN_ENTRIES" ]; then
+            echo "::error::Generated list has only $new_count entries (< $MIN_ENTRIES); keeping previous version"
+            exit 1
+          fi
+
+          old_count=$( (git show HEAD:Rule/cnip.list 2>/dev/null || true) | wc -l )
+          if [ "$old_count" -gt 0 ] && [ $((new_count * 100)) -lt $((old_count * MIN_RATIO_PERCENT)) ]; then
+            echo "::error::New list ($new_count) shrank below ${MIN_RATIO_PERCENT}% of previous ($old_count); keeping previous version"
+            exit 1
+          fi
+
+          # ---------- 4. 落盘 ----------
+          mkdir -p Rule
+          install -m 644 "$work/cnip.list" Rule/cnip.list
+          echo "cnip.list: $new_count entries (previous: $old_count)"
+
+          # ---------- 5. 判断是否需要重新生成 geoip.dat ----------
+          # 列表有变化 / geoip.dat 缺失 / 手动触发或 push（工作流本身可能已修改）时才重新生成
+          changed=false
+          if [ -n "$(git status --porcelain -- Rule/cnip.list)" ] \
+             || [ ! -s Rule/geoip.dat ] \
+             || [ "${GITHUB_EVENT_NAME:-}" != "schedule" ]; then
+            changed=true
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
 
       - name: Install Go
+        if: steps.merge.outputs.changed == 'true'
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
           cache: false
 
       - name: Install GeoIP generator
+        if: steps.merge.outputs.changed == 'true'
+        shell: bash
         run: |
-          go install github.com/Loyalsoldier/geoip@latest
+          set -euo pipefail
+          go install "github.com/Loyalsoldier/geoip@${GEOIP_VERSION}"
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-      - name: Generate standard geoip.dat
+      - name: Generate geoip.dat (cn only)
+        if: steps.merge.outputs.changed == 'true'
         shell: bash
         run: |
           set -euo pipefail
 
-          mkdir -p Rule
-          tmp_dat=$(mktemp)
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
 
-          trap 'rm -f "$tmp_dat"' EXIT
+          # Surge 格式 -> 纯 CIDR 文本
+          sed -E 's/^IP-CIDR6?,//' Rule/cnip.list > "$work/cn.txt"
+          if [ ! -s "$work/cn.txt" ]; then
+            echo "::error::CIDR text input is empty"
+            exit 1
+          fi
 
-          # 将 Surge 格式转换为纯 CIDR，再生成 V2Ray GeoIP dat
-          sed -E 's/^IP-CIDR6?,[[:space:]]*//' Rule/cnip.list |
-            grep -E '^[0-9a-fA-F:.]+/[0-9]{1,3}$' |
-            geoip merge |
-            geoip convert \
-              -c <(cat <<EOF
+          cat > "$work/config.json" <<EOF
           {
             "input": [
               {
                 "type": "text",
                 "action": "add",
-                "args": ["stdin"]
+                "args": {
+                  "name": "cn",
+                  "uri": "$work/cn.txt"
+                }
               }
             ],
             "output": [
               {
                 "type": "v2rayGeoIPDat",
                 "action": "output",
-                "args": ["$tmp_dat"],
-                "wantedList": ["cn"]
+                "args": {
+                  "outputName": "geoip.dat",
+                  "outputDir": "$work/out",
+                  "wantedList": ["cn"]
+                }
               }
             ]
           }
           EOF
-          )
 
-          if [ ! -s "$tmp_dat" ]; then
-            echo "::error::geoip.dat generation failed"
+          geoip convert -c "$work/config.json"
+
+          out="$work/out/geoip.dat"
+          if [ ! -s "$out" ]; then
+            echo "::error::geoip.dat generation failed (missing or empty output)"
+            exit 1
+          fi
+          if ! grep -aq 'CN' "$out"; then
+            echo "::error::geoip.dat does not contain the CN list"
             exit 1
           fi
 
-          mv "$tmp_dat" Rule/geoip.dat
+          mkdir -p Rule
+          install -m 644 "$out" Rule/geoip.dat
+          echo "geoip.dat: $(wc -c < Rule/geoip.dat) bytes"
 
-      - name: Check and Configure Git
+      - name: Commit and push changes if needed
+        if: github.ref == 'refs/heads/main'
+        shell: bash
         run: |
+          set -euo pipefail
+
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
-      - name: Commit and push changes if needed
-        run: |
           git add Rule/cnip.list Rule/geoip.dat
 
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto Update CNIP ($(date -u +'%Y-%m-%d %H:%M UTC'))"
-            git push origin HEAD:main
-          else
+          if git diff --cached --quiet; then
             echo "No changes to commit"
+            exit 0
           fi
+
+          git commit -m "Auto Update CNIP ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "::warning::Push failed (attempt $attempt/3), rebasing and retrying"
+            git pull --rebase origin main
+          done
+
+          echo "::error::Failed to push after 3 attempts"
+          exit 1
