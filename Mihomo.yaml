@@ -1,274 +1,233 @@
-mode: rule
+port: 0
+socks-port: 0
 redir-port: 0
 tproxy-port: 0
-mixed-port: 7897
+mixed-port: 7899
+ss-config: ""
+vmess-config: ""
+inbound-tfo: false
+inbound-mptcp: false
+authentication: []
+skip-auth-prefixes: []
+lan-allowed-ips:
+  - "0.0.0.0/0"
+  - "::/0"
+lan-disallowed-ips: null
 allow-lan: false
-log-level: silent
+bind-address: "*"
+mode: "rule"
+unified-delay: true
+log-level: "warning"
 ipv6: false
 external-controller: ""
-secret: set-your-secret
-unified-delay: false
-external-controller-pipe: \\.\pipe\verge-mihomo
-profile:
-  store-selected: true
-  store-fake-ip: false
-hosts: {}
-global-client-fingerprint: chrome
-geodata-loader: standard
-dns:
-  default-nameserver:
-    - system
-    - 223.6.6.6
-    - 8.8.8.8
-    - 2400:3200::1
-    - 2001:4860:4860::8888
-  direct-nameserver: []
-  direct-nameserver-follow-policy: false
-  enable: true
-  enhanced-mode: fake-ip
-  fake-ip-filter:
-    - "*.lan"
-    - "*.local"
-    - "*.arpa"
-    - time.*.com
-    - ntp.*.com
-    - time.*.com
-    - +.market.xiaomi.com
-    - localhost.ptlogin2.qq.com
-    - "*.msftncsi.com"
-    - www.msftconnecttest.com
-  fake-ip-filter-mode: blacklist
-  fake-ip-range: 198.18.0.1/16
-  fallback: []
-  fallback-filter:
-    domain:
-      - +.google.com
-      - +.facebook.com
-      - +.youtube.com
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
-      - 0.0.0.0/32
-  ipv6: false
-  listen: :53
-  nameserver:
-    - 8.8.8.8
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
-  prefer-h3: false
-  proxy-server-nameserver:
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
-    - tls://223.5.5.5
-  respect-rules: false
-  use-hosts: false
-  use-system-hosts: false
-geodata-mode: false
-tun:
-  enable: true
-  stack: gvisor
-  auto-route: true
-  auto-redirect: false
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53
-  device: Mihomo
-  mtu: 1492
-  route-exclude-address: []
-  strict-route: false
-lan-allowed-ips:
-  - 0.0.0.0/0
-  - ::/0
-global-ua: clash.meta
-geo-auto-update: false
-lan-disallowed-ips: []
+external-controller-routing-mark: 0
+external-controller-pipe: ""
+external-controller-unix: ""
+external-controller-tls: ""
 external-controller-cors:
-  allow-private-network: true
   allow-origins:
     - "*"
-geo-update-interval: 1
-skip-auth-prefixes:
-  - 127.0.0.1/32
+  allow-private-network: true
+external-ui: ""
+external-ui-url: ""
+external-ui-name: ""
+external-doh-server: ""
+secret: ""
+interface-name: ""
+routing-mark: 0
+tunnels: null
+geo-auto-update: true
+geo-update-interval: 24
+geodata-mode: true
+geodata-loader: "memconservative"
+geosite-matcher: ""
+tcp-concurrent: false
+find-process-mode: "off"
+global-client-fingerprint: ""
+global-ua: "FlClash/v0.9.1 clash-verge Platform/android"
+etag-support: true
+keep-alive-idle: 5
+keep-alive-interval: 3
+disable-keep-alive: false
+proxy-providers: null
+rule-providers: null
+proxies:
+  
+proxy-groups:
+  - name: Direct
+    type: select
+    proxies:
+      - DIRECT
+    url: http://61.241.12.106
+    interval: 600
+    tolerance: 80
+    lazy: true
+    max-connections: 512
+    max-idle-connections: 256
+    dial-timeout: 6s
+    request-timeout: 10s
+    connect-timeout: 5s
+    read-timeout: 10s
+    write-timeout: 10s
+    tls-handshake-timeout: 8s
+    keep-alive: 30s
+    keep-alive-interval: 15s
+    tcp-keep-alive: true
+    fast-open: false
+    tfo: false
+    ip-version: ipv4
+    
+    
+  - include-all-proxies: true
+    name: "Proxy"
+    type: "select"
+sub-rules: null
+listeners: null
+hosts:
+  +.edge.mountaintoys.cn:
+    - "0.0.0.0"
+  +.h2.smtcdns.net:
+    - "0.0.0.0"
+  +.mcdn.bilivideo.cn:
+    - "0.0.0.0"
+  +.mcdn.bilivideo.com:
+    - "0.0.0.0"
+  dns.google:
+    - "8.8.8.8"
+    - "8.8.4.4"
+  doh.pub:
+    - "1.12.12.12"
+    - "120.53.53.53"
+  services.googleapis.cn: "services.googleapis.com"
+dns:
+  enable: true
+  prefer-h3: false
+  ipv6: false
+  ipv6-timeout: 100
+  use-hosts: true
+  use-system-hosts: false
+  respect-rules: false
+  nameserver:
+    - "https://doh.pub/dns-query"
+  fallback: []
+  fallback-filter:
+    geoip: false
+    geoip-code: null
+    ipcidr: []
+    domain: null
+    geosite: []
+  fallback-lazy-query: true
+  listen: "0.0.0.0:1053"
+  listen-routing-mark: 0
+  enhanced-mode: "fake-ip"
+  fake-ip-range: "198.18.0.1/16"
+  fake-ip-range6: ""
+  fake-ip-filter: null
+  fake-ip-filter-mode: "blacklist"
+  fake-ip-ttl: 1
+  default-nameserver:
+    - "223.6.6.6"
+  cache-algorithm: "lru"
+  cache-max-size: 32768
+  nameserver-policy: null
+  proxy-server-nameserver: null
+  proxy-server-nameserver-policy: null
+  direct-nameserver: null
+  direct-nameserver-follow-policy: false
+ntp:
+  enable: false
+  server: "ntp.aliyun.com"
+  port: 123
+  interval: 30
+  dialer-proxy: ""
+  write-to-system: false
+tun:
+  enable: false
+  device: "FlClash"
+  stack: "system"
+  dns-hijack:
+    - "any:53"
+  auto-route: true
+  auto-detect-interface: true
+  mtu: 1400
+  inet6-address:
+    - "fdfe:dcba:9876::1/126"
+  auto-redirect: true
+  strict-route: true
+  route-exclude-address: null
+  endpoint-independent-nat: true
+  udp-timeout: 300
+  congestion-controller: "bbr3"
+  file-descriptor: 0
+  recvmsgx: true
+  processors-per-channel: 1
+tuic-server:
+  enable: false
+  listen: ""
+  token: null
+  certificate: ""
+  private-key: ""
+  max-idle-time: 15000
+  authentication-timeout: 1000
+  alpn:
+    - "h3"
+  max-udp-relay-packet-size: 1500
+iptables:
+  enable: false
+  inbound-interface: "lo"
+  bypass: []
+  dns-redirect: true
+experimental:
+  fingerprints: null
+  quic-go-disable-gso: false
+  quic-go-disable-ecn: true
+  dialer-ip4p-convert: false
+profile:
+  store-selected: false
+  store-fake-ip: true
+geox-url:
+  mmdb: "https://github.com/appshubcc/bett-rules/releases/download/latest/geoip.metadb"
+  asn: "https://github.com/appshubcc/bett-rules/releases/download/latest/GeoLite2-ASN.mmdb"
+  geoip: "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/geoip.dat"
+  geosite: "https://github.com/appshubcc/bett-rules/releases/download/latest/geosite.dat"
 sniffer:
   enable: true
+  override-destination: true
+  sniffing: null
+  force-domain: []
+  skip-src-address: null
+  skip-dst-address: null
+  skip-domain: []
+  port-whitelist: []
   force-dns-mapping: true
   parse-pure-ip: true
-  override-destination: false
   sniff:
     HTTP:
       ports:
-        - 80
-        - 443
-      override-destination: false
+        - "80"
+      override-destination: true
     TLS:
       ports:
-        - 443
-    QUIC:
-      ports:
-        - 443
-  skip-domain:
-    - +.push.apple.com
-  force-domain: []
-authentication: []
-find-process-mode: off
-bind-address: "*"
-tcp-concurrent: false
-geox-url:
-  mmdb: https://raw.githubusercontent.com/DH-Teams/DH-Geo_AS_IP_CN/main/Country.mmdb
-proxies:
-
-proxy-providers:
-   机场1:
-    type: http
-    url: 订阅链接
-    path: ./proxy_providers/机场1.yaml
-    interval: 3600
-    proxy: DIRECT
-    size-limit: 0
-    header:
-      User-Agent:
-        - Clash/v1.18.0
-        - mihomo/1.18.3
-      Authorization:
-        - token 1231231
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 300
-      timeout: 5000
-      lazy: true
-      expected-status: 204
-    override:
-      tfo: false
-      mptcp: false
-      udp: true
-      udp-over-tcp: false
-      skip-cert-verify: true
-      ip-version: ipv4
-  机场2:
-    type: http
-    url: 订阅链接
-    path: ./proxy_providers/机场2.yaml
-    interval: 3600
-    proxy: DIRECT
-    size-limit: 0
-    header:
-      User-Agent:
-        - Clash/v1.18.0
-        - mihomo/1.18.3
-      Authorization:
-        - token 1231231
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 300
-      timeout: 5000
-      lazy: true
-      expected-status: 204
-    override:
-      tfo: false
-      mptcp: false
-      udp: true
-      udp-over-tcp: false
-      skip-cert-verify: true
-      ip-version: ipv4
-proxy-groups:
-  - name: Proxy
-    type: fallback
-    include-all-proxies: true
-    use:
-      - 机场1
-      - 机场2
-    interval: 86400
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-  - name: SSH
-    type: select
-    include-all-proxies: true
-    use:
-      - 机场1
-      - 机场2
-    interval: 86400
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-  - name: Oracle
-    type: select
-    include-all-proxies: true
-    use:
-      - 机场1
-      - 机场2
-    interval: 86400
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-  - name: OpenAI
-    type: select
-    include-all-proxies: true
-    use:
-      - 机场1
-      - 机场2
-    interval: 86400
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-
-rule-providers:
-  Proxy:
-    type: http
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/Proxy.list
-    path: ./ruleset/Proxy.list
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-  OpenAI:
-    type: http
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/EAlyce/conf/main/Rule/OpenAI.list
-    path: ./ruleset/OpenAI.list
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
-  Oracle:
-    type: http
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://github.com/EAlyce/conf/raw/refs/heads/main/Rule/Oracle.list
-    path: ./ruleset/Oracle.list
-    health-check:
-      enable: true
-      url: http://1.0.0.1/favicon.ico
-      interval: 1800
-      timeout: 5000
+        - "443"
+      override-destination: true
+tls:
+  certificate: ""
+  private-key: ""
+  client-auth-type: ""
+  client-auth-cert: ""
+  ech-key: ""
+  custom-certifactes: null
+clash-for-android:
+  append-system-dns: false
+  ui-subtitle-pattern: ""
 rules:
-  - DST-PORT,22,SSH
-  - RULE-SET,Oracle,Oracle,no-resolve
-  - RULE-SET,OpenAI,OpenAI,no-resolve
-  - RULE-SET,Proxy,Proxy,no-resolve
-  - DOMAIN-KEYWORD,cn,DIRECT
-  - IP-CIDR, 192.168.0.0/16,DIRECT
-  - IP-CIDR, 10.0.0.0/8, DIRECT
-  - IP-CIDR, 172.16.0.0/12, DIRECT
-  - IP-CIDR, 127.0.0.0/8, DIRECT
-  - GEOIP,cn,DIRECT
-  - MATCH,Proxy
+  - IP-CIDR,10.0.0.0/8,Direct
+  - IP-CIDR,172.16.0.0/12,Direct
+  - IP-CIDR,192.168.0.0/16,Direct
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,169.254.0.0/16,Direct
+  - IP-CIDR,100.64.0.0/10,Direct
+  - IP-CIDR,224.0.0.0/4,Direct
+  - IP-CIDR,255.255.255.255/32,Direct
+  - "GEOIP,CN,Direct"
+  - "MATCH,Proxy"
