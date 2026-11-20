@@ -20,7 +20,7 @@ jobs:
           declare -a urls=(
             "https://ruleset.skk.moe/List/non_ip/ai.conf"
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
-           
+            "https://cdn.jsdelivr.net/gh/VPSDance/ai-proxy-rules@main/rules/surge/global.list"
             "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/Claude/Claude.list"
             "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list"
             
