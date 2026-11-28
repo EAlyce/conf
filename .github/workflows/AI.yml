@@ -23,7 +23,7 @@ jobs:
             "https://cdn.jsdelivr.net/gh/VPSDance/ai-proxy-rules@main/rules/surge/global.list"
             "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/Claude/Claude.list"
             "https://raw.githubusercontent.com/EAlyce/conf/main/Rule/ai.list"
-            
+            "https://raw.githubusercontent.com/QuixoticHeart/rule-set/ruleset/surge/ai.list"
           )
 
           temp_file=$(mktemp)
